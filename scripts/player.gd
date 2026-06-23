@@ -7,7 +7,7 @@ const _PLAYER_TEAM = Arrow.Team.PLAYER
 @export var input: InputComponent
 @export var health: HealthComponent
 
-@export var speed := 1.0
+@export var speed := 200.0
 @export_group("arrows")
 @export var fire_cooldown := 1.0:
 	set(value):
@@ -22,19 +22,6 @@ const _PLAYER_TEAM = Arrow.Team.PLAYER
 		hurt_radius = value
 @export var sector_count := 5
 @export var sector_centered := false
-@export_group("catch")
-@export var catch_radius := 10.0:
-	set(value):
-		if value < 0: value = 0
-		_update_collider(%CatchCollider, value)
-		catch_radius = value
-@export_group("skimming")
-@export var skim_radius := 10.0:
-	set(value):
-		if value < 0: value = 0
-		_update_collider(%SkimCollider, value)
-		skim_radius = value
-@export var skim_heal := 5
 
 signal hit(arrow: Arrow)
 signal fired(arrow: Arrow)
@@ -83,7 +70,7 @@ func get_hit(arrow: Arrow) -> void:
 	hit.emit(arrow)
 
 func move(dir: Vector2, _dt: float) -> void:
-	velocity = dir
+	velocity = dir * speed
 	move_and_slide()
 
 func try_fire(sector: int) -> void:
@@ -109,5 +96,3 @@ func _physics_process(delta: float) -> void:
 func _ready() -> void:
 	_setup_sectors()
 	_update_collider(%HurtCollider, hurt_radius)
-	_update_collider(%CatchCollider, catch_radius)
-	_update_collider(%SkimCollider, skim_radius)
