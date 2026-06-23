@@ -77,32 +77,44 @@ func _on_instance_timer_timeout(timer: Timer,
 		if nfired >= count:
 			timer.queue_free()
 
+func _execute_volley(instance: FiringInstance, count: int, spread: float, offset: float):
+	if instance.instance_delay == 0.0 and instance.max_instance_delay == 0.0:
+			for i in range(count):
+				_execute_instance(instance, i, spread, offset)
+	else:
+		var instance_deb := Timer.new()
+		instance_deb.set_meta("fired", 0)
+		instance_deb.autostart = true
+		instance_deb.wait_time = instance.instance_delay
+		instance_deb.one_shot = false
+		instance_deb.timeout.connect(_on_instance_timer_timeout.bind(
+			instance_deb,
+			instance,
+			count,
+			spread,
+			offset
+		))
+		%InstanceTimers.add_child(instance_deb)
+
 func perform(pattern: ArrowPattern) -> void:
 	if pattern.has_movement_pattern:
 		var p = _parse_movement_pattern(pattern.movement_pattern)
 		_movement_pattern = p
 	for instance in pattern.instances:
+		var startup: int = _get_rand(instance.starting_delay, instance.starting_delay)
 		var count: int = _get_rand(instance.count, instance.max_count)
 		var spread: float = _get_rand(instance.spread, instance.max_spread)
 		var offset: float = _get_rand(instance.offset, instance.max_offset)
 		
-		if instance.instance_delay == 0.0 and instance.max_instance_delay == 0.0:
-			for i in range(count):
-				_execute_instance(instance, i, spread, offset)
+		if startup == 0.0:
+			_execute_volley(instance, count, spread, offset)
 		else:
-			var instance_deb := Timer.new()
-			instance_deb.set_meta("fired", 0)
-			instance_deb.autostart = true
-			instance_deb.wait_time = instance.instance_delay
-			instance_deb.one_shot = false
-			instance_deb.timeout.connect(_on_instance_timer_timeout.bind(
-				instance_deb,
+			get_tree().create_timer(startup).timeout.connect(_execute_volley.bind(
 				instance,
 				count,
 				spread,
 				offset
 			))
-			%InstanceTimers.add_child(instance_deb)
 	
 	var _check_empty: Callable
 	_check_empty = func():
