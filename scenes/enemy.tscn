@@ -1,0 +1,18 @@
+[gd_scene format=3 uid="uid://cqg3t3w43do4q"]
+
+[ext_resource type="Script" uid="uid://c8x80rcsvjex" path="res://scripts/enemy.gd" id="1_enemy"]
+[ext_resource type="Script" uid="uid://cq7vk7ukbmts4" path="res://scripts/health_component.gd" id="2_health"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_body"]
+
+[node name="Enemy" type="CharacterBody2D" unique_id=908458802 node_paths=PackedStringArray("health")]
+collision_layer = 8
+collision_mask = 0
+script = ExtResource("1_enemy")
+health = NodePath("Health")
+
+[node name="Collider" type="CollisionShape2D" parent="." unique_id=163868457]
+shape = SubResource("CircleShape2D_body")
+
+[node name="Health" type="Node" parent="." unique_id=2036643712]
+script = ExtResource("2_health")
