@@ -8,7 +8,8 @@
 radius = 25.0
 
 [node name="Player" type="CharacterBody2D" unique_id=508579643 node_paths=PackedStringArray("input", "health")]
-collision_mask = 0
+collision_layer = 1
+collision_mask = 4
 script = ExtResource("1_3vyb7")
 input = NodePath("Input")
 health = NodePath("Health")

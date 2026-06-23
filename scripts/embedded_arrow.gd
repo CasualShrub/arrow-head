@@ -14,7 +14,7 @@ func enable_firing() -> void:
 func is_firing_enabled() -> bool:
 	return _can_fire
 
-func get_sector() -> bool:
+func get_sector() -> int:
 	return _sector
 
 func change_sector(sector: int) -> void:

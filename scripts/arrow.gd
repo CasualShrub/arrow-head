@@ -90,6 +90,12 @@ func activate(pos: Vector2, dir: Vector2, new_team := team) -> void:
 	%Collider.set_deferred("disabled", false)
 	set_physics_process(true)
 
+func stick(host: Node2D) -> void:
+	set_physics_process(false)
+	velocity = Vector2.ZERO
+	%Collider.set_deferred("disabled", true)
+	reparent.call_deferred(host)
+
 func deactivate() -> void:
 	set_physics_process(false)
 	velocity = Vector2.ZERO

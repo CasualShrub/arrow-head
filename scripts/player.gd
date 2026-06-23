@@ -20,7 +20,7 @@ const _PLAYER_TEAM = Arrow.Team.PLAYER
 		if value < 0: value = 0
 		_update_collider(%HurtCollider, value)
 		hurt_radius = value
-@export var sector_count := 5
+@export var sector_count := 4
 @export var sector_centered := false
 
 signal hit(arrow: Arrow, sector: int)
@@ -86,9 +86,24 @@ func enable_firing():
 	for embedded in _sectors:
 		embedded.enable_firing()
 
+func clear_embedded() -> void:
+	var freed := {}
+	for embedded in _sectors:
+		if not embedded or freed.has(embedded):
+			continue
+		freed[embedded] = true
+		var arrow := embedded.get_arrow()
+		if arrow:
+			arrow.queue_free()
+		embedded.queue_free()
+	_setup_sectors()
+
 func get_hit(arrow: Arrow) -> void:
-	var sector := get_sector(arrow.position)
-	if not try_embed_arrow(arrow, sector):
+	var sector := get_sector(arrow.global_position - global_position)
+	if try_embed_arrow(arrow, sector):
+		arrow.stick(self)
+	else:
+		arrow.queue_free()
 		die()
 	hit.emit(arrow, sector)
 
@@ -110,7 +125,9 @@ func try_fire(sector: int) -> void:
 func fire(arrow: Arrow) -> void:
 	if not arrow: return
 	%FireDebounce.start()
-	arrow.activate(position, Vector2(), _PLAYER_TEAM)
+	if arrow.get_parent() != get_tree().current_scene:
+		arrow.reparent(get_tree().current_scene)
+	arrow.activate(global_position, _facing, _PLAYER_TEAM)
 	fired.emit(arrow)
 
 func is_dead() -> bool:
@@ -118,6 +135,8 @@ func is_dead() -> bool:
 
 func die() -> void:
 	_dead = true
+	print("You died!")
+	clear_embedded()
 	died.emit()
 
 func _physics_process(delta: float) -> void:
