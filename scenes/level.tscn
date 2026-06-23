@@ -1,6 +1,7 @@
 [gd_scene format=3 uid="uid://wcfn6hm816x8"]
 
-[ext_resource type="PackedScene" uid="uid://boryk37cbh1nx" path="res://scenes/player.tscn" id="1_player"]
+[ext_resource type="PackedScene" uid="uid://b8rs35o7f45v0" path="res://scenes/enemy.tscn" id="2_w7c3h"]
+[ext_resource type="PackedScene" uid="uid://boryk37cbh1nx" path="res://scenes/player.tscn" id="2_w8frs"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_top"]
 size = Vector2(1216, 32)
@@ -49,6 +50,6 @@ shape = SubResource("RectangleShape2D_left")
 position = Vector2(576, 0)
 shape = SubResource("RectangleShape2D_right")
 
-[node name="Camera2D" type="Camera2D" parent="." unique_id=1529711472]
+[node name="Enemy" parent="." unique_id=1183056859 instance=ExtResource("2_w7c3h")]
 
-[node name="Player" parent="." unique_id=661813112 instance=ExtResource("1_player")]
+[node name="Player" parent="." unique_id=508579643 instance=ExtResource("2_w8frs")]

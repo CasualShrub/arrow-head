@@ -11,6 +11,7 @@ collision_mask = 0
 script = ExtResource("1_3vyb7")
 input = NodePath("Input")
 health = NodePath("Health")
+speed = 600.0
 
 [node name="HurtCollider" type="CollisionShape2D" parent="." unique_id=1531782285]
 unique_name_in_owner = true
@@ -29,3 +30,5 @@ one_shot = true
 
 [node name="InstanceTimers" type="Node" parent="." unique_id=1259921754]
 unique_name_in_owner = true
+
+[node name="Camera2D" type="Camera2D" parent="." unique_id=1450986859]
