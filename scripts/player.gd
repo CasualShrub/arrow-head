@@ -2,44 +2,111 @@
 extends CharacterBody2D
 class_name Player
 
+const _PLAYER_TEAM = Arrow.Team.PLAYER
+
 @export var input: InputComponent
 @export var health: HealthComponent
 
 @export var speed := 1.0
 @export_group("arrows")
-@export var arrows := []
-@export var max_arrows := 10.0
-@export_group("firing")
-@export var fire_cooldown := 1.0
+@export var fire_cooldown := 1.0:
+	set(value):
+		if value < 0: value = 0
+		%FireDebounce.wait_time = value
+		fire_cooldown = value
+@export_group("hurt")
+@export var hurt_radius := 10.0:
+	set(value):
+		if value < 0: value = 0
+		_update_collider(%HurtCollider, value)
+		hurt_radius = value
+@export var sector_count := 5
+@export var sector_centered := false
+@export_group("catch")
+@export var catch_radius := 10.0:
+	set(value):
+		if value < 0: value = 0
+		_update_collider(%CatchCollider, value)
+		catch_radius = value
 @export_group("skimming")
-@export var skim_dist := 1.0
+@export var skim_radius := 10.0:
+	set(value):
+		if value < 0: value = 0
+		_update_collider(%SkimCollider, value)
+		skim_radius = value
 @export var skim_heal := 5
 
-signal hit
-signal fired
-signal skimmed
+signal hit(arrow: Arrow)
+signal fired(arrow: Arrow)
+signal skimmed(arrow: Arrow)
 
-func check_skim() -> void:
-	for a in %SkimBox.get_overlapping_bodies():
-		skim(a)
+var sectors: Array[EmbeddedArrow]
 
-func skim(arrow: Node) -> void:
-	health.heal(skim_heal)
-	skimmed.emit(arrow)
+func _update_collider(c: CollisionShape2D, r: float) -> void:
+	var s := CircleShape2D.new()
+	s.radius = r
+	c.shape = s
 
-func try_catch() -> void:
-	for a in %CatchBox.get_overlapping_bodies():
-		catch(a)
+func _setup_sectors() -> void:
+	sectors = []
+	sectors.resize(sector_count)
 
-func catch(arrow: Node) -> void:
-	arrows.append(arrow)
+func get_sector(pos: Vector2) -> int:
+	var sector_size := 2 * PI / sector_count
+	var theta := atan2(pos.y, pos.x)
+	if sector_centered:
+		theta += sector_size / 2
+	if theta < 0:
+		theta += 2 * PI
+	elif theta >= 2 * PI:
+		theta -= 2 * PI
+	return floor(theta / sector_size)
 
-func get_hit(arrow: Node) -> void:
+func get_embedded(sector: int) -> EmbeddedArrow:
+	return sectors[sector]
+
+func sector_occupied(sector: int) -> bool:
+	return get_embedded(sector) != null
+
+func embed_arrow(arrow: Arrow, sector: int) -> void:
+	sectors[sector] = EmbeddedArrow.new(arrow, sector)
+	
+func try_embed_arrow(arrow: Arrow, sector: int,) -> bool:
+	if sector_occupied(sector): return false
+	embed_arrow(arrow, sector)
+	return true
+
+func get_hit(arrow: Arrow) -> void:
+	var sector := get_sector(arrow.position)
+	if not try_embed_arrow(arrow, sector):
+		die()
 	hit.emit(arrow)
 
-func move(dt: float) -> void:
+func move(dir: Vector2, _dt: float) -> void:
+	velocity = dir
 	move_and_slide()
 
+func try_fire(sector: int) -> void:
+	if not %FireDebounce.is_stopped():
+		return
+	var embedded := get_embedded(sector)
+	if embedded:
+		fire(embedded.grab())
+
+func fire(arrow: Arrow) -> void:
+	%FireDebounce.start()
+	arrow.activate(position, Vector2(), _PLAYER_TEAM)
+	fired.emit(arrow)
+
+func die() -> void:
+	queue_free()
+
 func _physics_process(delta: float) -> void:
-	check_skim()
-	move(delta)
+	#check_skim()
+	move(input.get_direction(), delta)
+	
+func _ready() -> void:
+	_setup_sectors()
+	_update_collider(%HurtCollider, hurt_radius)
+	_update_collider(%CatchCollider, catch_radius)
+	_update_collider(%SkimCollider, skim_radius)

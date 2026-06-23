@@ -1,0 +1,15 @@
+[gd_scene format=3 uid="uid://b6c1h2si8ob6l"]
+
+[ext_resource type="PackedScene" uid="uid://boryk37cbh1nx" path="res://scenes/player.tscn" id="1_lp88p"]
+
+[node name="Encounter" type="Node2D" unique_id=219280993]
+
+[node name="Player" parent="." unique_id=508579643 instance=ExtResource("1_lp88p")]
+speed = 1.0
+fire_cooldown = 1.0
+hurt_radius = 10.0
+sector_count = 5
+sector_centered = false
+catch_radius = 10.0
+skim_radius = 10.0
+skim_heal = 5
