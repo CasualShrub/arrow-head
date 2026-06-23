@@ -87,13 +87,15 @@ func move(dir: Vector2, _dt: float) -> void:
 	move_and_slide()
 
 func try_fire(sector: int) -> void:
-	if not %FireDebounce.is_stopped():
-		return
+	if not %FireDebounce.is_stopped(): return
 	var embedded := get_embedded(sector)
-	if embedded:
-		fire(embedded.grab())
+	if not embedded: return
+	var arrow := embedded.try_grab()
+	if arrow:
+		fire(arrow)
 
 func fire(arrow: Arrow) -> void:
+	if not arrow: return
 	%FireDebounce.start()
 	arrow.activate(position, Vector2(), _PLAYER_TEAM)
 	fired.emit(arrow)
@@ -102,7 +104,6 @@ func die() -> void:
 	queue_free()
 
 func _physics_process(delta: float) -> void:
-	#check_skim()
 	move(input.get_direction(), delta)
 	
 func _ready() -> void:
