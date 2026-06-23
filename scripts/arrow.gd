@@ -31,6 +31,7 @@ const _MASK_ENEMY := 1 << 3         # layer 4
 
 @export_group("movement")
 @export var speed := 300.0          ## px/sec
+@export var max_bounces := 3        # -1 = unlimited
 @export var direction := Vector2.RIGHT:
 	set(value):
 		direction = value.normalized() if value != Vector2.ZERO else Vector2.RIGHT
@@ -46,6 +47,7 @@ signal finished(arrow: Arrow)
 @onready var _notifier: VisibleOnScreenNotifier2D = $VisibleOnScreenNotifier2D
 
 var _life := 0.0
+var _bounces := 0
 
 func _ready() -> void:
 	collision_layer = _LAYER_PROJECTILE
@@ -62,7 +64,10 @@ func _physics_process(delta: float) -> void:
 			return
 	var collision := move_and_collide(direction * speed * delta)
 	if collision:
-		_on_impact(collision.get_collider())
+		if _is_wall(collision.get_collider()):
+			_bounce(collision)
+		else:
+			_on_impact(collision.get_collider())
 
 # --- Faction -----------------------------------------------------------------
 
@@ -72,6 +77,17 @@ func _apply_team() -> void:
 			collision_mask = _MASK_PLAYER | _MASK_WALL
 		Team.PLAYER:
 			collision_mask = _MASK_ENEMY | _MASK_WALL
+
+func _is_wall(body: Object) -> bool:
+	return body is CollisionObject2D and body.get_collision_layer_value(3)  # layer 3 = wall
+
+func _bounce(collision: KinematicCollision2D) -> void:
+	var n := collision.get_normal()
+	direction = direction.bounce(n)
+	move_and_collide(collision.get_remainder().bounce(n))
+	_bounces += 1
+	if max_bounces >= 0 and _bounces > max_bounces:
+		_finish()
 
 # --- Hit handling (damage is decoupled from the target's own logic) -----------
 
@@ -106,6 +122,7 @@ func activate(pos: Vector2, dir: Vector2, new_team := team) -> void:
 	direction = dir                 # setter normalizes
 	rotation = direction.angle()
 	_life = 0.0
+	_bounces = 0
 	show()
 	if _shape:
 		_shape.set_deferred("disabled", false)
