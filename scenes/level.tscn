@@ -2,6 +2,7 @@
 
 [ext_resource type="PackedScene" uid="uid://b8rs35o7f45v0" path="res://scenes/enemy.tscn" id="2_w7c3h"]
 [ext_resource type="PackedScene" uid="uid://boryk37cbh1nx" path="res://scenes/player.tscn" id="2_w8frs"]
+[ext_resource type="PackedScene" uid="uid://bhudarrowhead1" path="res://scenes/ui/hud.tscn" id="3_hud"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_top"]
 size = Vector2(1216, 32)
@@ -53,3 +54,5 @@ shape = SubResource("RectangleShape2D_right")
 [node name="Enemy" parent="." unique_id=1183056859 instance=ExtResource("2_w7c3h")]
 
 [node name="Player" parent="." unique_id=508579643 instance=ExtResource("2_w8frs")]
+
+[node name="Hud" parent="." instance=ExtResource("3_hud")]
