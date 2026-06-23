@@ -2,7 +2,7 @@
 extends CharacterBody2D
 class_name Player
 
-@export var input: Node
+@export var input: InputComponent
 @export var health: HealthComponent
 
 @export var speed := 1.0

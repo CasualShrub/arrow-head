@@ -1,4 +1,5 @@
 extends Node
+class_name InputComponent
 
 signal move_direction_changed(direction: Vector2)
 signal action_pressed(action: String)
