@@ -5,6 +5,7 @@
 [ext_resource type="Script" uid="uid://bw22qrc8y4p5b" path="res://scripts/input_component.gd" id="3_qhqgy"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_qhqgy"]
+radius = 25.0
 
 [node name="Player" type="CharacterBody2D" unique_id=508579643 node_paths=PackedStringArray("input", "health")]
 collision_mask = 0

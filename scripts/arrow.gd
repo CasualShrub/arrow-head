@@ -16,7 +16,7 @@ const _MASK_ENEMY := 1 << 3
 @export var damage := 10
 @export_group("movement")
 @export var speed := 700.0
-@export var max_bounces := 3 
+@export var max_bounces := 8
 @export var direction := Vector2.RIGHT:
 	set(value):
 		direction = value.normalized() if value != Vector2.ZERO else Vector2.RIGHT

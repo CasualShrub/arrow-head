@@ -15,7 +15,7 @@ const _PLAYER_TEAM = Arrow.Team.PLAYER
 		%FireDebounce.wait_time = value
 		fire_cooldown = value
 @export_group("hurt")
-@export var hurt_radius := 10.0:
+@export var hurt_radius := 25.0:
 	set(value):
 		if value < 0: value = 0
 		_update_collider(%HurtCollider, value)
@@ -32,6 +32,7 @@ var _dead := false
 var _facing := Vector2()
 
 func _update_collider(c: CollisionShape2D, r: float) -> void:
+	if not c: return
 	var s := CircleShape2D.new()
 	s.radius = r
 	c.shape = s
