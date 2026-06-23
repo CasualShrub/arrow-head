@@ -120,10 +120,11 @@ func die() -> void:
 	died.emit()
 
 func _physics_process(delta: float) -> void:
-	if not Engine.is_editor_hint():
-		move(input.get_direction(), delta)
+	if Engine.is_editor_hint(): return
+	move(input.get_direction(), delta)
 
 func _process(_delta: float) -> void:
+	if Engine.is_editor_hint(): return
 	face_mouse(get_global_mouse_position())
 
 func _ready() -> void:

@@ -16,10 +16,13 @@ const _ENEMY_TEAM = Arrow.Team.ENEMY
 var _facing := Vector2()
 var _dead := false
 var _alerted := false
+var _sus_meter := 0
+var _max_sus_meter := 100
 var _movement_pattern: Dictionary[float, Vector2] = {}
 
 signal fired(arrow: Arrow)
 signal died
+signal alerted
 
 func get_hit(_arrow: Arrow) -> void:
 	health.take_damage(1)
@@ -130,7 +133,16 @@ func fire(arrow: Arrow, dir: Vector2) -> void:
 	arrow.activate(position, dir, _ENEMY_TEAM)
 	fired.emit(arrow)
 
-func look_at_player() -> void:
+func _look_at_player() -> void:
+	pass
+
+func _patrol() -> void:
+	pass
+
+func _sussy() -> void:
+	pass
+
+func _alert() -> void:
 	pass
 
 func is_dead() -> bool:
@@ -140,4 +152,7 @@ func die() -> void:
 	died.emit()
 
 func _physics_process(_delta: float) -> void:
-	pass
+	if not _alerted:
+		_patrol()
+	else:
+		_sussy()
