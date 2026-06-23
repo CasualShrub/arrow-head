@@ -29,6 +29,7 @@ signal died()
 
 var _sectors: Array[EmbeddedArrow]
 var _dead := false
+var _facing := Vector2()
 
 func _update_collider(c: CollisionShape2D, r: float) -> void:
 	var s := CircleShape2D.new()
@@ -90,6 +91,9 @@ func get_hit(arrow: Arrow) -> void:
 		die()
 	hit.emit(arrow, sector)
 
+func face_mouse(mouse_pos: Vector2) -> void:
+	_facing = global_position.direction_to(mouse_pos)
+
 func move(dir: Vector2, _dt: float) -> void:
 	velocity = dir * speed
 	move_and_slide()
@@ -116,8 +120,12 @@ func die() -> void:
 	died.emit()
 
 func _physics_process(delta: float) -> void:
-	move(input.get_direction(), delta)
-	
+	if not Engine.is_editor_hint():
+		move(input.get_direction(), delta)
+
+func _process(_delta: float) -> void:
+	face_mouse(get_global_mouse_position())
+
 func _ready() -> void:
 	_setup_sectors()
 	_update_collider(%HurtCollider, hurt_radius)

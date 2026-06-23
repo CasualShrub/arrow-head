@@ -7,6 +7,12 @@ const _ENEMY_TEAM = Arrow.Team.ENEMY
 @export var health: HealthComponent
 @export var player: Player
 
+@export var hurt_radius := 10.0:
+	set(value):
+		if value < 0: value = 0
+		_update_collider(%HurtCollider, value)
+		hurt_radius = value
+
 var _facing := Vector2()
 var _dead := false
 var _alerted := false
@@ -17,6 +23,11 @@ signal died
 
 func get_hit(_arrow: Arrow) -> void:
 	health.take_damage(1)
+
+func _update_collider(c: CollisionShape2D, r: float) -> void:
+	var s := CircleShape2D.new()
+	s.radius = r
+	c.shape = s
 
 func _on_fire(arrow: Arrow) -> void:
 	pass
