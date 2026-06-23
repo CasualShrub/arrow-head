@@ -9,8 +9,8 @@ height = 18.0
 [node name="Arrow" type="CharacterBody2D" unique_id=1420623468]
 collision_layer = 2
 collision_mask = 5
+scale = Vector2(1.69, 1.69)
 script = ExtResource("1_arrow")
-scene = null
 
 [node name="Visual" type="Polygon2D" parent="." unique_id=1154579900]
 color = Color(0.95, 0.85, 0.3, 1)

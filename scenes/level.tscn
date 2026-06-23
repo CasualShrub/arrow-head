@@ -55,4 +55,3 @@ shape = SubResource("RectangleShape2D_right")
 [node name="Enemy" parent="." unique_id=1183056859 node_paths=PackedStringArray("player") instance=ExtResource("2_w7c3h")]
 position = Vector2(-300, -150)
 player = NodePath("../Player")
-hurt_radius = 25.0
