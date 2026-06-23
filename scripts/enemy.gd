@@ -5,6 +5,7 @@ class_name Enemy
 const _ENEMY_TEAM = Arrow.Team.ENEMY
 
 @export var health: HealthComponent
+@export var sus: SusComponent
 @export var player: Player
 
 @export var hurt_radius := 10.0:
@@ -16,13 +17,10 @@ const _ENEMY_TEAM = Arrow.Team.ENEMY
 var _facing := Vector2()
 var _dead := false
 var _alerted := false
-var _sus_meter := 0
-var _max_sus_meter := 100
 var _movement_pattern: Dictionary[float, Vector2] = {}
 
 signal fired(arrow: Arrow)
 signal died
-signal alerted
 
 func get_hit(_arrow: Arrow) -> void:
 	health.take_damage(1)

@@ -2,13 +2,14 @@
 
 [ext_resource type="Script" uid="uid://dhx7670bsb3xw" path="res://scripts/enemy.gd" id="1_7p1mj"]
 [ext_resource type="Script" uid="uid://cq7vk7ukbmts4" path="res://scripts/health_component.gd" id="2_md0e3"]
+[ext_resource type="Script" uid="uid://dn8jqcy1eo7y7" path="res://scripts/sus_component.gd" id="3_4ra3w"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_ub6uw"]
 
-[node name="Enemy" type="CharacterBody2D" unique_id=1183056859 node_paths=PackedStringArray("health")]
+[node name="Enemy" type="CharacterBody2D" unique_id=1183056859 node_paths=PackedStringArray("health", "sus")]
 script = ExtResource("1_7p1mj")
 health = NodePath("Health")
-hurt_radius = null
+sus = NodePath("Sus")
 
 [node name="HurtCollider" type="CollisionShape2D" parent="." unique_id=1207359402]
 unique_name_in_owner = true
@@ -22,3 +23,6 @@ metadata/_custom_type_script = "uid://cq7vk7ukbmts4"
 
 [node name="FireDebounce" type="Timer" parent="." unique_id=1708563758]
 unique_name_in_owner = true
+
+[node name="Sus" type="Node" parent="." unique_id=495149280]
+script = ExtResource("3_4ra3w")
