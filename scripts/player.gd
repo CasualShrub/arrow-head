@@ -23,11 +23,12 @@ const _PLAYER_TEAM = Arrow.Team.PLAYER
 @export var sector_count := 5
 @export var sector_centered := false
 
-signal hit(arrow: Arrow)
+signal hit(arrow: Arrow, sector: int)
 signal fired(arrow: Arrow)
-signal skimmed(arrow: Arrow)
+signal died()
 
-var sectors: Array[EmbeddedArrow]
+var _sectors: Array[EmbeddedArrow]
+var _dead := false
 
 func _update_collider(c: CollisionShape2D, r: float) -> void:
 	var s := CircleShape2D.new()
@@ -35,8 +36,8 @@ func _update_collider(c: CollisionShape2D, r: float) -> void:
 	c.shape = s
 
 func _setup_sectors() -> void:
-	sectors = []
-	sectors.resize(sector_count)
+	_sectors = []
+	_sectors.resize(sector_count)
 
 func get_sector(pos: Vector2) -> int:
 	var sector_size := 2 * PI / sector_count
@@ -50,35 +51,44 @@ func get_sector(pos: Vector2) -> int:
 	return floor(theta / sector_size)
 
 func get_embedded(sector: int) -> EmbeddedArrow:
-	return sectors[sector]
+	return _sectors[sector]
 
 func fully_embedded() -> bool:
-	for embedded in sectors:
+	for embedded in _sectors:
 		if not embedded: return false
 	return true
 
 func sector_occupied(sector: int) -> bool:
 	return get_embedded(sector) != null
 
+func sectors_occupied(sectors: Array[int]) -> bool:
+	for s in sectors:
+		if sector_occupied(s): return true
+	return false
+
 func embed_arrow(arrow: Arrow, sector: int) -> void:
-	sectors[sector] = EmbeddedArrow.new(arrow, sector)
+	var selected_sectors := arrow.get_sector(sector)
+	var embedded := EmbeddedArrow.new(arrow, sector)
+	for s in selected_sectors:
+		_sectors[s] = embedded
 	if fully_embedded():
 		enable_firing()
 
 func try_embed_arrow(arrow: Arrow, sector: int,) -> bool:
-	if sector_occupied(sector): return false
+	var selected_sectors := arrow.get_sector(sector)
+	if sectors_occupied(selected_sectors): return false
 	embed_arrow(arrow, sector)
 	return true
 
 func enable_firing():
-	for embedded in sectors:
+	for embedded in _sectors:
 		embedded.enable_firing()
 
 func get_hit(arrow: Arrow) -> void:
 	var sector := get_sector(arrow.position)
 	if not try_embed_arrow(arrow, sector):
 		die()
-	hit.emit(arrow)
+	hit.emit(arrow, sector)
 
 func move(dir: Vector2, _dt: float) -> void:
 	velocity = dir * speed
@@ -98,8 +108,12 @@ func fire(arrow: Arrow) -> void:
 	arrow.activate(position, Vector2(), _PLAYER_TEAM)
 	fired.emit(arrow)
 
+func is_dead() -> bool:
+	return _dead
+
 func die() -> void:
-	queue_free()
+	_dead = true
+	died.emit()
 
 func _physics_process(delta: float) -> void:
 	move(input.get_direction(), delta)

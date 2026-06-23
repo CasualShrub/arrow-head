@@ -5,15 +5,15 @@ class_name Enemy
 const _ENEMY_TEAM = Arrow.Team.ENEMY
 
 @export var health: HealthComponent
-
-@export_group("firing")
-@export var arrow_scene: PackedScene
+@export var player: Player
 
 var _facing := Vector2()
+var _dead := false
 var _alerted := false
 var _movement_pattern: Dictionary[float, Vector2] = {}
 
 signal fired(arrow: Arrow)
+signal died
 
 func get_hit(_arrow: Arrow) -> void:
 	health.take_damage(1)
@@ -28,10 +28,6 @@ func _parse_movement_pattern(pattern: Dictionary[float, Vector2]) -> Dictionary[
 		var o := pattern[t]
 		parsed[t+curr_tick] = position + o
 	return parsed
-
-func _get_spread(min_spread, max_spread) -> float:
-	if max_spread == 0.0: return min_spread
-	return randf_range(min_spread, max_spread)
 
 func _get_arrow_angle(i: int, spread: float, offset: float) -> float:
 	var i_spread := spread / i
@@ -111,11 +107,14 @@ func fire(arrow: Arrow, dir: Vector2) -> void:
 	arrow.activate(position, dir, _ENEMY_TEAM)
 	fired.emit(arrow)
 
-func look_at_player(_player: Player) -> void:
+func look_at_player() -> void:
 	pass
 
-func _on_recovered() -> void:
-	pass
+func is_dead() -> bool:
+	return _dead
+
+func die() -> void:
+	died.emit()
 
 func _physics_process(_delta: float) -> void:
 	pass

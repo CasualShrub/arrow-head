@@ -1,7 +1,14 @@
 [gd_scene format=3 uid="uid://b6c1h2si8ob6l"]
 
+[ext_resource type="Script" uid="uid://cm3vh4qq01y8d" path="res://scripts/encounter.gd" id="1_eu4s7"]
 [ext_resource type="PackedScene" uid="uid://boryk37cbh1nx" path="res://scenes/player.tscn" id="1_lp88p"]
 
 [node name="Encounter" type="Node2D" unique_id=219280993]
+script = ExtResource("1_eu4s7")
 
 [node name="Player" parent="." unique_id=508579643 instance=ExtResource("1_lp88p")]
+unique_name_in_owner = true
+speed = 1.0
+
+[node name="Enemies" type="Node" parent="." unique_id=1575711033]
+unique_name_in_owner = true

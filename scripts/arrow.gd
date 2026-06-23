@@ -7,6 +7,7 @@ const _MASK_PLAYER := 1 << 0
 const _MASK_WALL := 1 << 2
 const _MASK_ENEMY := 1 << 3
 
+@export var scene: PackedScene
 @export var team: Team = Team.ENEMY:
 	set(value):
 		team = value
@@ -48,8 +49,6 @@ func _physics_process(delta: float) -> void:
 		else:
 			_on_hit(collision.get_collider())
 
-# --- Faction -----------------------------------------------------------------
-
 func _apply_team() -> void:
 	match team:
 		Team.ENEMY:
@@ -58,7 +57,7 @@ func _apply_team() -> void:
 			collision_mask = _MASK_ENEMY | _MASK_WALL
 			
 func _is_wall(body: Object) -> bool:
-	return body is CollisionObject2D and body.get_collision_layer_value(3)  # layer 3 = wall
+	return body is CollisionObject2D and body.get_collision_layer_value(3)
 
 func _bounce(collision: KinematicCollision2D) -> void:
 	var n := collision.get_normal()
@@ -76,6 +75,9 @@ func _on_hit(target: Player) -> void:
 func get_remaining_lifetime() -> float:
 	if max_lifetime == 0: return INF
 	return max_lifetime - _life
+
+func get_sector(collided: int) -> Array[int]:
+	return [collided]
 
 func activate(pos: Vector2, dir: Vector2, new_team := team) -> void:
 	global_position = pos
