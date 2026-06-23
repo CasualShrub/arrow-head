@@ -5,8 +5,9 @@
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_ub6uw"]
 
-[node name="Enemy" type="CharacterBody2D" unique_id=1183056859]
+[node name="Enemy" type="CharacterBody2D" unique_id=1183056859 node_paths=PackedStringArray("health")]
 script = ExtResource("1_7p1mj")
+health = NodePath("Health")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1207359402]
 shape = SubResource("CircleShape2D_ub6uw")
