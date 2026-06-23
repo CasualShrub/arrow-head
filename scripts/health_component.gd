@@ -3,13 +3,13 @@ class_name HealthComponent
 
 @export var current := 0:
 	set(value):
-		current = clamp(value, 0, max_val)
+		current = clamp(value, 0, max_value)
 		changed.emit()
-@export var max_val := 100:
+@export var max_value := 100:
 	set(value):
 		if current > value:
 			current = value
-		max_val = value
+		max_value = value
 
 signal changed
 

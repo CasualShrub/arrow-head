@@ -1,6 +1,7 @@
 [gd_scene format=3 uid="uid://b8rs35o7f45v0"]
 
 [ext_resource type="Script" uid="uid://dhx7670bsb3xw" path="res://scripts/enemy.gd" id="1_7p1mj"]
+[ext_resource type="Script" uid="uid://cq7vk7ukbmts4" path="res://scripts/health_component.gd" id="2_md0e3"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_ub6uw"]
 
@@ -9,3 +10,11 @@ script = ExtResource("1_7p1mj")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1207359402]
 shape = SubResource("CircleShape2D_ub6uw")
+
+[node name="Health" type="Node" parent="." unique_id=1511902786]
+script = ExtResource("2_md0e3")
+current = 1
+metadata/_custom_type_script = "uid://cq7vk7ukbmts4"
+
+[node name="FireDebounce" type="Timer" parent="." unique_id=1708563758]
+unique_name_in_owner = true
