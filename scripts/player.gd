@@ -52,16 +52,27 @@ func get_sector(pos: Vector2) -> int:
 func get_embedded(sector: int) -> EmbeddedArrow:
 	return sectors[sector]
 
+func fully_embedded() -> bool:
+	for embedded in sectors:
+		if not embedded: return false
+	return true
+
 func sector_occupied(sector: int) -> bool:
 	return get_embedded(sector) != null
 
 func embed_arrow(arrow: Arrow, sector: int) -> void:
 	sectors[sector] = EmbeddedArrow.new(arrow, sector)
-	
+	if fully_embedded():
+		enable_firing()
+
 func try_embed_arrow(arrow: Arrow, sector: int,) -> bool:
 	if sector_occupied(sector): return false
 	embed_arrow(arrow, sector)
 	return true
+
+func enable_firing():
+	for embedded in sectors:
+		embedded.enable_firing()
 
 func get_hit(arrow: Arrow) -> void:
 	var sector := get_sector(arrow.position)
