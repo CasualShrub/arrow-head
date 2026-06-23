@@ -1,0 +1,38 @@
+[gd_scene format=3 uid="uid://boryk37cbh1nx"]
+
+[ext_resource type="Script" uid="uid://djbaojmlgp0lu" path="res://scripts/player.gd" id="1_3vyb7"]
+[ext_resource type="Script" uid="uid://cq7vk7ukbmts4" path="res://scripts/health_component.gd" id="2_g2els"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_ub6uw"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_8wtow"]
+
+[node name="Player" type="CharacterBody2D" unique_id=508579643 node_paths=PackedStringArray("input", "health")]
+collision_mask = 0
+script = ExtResource("1_3vyb7")
+input = NodePath("Input")
+health = NodePath("Health")
+
+[node name="HurtCollider" type="CollisionShape2D" parent="." unique_id=1531782285]
+shape = SubResource("CircleShape2D_ub6uw")
+
+[node name="Health" type="Node" parent="." unique_id=1891742081]
+script = ExtResource("2_g2els")
+
+[node name="CatchBox" type="Area2D" parent="." unique_id=47873977]
+unique_name_in_owner = true
+collision_layer = 0
+collision_mask = 2
+
+[node name="CatchCollider" type="CollisionShape2D" parent="CatchBox" unique_id=2000572899]
+shape = SubResource("CircleShape2D_8wtow")
+
+[node name="Input" type="Node" parent="." unique_id=1365044664]
+
+[node name="SkimBox" type="Area2D" parent="." unique_id=1630984370]
+unique_name_in_owner = true
+collision_layer = 0
+collision_mask = 2
+
+[node name="SkimCollider" type="CollisionShape2D" parent="SkimBox" unique_id=1428933608]
+shape = SubResource("CircleShape2D_8wtow")
