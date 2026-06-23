@@ -3,18 +3,18 @@ class_name HealthComponent
 
 @export var current := 0:
 	set(value):
-		current = clamp(value, 0, max)
+		current = clamp(value, 0, max_val)
 		changed.emit()
-@export var max := 100:
+@export var max_val := 100:
 	set(value):
 		if current > value:
 			current = value
-		max = value
+		max_val = value
 
 signal changed
 
 func take_damage(amount: int):
 	current -= amount
-	
+
 func heal(amount: int):
 	current += amount
