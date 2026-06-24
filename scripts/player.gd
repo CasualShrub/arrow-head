@@ -8,12 +8,9 @@ const _PLAYER_TEAM = Arrow.Team.PLAYER
 @export var health: HealthComponent
 
 @export var speed := 200.0
-@export_group("arrows")
-@export var fire_cooldown := 1.0:
-	set(value):
-		if value < 0: value = 0
-		%FireDebounce.wait_time = value
-		fire_cooldown = value
+@export_group("melee")
+@export var melee_range := 70.0
+@export var melee_cooldown := 0.4
 @export_group("hurt")
 @export var hurt_radius := 25.0:
 	set(value):
@@ -30,6 +27,7 @@ signal died()
 var _sectors: Array[EmbeddedArrow]
 var _dead := false
 var _facing := Vector2()
+var _melee_ready := true
 
 func _update_collider(c: CollisionShape2D, r: float) -> void:
 	if not c: return
@@ -120,21 +118,44 @@ func move(dir: Vector2, _dt: float) -> void:
 	velocity = dir * speed
 	move_and_slide()
 
-func try_fire(sector: int) -> void:
-	if not %FireDebounce.is_stopped(): return
+func _unhandled_input(event: InputEvent) -> void:
+	if Engine.is_editor_hint(): return
+	if event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_LEFT:
+		melee()
+
+# swing toward the mouse: weaponize the arrow stuck in the aimed sector, then clear it
+func melee() -> void:
+	if not _melee_ready: return
+	var sector := get_sector(_facing)
 	var embedded := get_embedded(sector)
 	if not embedded: return
-	var arrow := embedded.try_grab()
-	if arrow:
-		fire(arrow)
-
-func fire(arrow: Arrow) -> void:
-	if not arrow: return
-	%FireDebounce.start()
-	if arrow.get_parent() != get_tree().current_scene:
-		arrow.reparent(get_tree().current_scene)
-	arrow.activate(global_position, _facing, _PLAYER_TEAM)
+	var arrow := embedded.get_arrow()
+	_melee_ready = false
+	get_tree().create_timer(melee_cooldown).timeout.connect(func(): _melee_ready = true)
+	_melee_hit()
+	_consume(embedded)
 	fired.emit(arrow)
+
+func _melee_hit() -> void:
+	var shape := CircleShape2D.new()
+	shape.radius = melee_range
+	var q := PhysicsShapeQueryParameters2D.new()
+	q.shape = shape
+	q.transform = Transform2D(0.0, global_position + _facing * (melee_range * 0.6))
+	q.collision_mask = 1 << 3  # enemy = layer 4
+	for hit in get_world_2d().direct_space_state.intersect_shape(q, 16):
+		var col = hit.get("collider")
+		if col is Enemy:
+			col.get_hit(null)
+
+func _consume(embedded: EmbeddedArrow) -> void:
+	var arrow := embedded.get_arrow()
+	if arrow:
+		arrow.queue_free()
+	for s in _sectors.size():
+		if _sectors[s] == embedded:
+			_sectors[s] = null
+	embedded.queue_free()
 
 func is_dead() -> bool:
 	return _dead
