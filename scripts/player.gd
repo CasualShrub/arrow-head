@@ -11,23 +11,28 @@ const _PLAYER_TEAM = Arrow.Team.PLAYER
 @export_group("melee")
 @export var melee_range := 70.0
 @export var melee_cooldown := 0.4
+@export_group("shooting")
+@export var shoot_cooldown := 0.25
 @export_group("hurt")
 @export var hurt_radius := 25.0:
 	set(value):
 		if value < 0: value = 0
-		_update_collider(%HurtCollider, value)
+		_update_collider(get_node_or_null("%HurtCollider"), value)  # may run before the node exists
 		hurt_radius = value
 @export var sector_count := 4
 @export var sector_centered := false
 
 signal hit(arrow: Arrow, sector: int)
 signal fired(arrow: Arrow)
+signal ammo_changed(count: int)
 signal died()
 
 var _sectors: Array[EmbeddedArrow]
+var _ammo: Array[Arrow] = []
 var _dead := false
 var _facing := Vector2()
 var _melee_ready := true
+var _shoot_ready := true
 
 func _update_collider(c: CollisionShape2D, r: float) -> void:
 	if not c: return
@@ -74,8 +79,7 @@ func embed_arrow(arrow: Arrow, sector: int) -> void:
 	var embedded := EmbeddedArrow.new(arrow, sector)
 	for s in selected_sectors:
 		_sectors[s] = embedded
-	if fully_embedded():
-		enable_firing()
+	_try_absorb()
 
 func try_embed_arrow(arrow: Arrow, sector: int,) -> bool:
 	var selected_sectors := arrow.get_sector(sector)
@@ -120,8 +124,11 @@ func move(dir: Vector2, _dt: float) -> void:
 
 func _unhandled_input(event: InputEvent) -> void:
 	if Engine.is_editor_hint(): return
-	if event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_LEFT:
-		melee()
+	if event is InputEventMouseButton and event.pressed:
+		if event.button_index == MOUSE_BUTTON_LEFT:
+			melee()
+		elif event.button_index == MOUSE_BUTTON_RIGHT:
+			shoot()
 
 # swing toward the mouse: weaponize the arrow stuck in the aimed sector, then clear it
 func melee() -> void:
@@ -143,8 +150,8 @@ func _melee_hit() -> void:
 	q.shape = shape
 	q.transform = Transform2D(0.0, global_position + _facing * (melee_range * 0.5))
 	q.collision_mask = 1 << 3  # enemy = layer 4
-	for hit in get_world_2d().direct_space_state.intersect_shape(q, 16):
-		var col = hit.get("collider")
+	for result in get_world_2d().direct_space_state.intersect_shape(q, 16):
+		var col = result.get("collider")
 		if not (col is Enemy):
 			continue
 		var to_enemy: Vector2 = (col.global_position - global_position).normalized()
@@ -159,6 +166,45 @@ func _consume(embedded: EmbeddedArrow) -> void:
 		if _sectors[s] == embedded:
 			_sectors[s] = null
 	embedded.queue_free()
+
+# a full set of 4 gets pulled out of the sectors into a shoot-back pool, but only while the
+# pool is empty — you must spend the current batch before the next one loads
+func _try_absorb() -> void:
+	if not fully_embedded() or not _ammo.is_empty():
+		return
+	var taken := {}
+	for em in _sectors:
+		if not em or taken.has(em):
+			continue
+		taken[em] = true
+		var arrow := em.get_arrow()
+		if arrow and is_instance_valid(arrow):
+			arrow.free_on_finish = false  # held in the pool: don't let it self-free off-screen
+			arrow.deactivate()
+			_ammo.append(arrow)
+		em.queue_free()
+	_setup_sectors()
+	ammo_changed.emit(_ammo.size())
+
+# right-click: fling one stored arrow back toward the mouse as a player-team projectile
+func shoot() -> void:
+	if not _shoot_ready:
+		return
+	while not _ammo.is_empty() and not is_instance_valid(_ammo[-1]):
+		_ammo.pop_back()  # discard any pooled arrow that got freed out from under us
+	if _ammo.is_empty():
+		ammo_changed.emit(_ammo.size())
+		return
+	var arrow: Arrow = _ammo.pop_back()
+	_shoot_ready = false
+	get_tree().create_timer(shoot_cooldown).timeout.connect(func(): _shoot_ready = true)
+	arrow.free_on_finish = true  # back in flight: clean it up when it leaves the arena
+	if arrow.get_parent() != get_tree().current_scene:
+		arrow.reparent(get_tree().current_scene)
+	arrow.activate(global_position, _facing, _PLAYER_TEAM)
+	fired.emit(arrow)
+	ammo_changed.emit(_ammo.size())
+	_try_absorb()
 
 func is_dead() -> bool:
 	return _dead

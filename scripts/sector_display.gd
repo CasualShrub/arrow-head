@@ -32,8 +32,9 @@ func _draw() -> void:
 		if i == aimed:
 			fill = Color(1, 1, 1, 0.3)
 		draw_colored_polygon(pts, fill)
-		# arc (outer curve) stays translucent for every wedge
-		draw_polyline(pts.slice(1), Color(0.95, 0.45, 0.25, 0.35), 1.5)
+		# arc (outer curve): white-translucent on the aimed wedge, reddish on the rest
+		var arc_color := Color(1, 1, 1, 0.35) if i == aimed else Color(0.95, 0.45, 0.25, 0.35)
+		draw_polyline(pts.slice(1), arc_color, 1.5)
 		# inner cone sides: bold white on the aimed wedge, translucent on the rest
 		var sides := PackedVector2Array([pts[1], pts[0], pts[pts.size() - 1]])
 		if i == aimed:

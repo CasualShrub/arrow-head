@@ -25,7 +25,7 @@ const _MASK_ENEMY := 1 << 3
 @export var max_lifetime := 0.0
 @export var free_on_finish := true
 
-signal hit(target: Player)
+signal hit(target: Node2D)
 signal finished(arrow: Arrow)
 
 var _life := 0.0
@@ -70,10 +70,13 @@ func _bounce(collision: KinematicCollision2D) -> void:
 	if max_bounces >= 0 and _bounces > max_bounces:
 		_finish()
 
-func _on_hit(target: Player) -> void:
-	#target.health.take_damage(damage)
-	target.get_hit(self)
+func _on_hit(target) -> void:
+	# player and enemy both expose get_hit(arrow); our team's mask decides which one we can strike
+	if target.has_method("get_hit"):
+		target.get_hit(self)
 	hit.emit(target)
+	if team == Team.PLAYER:
+		_finish()  # a shot-back arrow is spent on impact; the enemy doesn't stop it like the player does
 
 func get_remaining_lifetime() -> float:
 	if max_lifetime == 0: return INF

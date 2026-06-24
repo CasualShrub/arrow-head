@@ -16,7 +16,7 @@ func _ready() -> void:
 	_build_ui()
 	_find_actors()
 	_wire()
-	_ammo_label.text = "ammo: 0 / %d" % (_player.sector_count if _player else 0)
+	_ammo_label.text = "arrows: 0"
 	_refresh_enemies()
 
 func _build_ui() -> void:
@@ -37,7 +37,7 @@ func _build_ui() -> void:
 	hb.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	bar.add_child(hb)
 
-	_ammo_label = UiStyle.label("ammo: 0 / 0", 20)
+	_ammo_label = UiStyle.label("arrows: 0", 20)
 	hb.add_child(_ammo_label)
 
 	var spacer := Control.new()
@@ -104,22 +104,15 @@ func _find_enemies(node: Node, out: Array[Enemy]) -> void:
 
 func _wire() -> void:
 	if _player:
-		_player.hit.connect(func(_a, _s): _refresh_ammo())
-		_player.fired.connect(func(_a): _refresh_ammo())
+		_player.ammo_changed.connect(_on_ammo_changed)
 		_player.died.connect(_on_player_died)
 	for e in _enemies:
 		if e.health:
 			e.health.changed.connect(_on_enemy_health_changed)
 
-func _refresh_ammo() -> void:
-	if not _player:
-		return
-	# ammo = quadrants currently holding an arrow
-	var n := 0
-	for i in _player.sector_count:
-		if _player.get_embedded(i) != null:
-			n += 1
-	_ammo_label.text = "ammo: %d / %d" % [n, _player.sector_count]
+func _on_ammo_changed(count: int) -> void:
+	# the shoot-back pool: arrows absorbed from a full set, ready to fire
+	_ammo_label.text = "arrows: %d" % count
 
 # an enemy counts as dead once its health drains; it isn't freed from the tree
 func _enemies_alive() -> int:
