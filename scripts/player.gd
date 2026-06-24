@@ -112,6 +112,12 @@ func move(dir: Vector2, _dt: float) -> void:
 	velocity.x = v.x
 	velocity.z = v.y
 	velocity.y = 0
+	var selected: int
+	if velocity == Vector3.ZERO:
+		selected = -1
+	else:
+		selected = sectors.get_sector_from_position(global_position + velocity)
+	sectors.highlight_sector(selected)
 	move_and_slide()
 
 func try_fire(sector: int) -> void:

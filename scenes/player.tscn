@@ -32,9 +32,7 @@ input = NodePath("Input")
 health = NodePath("Health")
 sectors = NodePath("Sectors")
 hurt_radius = 0.4
-sector_count = 4
-sector_centered = true
-sector_radius = 1.0
+sector_radius = null
 
 [node name="HurtCollider" type="CollisionShape3D" parent="." unique_id=1401584448]
 unique_name_in_owner = true
@@ -64,7 +62,7 @@ double_sided = false
 texture = ExtResource("4_dqkch")
 
 [node name="Sectors" type="MeshInstance3D" parent="." unique_id=9603647]
-transform = Transform3D(-0.70710677, -0.70710677, -3.090862e-08, 0, -4.371139e-08, 1, -0.70710677, 0.70710677, 3.090862e-08, 0, 0.0095798075, 0)
+transform = Transform3D(-0.7071067, -0.7071067, -3.090862e-08, 0, -4.3711385e-08, 1, -0.7071067, 0.7071067, 3.090862e-08, 0, 0.0095798075, 0)
 material_override = SubResource("ShaderMaterial_fjrip")
 mesh = SubResource("QuadMesh_ub6uw")
 script = ExtResource("6_tuyoq")

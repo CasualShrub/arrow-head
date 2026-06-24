@@ -7,6 +7,7 @@ class_name SectorsComponent
 		if not mat: return
 		mat.set_shader_parameter("sector_count", value)
 		sector_count = value
+		_handle_centering()
 @export var centered := true:
 	set(value):
 		_handle_centering(value)
@@ -17,30 +18,54 @@ class_name SectorsComponent
 		scale.y = value
 		radius = value
 
+
+
+	
 @onready var mat: ShaderMaterial = material_override
+
+var _highlighted := -1:
+	set(value):
+		if not mat: return
+		mat.set_shader_parameter("aimed_sector", value)
+		_highlighted = value
 
 var _stored := []
 
 func get_sector_size() -> float:
-	return 2 * PI / sector_count
+	return TAU / sector_count
 
 func get_sector_from_angle(angle: float) -> int:
 	var sector_size := get_sector_size()
-	if centered:
-		angle += sector_size / 2
-	if angle < 0:
-		angle += 2 * PI
-	elif angle >= 2 * PI:
-		angle -= 2 * PI
-	return floor(angle / sector_size)
+
+	angle = fposmod(angle, TAU)
+	return int(floor(angle / sector_size))
 
 func get_sector_from_position(pos: Vector3) -> int:
-	var local_pos = to_local(pos)
-	var angle := atan2(local_pos.x, -local_pos.z)
+	var dir := pos - global_position
+	dir.y = 0.0
+
+	if dir.length() < 0.0001:
+		return 0.0
+
+	dir = dir.normalized()
+
+	var forward := -global_transform.basis.z
+	var right := global_transform.basis.x
+
+	forward.y = 0.0
+	right.y = 0.0
+
+	forward = forward.normalized()
+	right = right.normalized()
+
+	var x := dir.dot(right)
+	var z := dir.dot(forward)
+
+	var angle := atan2(z, x)
 	return get_sector_from_angle(angle)
 
 func _stored_is_ref(stored: Variant) -> bool:
-	return stored is int and stored < sector_count
+	return stored is int
 
 func store(sectors: Array[int], to_store: Variant) -> bool:
 	if len(sectors) == 0: return false
@@ -81,11 +106,8 @@ func full() -> bool:
 	return true
 
 func take_stored(sector: int) -> Variant:
-	var s = get_stored_at(sector)
-	if _stored_is_ref(s):
-		sector = s
-		s = get_stored_at(s)
-	# other slots are 
+	if _stored_is_ref(_stored[sector]):
+		sector = _stored[sector]
 	var slots = [sector]
 	for i in range(sector_count):
 		# store actual in last slot, so if passed break
@@ -93,22 +115,21 @@ func take_stored(sector: int) -> Variant:
 			break
 		if _stored[i] == sector:
 			slots.append(i)
+	var s = get_stored_at(sector)
 	for i in slots:
 		_stored[i] = null
 	_update_occupied_mask()
 	return s
 
 func clear_stored() -> void:
-	for s in _stored:
-		if s and s is not int:
-			print("clearing", s)
-			s.queue_free()
-	_stored = []
+	_stored.clear()
 	_setup_stored()
 
+func get_highlighted() -> int:
+	return _highlighted
+
 func highlight_sector(sector: int = -1) -> void:
-	if not mat: return
-	mat.set_shader_parameter("aimed_sector", sector)
+	_highlighted = sector
 
 func _update_occupied_mask() -> void:
 	if not mat: return
@@ -131,7 +152,10 @@ func _decenter() -> void:
 	rotation.y = PI / 2
 
 func _setup_stored() -> void:
+	_stored = []
 	_stored.resize(sector_count)
+	for i in range(sector_count):
+		_stored[i] = null
 
 func _ready() -> void:
 	if not Engine.is_editor_hint():
