@@ -14,6 +14,7 @@ config/name="bullet hell"
 run/main_scene="uid://b6c1h2si8ob6l"
 config/features=PackedStringArray("4.7", "Forward Plus")
 config/icon="res://icon.svg"
+<<<<<<<Updatedupstreamrun/main_scene="res://scenes/level.tscn"
 
 [autoload]
 

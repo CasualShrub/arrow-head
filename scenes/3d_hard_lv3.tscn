@@ -1,8 +1,4 @@
-<<<<<<< Updated upstream
-[gd_scene format=3 uid="uid://cbqfgfsy4gakx"]
-=======
 [gd_scene format=3 uid="uid://by6cpdx5d7sdo"]
->>>>>>> Stashed changes
 
 [ext_resource type="Script" uid="uid://cm3vh4qq01y8d" path="res://scripts/encounter.gd" id="1_7lq1q"]
 [ext_resource type="PackedScene" uid="uid://boryk37cbh1nx" path="res://scenes/player.tscn" id="2_k7ae3"]
@@ -83,18 +79,6 @@ motion_mode = 1
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.91236, 0, 22.649395)
 motion_mode = 1
 
-[node name="Enemy4" parent="SubViewportContainer/SubViewport/World/Enemies" unique_id=307138545 instance=ExtResource("7_nqiib")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8.9424305, 0, 33.686996)
-motion_mode = 1
-
-[node name="Enemy5" parent="SubViewportContainer/SubViewport/World/Enemies" unique_id=40837905 instance=ExtResource("7_nqiib")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 18.808702, 0, 12.539282)
-motion_mode = 1
-
-[node name="Enemy6" parent="SubViewportContainer/SubViewport/World/Enemies" unique_id=2024148933 instance=ExtResource("7_nqiib")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 38.792618, 0, 19.987944)
-motion_mode = 1
-
 [node name="CSGBox3D" type="CSGBox3D" parent="SubViewportContainer/SubViewport/World" unique_id=1674034061]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.7, 0)
 size = Vector3(100, 1, 100)
@@ -126,46 +110,28 @@ collision_layer = 4
 size = Vector3(7.355279, 2.6455078, 0.19891214)
 
 [node name="CSGBox3D11" type="CSGBox3D" parent="SubViewportContainer/SubViewport/World/Node3D" unique_id=845751079]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 28.690056, 0.3557061, 7.542734)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 17.356503, 0.3557061, 1.1895063)
 use_collision = true
 collision_layer = 4
-size = Vector3(17.392666, 2.6455078, 6.4514046)
-
-[node name="CSGBox3D13" type="CSGBox3D" parent="SubViewportContainer/SubViewport/World/Node3D" unique_id=741970768]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 43.41041, 0.3557061, 17.565392)
-use_collision = true
-collision_layer = 4
-size = Vector3(7.0082617, 2.6455078, 31.406645)
-
-[node name="CSGBox3D14" type="CSGBox3D" parent="SubViewportContainer/SubViewport/World/Node3D" unique_id=779878569]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 28.437159, 0.3557061, 15.984577)
-use_collision = true
-collision_layer = 4
-size = Vector3(17.013775, 2.6455078, 5.348793)
-
-[node name="CSGBox3D15" type="CSGBox3D" parent="SubViewportContainer/SubViewport/World/Node3D" unique_id=1436431708]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 31.027874, 0.3557061, 25.938791)
-use_collision = true
-collision_layer = 4
-size = Vector3(24.849575, 2.6455078, 8.957478)
-
-[node name="CSGBox3D16" type="CSGBox3D" parent="SubViewportContainer/SubViewport/World/Node3D" unique_id=716781972]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 22.168415, 0.3557061, 31.513811)
-use_collision = true
-collision_layer = 4
-size = Vector3(9.6634655, 2.6455078, 5.348793)
+size = Vector3(11.437384, 2.6455078, 5.593291)
 
 [node name="CSGBox3D12" type="CSGBox3D" parent="SubViewportContainer/SubViewport/World/Node3D" unique_id=1533390924]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 26.676273, 0.3557061, -4.76009)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 18.566954, 0.3557061, -6.784562)
 use_collision = true
 collision_layer = 4
-size = Vector3(26.223412, 2.6455078, 6.4514046)
+size = Vector3(10.004772, 2.6455078, 2.40246)
+
+[node name="CSGBox3D13" type="CSGBox3D" parent="SubViewportContainer/SubViewport/World/Node3D" unique_id=1018450909]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 18.69293, 0.3557061, -2.4839044)
+use_collision = true
+collision_layer = 4
+size = Vector3(10.256725, 2.6455078, 2.40246)
 
 [node name="CSGBox3D4" type="CSGBox3D" parent="SubViewportContainer/SubViewport/World/Node3D" unique_id=1770848343]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.1330247, 0.3557061, 31.68776)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 15.148171, 0.3557061, 32.83001)
 use_collision = true
 collision_layer = 4
-size = Vector3(0.24346268, 2.6455078, 10.153664)
+size = Vector3(24.273756, 2.6455078, 12.43816)
 
 [node name="CSGBox3D9" type="CSGBox3D" parent="SubViewportContainer/SubViewport/World/Node3D" unique_id=149567002]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.1330247, 0.3557061, 23.083187)
@@ -185,29 +151,11 @@ use_collision = true
 collision_layer = 4
 size = Vector3(5.353665, 2.6455078, 0.23136449)
 
-[node name="CSGBox3D20" type="CSGBox3D" parent="SubViewportContainer/SubViewport/World/Node3D" unique_id=274680806]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8.3535795, 0.18372715, 30.060781)
-use_collision = true
-collision_layer = 4
-size = Vector3(4.928399, 2.6455078, 0.5519295)
-
-[node name="CSGBox3D21" type="CSGBox3D" parent="SubViewportContainer/SubViewport/World/Node3D" unique_id=1223322662]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8.3535795, 0.18372715, 34.308952)
-use_collision = true
-collision_layer = 4
-size = Vector3(4.928399, 2.6455078, 0.5519295)
-
-[node name="CSGBox3D22" type="CSGBox3D" parent="SubViewportContainer/SubViewport/World/Node3D" unique_id=1678146846]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.1185503, 0.18372715, 32.13642)
-use_collision = true
-collision_layer = 4
-size = Vector3(0.45834017, 2.6455078, 4.703211)
-
 [node name="CSGBox3D5" type="CSGBox3D" parent="SubViewportContainer/SubViewport/World/Node3D" unique_id=1106578381]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11.734961, 0.3557061, 15.590554)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 19.129192, 0.3557061, 15.590554)
 use_collision = true
 collision_layer = 4
-size = Vector3(2.3781476, 2.6455078, 24.4042)
+size = Vector3(17.166613, 2.6455078, 24.4042)
 
 [node name="CSGBox3D6" type="CSGBox3D" parent="SubViewportContainer/SubViewport/World/Node3D" unique_id=1282754641]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.443125, 0.3557061, 20.40828)
@@ -220,12 +168,6 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8.006845, 0.3557061, 27.63246
 use_collision = true
 collision_layer = 4
 size = Vector3(9.834377, 2.6455078, 0.40933847)
-
-[node name="CSGBox3D8" type="CSGBox3D" parent="SubViewportContainer/SubViewport/World/Node3D" unique_id=1636562770]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.960262, 0.3557061, 37.509605)
-use_collision = true
-collision_layer = 4
-size = Vector3(9.927545, 2.6455078, 2.462964)
 
 [node name="Walls" type="Node3D" parent="SubViewportContainer/SubViewport/World" unique_id=2116843859]
 
