@@ -109,4 +109,5 @@ func _finish() -> void:
 		queue_free()
 
 func _on_screen_exited() -> void:
-	_finish()
+	pass
+	#_finish()
