@@ -4,12 +4,10 @@
 [ext_resource type="Script" uid="uid://cq7vk7ukbmts4" path="res://scripts/health_component.gd" id="2_md0e3"]
 [ext_resource type="Script" uid="uid://dn8jqcy1eo7y7" path="res://scripts/sus_component.gd" id="3_4ra3w"]
 [ext_resource type="PackedScene" uid="uid://bxgfy1nvmlb7v" path="res://scenes/arrow.tscn" id="4_arrow"]
+[ext_resource type="Texture2D" uid="uid://bw2u2pxocrlxi" path="res://art/enemy/idle.PNG" id="5_idle"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_5uy6h"]
 radius = 25.0
-
-[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_5uy6h"]
-load_path = "res://.godot/imported/icon.svg-218a8f2b3041327d8a5756f3a245f83b.ctex"
 
 [node name="Enemy" type="CharacterBody2D" unique_id=1183056859 node_paths=PackedStringArray("health", "sus")]
 collision_layer = 8
@@ -35,6 +33,5 @@ unique_name_in_owner = true
 script = ExtResource("3_4ra3w")
 
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=2023821250]
-position = Vector2(3.8146973e-06, 3.8146973e-06)
-scale = Vector2(0.3, 0.3)
-texture = SubResource("CompressedTexture2D_5uy6h")
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("5_idle")
