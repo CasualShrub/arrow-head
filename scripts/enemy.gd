@@ -12,22 +12,40 @@ const _ENEMY_TEAM = Arrow.Team.ENEMY
 @export var arrow_scene: PackedScene
 @export var fire_rate := 2.0
 
+@export var aim_time := 0.4
+@export var release_time := 0.12
+@export var hit_flash_time := 0.15
+
 @export var hurt_radius := 25.0:
 	set(value):
 		if value < 0: value = 0
 		_update_collider(%HurtCollider, value)
 		hurt_radius = value
 
+@export_group("sprites")
+@export var frame1: Texture2D
+@export var frame2: Texture2D
+@export var frame3: Texture2D
+@export var frame4: Texture2D
+@export var hit_normal: Texture2D
+@export var hit_stretch: Texture2D
+
 var _facing := Vector2()
 var _dead := false
 var _alerted := false
+var _aiming := false
+var _hit_showing := false
+var _base_tex: Texture2D 
 var _movement_pattern: Dictionary[float, Vector2] = {}
+
+@onready var _sprite: Sprite2D = $Sprite2D
 
 signal fired(arrow: Arrow)
 signal died
 
 func get_hit(_arrow: Arrow) -> void:
 	health.take_damage(1)
+	_show_hit()
 
 func _update_collider(c: CollisionShape2D, r: float) -> void:
 	if not c:
@@ -159,18 +177,58 @@ func die() -> void:
 	died.emit()
 
 func _ready() -> void:
-	if not Engine.is_editor_hint():
-		%FireDebounce.wait_time = fire_rate
-		%FireDebounce.timeout.connect(_on_fire_timeout)
-		%FireDebounce.start()
+	if Engine.is_editor_hint():
+		return
+	_set_base(frame1)
+	%FireDebounce.one_shot = true
+	%FireDebounce.wait_time = fire_rate
+	%FireDebounce.timeout.connect(_on_fire_timeout)
+	%FireDebounce.start()
 
 func _on_fire_timeout() -> void:
 	_look_at_player()
+	_aiming = true
+	var draw := [frame1, frame2, frame3]
+	var step := aim_time / draw.size()
+	for frame in draw:
+		_set_base(frame)
+		await get_tree().create_timer(step).timeout
+		if _dead:
+			return
 	if arrow_scene:
 		fire(_make_arrow(arrow_scene), _facing)
+	_set_base(frame4)
+	await get_tree().create_timer(release_time).timeout
+	if _dead:
+		return
+	_aiming = false
+	_set_base(frame1)
 	%FireDebounce.start()
 
+func _set_base(tex: Texture2D) -> void:
+	_base_tex = tex
+	if not _hit_showing:
+		_set_sprite(tex)
+
+func _set_sprite(tex: Texture2D) -> void:
+	if _sprite:
+		_sprite.texture = tex
+
+func _show_hit() -> void:
+	_hit_showing = true
+	_set_sprite(hit_stretch if _aiming else hit_normal)
+	await get_tree().create_timer(hit_flash_time).timeout
+	_hit_showing = false
+	if _dead:
+		return
+	_set_sprite(_base_tex)
+
 func _physics_process(_delta: float) -> void:
+	if Engine.is_editor_hint():
+		return
+	_look_at_player()
+	if _sprite and _facing != Vector2.ZERO:
+		_sprite.rotation = _facing.angle()
 	if not _alerted:
 		_patrol()
 	else:

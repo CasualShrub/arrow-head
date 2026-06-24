@@ -17,9 +17,6 @@
 
 [node name="Walls" type="Node2D" parent="." unique_id=1010003266]
 script = ExtResource("6_arena")
-half_width_px = 576
-half_height_px = 324
-block_scale = 0.3
 
 [node name="Grass" type="TileMapLayer" parent="." unique_id=166726213]
 z_index = -2
