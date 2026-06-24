@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://bhak42iqctdgj"
-path="res://.godot/imported/stretch_aim.PNG-19adc837ad76d0dfb276872e2934d5df.ctex"
+uid="uid://ccs6nyr8bd0ba"
+path="res://.godot/imported/frame4.png-9ade79d72273ff637ec26131a8572f6e.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://art/enemy/stretch_aim.PNG"
-dest_files=["res://.godot/imported/stretch_aim.PNG-19adc837ad76d0dfb276872e2934d5df.ctex"]
+source_file="res://art/enemy/frame4.png"
+dest_files=["res://.godot/imported/frame4.png-9ade79d72273ff637ec26131a8572f6e.ctex"]
 
 [params]
 

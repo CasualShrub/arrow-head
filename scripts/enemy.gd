@@ -4,11 +4,6 @@ class_name Enemy
 
 const _ENEMY_TEAM = Arrow.Team.ENEMY
 
-const _TEX_IDLE := preload("res://art/enemy/idle.PNG")
-const _TEX_AIM := preload("res://art/enemy/stretch_aim.PNG")
-const _TEX_NORMAL_HIT := preload("res://art/enemy/normal_hit.PNG")
-const _TEX_STRETCH_HIT := preload("res://art/enemy/stretch_hit.PNG")
-
 @export var health: HealthComponent
 @export var sus: SusComponent
 @export var player: Player
@@ -18,6 +13,7 @@ const _TEX_STRETCH_HIT := preload("res://art/enemy/stretch_hit.PNG")
 @export var fire_rate := 2.0
 
 @export var aim_time := 0.4
+@export var release_time := 0.12
 @export var hit_flash_time := 0.15
 
 @export var hurt_radius := 25.0:
@@ -26,11 +22,20 @@ const _TEX_STRETCH_HIT := preload("res://art/enemy/stretch_hit.PNG")
 		_update_collider(%HurtCollider, value)
 		hurt_radius = value
 
+@export_group("sprites")
+@export var frame1: Texture2D
+@export var frame2: Texture2D
+@export var frame3: Texture2D
+@export var frame4: Texture2D
+@export var hit_normal: Texture2D
+@export var hit_stretch: Texture2D
+
 var _facing := Vector2()
 var _dead := false
 var _alerted := false
 var _aiming := false
 var _hit_showing := false
+var _base_tex: Texture2D 
 var _movement_pattern: Dictionary[float, Vector2] = {}
 
 @onready var _sprite: Sprite2D = $Sprite2D
@@ -174,7 +179,7 @@ func die() -> void:
 func _ready() -> void:
 	if Engine.is_editor_hint():
 		return
-	_set_sprite(_TEX_IDLE)
+	_set_base(frame1)
 	%FireDebounce.one_shot = true
 	%FireDebounce.wait_time = fire_rate
 	%FireDebounce.timeout.connect(_on_fire_timeout)
@@ -183,17 +188,27 @@ func _ready() -> void:
 func _on_fire_timeout() -> void:
 	_look_at_player()
 	_aiming = true
-	if not _hit_showing:
-		_set_sprite(_TEX_AIM)
-	await get_tree().create_timer(aim_time).timeout
-	if _dead:
-		return
+	var draw := [frame1, frame2, frame3]
+	var step := aim_time / draw.size()
+	for frame in draw:
+		_set_base(frame)
+		await get_tree().create_timer(step).timeout
+		if _dead:
+			return
 	if arrow_scene:
 		fire(_make_arrow(arrow_scene), _facing)
+	_set_base(frame4)
+	await get_tree().create_timer(release_time).timeout
+	if _dead:
+		return
 	_aiming = false
-	if not _hit_showing:
-		_set_sprite(_TEX_IDLE)
+	_set_base(frame1)
 	%FireDebounce.start()
+
+func _set_base(tex: Texture2D) -> void:
+	_base_tex = tex
+	if not _hit_showing:
+		_set_sprite(tex)
 
 func _set_sprite(tex: Texture2D) -> void:
 	if _sprite:
@@ -201,12 +216,12 @@ func _set_sprite(tex: Texture2D) -> void:
 
 func _show_hit() -> void:
 	_hit_showing = true
-	_set_sprite(_TEX_STRETCH_HIT if _aiming else _TEX_NORMAL_HIT)
+	_set_sprite(hit_stretch if _aiming else hit_normal)
 	await get_tree().create_timer(hit_flash_time).timeout
 	_hit_showing = false
 	if _dead:
 		return
-	_set_sprite(_TEX_AIM if _aiming else _TEX_IDLE)
+	_set_sprite(_base_tex)
 
 func _physics_process(_delta: float) -> void:
 	if Engine.is_editor_hint():
