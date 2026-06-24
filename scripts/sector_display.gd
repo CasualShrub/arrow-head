@@ -28,7 +28,10 @@ func _draw() -> void:
 			a0 -= size * 0.5
 		var pts := _wedge(a0, a0 + size)
 		var occupied: bool = player.get_embedded(i) != null
-		draw_colored_polygon(pts, Color(0.9, 0.35, 0.15, 0.5) if occupied else Color(0.9, 0.35, 0.15, 0.12))
+		var fill := Color(0.9, 0.35, 0.15, 0.5) if occupied else Color(0.9, 0.35, 0.15, 0.12)
+		if i == aimed:
+			fill = Color(1, 1, 1, 0.3)
+		draw_colored_polygon(pts, fill)
 		# arc (outer curve) stays translucent for every wedge
 		draw_polyline(pts.slice(1), Color(0.95, 0.45, 0.25, 0.35), 1.5)
 		# inner cone sides: bold white on the aimed wedge, translucent on the rest

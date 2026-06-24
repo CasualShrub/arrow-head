@@ -51,14 +51,14 @@ func _build_ui() -> void:
 	_pause_panel = _make_overlay("Paused", [
 		["Resume", _resume], ["Restart", _restart], ["Main menu", _to_menu]])
 	_victory_panel = _make_overlay("Victory", [
-		["Next level", _next], ["Restart", _restart], ["Main menu", _to_menu]])
+		["Next level", _next], ["Restart", _restart], ["Main menu", _to_menu]], "press R to restart")
 	_defeat_panel = _make_overlay("You got pierced", [
-		["Restart", _restart], ["Main menu", _to_menu]])
+		["Restart", _restart], ["Main menu", _to_menu]], "press R to restart")
 	for p in [_pause_panel, _victory_panel, _defeat_panel]:
 		p.visible = false
 		root.add_child(p)
 
-func _make_overlay(title_text: String, buttons: Array) -> Control:
+func _make_overlay(title_text: String, buttons: Array, hint := "") -> Control:
 	var overlay := ColorRect.new()
 	overlay.color = Color(0, 0, 0, 0.6)
 	overlay.set_anchors_preset(Control.PRESET_FULL_RECT)
@@ -74,6 +74,10 @@ func _make_overlay(title_text: String, buttons: Array) -> Control:
 		var b := UiStyle.button(entry[0])
 		b.pressed.connect(entry[1])
 		vb.add_child(b)
+	if hint != "":
+		var h := UiStyle.label(hint, 16, UiStyle.MUTED)
+		h.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		vb.add_child(h)
 	return overlay
 
 func _find_actors() -> void:

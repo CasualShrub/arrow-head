@@ -141,11 +141,14 @@ func _melee_hit() -> void:
 	shape.radius = melee_range
 	var q := PhysicsShapeQueryParameters2D.new()
 	q.shape = shape
-	q.transform = Transform2D(0.0, global_position + _facing * (melee_range * 0.6))
+	q.transform = Transform2D(0.0, global_position + _facing * (melee_range * 0.5))
 	q.collision_mask = 1 << 3  # enemy = layer 4
 	for hit in get_world_2d().direct_space_state.intersect_shape(q, 16):
 		var col = hit.get("collider")
-		if col is Enemy:
+		if not (col is Enemy):
+			continue
+		var to_enemy: Vector2 = (col.global_position - global_position).normalized()
+		if _facing.dot(to_enemy) > 0.3:  # only enemies in front of the swing
 			col.get_hit(null)
 
 func _consume(embedded: EmbeddedArrow) -> void:
