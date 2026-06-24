@@ -8,7 +8,11 @@ const _ENEMY_TEAM = Arrow.Team.ENEMY
 @export var sus: SusComponent
 @export var player: Player
 
-@export var hurt_radius := 10.0:
+@export_group("firing")
+@export var arrow_scene: PackedScene
+@export var fire_rate := 2.0
+
+@export var hurt_radius := 25.0:
 	set(value):
 		if value < 0: value = 0
 		_update_collider(%HurtCollider, value)
@@ -26,6 +30,8 @@ func get_hit(_arrow: Arrow) -> void:
 	health.take_damage(1)
 
 func _update_collider(c: CollisionShape2D, r: float) -> void:
+	if not c:
+		return
 	var s := CircleShape2D.new()
 	s.radius = r
 	c.shape = s
@@ -128,11 +134,14 @@ func perform(pattern: ArrowPattern) -> void:
 	_check_empty.call()
 
 func fire(arrow: Arrow, dir: Vector2) -> void:
-	arrow.activate(position, dir, _ENEMY_TEAM)
+	get_tree().current_scene.add_child(arrow)
+	arrow.activate(global_position, dir, _ENEMY_TEAM)
 	fired.emit(arrow)
 
 func _look_at_player() -> void:
-	pass
+	if not player:
+		return
+	_facing = (player.global_position - global_position).normalized()
 
 func _patrol() -> void:
 	pass
@@ -148,6 +157,18 @@ func is_dead() -> bool:
 
 func die() -> void:
 	died.emit()
+
+func _ready() -> void:
+	if not Engine.is_editor_hint():
+		%FireDebounce.wait_time = fire_rate
+		%FireDebounce.timeout.connect(_on_fire_timeout)
+		%FireDebounce.start()
+
+func _on_fire_timeout() -> void:
+	_look_at_player()
+	if arrow_scene:
+		fire(_make_arrow(arrow_scene), _facing)
+	%FireDebounce.start()
 
 func _physics_process(_delta: float) -> void:
 	if not _alerted:

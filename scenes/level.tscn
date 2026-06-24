@@ -51,8 +51,10 @@ shape = SubResource("RectangleShape2D_left")
 position = Vector2(576, 0)
 shape = SubResource("RectangleShape2D_right")
 
-[node name="Enemy" parent="." unique_id=1183056859 instance=ExtResource("2_w7c3h")]
-
 [node name="Player" parent="." unique_id=508579643 instance=ExtResource("2_w8frs")]
+
+[node name="Enemy" parent="." unique_id=1183056859 node_paths=PackedStringArray("player") instance=ExtResource("2_w7c3h")]
+position = Vector2(-300, -150)
+player = NodePath("../Player")
 
 [node name="Hud" parent="." instance=ExtResource("3_hud")]

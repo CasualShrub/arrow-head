@@ -16,7 +16,7 @@ const _MASK_ENEMY := 1 << 3
 @export var damage := 10
 @export_group("movement")
 @export var speed := 700.0
-@export var max_bounces := 3 
+@export var max_bounces := 8
 @export var direction := Vector2.RIGHT:
 	set(value):
 		direction = value.normalized() if value != Vector2.ZERO else Vector2.RIGHT
@@ -89,6 +89,12 @@ func activate(pos: Vector2, dir: Vector2, new_team := team) -> void:
 	show()
 	%Collider.set_deferred("disabled", false)
 	set_physics_process(true)
+
+func stick(host: Node2D) -> void:
+	set_physics_process(false)
+	velocity = Vector2.ZERO
+	%Collider.set_deferred("disabled", true)
+	reparent.call_deferred(host)
 
 func deactivate() -> void:
 	set_physics_process(false)
