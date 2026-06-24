@@ -95,6 +95,7 @@ func _finish() -> void:
 		queue_free()
 
 func _face_vector(dir: Vector3) -> void:
+	if dir.length() < 0.0001: return
 	look_at(global_position + dir)
 
 func _ready() -> void:

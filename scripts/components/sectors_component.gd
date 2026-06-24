@@ -18,7 +18,8 @@ class_name SectorsComponent
 		scale.y = value * 2
 		radius = value
 
-	
+signal changed
+
 @onready var mat: ShaderMaterial = material_override
 
 var _highlighted := -1:

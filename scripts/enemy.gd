@@ -21,7 +21,8 @@ const _ENEMY_TEAM = Arrow.Team.ENEMY
 		hurt_radius = value
 
 var _dead := false
-var _movement_pattern: Dictionary[float, Vector2] = {}
+var _movement_pattern: Dictionary[float, Vector3] = {}
+var _movement_pattern_start: float
 
 @onready var _sprite: Sprite3D = %Sprite
 @onready var _collider: CollisionShape3D = %Collider
@@ -63,11 +64,15 @@ func _parse_movement_pattern(pattern: Dictionary[float, Vector2]) -> Dictionary[
 		parsed[t+curr_tick] = offset
 	return parsed
 
-func _get_arrow_angle(i: int, spread: float, offset: float) -> float:
-	var i_spread := spread / i
-	return i_spread + offset
+func _start_movement_pattern(pattern: Dictionary[float, Vector2]) -> void:
+	_movement_pattern = _parse_movement_pattern(pattern)
+	_movement_pattern_start = Time.get_ticks_msec()
+
+func _get_arrow_angle(offset: float, spread: float, count: int, i: int) -> float:
+	return (spread / count * i) + offset
 
 func _get_arrow_dir(angle: float) -> Vector3:
+	print(-global_basis.z.rotated(Vector3.UP, angle))
 	return -global_basis.z.rotated(Vector3.UP, angle)
 
 func _make_arrow(scene: PackedScene) -> Arrow:
@@ -82,28 +87,35 @@ func _get_rand(min_val: Variant, max_val: Variant) -> Variant:
 	else:
 		return randf_range(min_val, max_val)
 
-func _execute_instance(instance: FiringInstance, i: int, spread: float, offset: float) -> void:
+func _execute_instance(instance: FiringInstance, offset: float, spread: float, count: int, i: int) -> void:
+	if instance.individual_offset:
+		offset = _get_rand(instance.offset, instance.max_offset)
 	var arrow := _make_arrow(instance.type)
-	var angle := _get_arrow_angle(i, instance.spread, offset)
+	var angle := _get_arrow_angle(offset, spread, count, i)
 	var dir := _get_arrow_dir(angle)
 	fire(arrow, dir)
 
 func _on_instance_timer_timeout(timer: Timer,
 	instance: FiringInstance,
-	count: int,
+	offset: float,
 	spread: float,
-	offset: float) -> void:
+	count: int) -> void:
 		var nfired = timer.get_meta("fired")
-		_execute_instance(instance, nfired, spread, offset)
+		if nfired >= count:
+			return
+		_execute_instance(instance, offset, spread, count, nfired)
 		nfired += 1
 		timer.set_meta("fired", nfired)
 		if nfired >= count:
 			timer.queue_free()
 
-func _execute_volley(instance: FiringInstance, count: int, spread: float, offset: float):
+func _execute_volley(instance: FiringInstance):
+	var count: int = _get_rand(instance.count, instance.max_count)
+	var spread: float = _get_rand(instance.spread, instance.max_spread)
+	var offset: float = _get_rand(instance.offset, instance.max_offset)
 	if instance.instance_delay == 0.0 and instance.max_instance_delay == 0.0:
 			for i in range(count):
-				_execute_instance(instance, i, spread, offset)
+				_execute_instance(instance, offset, spread, count, i)
 	else:
 		var instance_deb := Timer.new()
 		instance_deb.set_meta("fired", 0)
@@ -113,46 +125,35 @@ func _execute_volley(instance: FiringInstance, count: int, spread: float, offset
 		instance_deb.timeout.connect(_on_instance_timer_timeout.bind(
 			instance_deb,
 			instance,
-			count,
+			offset,
 			spread,
-			offset
+			count
 		))
 		_inst_timers.add_child(instance_deb)
 
 func perform(pattern: ArrowPattern) -> void:
+	print("performing")
 	if pattern.has_movement_pattern:
-		var p = _parse_movement_pattern(pattern.movement_pattern)
-		_movement_pattern = p
+		_start_movement_pattern(pattern.movement_pattern)
 	for instance in pattern.instances:
 		var startup: int = _get_rand(instance.starting_delay, instance.starting_delay)
-		var count: int = _get_rand(instance.count, instance.max_count)
-		var spread: float = _get_rand(instance.spread, instance.max_spread)
-		var offset: float = _get_rand(instance.offset, instance.max_offset)
 		
 		if startup == 0.0:
-			_execute_volley(instance, count, spread, offset)
+			_execute_volley(instance)
 		else:
 			get_tree().create_timer(startup).timeout.connect(_execute_volley.bind(
-				instance,
-				count,
-				spread,
-				offset
+				instance
 			))
 	
-	var _check_empty: Callable
-	_check_empty = func():
-		if !_inst_timers.child_exiting_tree.is_connected(_check_empty):
-			return
-		if _inst_timers.get_child_count() == 0:
-			_inst_timers.child_exiting_tree.disconnect(_check_empty)
-			_recovery.start()
-	_inst_timers.child_exiting_tree.connect(_check_empty)
-	_check_empty.call()
+	while _inst_timers.get_child_count() > 0:
+		await _inst_timers.child_exiting_tree
+	_recovery.start()
 
 func fire(arrow: Arrow, dir: Vector3) -> void:
 	var new_v := _on_fire(arrow, dir)
 	if new_v: dir = new_v
 	get_tree().current_scene.add_child(arrow)
+	print("fired arrow, dir:", dir)
 	arrow.activate(global_position, dir, _ENEMY_TEAM)
 	fired.emit(arrow, dir)
 
@@ -162,10 +163,21 @@ func _look_at_player() -> void:
 	look_at(player.global_position)
 
 func _select_pattern() -> ArrowPattern:
-	return
+	if len(patterns) == 0:
+		return ArrowPattern.new()
+	var total := 0.0
+	for p in patterns:
+		total += p.weight
+	var roll := randf_range(0.0, total)
+	var c := 0.0
+	for p in patterns:
+		c += p.weight
+		if c >= roll:
+			return p
+	return patterns[0]
 
 func _patrol(dt: float) -> void:
-	pass
+	_alert(dt)
 
 func _med_sus(dt: float) -> void:
 	_patrol(dt)
@@ -173,8 +185,8 @@ func _med_sus(dt: float) -> void:
 func _high_sus(dt: float) -> void:
 	_patrol(dt)
 
-func _alert(dt: float) -> void:
-	pass
+func _alert(_dt: float) -> void:
+	_look_at_player()
 
 func _select_behaviour(dt: float) -> void:
 	if sus.is_alert():
@@ -195,20 +207,13 @@ func die() -> void:
 	died.emit()
 
 func _on_health_changed() -> void:
-	# drained to 0 = death: stop the zombie (it kept firing) and leave the tree
 	if not _dead and health.current <= 0:
 		_dead = true
 		die()
 
-func _on_recovered() -> void:
+func _on_recovery_timeout() -> void:
 	var pattern := _select_pattern()
 	perform(pattern)
-
-func _set_base(tex: Texture2D) -> void:
-	#_base_tex = tex
-	#if not _hit_showing:
-	#	_set_sprite(tex)
-	pass
 
 func _set_sprite(tex: Texture2D) -> void:
 	if _sprite:
@@ -216,9 +221,7 @@ func _set_sprite(tex: Texture2D) -> void:
 
 func _physics_process(delta: float) -> void:
 	if Engine.is_editor_hint(): return
-	_look_at_player()
 	_select_behaviour(delta)
-	
+
 func _ready() -> void:
-	if Engine.is_editor_hint(): return
-	#_set_base(frame1)
+	pass

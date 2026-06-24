@@ -128,14 +128,9 @@ func get_facing_angle() -> float:
 func embed_arrow(arrow: Arrow, sector: int) -> void:
 	var selected_sectors := arrow.get_sectors(sector)
 	var embedded := EmbeddedArrow.new(arrow, sector)
-	for s in selected_sectors:
-		_sectors[s] = embedded
-	_try_absorb()
 	sectors.store(selected_sectors, embedded)
-	if sectors.full():
-		enable_firing()
 
-func try_embed_arrow(arrow: Arrow, sector: int,) -> bool:
+func try_embed_arrow(arrow: Arrow, sector: int) -> bool:
 	var selected_sectors := arrow.get_sectors(sector)
 	if sectors.occupied(selected_sectors): return false
 	embed_arrow(arrow, sector)
@@ -143,29 +138,20 @@ func try_embed_arrow(arrow: Arrow, sector: int,) -> bool:
 
 func enable_firing():
 	for embedded in sectors.get_stored():
-		embedded.enable_firing()
+		if embedded is EmbeddedArrow:
+			embedded.enable_firing()
 
-func clear_embedded() -> void:
-	var freed := {}
-	for embedded in _sectors:
-		if not embedded or freed.has(embedded):
-			continue
-		freed[embedded] = true
-		var arrow := embedded.get_arrow()
-		if arrow:
-			arrow.queue_free()
-		embedded.queue_free()
-	_update_eyes()
 
 func kind_for_sector(sector: int) -> int:
 	if sector < 0 or sector >= sector_kinds.size():
 		return Arrow.Kind.NORMAL
 	return sector_kinds[sector]
 
-func is_correct_catch(arrow: Arrow, sector: int) -> bool:
-	if arrow.kind == Arrow.Kind.NORMAL:
-		return true  # white wildcard: any sector accepts it
-	return arrow.kind == kind_for_sector(sector)
+func is_correct_catch(_arrow: Arrow, _sector: int) -> bool:
+	#if arrow.kind == Arrow.Kind.NORMAL:
+	#	return true  # white wildcard: any sector accepts it
+	#return arrow.kind == kind_for_sector(sector)
+	return true
 
 func get_hit(arrow: Arrow) -> void:
 	var sector := sectors.get_sector_from_position(arrow.global_position)
@@ -245,7 +231,6 @@ func _apply_debuff(kind: int) -> void:
 			_freeze_time = freeze_duration
 
 func _burn_spin(delta: float) -> void:
-	var facing := get_facing()
 	rotate(Vector3.UP, burn_spin_speed * _burn_spin_dir * delta)
 
 func _update_status_tint() -> void:
@@ -255,25 +240,6 @@ func _update_status_tint() -> void:
 		_sprite.modulate = Color(0.6, 0.85, 1)
 	else:
 		_sprite.modulate = Color.WHITE
-
-# a full set of 4 gets pulled out of the sectors into a shoot-back pool, but only while the
-# pool is empty — you must spend the current batch before the next one loads
-func _try_absorb() -> void:
-	if not sectors.full() or not _ammo.is_empty():
-		return
-	var taken := {}
-	for em in _sectors:
-		if not em or taken.has(em):
-			continue
-		taken[em] = true
-		var arrow := em.get_arrow()
-		if arrow and is_instance_valid(arrow):
-			arrow.free_on_finish = false  # held in the pool: don't let it self-free off-screen
-			arrow.deactivate()
-			_ammo.append(arrow)
-		em.queue_free()
-	_update_eyes()
-	ammo_changed.emit(_ammo.size())
 
 # right-click: fling one stored arrow back toward the mouse as a player-team projectile
 func shoot() -> void:
@@ -293,7 +259,6 @@ func shoot() -> void:
 	arrow.activate(global_position, get_facing(), _PLAYER_TEAM)
 	fired.emit(arrow)
 	ammo_changed.emit(_ammo.size())
-	_try_absorb()
 
 func is_dead() -> bool:
 	return _dead
@@ -306,6 +271,10 @@ func die() -> void:
 	print("You died!")
 	sectors.clear_stored()
 	died.emit()
+
+func _on_sectors_changed() -> void:
+	if sectors.full():
+		enable_firing()
 
 func _on_recovery_timeout() -> void:
 	pass
