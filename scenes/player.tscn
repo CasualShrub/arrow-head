@@ -70,3 +70,4 @@ script = ExtResource("6_tuyoq")
 
 [connection signal="timeout" from="Recovery" to="." method="_on_recovery_timeout"]
 [connection signal="changed" from="Sectors" to="." method="_on_sectors_changed"]
+[connection signal="changed" from="Sectors" to="Sectors" method="_on_changed"]

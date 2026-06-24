@@ -89,7 +89,7 @@ func store(sectors: Array[int], to_store: Variant) -> bool:
 				_stored[i] = to_store
 			else:
 				_stored[i] = largest
-	_update_occupied_mask()
+	changed.emit()
 	return true
 
 func get_stored() -> Array:
@@ -99,7 +99,7 @@ func get_stored_at(sector: int) -> Variant:
 	var s = _stored[sector]
 	if _stored_is_ref(s): s = _stored[s]
 	return s
-	
+
 func occupied(sectors: Array[int]) -> bool:
 	print("getting occupied",_stored)
 	for i in sectors:
@@ -124,12 +124,13 @@ func take_stored(sector: int) -> Variant:
 	var s = get_stored_at(sector)
 	for i in slots:
 		_stored[i] = null
-	_update_occupied_mask()
+	changed.emit()
 	return s
 
 func clear_stored() -> void:
 	_stored.clear()
 	_setup_stored()
+	changed.emit()
 
 func get_highlighted() -> int:
 	return _highlighted
@@ -162,6 +163,9 @@ func _setup_stored() -> void:
 	_stored.resize(sector_count)
 	for i in range(sector_count):
 		_stored[i] = null
+
+func _on_changed() -> void:
+	_update_occupied_mask()
 
 func _ready() -> void:
 	if not Engine.is_editor_hint():

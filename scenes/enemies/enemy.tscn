@@ -11,12 +11,22 @@
 [sub_resource type="Resource" id="Resource_lu5c6"]
 script = ExtResource("3_nenq2")
 type = ExtResource("4_jt03m")
+starting_delay = 0.1
+instance_delay = 0.1
+count = 3
+metadata/_custom_type_script = "uid://r4qbgt6it8lb"
+
+[sub_resource type="Resource" id="Resource_jt03m"]
+script = ExtResource("3_nenq2")
+type = ExtResource("4_jt03m")
+count = 3
+spread = 1.0
 metadata/_custom_type_script = "uid://r4qbgt6it8lb"
 
 [sub_resource type="Resource" id="Resource_fcftc"]
 script = ExtResource("2_xwavj")
 recovery = 1.0
-instances = Array[ExtResource("3_nenq2")]([SubResource("Resource_lu5c6")])
+instances = Array[ExtResource("3_nenq2")]([SubResource("Resource_lu5c6"), SubResource("Resource_jt03m")])
 metadata/_custom_type_script = "uid://d04k7pxjd2u24"
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_ensgf"]
@@ -41,6 +51,7 @@ metadata/_custom_type_script = "uid://cq7vk7ukbmts4"
 [node name="Recovery" type="Timer" parent="." unique_id=1708563758]
 unique_name_in_owner = true
 wait_time = 0.3
+one_shot = true
 autostart = true
 
 [node name="Sus" type="Node" parent="." unique_id=495149280]

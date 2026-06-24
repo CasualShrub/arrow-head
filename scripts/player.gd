@@ -282,6 +282,8 @@ func _on_recovery_timeout() -> void:
 func _physics_process(delta: float) -> void:
 	if Engine.is_editor_hint(): return
 	if _dead: return
+	if input.consume_fire():
+		try_fire(sectors.get_highlighted())
 	if is_burning():
 		# careen chaotically: re-roll the drift direction on a short random timer
 		_burn_redrift -= delta

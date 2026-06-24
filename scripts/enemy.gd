@@ -69,10 +69,10 @@ func _start_movement_pattern(pattern: Dictionary[float, Vector2]) -> void:
 	_movement_pattern_start = Time.get_ticks_msec()
 
 func _get_arrow_angle(offset: float, spread: float, count: int, i: int) -> float:
-	return (spread / count * i) + offset
+	var i_spread := -(spread / 2) + (i as float / (count - 1) as float * spread)
+	return i_spread + offset
 
 func _get_arrow_dir(angle: float) -> Vector3:
-	print(-global_basis.z.rotated(Vector3.UP, angle))
 	return -global_basis.z.rotated(Vector3.UP, angle)
 
 func _make_arrow(scene: PackedScene) -> Arrow:
@@ -132,28 +132,36 @@ func _execute_volley(instance: FiringInstance):
 		_inst_timers.add_child(instance_deb)
 
 func perform(pattern: ArrowPattern) -> void:
-	print("performing")
 	if pattern.has_movement_pattern:
 		_start_movement_pattern(pattern.movement_pattern)
+	var max_startup := 0.0
 	for instance in pattern.instances:
 		var startup: int = _get_rand(instance.starting_delay, instance.starting_delay)
 		
 		if startup == 0.0:
 			_execute_volley(instance)
 		else:
+			max_startup = max(startup, max_startup)
 			get_tree().create_timer(startup).timeout.connect(_execute_volley.bind(
 				instance
 			))
 	
+	if max_startup > 0.0:
+		await get_tree().create_timer(max_startup).timeout
+	
 	while _inst_timers.get_child_count() > 0:
-		await _inst_timers.child_exiting_tree
+		var c = await _inst_timers.child_exiting_tree as Node
+		# fully out
+		await c.tree_exited
+
+	_recovery.wait_time = pattern.recovery
+
 	_recovery.start()
 
 func fire(arrow: Arrow, dir: Vector3) -> void:
 	var new_v := _on_fire(arrow, dir)
 	if new_v: dir = new_v
 	get_tree().current_scene.add_child(arrow)
-	print("fired arrow, dir:", dir)
 	arrow.activate(global_position, dir, _ENEMY_TEAM)
 	fired.emit(arrow, dir)
 
@@ -212,6 +220,7 @@ func _on_health_changed() -> void:
 		die()
 
 func _on_recovery_timeout() -> void:
+	print("recovered")
 	var pattern := _select_pattern()
 	perform(pattern)
 
