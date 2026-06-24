@@ -1,9 +1,10 @@
-# in-game overlay (ammo, enemy count) plus the per-level win/lose/pause flow
+# in-game overlay (ammo, enemy count) + pause/restart flow; shows win/lose panels on the Encounter's verdict
 extends CanvasLayer
 class_name Hud
 
 var _player: Player
 var _enemies: Array[Enemy] = []
+var _encounter: Encounter
 var _ammo_label: Label
 var _enemies_label: Label
 var _pause_panel: Control
@@ -86,6 +87,7 @@ func _find_actors() -> void:
 		return
 	_player = _find_player(scene)
 	_find_enemies(scene, _enemies)
+	_encounter = _find_encounter(scene)
 
 func _find_player(node: Node) -> Player:
 	for c in node.get_children():
@@ -102,10 +104,22 @@ func _find_enemies(node: Node, out: Array[Enemy]) -> void:
 			out.append(c)
 		_find_enemies(c, out)
 
+func _find_encounter(node: Node) -> Encounter:
+	for c in node.get_children():
+		if c is Encounter:
+			return c
+		var found := _find_encounter(c)
+		if found:
+			return found
+	return null
+
 func _wire() -> void:
 	if _player:
 		_player.ammo_changed.connect(_on_ammo_changed)
-		_player.died.connect(_on_player_died)
+	if _encounter:
+		_encounter.ended.connect(_on_encounter_ended)
+	# enemy health is watched only to keep the on-screen count current; the win
+	# verdict belongs to the Encounter, not the HUD
 	for e in _enemies:
 		if e.health:
 			e.health.changed.connect(_on_enemy_health_changed)
@@ -127,11 +141,13 @@ func _refresh_enemies() -> void:
 
 func _on_enemy_health_changed() -> void:
 	_refresh_enemies()
-	if not _ended and _enemies.size() > 0 and _enemies_alive() == 0:
-		_win()
 
-func _on_player_died() -> void:
-	if not _ended:
+func _on_encounter_ended(won: bool) -> void:
+	if _ended:
+		return
+	if won:
+		_win()
+	else:
 		_lose()
 
 func _win() -> void:

@@ -8,6 +8,7 @@
 [ext_resource type="Script" uid="uid://b0hp4oeupnfex" path="res://scripts/wall_tiles.gd" id="6_arena"]
 [ext_resource type="TileSet" uid="uid://cq0p2ietf38fi" path="res://tilesets/grass_tileset.tres" id="8_grass_ts"]
 [ext_resource type="Script" uid="uid://d17a1s7lg4fkp" path="res://scripts/grass_tiles.gd" id="9_grass"]
+[ext_resource type="Script" uid="uid://cm3vh4qq01y8d" path="res://scripts/encounter.gd" id="10_enc"]
 
 [node name="Level" type="Node2D" unique_id=999275406]
 
@@ -38,6 +39,10 @@ player = NodePath("../Player")
 [node name="SectorDisplay" type="Node2D" parent="." unique_id=646221309 node_paths=PackedStringArray("player")]
 z_index = 1
 script = ExtResource("4_sd")
+player = NodePath("../Player")
+
+[node name="Encounter" type="Node2D" parent="." node_paths=PackedStringArray("player")]
+script = ExtResource("10_enc")
 player = NodePath("../Player")
 
 [node name="Hud" parent="." unique_id=625368645 instance=ExtResource("3_hud")]

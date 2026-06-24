@@ -159,10 +159,21 @@ func die() -> void:
 	died.emit()
 
 func _ready() -> void:
-	if not Engine.is_editor_hint():
-		%FireDebounce.wait_time = fire_rate
-		%FireDebounce.timeout.connect(_on_fire_timeout)
-		%FireDebounce.start()
+	if Engine.is_editor_hint():
+		return
+	add_to_group("enemies")
+	if health and not health.changed.is_connected(_on_health_changed):
+		health.changed.connect(_on_health_changed)
+	%FireDebounce.wait_time = fire_rate
+	%FireDebounce.timeout.connect(_on_fire_timeout)
+	%FireDebounce.start()
+
+func _on_health_changed() -> void:
+	# drained to 0 = death: emit died (the Encounter listens) and leave the tree
+	if not _dead and health.current <= 0:
+		_dead = true
+		die()
+		queue_free()
 
 func _on_fire_timeout() -> void:
 	_look_at_player()
