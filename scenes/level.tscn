@@ -2,9 +2,9 @@
 
 [ext_resource type="PackedScene" uid="uid://b8rs35o7f45v0" path="res://scenes/enemy.tscn" id="2_w7c3h"]
 [ext_resource type="PackedScene" uid="uid://boryk37cbh1nx" path="res://scenes/player.tscn" id="2_w8frs"]
-[ext_resource type="Texture2D" path="res://art/backgrounds/level_1.png" id="3_bg1"]
-[ext_resource type="PackedScene" uid="uid://bhudarrowhead1" path="res://scenes/ui/hud.tscn" id="3_hud"]
-[ext_resource type="Script" path="res://scripts/sector_display.gd" id="4_sd"]
+[ext_resource type="Texture2D" uid="uid://cm473p31f8mc0" path="res://art/backgrounds/level_1.png" id="3_bg1"]
+[ext_resource type="PackedScene" uid="uid://c7aku7ietdise" path="res://scenes/ui/hud.tscn" id="3_hud"]
+[ext_resource type="Script" uid="uid://dy53cb8kjf73t" path="res://scripts/sector_display.gd" id="4_sd"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_top"]
 size = Vector2(1216, 32)
@@ -22,8 +22,8 @@ size = Vector2(32, 648)
 
 [node name="Background" type="Sprite2D" parent="." unique_id=1131090978]
 z_index = -1
-texture = ExtResource("3_bg1")
 scale = Vector2(2.25, 2.25)
+texture = ExtResource("3_bg1")
 
 [node name="Border" type="Line2D" parent="." unique_id=1909312251]
 points = PackedVector2Array(-576, -324, 576, -324, 576, 324, -576, 324, -576, -324)
@@ -52,13 +52,13 @@ shape = SubResource("RectangleShape2D_right")
 
 [node name="Player" parent="." unique_id=508579643 instance=ExtResource("2_w8frs")]
 
-[node name="Enemy" parent="." unique_id=1183056859 node_paths=PackedStringArray("player") instance=ExtResource("2_w7c3h")]
-position = Vector2(-300, -150)
-player = NodePath("../Player")
+[node name="Enemy" parent="." unique_id=1183056859 instance=ExtResource("2_w7c3h")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -300, -150, 0)
 
-[node name="SectorDisplay" type="Node2D" parent="." node_paths=PackedStringArray("player")]
+[node name="SectorDisplay" type="Node2D" parent="." unique_id=1684153881 node_paths=PackedStringArray("player")]
 z_index = 1
 script = ExtResource("4_sd")
+radius = null
 player = NodePath("../Player")
 
-[node name="Hud" parent="." instance=ExtResource("3_hud")]
+[node name="Hud" parent="." unique_id=2110212236 instance=ExtResource("3_hud")]

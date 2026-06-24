@@ -15,7 +15,7 @@ const _MASK_ENEMY := 1 << 3
 
 @export var damage := 10
 @export_group("movement")
-@export var speed := 700.0
+@export var speed := 7.0
 @export var max_bounces := 8
 @export var direction := Vector3.RIGHT:
 	set(value):
@@ -24,6 +24,8 @@ const _MASK_ENEMY := 1 << 3
 @export_group("lifetime")
 @export var max_lifetime := 0.0
 @export var free_on_finish := true
+
+@onready var collider: CollisionShape3D = %Collider
 
 signal hit(target: Player)
 signal finished(arrow: Arrow)
@@ -58,7 +60,7 @@ func get_remaining_lifetime() -> float:
 	if max_lifetime == 0: return INF
 	return max_lifetime - _life
 
-func get_sector(collided: int) -> Array[int]:
+func get_sectors(collided: int) -> Array[int]:
 	return [collided]
 
 func activate(pos: Vector3, dir: Vector3, new_team := team) -> void:
@@ -69,20 +71,20 @@ func activate(pos: Vector3, dir: Vector3, new_team := team) -> void:
 	_life = 0.0
 	_bounces = 0
 	show()
-	%Collider.set_deferred("disabled", false)
+	collider.set_deferred("disabled", false)
 	set_physics_process(true)
 
 func stick(host: Node3D) -> void:
 	set_physics_process(false)
 	velocity = Vector3.ZERO
-	%Collider.set_deferred("disabled", true)
+	collider.set_deferred("disabled", true)
 	reparent.call_deferred(host)
 
 func deactivate() -> void:
 	set_physics_process(false)
 	velocity = Vector3.ZERO
 	hide()
-	%Collider.set_deferred("disabled", true)
+	collider.set_deferred("disabled", true)
 
 func _finish() -> void:
 	deactivate()

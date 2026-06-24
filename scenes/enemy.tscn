@@ -18,7 +18,7 @@ arrow_scene = ExtResource("4_arrow")
 [node name="HurtCollider" type="CollisionShape3D" parent="." unique_id=1742085930]
 unique_name_in_owner = true
 shape = SubResource("SphereShape3D_ensgf")
-debug_color = Color(1, 0, 0, 0.41960785)
+debug_color = Color(0, 0.6, 0.7019608, 0.41960785)
 
 [node name="Health" type="Node" parent="." unique_id=1511902786]
 script = ExtResource("2_md0e3")
@@ -33,4 +33,9 @@ script = ExtResource("3_4ra3w")
 
 [node name="Sprite" type="Sprite3D" parent="." unique_id=508008351]
 transform = Transform3D(0.5, 0, 0, 0, -2.1855694e-08, 0.5, 0, -0.5, -2.1855694e-08, 0, 0, 0)
+double_sided = false
 texture = ExtResource("5_c4w8v")
+
+[node name="InstanceTimers" type="Node" parent="." unique_id=160238136]
+
+[connection signal="timeout" from="FireDebounce" to="." method="_on_fire_timeout"]

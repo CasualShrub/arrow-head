@@ -31,7 +31,9 @@ func add_player(p: Player):
 	p.died.connect(_on_player_died.bind(p))
 
 func start() -> void:
-	for e in get_enemies():
+	var enemies := find_children("*", "Enemy")
+	for e in enemies:
+		print(e)
 		add_enemy(e)
 	add_player(player)
 	_ongoing = true
@@ -51,3 +53,4 @@ func _on_player_died() -> void:
 
 func _ready() -> void:
 	if not player: player = %Player
+	start()

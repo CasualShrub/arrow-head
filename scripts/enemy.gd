@@ -19,7 +19,6 @@ const _ENEMY_TEAM = Arrow.Team.ENEMY
 		hurt_radius = value
 
 var _dead := false
-var _alerted := false
 var _movement_pattern: Dictionary[float, Vector2] = {}
 
 signal fired(arrow: Arrow, dir: Vector3)
@@ -31,7 +30,7 @@ func get_hit(_arrow: Arrow) -> void:
 func _update_collider(c: CollisionShape3D, r: float) -> void:
 	if not c:
 		return
-	var s := CapsuleShape3D.new()
+	var s := SphereShape3D.new()
 	s.radius = r
 	c.shape = s
 
@@ -148,14 +147,29 @@ func _look_at_player() -> void:
 		return
 	look_at(player.global_position)
 
-func _patrol() -> void:
+func _patrol(dt: float) -> void:
 	pass
 
-func _sussy() -> void:
+func _med_sus(dt: float) -> void:
+	_patrol(dt)
+	
+func _high_sus(dt: float) -> void:
+	_patrol(dt)
+
+func _alert(dt: float) -> void:
 	pass
 
-func _alert() -> void:
-	pass
+func _select_behaviour(dt: float) -> void:
+	if sus.is_alert():
+		_alert(dt)
+	else:
+		match sus.get_stage():
+			sus.SusStage.LW:
+				_patrol(dt)
+			sus.SusStage.MD:
+				_med_sus(dt)
+			sus.SusStage.HI:
+				_high_sus(dt)
 
 func is_dead() -> bool:
 	return _dead
@@ -163,20 +177,18 @@ func is_dead() -> bool:
 func die() -> void:
 	died.emit()
 
+func _physics_process(delta: float) -> void:
+	if Engine.is_editor_hint(): return
+	_select_behaviour(delta)
+
 func _ready() -> void:
-	if not Engine.is_editor_hint():
-		%FireDebounce.wait_time = fire_rate
-		%FireDebounce.timeout.connect(_on_fire_timeout)
-		%FireDebounce.start()
+	if Engine.is_editor_hint(): return
+	%FireDebounce.wait_time = fire_rate
+	%FireDebounce.start()
 
 func _on_fire_timeout() -> void:
+	print("firing")
 	_look_at_player()
 	if arrow_scene:
 		fire(_make_arrow(arrow_scene), _get_arrow_dir(0))
 	%FireDebounce.start()
-
-func _physics_process(_delta: float) -> void:
-	if not _alerted:
-		_patrol()
-	else:
-		_sussy()

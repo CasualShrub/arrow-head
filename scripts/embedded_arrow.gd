@@ -24,12 +24,18 @@ func get_arrow() -> Arrow:
 	return _arrow
 
 func grab() -> Arrow:
+	var a := _arrow
+	_arrow = null
 	queue_free()
-	return get_arrow()
+	return a
 	
 func try_grab() -> Arrow:
 	if not is_firing_enabled(): return null
 	return grab()
+
+func _exit_tree() -> void:
+	print("exiting")
+	if _arrow: _arrow.queue_free()
 
 func _init(arrow: Arrow, sector: int) -> void:
 	_arrow = arrow

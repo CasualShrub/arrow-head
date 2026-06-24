@@ -1,8 +1,0 @@
-[gd_resource type="ShaderMaterial" format=3 uid="uid://cuk6ujha27ml6"]
-
-[ext_resource type="Shader" uid="uid://dnw37cynwb7od" path="res://shaders/test.gdshader" id="1_tnh2o"]
-
-[resource]
-shader = ExtResource("1_tnh2o")
-shader_parameter/color_steps = 8.0
-shader_parameter/dither_strength = 1.0

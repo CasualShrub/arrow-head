@@ -3,17 +3,22 @@
 [ext_resource type="Script" uid="uid://ddq3o77rdeao0" path="res://scripts/arrow.gd" id="1_arrow"]
 [ext_resource type="Texture2D" uid="uid://ssnmuf3en2ae" path="res://icon.svg" id="2_23jat"]
 
-[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_ub6uw"]
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_23jat"]
+radius = 0.2
+height = 0.6
 
 [node name="Arrow" type="CharacterBody3D" unique_id=201688871]
-transform = Transform3D(1.69, 0, 0, 0, 1.69, 0, 0, 0, 0, 0, 0, 0)
 collision_layer = 2
 collision_mask = 5
+motion_mode = 1
 script = ExtResource("1_arrow")
 
-[node name="Visual" type="Sprite3D" parent="." unique_id=795682716]
-texture = ExtResource("2_23jat")
-
-[node name="Collider" type="CollisionShape3D" parent="." unique_id=1528460849]
+[node name="Collider" type="CollisionShape3D" parent="." unique_id=568441233]
 unique_name_in_owner = true
-shape = SubResource("CapsuleShape3D_ub6uw")
+transform = Transform3D(1, 0, 0, 0, -4.371139e-08, 1, 0, -1, -4.371139e-08, 0, 0, 0)
+shape = SubResource("CapsuleShape3D_23jat")
+
+[node name="Sprite3D" type="Sprite3D" parent="." unique_id=1125079801]
+transform = Transform3D(0.2, 0, 0, 0, -8.742278e-09, 0.2, 0, -0.2, -8.742278e-09, 0, 0, 0)
+double_sided = false
+texture = ExtResource("2_23jat")
