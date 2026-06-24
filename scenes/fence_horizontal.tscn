@@ -1,0 +1,15 @@
+[gd_scene format=3 uid="uid://casx2dyqcobu1"]
+
+[ext_resource type="Texture2D" uid="uid://bfbxmka6rg8k8" path="res://art/walls/fence_horizontal.png" id="1_tphf0"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_0db7h"]
+size = Vector2(60, 50.75)
+
+[node name="fence_horizontal" type="StaticBody2D" unique_id=1217788686]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=218446084]
+shape = SubResource("RectangleShape2D_0db7h")
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=438922658]
+scale = Vector2(0.26000002, 0.26)
+texture = ExtResource("1_tphf0")

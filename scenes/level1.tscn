@@ -1,0 +1,105 @@
+[gd_scene format=3 uid="uid://hsx84guwfta"]
+
+[ext_resource type="Texture2D" uid="uid://cm473p31f8mc0" path="res://art/backgrounds/level_1.png" id="1_ru4tf"]
+[ext_resource type="PackedScene" uid="uid://boryk37cbh1nx" path="res://scenes/player.tscn" id="2_6sh32"]
+[ext_resource type="PackedScene" uid="uid://casx2dyqcobu1" path="res://scenes/fence_horizontal.tscn" id="2_ejswk"]
+[ext_resource type="PackedScene" uid="uid://b8rs35o7f45v0" path="res://scenes/enemy.tscn" id="3_ejswk"]
+[ext_resource type="Script" uid="uid://dy53cb8kjf73t" path="res://scripts/sector_display.gd" id="4_bbk5w"]
+[ext_resource type="PackedScene" uid="uid://c7aku7ietdise" path="res://scenes/ui/hud.tscn" id="5_conm7"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_top"]
+size = Vector2(1216, 32)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_bottom"]
+size = Vector2(1216, 32)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_left"]
+size = Vector2(32, 648)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_right"]
+size = Vector2(32, 648)
+
+[node name="Level" type="Node2D" unique_id=999275406]
+
+[node name="Background" type="Sprite2D" parent="." unique_id=1131090978]
+z_index = -1
+scale = Vector2(2.25, 2.25)
+texture = ExtResource("1_ru4tf")
+
+[node name="Border" type="Line2D" parent="." unique_id=1909312251]
+points = PackedVector2Array(-576, -324, 576, -324, 576, 324, -576, 324, -576, -324)
+width = 4.0
+default_color = Color(0.5, 0.55, 0.65, 1)
+
+[node name="Walls" type="StaticBody2D" parent="." unique_id=1347212842]
+visible = false
+collision_layer = 4
+collision_mask = 0
+
+[node name="WallTop" type="CollisionShape2D" parent="Walls" unique_id=182726881]
+position = Vector2(0, -324)
+shape = SubResource("RectangleShape2D_top")
+
+[node name="WallBottom" type="CollisionShape2D" parent="Walls" unique_id=509221147]
+position = Vector2(0, 324)
+shape = SubResource("RectangleShape2D_bottom")
+
+[node name="WallLeft" type="CollisionShape2D" parent="Walls" unique_id=883357540]
+position = Vector2(-576, 0)
+shape = SubResource("RectangleShape2D_left")
+
+[node name="WallRight" type="CollisionShape2D" parent="Walls" unique_id=522047324]
+position = Vector2(576, 0)
+shape = SubResource("RectangleShape2D_right")
+
+[node name="Fences" type="Node2D" parent="." unique_id=93986686]
+
+[node name="fence_horizontal" parent="Fences" unique_id=1217788686 instance=ExtResource("2_ejswk")]
+position = Vector2(-122, 7)
+
+[node name="fence_horizontal2" parent="Fences" unique_id=758499150 instance=ExtResource("2_ejswk")]
+position = Vector2(-181, 7)
+
+[node name="fence_horizontal3" parent="Fences" unique_id=1789587449 instance=ExtResource("2_ejswk")]
+position = Vector2(-63, 7)
+
+[node name="fence_horizontal4" parent="Fences" unique_id=464181295 instance=ExtResource("2_ejswk")]
+position = Vector2(192, 9)
+
+[node name="fence_horizontal5" parent="Fences" unique_id=1020692598 instance=ExtResource("2_ejswk")]
+position = Vector2(133, 9)
+
+[node name="fence_horizontal6" parent="Fences" unique_id=1272830303 instance=ExtResource("2_ejswk")]
+position = Vector2(251, 9)
+
+[node name="fence_horizontal7" parent="Fences" unique_id=1069036746 instance=ExtResource("2_ejswk")]
+position = Vector2(32, -176)
+
+[node name="fence_horizontal8" parent="Fences" unique_id=1431890307 instance=ExtResource("2_ejswk")]
+position = Vector2(-27, -176)
+
+[node name="fence_horizontal9" parent="Fences" unique_id=619023956 instance=ExtResource("2_ejswk")]
+position = Vector2(91, -176)
+
+[node name="Player" parent="." unique_id=508579643 instance=ExtResource("2_6sh32")]
+position = Vector2(18, 260)
+
+[node name="Enemy" parent="." unique_id=1183056859 node_paths=PackedStringArray("player") instance=ExtResource("3_ejswk")]
+position = Vector2(-128, 68)
+player = NodePath("../Player")
+
+[node name="Enemy2" parent="." unique_id=836255344 node_paths=PackedStringArray("player") instance=ExtResource("3_ejswk")]
+position = Vector2(192, 72)
+player = NodePath("../Player")
+
+[node name="Enemy3" parent="." unique_id=1264087481 node_paths=PackedStringArray("player") instance=ExtResource("3_ejswk")]
+position = Vector2(35, -2)
+player = NodePath("../Player")
+
+[node name="SectorDisplay" type="Node2D" parent="." unique_id=1792443763 node_paths=PackedStringArray("player")]
+z_index = 1
+position = Vector2(18, 260)
+script = ExtResource("4_bbk5w")
+player = NodePath("../Player")
+
+[node name="Hud" parent="." unique_id=1555300782 instance=ExtResource("5_conm7")]
