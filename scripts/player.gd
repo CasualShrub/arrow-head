@@ -26,6 +26,20 @@ const _PLAYER_TEAM = Arrow.Team.PLAYER
 @export var eyes_lowhp: Texture2D
 @export var eyes_hit: Texture2D
 @export var eyes_hit_time := 0.36
+@export_group("sectors")
+# sector index -> the Arrow.Kind correctly caught there (size should match sector_count)
+@export var sector_kinds: Array[int] = [
+	Arrow.Kind.INCENDIARY,
+	Arrow.Kind.FROST,
+	Arrow.Kind.INCENDIARY,
+	Arrow.Kind.FROST,
+]
+@export_group("status_effects")
+@export var burn_duration := 2.5
+@export var freeze_duration := 2.0
+@export var burn_spin_speed := 24.0
+@export var burn_drift_speed := 240.0
+@export var burn_redrift := 0.14  # avg time between random drift-direction changes (lurching)
 
 signal hit(arrow: Arrow, sector: int)
 signal fired(arrow: Arrow)
@@ -39,6 +53,11 @@ var _facing := Vector2()
 var _melee_ready := true
 var _shoot_ready := true
 var _eyes_hit_showing := false
+var _burn_time := 0.0
+var _freeze_time := 0.0
+var _burn_drift := Vector2.ZERO
+var _burn_redrift := 0.0
+var _burn_spin_dir := 1.0
 
 @onready var _eyes: Sprite2D = %Eyes
 
@@ -134,10 +153,27 @@ func clear_embedded() -> void:
 	_setup_sectors()
 	_update_eyes()
 
+func kind_for_sector(sector: int) -> int:
+	if sector < 0 or sector >= sector_kinds.size():
+		return Arrow.Kind.NORMAL
+	return sector_kinds[sector]
+
+func is_correct_catch(arrow: Arrow, sector: int) -> bool:
+	if arrow.kind == Arrow.Kind.NORMAL:
+		return true  # white wildcard: any sector accepts it
+	return arrow.kind == kind_for_sector(sector)
+
 func get_hit(arrow: Arrow) -> void:
+	if _dead:
+		return
 	var sector := get_sector(arrow.global_position - global_position)
+	var correct := is_correct_catch(arrow, sector)
+	# arrows always pincushion: stick in the sector they hit, or kill on an occupied one.
+	# a wrong-color arrow still sticks, but its debuff fires as the penalty.
 	if try_embed_arrow(arrow, sector):
 		arrow.stick(%Arrows)
+		if not correct:
+			_apply_debuff(arrow.kind)
 	else:
 		arrow.queue_free()
 		die()
@@ -154,6 +190,7 @@ func move(dir: Vector2, _dt: float) -> void:
 
 func _unhandled_input(event: InputEvent) -> void:
 	if Engine.is_editor_hint(): return
+	if is_burning(): return  # no control at all while spinning on fire
 	if event is InputEventMouseButton and event.pressed:
 		if event.button_index == MOUSE_BUTTON_LEFT:
 			melee()
@@ -197,6 +234,33 @@ func _consume(embedded: EmbeddedArrow) -> void:
 			_sectors[s] = null
 	embedded.queue_free()
 	_update_eyes()
+
+# status effects from mis-caught special arrows
+func is_burning() -> bool: return _burn_time > 0.0
+func is_frozen() -> bool: return _freeze_time > 0.0
+
+func _apply_debuff(kind: int) -> void:
+	match kind:
+		Arrow.Kind.INCENDIARY:
+			_burn_time = burn_duration
+			_burn_redrift = 0.0  # re-roll the drift on the first burning frame
+			_burn_spin_dir = 1.0 if randf() < 0.5 else -1.0
+		Arrow.Kind.FROST:
+			_freeze_time = freeze_duration
+
+func _burn_spin(delta: float) -> void:
+	if _facing == Vector2.ZERO:
+		_facing = Vector2.RIGHT
+	_facing = _facing.rotated(burn_spin_speed * _burn_spin_dir * delta)
+	%Arrows.rotation = get_facing_angle()
+
+func _update_status_tint() -> void:
+	if is_burning():
+		%Sprite.modulate = Color(1, 0.5, 0.2)
+	elif is_frozen():
+		%Sprite.modulate = Color(0.6, 0.85, 1)
+	else:
+		%Sprite.modulate = Color.WHITE
 
 # a full set of 4 gets pulled out of the sectors into a shoot-back pool, but only while the
 # pool is empty — you must spend the current batch before the next one loads
@@ -243,17 +307,37 @@ func is_dead() -> bool:
 
 func die() -> void:
 	_dead = true
+	_burn_time = 0.0
+	_freeze_time = 0.0
+	%Sprite.modulate = Color.WHITE
 	print("You died!")
 	clear_embedded()
 	died.emit()
 
 func _physics_process(delta: float) -> void:
 	if Engine.is_editor_hint(): return
-	move(input.get_direction(), delta)
+	if _dead: return
+	if is_burning():
+		# careen chaotically: re-roll the drift direction on a short random timer
+		_burn_redrift -= delta
+		if _burn_redrift <= 0.0:
+			_burn_drift = Vector2.RIGHT.rotated(randf() * TAU)
+			_burn_redrift = burn_redrift * randf_range(0.6, 1.4)
+		velocity = _burn_drift * burn_drift_speed
+		move_and_slide()
+	else:
+		move(input.get_direction(), delta)
 
-func _process(_delta: float) -> void:
+func _process(delta: float) -> void:
 	if Engine.is_editor_hint(): return
-	face_mouse(get_global_mouse_position())
+	if _dead: return
+	if _freeze_time > 0.0: _freeze_time -= delta
+	if _burn_time > 0.0:
+		_burn_time -= delta
+		_burn_spin(delta)
+	elif not is_frozen():
+		face_mouse(get_global_mouse_position())
+	_update_status_tint()
 
 func _ready() -> void:
 	_setup_sectors()

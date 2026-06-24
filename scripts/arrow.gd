@@ -2,6 +2,13 @@ extends CharacterBody2D
 class_name Arrow
 
 enum Team { ENEMY, PLAYER }
+enum Kind { NORMAL, INCENDIARY, FROST }
+
+const KIND_COLORS := {
+	Kind.NORMAL: Color(1, 1, 1, 1),
+	Kind.INCENDIARY: Color(0.95, 0.35, 0.12, 1),
+	Kind.FROST: Color(0.35, 0.75, 1.0, 1),
+}
 
 const _MASK_PLAYER := 1 << 0
 const _MASK_WALL := 1 << 2
@@ -12,6 +19,10 @@ const _MASK_ENEMY := 1 << 3
 	set(value):
 		team = value
 		_apply_team()
+@export var kind: Kind = Kind.NORMAL:
+	set(value):
+		kind = value
+		_apply_kind()
 
 @export var damage := 10
 @export_group("movement")
@@ -33,6 +44,7 @@ var _bounces := 0
 
 func _ready() -> void:
 	_apply_team()
+	_apply_kind()
 	if not %VisibleOnScreenNotifier2D.screen_exited.is_connected(_on_screen_exited):
 		%VisibleOnScreenNotifier2D.screen_exited.connect(_on_screen_exited)
 
@@ -55,6 +67,11 @@ func _apply_team() -> void:
 			collision_mask = _MASK_PLAYER | _MASK_WALL
 		Team.PLAYER:
 			collision_mask = _MASK_ENEMY | _MASK_WALL
+
+func _apply_kind() -> void:
+	var v := get_node_or_null("Visual") as Polygon2D
+	if v:
+		v.color = KIND_COLORS.get(kind, Color.WHITE)
 			
 func _is_wall(body: Object) -> bool:
 	# basically was thinking if the tilemaplayer has a collision box then it must be a wall

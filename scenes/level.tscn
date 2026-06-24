@@ -12,6 +12,8 @@
 [ext_resource type="PackedScene" path="res://scenes/deco/log.tscn" id="12_log"]
 [ext_resource type="PackedScene" path="res://scenes/deco/stump.tscn" id="13_stump"]
 [ext_resource type="PackedScene" path="res://scenes/deco/fence_pillar.tscn" id="14_fence_pillar"]
+[ext_resource type="PackedScene" path="res://scenes/enemy_incendiary.tscn" id="15_e_inc"]
+[ext_resource type="PackedScene" path="res://scenes/enemy_frost.tscn" id="16_e_frost"]
 
 [node name="Level" type="Node2D" unique_id=999275406]
 
@@ -46,7 +48,15 @@ position = Vector2(-306, -242)
 
 [node name="Player" parent="." unique_id=508579643 instance=ExtResource("2_w8frs")]
 
-[node name="Enemy" parent="." unique_id=1183056859 node_paths=PackedStringArray("player") instance=ExtResource("2_w7c3h")]
+[node name="IncendiaryEnemy" parent="." node_paths=PackedStringArray("player") instance=ExtResource("15_e_inc")]
+position = Vector2(0, 200)
+player = NodePath("../Player")
+
+[node name="FrostEnemy" parent="." node_paths=PackedStringArray("player") instance=ExtResource("16_e_frost")]
+position = Vector2(300, -150)
+player = NodePath("../Player")
+
+[node name="Enemy" parent="." node_paths=PackedStringArray("player") instance=ExtResource("2_w7c3h")]
 position = Vector2(-300, -150)
 player = NodePath("../Player")
 

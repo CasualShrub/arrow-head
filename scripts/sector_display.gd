@@ -27,20 +27,26 @@ func _draw() -> void:
 		if player.sector_centered:
 			a0 -= size * 0.5
 		var pts := _wedge(a0, a0 + size)
+		var base := _kind_color(i)  # each sector tinted by the kind it catches
 		var occupied: bool = player.get_embedded(i) != null
-		var fill := Color(0.9, 0.35, 0.15, 0.5) if occupied else Color(0.9, 0.35, 0.15, 0.12)
+		var fill := base
+		fill.a = 0.62 if occupied else 0.32
 		if i == aimed:
-			fill = Color(1, 1, 1, 0.3)
+			fill = base.lerp(Color.WHITE, 0.4)
+			fill.a = 0.6
 		draw_colored_polygon(pts, fill)
-		# arc (outer curve): white-translucent on the aimed wedge, reddish on the rest
-		var arc_color := Color(1, 1, 1, 0.35) if i == aimed else Color(0.95, 0.45, 0.25, 0.35)
+		# arc (outer curve): brighter on the aimed wedge
+		var arc_color := base
+		arc_color.a = 0.85 if i == aimed else 0.6
 		draw_polyline(pts.slice(1), arc_color, 1.5)
-		# inner cone sides: bold white on the aimed wedge, translucent on the rest
+		# inner cone sides: bold white on the aimed wedge, the kind color on the rest
 		var sides := PackedVector2Array([pts[1], pts[0], pts[pts.size() - 1]])
 		if i == aimed:
 			draw_polyline(sides, Color(1, 1, 1, 0.95), 3.0)
 		else:
-			draw_polyline(sides, Color(0.95, 0.45, 0.25, 0.35), 1.5)
+			var side_c := base
+			side_c.a = 0.6
+			draw_polyline(sides, side_c, 1.5)
 
 func _wedge(a0: float, a1: float) -> PackedVector2Array:
 	var pts := PackedVector2Array()
@@ -49,3 +55,7 @@ func _wedge(a0: float, a1: float) -> PackedVector2Array:
 		var a: float = lerp(a0, a1, s / 10.0)
 		pts.append(Vector2(cos(a), sin(a)) * radius)
 	return pts
+
+func _kind_color(sector: int) -> Color:
+	var k: int = player.sector_kinds[sector] if sector < player.sector_kinds.size() else Arrow.Kind.NORMAL
+	return Arrow.KIND_COLORS.get(k, Color.WHITE)
