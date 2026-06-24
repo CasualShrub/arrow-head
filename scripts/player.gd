@@ -37,8 +37,9 @@ const _PLAYER_TEAM = Arrow.Team.PLAYER
 @export_group("status_effects")
 @export var burn_duration := 2.5
 @export var freeze_duration := 2.0
-@export var burn_spin_speed := 15.0
-@export var burn_drift_speed := 120.0
+@export var burn_spin_speed := 24.0
+@export var burn_drift_speed := 140.0
+@export var burn_redrift := 0.14  # avg time between random drift-direction changes (lurching)
 
 signal hit(arrow: Arrow, sector: int)
 signal fired(arrow: Arrow)
@@ -55,6 +56,8 @@ var _eyes_hit_showing := false
 var _burn_time := 0.0
 var _freeze_time := 0.0
 var _burn_drift := Vector2.ZERO
+var _burn_redrift := 0.0
+var _burn_spin_dir := 1.0
 
 @onready var _eyes: Sprite2D = %Eyes
 
@@ -240,14 +243,15 @@ func _apply_debuff(kind: int) -> void:
 	match kind:
 		Arrow.Kind.INCENDIARY:
 			_burn_time = burn_duration
-			_burn_drift = Vector2.RIGHT.rotated(randf() * TAU)
+			_burn_redrift = 0.0  # re-roll the drift on the first burning frame
+			_burn_spin_dir = 1.0 if randf() < 0.5 else -1.0
 		Arrow.Kind.FROST:
 			_freeze_time = freeze_duration
 
 func _burn_spin(delta: float) -> void:
 	if _facing == Vector2.ZERO:
 		_facing = Vector2.RIGHT
-	_facing = _facing.rotated(burn_spin_speed * delta)
+	_facing = _facing.rotated(burn_spin_speed * _burn_spin_dir * delta)
 	%Arrows.rotation = get_facing_angle()
 
 func _update_status_tint() -> void:
@@ -314,7 +318,12 @@ func _physics_process(delta: float) -> void:
 	if Engine.is_editor_hint(): return
 	if _dead: return
 	if is_burning():
-		velocity = _burn_drift * burn_drift_speed  # drift out of control, input ignored
+		# careen chaotically: re-roll the drift direction on a short random timer
+		_burn_redrift -= delta
+		if _burn_redrift <= 0.0:
+			_burn_drift = Vector2.RIGHT.rotated(randf() * TAU)
+			_burn_redrift = burn_redrift * randf_range(0.6, 1.4)
+		velocity = _burn_drift * burn_drift_speed
 		move_and_slide()
 	else:
 		move(input.get_direction(), delta)
