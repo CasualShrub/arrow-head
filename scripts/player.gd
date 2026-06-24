@@ -37,13 +37,16 @@ func _update_collider(c: CollisionShape2D, r: float) -> void:
 	s.radius = r
 	c.shape = s
 
+func get_facing_angle() -> float:
+	return atan2(_facing.y, _facing.x) + (PI / 2)
+
 func _setup_sectors() -> void:
 	_sectors = []
 	_sectors.resize(sector_count)
 
 func get_sector(pos: Vector2) -> int:
 	var sector_size := 2 * PI / sector_count
-	var theta := atan2(pos.y, pos.x)
+	var theta := atan2(pos.y, pos.x) - get_facing_angle()
 	if sector_centered:
 		theta += sector_size / 2
 	if theta < 0:
@@ -101,7 +104,7 @@ func clear_embedded() -> void:
 func get_hit(arrow: Arrow) -> void:
 	var sector := get_sector(arrow.global_position - global_position)
 	if try_embed_arrow(arrow, sector):
-		arrow.stick(self)
+		arrow.stick(%Arrows)
 	else:
 		arrow.queue_free()
 		die()
@@ -109,6 +112,9 @@ func get_hit(arrow: Arrow) -> void:
 
 func face_mouse(mouse_pos: Vector2) -> void:
 	_facing = global_position.direction_to(mouse_pos)
+	var angle := get_facing_angle()
+	%Sprite.rotation = angle
+	%Arrows.rotation = angle
 
 func move(dir: Vector2, _dt: float) -> void:
 	velocity = dir * speed
