@@ -37,7 +37,7 @@ const _PLAYER_TEAM = Arrow.Team.PLAYER
 @export_group("status_effects")
 @export var burn_duration := 2.5
 @export var freeze_duration := 2.0
-@export var burn_spin_speed := 9.0
+@export var burn_spin_speed := 15.0
 @export var burn_drift_speed := 120.0
 
 signal hit(arrow: Arrow, sector: int)
