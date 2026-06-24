@@ -12,13 +12,11 @@ class_name SectorsComponent
 	set(value):
 		_handle_centering(value)
 		centered = value
-@export var radius := 1.0:
+@export var radius := 0.5:
 	set(value):
-		scale.x = value
-		scale.y = value
+		scale.x = value * 2
+		scale.y = value * 2
 		radius = value
-
-
 
 	
 @onready var mat: ShaderMaterial = material_override
@@ -45,7 +43,7 @@ func get_sector_from_position(pos: Vector3) -> int:
 	dir.y = 0.0
 
 	if dir.length() < 0.0001:
-		return 0.0
+		return 0
 
 	dir = dir.normalized()
 
@@ -63,6 +61,13 @@ func get_sector_from_position(pos: Vector3) -> int:
 
 	var angle := atan2(z, x)
 	return get_sector_from_angle(angle)
+
+func get_sector_from_movement(dir: Vector2) -> int:
+	if dir == Vector2.ZERO: return 0
+	var v := global_position
+	v.x += dir.x
+	v.z += dir.y
+	return get_sector_from_position(v)
 
 func _stored_is_ref(stored: Variant) -> bool:
 	return stored is int
@@ -161,3 +166,4 @@ func _ready() -> void:
 	if not Engine.is_editor_hint():
 		_setup_stored()
 	_handle_centering()
+	radius = radius

@@ -4,26 +4,11 @@ class_name Arrow
 enum Team { ENEMY, PLAYER }
 enum Kind { NORMAL, INCENDIARY, FROST }
 
-const KIND_COLORS := {
-	Kind.NORMAL: Color(1, 1, 1, 1),
-	Kind.INCENDIARY: Color(0.95, 0.35, 0.12, 1),
-	Kind.FROST: Color(0.35, 0.75, 1.0, 1),
-}
-
 const _MASK_PLAYER := 1 << 0
 const _MASK_WALL := 1 << 2
 const _MASK_ENEMY := 1 << 3
 
 @export var scene: PackedScene
-@export var team: Team = Team.ENEMY:
-	set(value):
-		team = value
-		_apply_team()
-@export var kind: Kind = Kind.NORMAL:
-	set(value):
-		kind = value
-		_apply_kind()
-
 @export var damage := 10
 @export_group("movement")
 @export var speed := 7.0
@@ -41,20 +26,19 @@ const _MASK_ENEMY := 1 << 3
 signal hit(target: Player)
 signal finished(arrow: Arrow)
 
+var _team: Team = Team.ENEMY:
+	set(value):
+		_team = value
+		_apply_team()
 var _life := 0.0
 var _bounces := 0
 
 func _apply_team() -> void:
-	match team:
+	match _team:
 		Team.ENEMY:
 			collision_mask = _MASK_PLAYER | _MASK_WALL
 		Team.PLAYER:
 			collision_mask = _MASK_ENEMY | _MASK_WALL
-
-func _apply_kind() -> void:
-	var v := get_node_or_null("Visual") as Polygon2D
-	if v:
-		v.color = KIND_COLORS.get(kind, Color.WHITE)
 			
 func _is_wall(body: Object) -> bool:
 	return body is CollisionObject3D and body.get_collision_layer_value(3)
@@ -68,12 +52,11 @@ func _bounce(collision: KinematicCollision3D) -> void:
 		_finish()
 
 func _on_hit(target) -> void:
-	# player and enemy both expose get_hit(arrow); our team's mask decides which one we can strike
 	if target.has_method("get_hit"):
 		target.get_hit(self)
 	hit.emit(target)
-	if team == Team.PLAYER:
-		_finish()  # a shot-back arrow is spent on impact; the enemy doesn't stop it like the player does
+	#if _team == Team.PLAYER:
+	#	_finish()  # a shot-back arrow is spent on impact; the enemy doesn't stop it like the player does
 
 func get_remaining_lifetime() -> float:
 	if max_lifetime == 0: return INF
@@ -82,9 +65,9 @@ func get_remaining_lifetime() -> float:
 func get_sectors(collided: int) -> Array[int]:
 	return [collided]
 
-func activate(pos: Vector3, dir: Vector3, new_team := team) -> void:
+func activate(pos: Vector3, dir: Vector3, new_team := _team) -> void:
 	global_position = pos
-	team = new_team
+	_team = new_team
 	direction = dir
 	_face_vector(direction)
 	_life = 0.0
@@ -116,7 +99,6 @@ func _face_vector(dir: Vector3) -> void:
 
 func _ready() -> void:
 	_apply_team()
-	_apply_kind()
 
 func _physics_process(delta: float) -> void:
 	_face_vector(direction)

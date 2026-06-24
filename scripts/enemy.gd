@@ -9,29 +9,37 @@ const _ENEMY_TEAM = Arrow.Team.ENEMY
 @export var player: Player
 
 @export_group("firing")
-@export var patters: Array[ArrowPattern] = []
+@export var patterns: Array[ArrowPattern] = []
 
-@export var aim_time := 0.4
-@export var release_time := 0.12
+@export_group("hit")
 @export var hit_flash_time := 0.15
-
-@export var hurt_radius := 25.0:
+@export var hurt_radius := 0.4:
 	set(value):
 		if value < 0: value = 0
-		_update_collider(%HurtCollider, value)
+		if _collider:
+			_update_collider(_collider, value)
 		hurt_radius = value
 
 var _dead := false
 var _movement_pattern: Dictionary[float, Vector2] = {}
 
-@onready var _sprite: Sprite2D = $Sprite2D
+@onready var _sprite: Sprite3D = %Sprite
+@onready var _collider: CollisionShape3D = %Collider
+@onready var _recovery: Timer = %Recovery
+@onready var _inst_timers: Node = %InstanceTimers
 
 signal fired(arrow: Arrow, dir: Vector3)
 signal died
 
 func get_hit(_arrow: Arrow) -> void:
 	health.take_damage(1)
-	_show_hit()
+	#_hit_showing = true
+	#_set_sprite(hit_stretch if _aiming else hit_normal)
+	await get_tree().create_timer(hit_flash_time).timeout
+	#_hit_showing = false
+	if _dead:
+		return
+	#_set_sprite(_base_tex)
 
 func _update_collider(c: CollisionShape3D, r: float) -> void:
 	if not c:
@@ -109,7 +117,7 @@ func _execute_volley(instance: FiringInstance, count: int, spread: float, offset
 			spread,
 			offset
 		))
-		%InstanceTimers.add_child(instance_deb)
+		_inst_timers.add_child(instance_deb)
 
 func perform(pattern: ArrowPattern) -> void:
 	if pattern.has_movement_pattern:
@@ -133,12 +141,12 @@ func perform(pattern: ArrowPattern) -> void:
 	
 	var _check_empty: Callable
 	_check_empty = func():
-		if !%InstanceTimers.child_exiting_tree.is_connected(_check_empty):
+		if !_inst_timers.child_exiting_tree.is_connected(_check_empty):
 			return
-		if %InstanceTimers.get_child_count() == 0:
-			%InstanceTimers.child_exiting_tree.disconnect(_check_empty)
-			%Recovery.start()
-	%InstanceTimers.child_exiting_tree.connect(_check_empty)
+		if _inst_timers.get_child_count() == 0:
+			_inst_timers.child_exiting_tree.disconnect(_check_empty)
+			_recovery.start()
+	_inst_timers.child_exiting_tree.connect(_check_empty)
 	_check_empty.call()
 
 func fire(arrow: Arrow, dir: Vector3) -> void:
@@ -191,7 +199,6 @@ func _on_health_changed() -> void:
 	if not _dead and health.current <= 0:
 		_dead = true
 		die()
-		queue_free()
 
 func _on_recovered() -> void:
 	var pattern := _select_pattern()
@@ -206,15 +213,6 @@ func _set_base(tex: Texture2D) -> void:
 func _set_sprite(tex: Texture2D) -> void:
 	if _sprite:
 		_sprite.texture = tex
-
-func _show_hit() -> void:
-	#_hit_showing = true
-	#_set_sprite(hit_stretch if _aiming else hit_normal)
-	await get_tree().create_timer(hit_flash_time).timeout
-	#_hit_showing = false
-	if _dead:
-		return
-	#_set_sprite(_base_tex)
 
 func _physics_process(delta: float) -> void:
 	if Engine.is_editor_hint(): return

@@ -8,7 +8,10 @@ const _PLAYER_TEAM = Arrow.Team.PLAYER
 @export var health: HealthComponent
 @export var sectors: SectorsComponent
 
-@onready var camera: Camera3D = %Camera
+@onready var _camera: Camera3D = %Camera
+@onready var _recovery: Timer = %Recovery
+@onready var _sprite: Sprite3D = %Sprite
+@onready var _collider: CollisionShape3D = %Collider
 
 @export var speed := 6.0
 @export_group("arrows")
@@ -17,16 +20,14 @@ const _PLAYER_TEAM = Arrow.Team.PLAYER
 		if value < 0: value = 0
 		%FireDebounce.wait_time = value
 		fire_cooldown = value
-@export_group("melee")
-@export var melee_range := 70.0
-@export var melee_cooldown := 0.4
 @export_group("shooting")
 @export var shoot_cooldown := 0.25
 @export_group("hurt")
-@export var hurt_radius := 25.0:
+@export var hurt_radius := 0.4:
 	set(value):
 		if value < 0: value = 0
-		_update_collider(get_node_or_null("%HurtCollider"), value)  # may run before the node exists
+		if _collider:
+			_update_collider(_collider, value)  # may run before the node exists
 		hurt_radius = value
 @export_group("sectors")
 @export var sector_count: int:
@@ -79,17 +80,16 @@ signal died()
 var _sectors: Array[EmbeddedArrow]
 var _ammo: Array[Arrow] = []
 var _dead := false
-var _facing := Vector2()
-var _melee_ready := true
 var _shoot_ready := true
 var _eyes_hit_showing := false
 var _burn_time := 0.0
 var _freeze_time := 0.0
-var _burn_drift := Vector2.ZERO
+var _burn_drift := Vector3.ZERO
 var _burn_redrift := 0.0
 var _burn_spin_dir := 1.0
 
 @onready var _eyes: Sprite2D = %Eyes
+@onready var _arrows: Node3D = %Arrows
 
 func _update_collider(c: CollisionShape3D, r: float) -> void:
 	if not c: return
@@ -155,7 +155,6 @@ func clear_embedded() -> void:
 		if arrow:
 			arrow.queue_free()
 		embedded.queue_free()
-	_setup_sectors()
 	_update_eyes()
 
 func kind_for_sector(sector: int) -> int:
@@ -177,7 +176,7 @@ func get_hit(arrow: Arrow) -> void:
 	# arrows always pincushion: stick in the sector they hit, or kill on an occupied one.
 	# a wrong-color arrow still sticks, but its debuff fires as the penalty.
 	if try_embed_arrow(arrow, sector):
-		arrow.stick(%Arrows)
+		arrow.stick(_arrows)
 		if not correct:
 			_apply_debuff(arrow.kind)
 	else:
@@ -189,11 +188,14 @@ func get_hit(arrow: Arrow) -> void:
 func get_mouse_world_position() -> Vector3:
 	var mouse = get_viewport().get_mouse_position()
 
-	var origin := camera.project_ray_origin(mouse)
-	var dir := camera.project_ray_normal(mouse)
+	var origin := _camera.project_ray_origin(mouse)
+	var dir := _camera.project_ray_normal(mouse)
 
 	var plane := Plane(Vector3.UP, global_position.y)
 	var hit_plane = plane.intersects_ray(origin, dir)
+
+	if hit_plane == null:
+		return Vector3.ZERO
 
 	return hit_plane
 
@@ -211,7 +213,7 @@ func move(dir: Vector2, _dt: float) -> void:
 	if velocity == Vector3.ZERO:
 		selected = -1
 	else:
-		selected = sectors.get_sector_from_position(global_position + velocity)
+		selected = sectors.get_sector_from_movement(dir)
 	sectors.highlight_sector(selected)
 	move_and_slide()
 
@@ -219,51 +221,15 @@ func _unhandled_input(event: InputEvent) -> void:
 	if Engine.is_editor_hint(): return
 	if is_burning(): return  # no control at all while spinning on fire
 	if event is InputEventMouseButton and event.pressed:
-		if event.button_index == MOUSE_BUTTON_LEFT:
-			melee()
-		elif event.button_index == MOUSE_BUTTON_RIGHT:
+		if event.button_index == MOUSE_BUTTON_RIGHT:
 			shoot()
 
-# swing toward the mouse: weaponize the arrow stuck in the aimed sector, then clear it
-func melee() -> void:
-	if not _melee_ready: return
-	var sector := get_sector(_facing)
-	var embedded := get_embedded(sector)
 func try_fire(sector: int) -> void:
-	if not %FireDebounce.is_stopped(): return
+	if not _recovery.is_stopped(): return
 	var embedded = sectors.get_stored_at(sector) as EmbeddedArrow
 	if not embedded: return
 	var arrow := embedded.get_arrow()
-	_melee_ready = false
-	get_tree().create_timer(melee_cooldown).timeout.connect(func(): _melee_ready = true)
-	_melee_hit()
-	_consume(embedded)
 	fired.emit(arrow)
-
-func _melee_hit() -> void:
-	var shape := CircleShape2D.new()
-	shape.radius = melee_range
-	var q := PhysicsShapeQueryParameters2D.new()
-	q.shape = shape
-	q.transform = Transform2D(0.0, global_position + _facing * (melee_range * 0.5))
-	q.collision_mask = 1 << 3  # enemy = layer 4
-	for result in get_world_2d().direct_space_state.intersect_shape(q, 16):
-		var col = result.get("collider")
-		if not (col is Enemy):
-			continue
-		var to_enemy: Vector2 = (col.global_position - global_position).normalized()
-		if _facing.dot(to_enemy) > 0.3:  # only enemies in front of the swing
-			col.get_hit(null)
-
-func _consume(embedded: EmbeddedArrow) -> void:
-	var arrow := embedded.get_arrow()
-	if arrow:
-		arrow.queue_free()
-	for s in _sectors.size():
-		if _sectors[s] == embedded:
-			_sectors[s] = null
-	embedded.queue_free()
-	_update_eyes()
 
 # status effects from mis-caught special arrows
 func is_burning() -> bool: return _burn_time > 0.0
@@ -279,23 +245,21 @@ func _apply_debuff(kind: int) -> void:
 			_freeze_time = freeze_duration
 
 func _burn_spin(delta: float) -> void:
-	if _facing == Vector2.ZERO:
-		_facing = Vector2.RIGHT
-	_facing = _facing.rotated(burn_spin_speed * _burn_spin_dir * delta)
-	%Arrows.rotation = get_facing_angle()
+	var facing := get_facing()
+	rotate(Vector3.UP, burn_spin_speed * _burn_spin_dir * delta)
 
 func _update_status_tint() -> void:
 	if is_burning():
-		%Sprite.modulate = Color(1, 0.5, 0.2)
+		_sprite.modulate = Color(1, 0.5, 0.2)
 	elif is_frozen():
-		%Sprite.modulate = Color(0.6, 0.85, 1)
+		_sprite.modulate = Color(0.6, 0.85, 1)
 	else:
-		%Sprite.modulate = Color.WHITE
+		_sprite.modulate = Color.WHITE
 
 # a full set of 4 gets pulled out of the sectors into a shoot-back pool, but only while the
 # pool is empty — you must spend the current batch before the next one loads
 func _try_absorb() -> void:
-	if not fully_embedded() or not _ammo.is_empty():
+	if not sectors.full() or not _ammo.is_empty():
 		return
 	var taken := {}
 	for em in _sectors:
@@ -308,7 +272,6 @@ func _try_absorb() -> void:
 			arrow.deactivate()
 			_ammo.append(arrow)
 		em.queue_free()
-	_setup_sectors()
 	_update_eyes()
 	ammo_changed.emit(_ammo.size())
 
@@ -339,7 +302,7 @@ func die() -> void:
 	_dead = true
 	_burn_time = 0.0
 	_freeze_time = 0.0
-	%Sprite.modulate = Color.WHITE
+	_sprite.modulate = Color.WHITE
 	print("You died!")
 	sectors.clear_stored()
 	died.emit()
@@ -354,7 +317,7 @@ func _physics_process(delta: float) -> void:
 		# careen chaotically: re-roll the drift direction on a short random timer
 		_burn_redrift -= delta
 		if _burn_redrift <= 0.0:
-			_burn_drift = Vector2.RIGHT.rotated(randf() * TAU)
+			_burn_drift = Vector3.RIGHT.rotated(Vector3.UP, randf() * TAU)
 			_burn_redrift = burn_redrift * randf_range(0.6, 1.4)
 		velocity = _burn_drift * burn_drift_speed
 		move_and_slide()
@@ -369,10 +332,10 @@ func _process(delta: float) -> void:
 		_burn_time -= delta
 		_burn_spin(delta)
 	elif not is_frozen():
-		face_mouse(get_global_mouse_position())
+		face_mouse()
 	_update_status_tint()
 
 func _ready() -> void:
-	_update_collider(%HurtCollider, hurt_radius)
-	_update_eyes()
-	if Engine.is_editor_hint(): return
+	_update_collider(_collider, hurt_radius)
+	if not Engine.is_editor_hint():
+		_update_eyes()
