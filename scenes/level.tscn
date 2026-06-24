@@ -49,11 +49,15 @@ position = Vector2(-306, -242)
 [node name="Player" parent="." unique_id=508579643 instance=ExtResource("2_w8frs")]
 
 [node name="IncendiaryEnemy" parent="." node_paths=PackedStringArray("player") instance=ExtResource("15_e_inc")]
-position = Vector2(-300, -150)
+position = Vector2(0, 200)
 player = NodePath("../Player")
 
 [node name="FrostEnemy" parent="." node_paths=PackedStringArray("player") instance=ExtResource("16_e_frost")]
 position = Vector2(300, -150)
+player = NodePath("../Player")
+
+[node name="Enemy" parent="." node_paths=PackedStringArray("player") instance=ExtResource("2_w7c3h")]
+position = Vector2(-300, -150)
 player = NodePath("../Player")
 
 [node name="SectorDisplay" type="Node2D" parent="." unique_id=646221309 node_paths=PackedStringArray("player")]
