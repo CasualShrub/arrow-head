@@ -9,6 +9,7 @@ func _process(_delta: float) -> void:
 	if not is_instance_valid(player):
 		return
 	global_position = player.global_position
+	rotation = player.get_facing_angle()  # sectors rotate with the apple's facing
 	queue_redraw()
 
 func _draw() -> void:
