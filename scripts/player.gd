@@ -150,8 +150,8 @@ func _melee_hit() -> void:
 	q.shape = shape
 	q.transform = Transform2D(0.0, global_position + _facing * (melee_range * 0.5))
 	q.collision_mask = 1 << 3  # enemy = layer 4
-	for hit in get_world_2d().direct_space_state.intersect_shape(q, 16):
-		var col = hit.get("collider")
+	for result in get_world_2d().direct_space_state.intersect_shape(q, 16):
+		var col = result.get("collider")
 		if not (col is Enemy):
 			continue
 		var to_enemy: Vector2 = (col.global_position - global_position).normalized()
@@ -178,7 +178,8 @@ func _try_absorb() -> void:
 			continue
 		taken[em] = true
 		var arrow := em.get_arrow()
-		if arrow:
+		if arrow and is_instance_valid(arrow):
+			arrow.free_on_finish = false  # held in the pool: don't let it self-free off-screen
 			arrow.deactivate()
 			_ammo.append(arrow)
 		em.queue_free()
@@ -187,11 +188,17 @@ func _try_absorb() -> void:
 
 # right-click: fling one stored arrow back toward the mouse as a player-team projectile
 func shoot() -> void:
-	if not _shoot_ready or _ammo.is_empty():
+	if not _shoot_ready:
+		return
+	while not _ammo.is_empty() and not is_instance_valid(_ammo[-1]):
+		_ammo.pop_back()  # discard any pooled arrow that got freed out from under us
+	if _ammo.is_empty():
+		ammo_changed.emit(_ammo.size())
 		return
 	var arrow: Arrow = _ammo.pop_back()
 	_shoot_ready = false
 	get_tree().create_timer(shoot_cooldown).timeout.connect(func(): _shoot_ready = true)
+	arrow.free_on_finish = true  # back in flight: clean it up when it leaves the arena
 	if arrow.get_parent() != get_tree().current_scene:
 		arrow.reparent(get_tree().current_scene)
 	arrow.activate(global_position, _facing, _PLAYER_TEAM)
