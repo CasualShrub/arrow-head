@@ -11,6 +11,8 @@ const _PLAYER_TEAM = Arrow.Team.PLAYER
 @export_group("melee")
 @export var melee_range := 70.0
 @export var melee_cooldown := 0.4
+@export_group("shooting")
+@export var shoot_cooldown := 0.25
 @export_group("hurt")
 @export var hurt_radius := 25.0:
 	set(value):
@@ -22,12 +24,15 @@ const _PLAYER_TEAM = Arrow.Team.PLAYER
 
 signal hit(arrow: Arrow, sector: int)
 signal fired(arrow: Arrow)
+signal ammo_changed(count: int)
 signal died()
 
 var _sectors: Array[EmbeddedArrow]
+var _ammo: Array[Arrow] = []
 var _dead := false
 var _facing := Vector2()
 var _melee_ready := true
+var _shoot_ready := true
 
 func _update_collider(c: CollisionShape2D, r: float) -> void:
 	if not c: return
@@ -74,8 +79,7 @@ func embed_arrow(arrow: Arrow, sector: int) -> void:
 	var embedded := EmbeddedArrow.new(arrow, sector)
 	for s in selected_sectors:
 		_sectors[s] = embedded
-	if fully_embedded():
-		enable_firing()
+	_try_absorb()
 
 func try_embed_arrow(arrow: Arrow, sector: int,) -> bool:
 	var selected_sectors := arrow.get_sector(sector)
@@ -120,8 +124,11 @@ func move(dir: Vector2, _dt: float) -> void:
 
 func _unhandled_input(event: InputEvent) -> void:
 	if Engine.is_editor_hint(): return
-	if event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_LEFT:
-		melee()
+	if event is InputEventMouseButton and event.pressed:
+		if event.button_index == MOUSE_BUTTON_LEFT:
+			melee()
+		elif event.button_index == MOUSE_BUTTON_RIGHT:
+			shoot()
 
 # swing toward the mouse: weaponize the arrow stuck in the aimed sector, then clear it
 func melee() -> void:
@@ -159,6 +166,38 @@ func _consume(embedded: EmbeddedArrow) -> void:
 		if _sectors[s] == embedded:
 			_sectors[s] = null
 	embedded.queue_free()
+
+# a full set of 4 gets pulled out of the sectors into a shoot-back pool, but only while the
+# pool is empty — you must spend the current batch before the next one loads
+func _try_absorb() -> void:
+	if not fully_embedded() or not _ammo.is_empty():
+		return
+	var taken := {}
+	for em in _sectors:
+		if not em or taken.has(em):
+			continue
+		taken[em] = true
+		var arrow := em.get_arrow()
+		if arrow:
+			arrow.deactivate()
+			_ammo.append(arrow)
+		em.queue_free()
+	_setup_sectors()
+	ammo_changed.emit(_ammo.size())
+
+# right-click: fling one stored arrow back toward the mouse as a player-team projectile
+func shoot() -> void:
+	if not _shoot_ready or _ammo.is_empty():
+		return
+	var arrow: Arrow = _ammo.pop_back()
+	_shoot_ready = false
+	get_tree().create_timer(shoot_cooldown).timeout.connect(func(): _shoot_ready = true)
+	if arrow.get_parent() != get_tree().current_scene:
+		arrow.reparent(get_tree().current_scene)
+	arrow.activate(global_position, _facing, _PLAYER_TEAM)
+	fired.emit(arrow)
+	ammo_changed.emit(_ammo.size())
+	_try_absorb()
 
 func is_dead() -> bool:
 	return _dead
