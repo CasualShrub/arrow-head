@@ -2,6 +2,7 @@
 
 [ext_resource type="PackedScene" uid="uid://b8rs35o7f45v0" path="res://scenes/enemy.tscn" id="2_w7c3h"]
 [ext_resource type="PackedScene" uid="uid://boryk37cbh1nx" path="res://scenes/player.tscn" id="2_w8frs"]
+[ext_resource type="Texture2D" path="res://art/backgrounds/level_1.png" id="3_bg1"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_top"]
 size = Vector2(1216, 32)
@@ -17,13 +18,10 @@ size = Vector2(32, 648)
 
 [node name="Level" type="Node2D" unique_id=999275406]
 
-[node name="Background" type="ColorRect" parent="." unique_id=1131090978]
+[node name="Background" type="Sprite2D" parent="." unique_id=1131090978]
 z_index = -1
-offset_left = -576.0
-offset_top = -324.0
-offset_right = 576.0
-offset_bottom = 324.0
-color = Color(0.09, 0.1, 0.13, 1)
+texture = ExtResource("3_bg1")
+scale = Vector2(2.25, 2.25)
 
 [node name="Border" type="Line2D" parent="." unique_id=1909312251]
 points = PackedVector2Array(-576, -324, 576, -324, 576, 324, -576, 324, -576, -324)
