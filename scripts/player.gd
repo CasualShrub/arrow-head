@@ -21,6 +21,11 @@ const _PLAYER_TEAM = Arrow.Team.PLAYER
 		hurt_radius = value
 @export var sector_count := 4
 @export var sector_centered := false
+@export_group("eyes")
+@export var eyes_normal: Texture2D
+@export var eyes_lowhp: Texture2D
+@export var eyes_hit: Texture2D
+@export var eyes_hit_time := 0.36
 
 signal hit(arrow: Arrow, sector: int)
 signal fired(arrow: Arrow)
@@ -33,12 +38,37 @@ var _dead := false
 var _facing := Vector2()
 var _melee_ready := true
 var _shoot_ready := true
+var _eyes_hit_showing := false
+
+@onready var _eyes: Sprite2D = %Eyes
 
 func _update_collider(c: CollisionShape2D, r: float) -> void:
 	if not c: return
 	var s := CircleShape2D.new()
 	s.radius = r
 	c.shape = s
+
+
+func embedded_count() -> int:
+	var n := 0
+	for em in _sectors:
+		if em:
+			n += 1
+	return n
+
+func _update_eyes() -> void:
+	if not _eyes or _eyes_hit_showing:
+		return
+	_eyes.texture = eyes_lowhp if embedded_count() >= 3 else eyes_normal
+
+func _flash_eyes_hit() -> void:
+	if not _eyes:
+		return
+	_eyes_hit_showing = true
+	_eyes.texture = eyes_hit
+	await get_tree().create_timer(eyes_hit_time).timeout
+	_eyes_hit_showing = false
+	_update_eyes()
 
 func get_facing_angle() -> float:
 	return atan2(_facing.y, _facing.x) + (PI / 2)
@@ -102,6 +132,7 @@ func clear_embedded() -> void:
 			arrow.queue_free()
 		embedded.queue_free()
 	_setup_sectors()
+	_update_eyes()
 
 func get_hit(arrow: Arrow) -> void:
 	var sector := get_sector(arrow.global_position - global_position)
@@ -111,12 +142,11 @@ func get_hit(arrow: Arrow) -> void:
 		arrow.queue_free()
 		die()
 	hit.emit(arrow, sector)
+	_flash_eyes_hit()
 
 func face_mouse(mouse_pos: Vector2) -> void:
 	_facing = global_position.direction_to(mouse_pos)
-	var angle := get_facing_angle()
-	%Sprite.rotation = angle
-	%Arrows.rotation = angle
+	%Arrows.rotation = get_facing_angle()
 
 func move(dir: Vector2, _dt: float) -> void:
 	velocity = dir * speed
@@ -166,6 +196,7 @@ func _consume(embedded: EmbeddedArrow) -> void:
 		if _sectors[s] == embedded:
 			_sectors[s] = null
 	embedded.queue_free()
+	_update_eyes()
 
 # a full set of 4 gets pulled out of the sectors into a shoot-back pool, but only while the
 # pool is empty — you must spend the current batch before the next one loads
@@ -184,6 +215,7 @@ func _try_absorb() -> void:
 			_ammo.append(arrow)
 		em.queue_free()
 	_setup_sectors()
+	_update_eyes()
 	ammo_changed.emit(_ammo.size())
 
 # right-click: fling one stored arrow back toward the mouse as a player-team projectile
@@ -226,3 +258,4 @@ func _process(_delta: float) -> void:
 func _ready() -> void:
 	_setup_sectors()
 	_update_collider(%HurtCollider, hurt_radius)
+	_update_eyes()

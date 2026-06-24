@@ -3,15 +3,15 @@
 [ext_resource type="Script" uid="uid://djbaojmlgp0lu" path="res://scripts/player.gd" id="1_3vyb7"]
 [ext_resource type="Script" uid="uid://cq7vk7ukbmts4" path="res://scripts/health_component.gd" id="2_g2els"]
 [ext_resource type="Script" uid="uid://bw22qrc8y4p5b" path="res://scripts/input_component.gd" id="3_qhqgy"]
+[ext_resource type="Texture2D" uid="uid://c5w3uc4upc1av" path="res://art/player/apple_base.png" id="4_apple"]
+[ext_resource type="Texture2D" uid="uid://cp4cnsely21gy" path="res://art/player/eye_normal.png" id="5_eyes"]
+[ext_resource type="Texture2D" uid="uid://ddhrf02nv342f" path="res://art/player/eyes_lowHP.png" id="6_lowhp"]
+[ext_resource type="Texture2D" uid="uid://bxkglylm44xg" path="res://art/player/eyes_hit.png" id="7_hit"]
 
-[sub_resource type="CircleShape2D" id="CircleShape2D_qhqgy"]
+[sub_resource type="CircleShape2D" id="CircleShape2D_fjrip"]
 radius = 19.0
 
-[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_qhqgy"]
-load_path = "res://.godot/imported/icon.svg-218a8f2b3041327d8a5756f3a245f83b.ctex"
-
 [node name="Player" type="CharacterBody2D" unique_id=508579643 node_paths=PackedStringArray("input", "health")]
-collision_layer = 1
 collision_mask = 4
 script = ExtResource("1_3vyb7")
 input = NodePath("Input")
@@ -19,10 +19,13 @@ health = NodePath("Health")
 speed = 600.0
 hurt_radius = 19.0
 sector_centered = true
+eyes_normal = ExtResource("5_eyes")
+eyes_lowhp = ExtResource("6_lowhp")
+eyes_hit = ExtResource("7_hit")
 
 [node name="HurtCollider" type="CollisionShape2D" parent="." unique_id=1531782285]
 unique_name_in_owner = true
-shape = SubResource("CircleShape2D_qhqgy")
+shape = SubResource("CircleShape2D_fjrip")
 debug_color = Color(1, 0, 0, 0.41960785)
 
 [node name="Health" type="Node" parent="." unique_id=1891742081]
@@ -42,9 +45,13 @@ unique_name_in_owner = true
 
 [node name="Sprite" type="Sprite2D" parent="." unique_id=274062760]
 unique_name_in_owner = true
-position = Vector2(3.8146973e-06, 3.8146973e-06)
 scale = Vector2(0.3, 0.3)
-texture = SubResource("CompressedTexture2D_qhqgy")
+texture = ExtResource("4_apple")
+
+[node name="Eyes" type="Sprite2D" parent="." unique_id=274062761]
+unique_name_in_owner = true
+scale = Vector2(0.3, 0.3)
+texture = ExtResource("5_eyes")
 
 [node name="Arrows" type="Node2D" parent="." unique_id=1690948396]
 unique_name_in_owner = true

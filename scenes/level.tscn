@@ -6,7 +6,7 @@
 [ext_resource type="Script" uid="uid://dy53cb8kjf73t" path="res://scripts/sector_display.gd" id="4_sd"]
 [ext_resource type="Script" uid="uid://b0hp4oeupnfex" path="res://scripts/wall_tiles.gd" id="6_arena"]
 [ext_resource type="TileSet" uid="uid://cq0p2ietf38fi" path="res://tilesets/grass_tileset.tres" id="8_grass_ts"]
-[ext_resource type="Script" path="res://scripts/grass_ground.gd" id="9_grass"]
+[ext_resource type="Script" uid="uid://d17a1s7lg4fkp" path="res://scripts/grass_tiles.gd" id="9_grass"]
 [ext_resource type="PackedScene" path="res://scenes/deco/wall.tscn" id="10_wall"]
 [ext_resource type="PackedScene" path="res://scenes/deco/fence_block.tscn" id="11_fence_block"]
 [ext_resource type="PackedScene" path="res://scenes/deco/log.tscn" id="12_log"]
@@ -49,8 +49,6 @@ position = Vector2(-306, -242)
 [node name="Enemy" parent="." unique_id=1183056859 node_paths=PackedStringArray("player") instance=ExtResource("2_w7c3h")]
 position = Vector2(-300, -150)
 player = NodePath("../Player")
-aim_time = null
-hit_flash_time = null
 
 [node name="SectorDisplay" type="Node2D" parent="." unique_id=646221309 node_paths=PackedStringArray("player")]
 z_index = 1
