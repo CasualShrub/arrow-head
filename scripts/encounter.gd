@@ -8,7 +8,10 @@ var _won: bool
 signal ended(won: bool)
 
 func get_enemies() -> Array[Enemy]:
-	var enemies = %Enemies.get_children()
+	var enemies: Array[Enemy] = []
+	for e in %Enemies.get_children():
+		if e is Enemy:
+			enemies.append(e)
 	return enemies
 
 func enemies_alive() -> bool:
@@ -28,7 +31,7 @@ func add_enemy(enemy: Enemy) -> void:
 		%Enemies.add_child(enemy)
 		
 func add_player(p: Player):
-	p.died.connect(_on_player_died.bind(p))
+	p.died.connect(_on_player_died.bind())
 
 func start() -> void:
 	var enemies := find_children("*", "Enemy")

@@ -141,7 +141,6 @@ func enable_firing():
 		if embedded is EmbeddedArrow:
 			embedded.enable_firing()
 
-
 func kind_for_sector(sector: int) -> int:
 	if sector < 0 or sector >= sector_kinds.size():
 		return Arrow.Kind.NORMAL
@@ -154,13 +153,11 @@ func is_correct_catch(_arrow: Arrow, _sector: int) -> bool:
 	return true
 
 func get_hit(arrow: Arrow) -> void:
-	var sector := sectors.get_sector_from_position(arrow.global_position)
-	if _dead:
+	if is_dead():
+		arrow.deactivate()
 		return
-	#var sector := get_sector(arrow.global_position - global_position)
+	var sector := sectors.get_sector_from_position(arrow.global_position)
 	var correct := is_correct_catch(arrow, sector)
-	# arrows always pincushion: stick in the sector they hit, or kill on an occupied one.
-	# a wrong-color arrow still sticks, but its debuff fires as the penalty.
 	if try_embed_arrow(arrow, sector):
 		arrow.stick(_arrows)
 		if not correct:
@@ -210,11 +207,17 @@ func _unhandled_input(event: InputEvent) -> void:
 		if event.button_index == MOUSE_BUTTON_RIGHT:
 			shoot()
 
+func fire(arrow: Arrow) -> void:
+	arrow.reparent(get_tree().current_scene)
+	arrow.activate(global_position, get_facing(), _PLAYER_TEAM)
+
 func try_fire(sector: int) -> void:
+	print("trying to fire")
 	if not _recovery.is_stopped(): return
-	var embedded = sectors.get_stored_at(sector) as EmbeddedArrow
+	var embedded = sectors.take_stored(sector) as EmbeddedArrow
 	if not embedded: return
-	var arrow := embedded.get_arrow()
+	var arrow := embedded.grab()
+	fire(arrow)
 	fired.emit(arrow)
 
 # status effects from mis-caught special arrows
@@ -276,12 +279,9 @@ func _on_sectors_changed() -> void:
 	if sectors.full():
 		enable_firing()
 
-func _on_recovery_timeout() -> void:
-	pass
-
 func _physics_process(delta: float) -> void:
 	if Engine.is_editor_hint(): return
-	if _dead: return
+	if is_dead(): return
 	if input.consume_fire():
 		try_fire(sectors.get_highlighted())
 	if is_burning():

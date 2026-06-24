@@ -12,6 +12,8 @@ collision_layer = 2
 collision_mask = 5
 motion_mode = 1
 script = ExtResource("1_arrow")
+max_bounces = 3
+decay_time = 2.0
 
 [node name="Collider" type="CollisionShape3D" parent="." unique_id=568441233]
 unique_name_in_owner = true

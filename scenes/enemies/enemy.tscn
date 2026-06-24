@@ -33,6 +33,7 @@ metadata/_custom_type_script = "uid://d04k7pxjd2u24"
 
 [node name="Enemy" type="CharacterBody3D" unique_id=71488470 node_paths=PackedStringArray("health", "sus")]
 collision_layer = 8
+motion_mode = 1
 script = ExtResource("1_7p1mj")
 health = NodePath("Health")
 sus = NodePath("Sus")

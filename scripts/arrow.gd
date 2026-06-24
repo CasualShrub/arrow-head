@@ -12,19 +12,18 @@ const _MASK_ENEMY := 1 << 3
 @export var damage := 10
 @export_group("movement")
 @export var speed := 7.0
-@export var max_bounces := 8
-@export var direction := Vector3.RIGHT:
-	set(value):
-		direction = value.normalized() if value != Vector3.ZERO else Vector3.RIGHT
 
 @export_group("lifetime")
 @export var max_lifetime := 0.0
 @export var free_on_finish := true
+@export var max_bounces := 8
+@export var decay_time := -1.0
 
-@onready var collider: CollisionShape3D = %Collider
+@onready var _collider: CollisionShape3D = %Collider
 
 signal hit(target: Player)
-signal finished(arrow: Arrow)
+signal finished
+signal stuck
 
 var _team: Team = Team.ENEMY:
 	set(value):
@@ -32,6 +31,9 @@ var _team: Team = Team.ENEMY:
 		_apply_team()
 var _life := 0.0
 var _bounces := 0
+var _direction := Vector3.RIGHT:
+	set(value):
+		_direction = value.normalized() if value != Vector3.ZERO else Vector3.RIGHT
 
 func _apply_team() -> void:
 	match _team:
@@ -41,14 +43,22 @@ func _apply_team() -> void:
 			collision_mask = _MASK_ENEMY | _MASK_WALL
 			
 func _is_wall(body: Object) -> bool:
-	return body is CollisionObject3D and body.get_collision_layer_value(3)
+	return body.get_collision_layer_value(3)
 
 func _bounce(collision: KinematicCollision3D) -> void:
 	var n := collision.get_normal()
-	direction = direction.bounce(n)
+	_direction = _direction.bounce(n)
 	move_and_collide(collision.get_remainder().bounce(n))
 	_bounces += 1
 	if max_bounces >= 0 and _bounces > max_bounces:
+		_wall_stick()
+
+func _wall_stick() -> void:
+	stuck.emit()
+	_disable()
+	if decay_time >= 0:
+		if decay_time > 0:
+			await get_tree().create_timer(decay_time).timeout
 		_finish()
 
 func _on_hit(target) -> void:
@@ -68,48 +78,51 @@ func get_sectors(collided: int) -> Array[int]:
 func activate(pos: Vector3, dir: Vector3, new_team := _team) -> void:
 	global_position = pos
 	_team = new_team
-	direction = dir
-	_face_vector(direction)
+	_direction = dir
+	face(dir)
 	_life = 0.0
 	_bounces = 0
 	show()
-	collider.set_deferred("disabled", false)
+	_collider.set_deferred("disabled", false)
 	set_physics_process(true)
 
-func stick(host: Node3D) -> void:
+func _disable() -> void:
 	set_physics_process(false)
 	velocity = Vector3.ZERO
-	collider.set_deferred("disabled", true)
+	_collider.set_deferred("disabled", true)
+
+func stick(host: Node3D) -> void:
+	_disable()
 	reparent.call_deferred(host)
 
 func deactivate() -> void:
-	set_physics_process(false)
-	velocity = Vector3.ZERO
+	_disable()
 	hide()
-	collider.set_deferred("disabled", true)
 
 func _finish() -> void:
 	deactivate()
-	finished.emit(self)
+	finished.emit()
 	if free_on_finish:
 		queue_free()
 
-func _face_vector(dir: Vector3) -> void:
-	if dir.length() < 0.0001: return
-	look_at(global_position + dir)
+func face(direction: Vector3) -> void:
+	if direction.length() < 0.0001: return
+	look_at(global_position + direction)
 
 func _ready() -> void:
 	_apply_team()
 
 func _physics_process(delta: float) -> void:
-	_face_vector(direction)
 	_life += delta
 	if get_remaining_lifetime() <= 0:
 		_finish()
 		return
-	var collision := move_and_collide(direction * speed * delta)
+	var collision := move_and_collide(_direction * speed * delta)
 	if collision:
-		if _is_wall(collision.get_collider()):
+		var collider := collision.get_collider()
+		if collider.has_method("get_hit"):
+			_on_hit(collider)
+		elif _is_wall(collision.get_collider()):
 			_bounce(collision)
 		else:
-			_on_hit(collision.get_collider())
+			_wall_stick()

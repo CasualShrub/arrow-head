@@ -20,26 +20,28 @@ const _ENEMY_TEAM = Arrow.Team.ENEMY
 			_update_collider(_collider, value)
 		hurt_radius = value
 
-var _dead := false
-var _movement_pattern: Dictionary[float, Vector3] = {}
-var _movement_pattern_start: float
+signal fired(arrow: Arrow, dir: Vector3)
+signal died
 
 @onready var _sprite: Sprite3D = %Sprite
 @onready var _collider: CollisionShape3D = %Collider
 @onready var _recovery: Timer = %Recovery
 @onready var _inst_timers: Node = %InstanceTimers
 
-signal fired(arrow: Arrow, dir: Vector3)
-signal died
+var _dead := false
+var _movement_pattern: Dictionary[float, Vector3] = {}
+var _movement_pattern_start: float
 
-func get_hit(_arrow: Arrow) -> void:
+func get_hit(arrow: Arrow) -> void:
+	arrow.deactivate()
+	if is_dead():
+		return
 	health.take_damage(1)
 	#_hit_showing = true
 	#_set_sprite(hit_stretch if _aiming else hit_normal)
 	await get_tree().create_timer(hit_flash_time).timeout
 	#_hit_showing = false
-	if _dead:
-		return
+	
 	#_set_sprite(_base_tex)
 
 func _update_collider(c: CollisionShape3D, r: float) -> void:
@@ -212,15 +214,14 @@ func is_dead() -> bool:
 	return _dead
 
 func die() -> void:
+	_dead = true
 	died.emit()
 
 func _on_health_changed() -> void:
 	if not _dead and health.current <= 0:
-		_dead = true
 		die()
 
 func _on_recovery_timeout() -> void:
-	print("recovered")
 	var pattern := _select_pattern()
 	perform(pattern)
 
@@ -230,6 +231,7 @@ func _set_sprite(tex: Texture2D) -> void:
 
 func _physics_process(delta: float) -> void:
 	if Engine.is_editor_hint(): return
+	if is_dead(): return
 	_select_behaviour(delta)
 
 func _ready() -> void:

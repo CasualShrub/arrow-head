@@ -119,7 +119,7 @@ func take_stored(sector: int) -> Variant:
 		# store actual in last slot, so if passed break
 		if i == sector:
 			break
-		if _stored[i] == sector:
+		if _stored[i] is int and _stored[i] == sector:
 			slots.append(i)
 	var s = get_stored_at(sector)
 	for i in slots:

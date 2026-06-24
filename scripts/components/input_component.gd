@@ -15,7 +15,7 @@ func consume_fire() -> bool:
 	if _wants_fire:
 		_wants_fire = false
 		return true
-	return true
+	return false
 
 func _poll_input(_delta: float) -> void:
 	var direction := get_direction()
