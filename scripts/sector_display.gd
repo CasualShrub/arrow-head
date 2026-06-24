@@ -28,12 +28,12 @@ func _draw() -> void:
 			a0 -= size * 0.5
 		var pts := _wedge(a0, a0 + size)
 		var occupied: bool = player.get_embedded(i) != null
-		draw_colored_polygon(pts, Color(0.95, 0.85, 0.3, 0.4) if occupied else Color(0.6, 0.65, 0.75, 0.08))
+		draw_colored_polygon(pts, Color(0.9, 0.35, 0.15, 0.5) if occupied else Color(0.9, 0.35, 0.15, 0.12))
 		var edge := pts.duplicate()
 		edge.append(pts[0])
-		draw_polyline(edge, Color(0.85, 0.87, 0.95, 0.45), 1.5)
+		draw_polyline(edge, Color(0.95, 0.45, 0.25, 0.5), 1.5)
 		if i == aimed:
-			draw_polyline(edge, Color(1, 1, 1, 0.95), 3.0)
+			draw_polyline(edge, Color(1, 0.7, 0.4, 0.95), 3.0)
 
 func _wedge(a0: float, a1: float) -> PackedVector2Array:
 	var pts := PackedVector2Array()

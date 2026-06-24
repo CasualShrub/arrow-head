@@ -13,7 +13,7 @@ scale = Vector2(1.69, 1.69)
 script = ExtResource("1_arrow")
 
 [node name="Visual" type="Polygon2D" parent="." unique_id=1154579900]
-color = Color(0.95, 0.85, 0.3, 1)
+color = Color(1, 1, 1, 1)
 polygon = PackedVector2Array(8, 0, -6, -4, -6, 4)
 
 [node name="Collider" type="CollisionShape2D" parent="." unique_id=174712288]
