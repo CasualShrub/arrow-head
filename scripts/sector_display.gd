@@ -30,14 +30,14 @@ func _draw() -> void:
 		var base := _kind_color(i)  # each sector tinted by the kind it catches
 		var occupied: bool = player.get_embedded(i) != null
 		var fill := base
-		fill.a = 0.5 if occupied else 0.14
+		fill.a = 0.62 if occupied else 0.32
 		if i == aimed:
-			fill = base.lerp(Color.WHITE, 0.5)
-			fill.a = 0.45
+			fill = base.lerp(Color.WHITE, 0.4)
+			fill.a = 0.6
 		draw_colored_polygon(pts, fill)
 		# arc (outer curve): brighter on the aimed wedge
 		var arc_color := base
-		arc_color.a = 0.6 if i == aimed else 0.35
+		arc_color.a = 0.85 if i == aimed else 0.6
 		draw_polyline(pts.slice(1), arc_color, 1.5)
 		# inner cone sides: bold white on the aimed wedge, the kind color on the rest
 		var sides := PackedVector2Array([pts[1], pts[0], pts[pts.size() - 1]])
@@ -45,7 +45,7 @@ func _draw() -> void:
 			draw_polyline(sides, Color(1, 1, 1, 0.95), 3.0)
 		else:
 			var side_c := base
-			side_c.a = 0.35
+			side_c.a = 0.6
 			draw_polyline(sides, side_c, 1.5)
 
 func _wedge(a0: float, a1: float) -> PackedVector2Array:

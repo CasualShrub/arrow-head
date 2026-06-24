@@ -10,6 +10,7 @@ const _ENEMY_TEAM = Arrow.Team.ENEMY
 
 @export_group("firing")
 @export var arrow_scene: PackedScene
+@export var arrow_scenes: Array[PackedScene] = []  # if non-empty, firing cycles through these
 @export var fire_rate := 2.0
 
 @export var aim_time := 0.4
@@ -35,8 +36,9 @@ var _dead := false
 var _alerted := false
 var _aiming := false
 var _hit_showing := false
-var _base_tex: Texture2D 
+var _base_tex: Texture2D
 var _movement_pattern: Dictionary[float, Vector2] = {}
+var _fire_index := 0
 
 @onready var _sprite: Sprite2D = $Sprite2D
 
@@ -203,8 +205,9 @@ func _on_fire_timeout() -> void:
 		await get_tree().create_timer(step).timeout
 		if _dead:
 			return
-	if arrow_scene:
-		fire(_make_arrow(arrow_scene), _facing)
+	var scene := _next_arrow_scene()
+	if scene:
+		fire(_make_arrow(scene), _facing)
 	_set_base(frame4)
 	await get_tree().create_timer(release_time).timeout
 	if _dead:
@@ -212,6 +215,13 @@ func _on_fire_timeout() -> void:
 	_aiming = false
 	_set_base(frame1)
 	%FireDebounce.start()
+
+func _next_arrow_scene() -> PackedScene:
+	if arrow_scenes.is_empty():
+		return arrow_scene
+	var s: PackedScene = arrow_scenes[_fire_index % arrow_scenes.size()]
+	_fire_index += 1
+	return s
 
 func _set_base(tex: Texture2D) -> void:
 	_base_tex = tex

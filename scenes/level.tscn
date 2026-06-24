@@ -12,6 +12,8 @@
 [ext_resource type="PackedScene" path="res://scenes/deco/log.tscn" id="12_log"]
 [ext_resource type="PackedScene" path="res://scenes/deco/stump.tscn" id="13_stump"]
 [ext_resource type="PackedScene" path="res://scenes/deco/fence_pillar.tscn" id="14_fence_pillar"]
+[ext_resource type="PackedScene" path="res://scenes/arrow_incendiary.tscn" id="15_incend"]
+[ext_resource type="PackedScene" path="res://scenes/arrow_frost.tscn" id="16_frost"]
 
 [node name="Level" type="Node2D" unique_id=999275406]
 
@@ -49,6 +51,7 @@ position = Vector2(-306, -242)
 [node name="Enemy" parent="." unique_id=1183056859 node_paths=PackedStringArray("player") instance=ExtResource("2_w7c3h")]
 position = Vector2(-300, -150)
 player = NodePath("../Player")
+arrow_scenes = Array[PackedScene]([ExtResource("15_incend"), ExtResource("16_frost")])
 
 [node name="SectorDisplay" type="Node2D" parent="." unique_id=646221309 node_paths=PackedStringArray("player")]
 z_index = 1
