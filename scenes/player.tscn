@@ -3,30 +3,41 @@
 [ext_resource type="Script" uid="uid://djbaojmlgp0lu" path="res://scripts/player.gd" id="1_3vyb7"]
 [ext_resource type="Script" uid="uid://cq7vk7ukbmts4" path="res://scripts/health_component.gd" id="2_g2els"]
 [ext_resource type="Script" uid="uid://bw22qrc8y4p5b" path="res://scripts/input_component.gd" id="3_qhqgy"]
-[ext_resource type="Texture2D" uid="uid://c5w3uc4upc1av" path="res://art/player/apple_base.png" id="4_apple"]
-[ext_resource type="Texture2D" uid="uid://cp4cnsely21gy" path="res://art/player/eye_normal.png" id="5_eyes"]
-[ext_resource type="Texture2D" uid="uid://ddhrf02nv342f" path="res://art/player/eyes_lowHP.png" id="6_lowhp"]
-[ext_resource type="Texture2D" uid="uid://bxkglylm44xg" path="res://art/player/eyes_hit.png" id="7_hit"]
+[ext_resource type="Texture2D" uid="uid://ssnmuf3en2ae" path="res://icon.svg" id="4_dqkch"]
+[ext_resource type="Shader" uid="uid://bfi638v144t8g" path="res://shaders/sector_visualiser.gdshader" id="5_qlg0r"]
+[ext_resource type="Script" uid="uid://bdywsusg7sgug" path="res://scripts/sectors_component.gd" id="6_tuyoq"]
 
-[sub_resource type="CircleShape2D" id="CircleShape2D_fjrip"]
-radius = 19.0
+[sub_resource type="SphereShape3D" id="SphereShape3D_tuyoq"]
+radius = 0.4
 
-[node name="Player" type="CharacterBody2D" unique_id=508579643 node_paths=PackedStringArray("input", "health")]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_fjrip"]
+render_priority = 0
+shader = ExtResource("5_qlg0r")
+shader_parameter/sector_count = 4
+shader_parameter/aimed_sector = -1
+shader_parameter/occupied_mask = 0
+shader_parameter/empty_color = Color(0.9, 0.35, 0.15, 0.12)
+shader_parameter/occupied_color = Color(0.9, 0.35, 0.15, 0.5)
+shader_parameter/highlight_color = Color(0.9882353, 0.59607846, 0, 0.7137255)
+shader_parameter/line_color = Color(0.95, 0.45, 0.25, 0.7)
+shader_parameter/edge_width = 0.02
+shader_parameter/outer_ring_width = 0.02
+
+[sub_resource type="QuadMesh" id="QuadMesh_ub6uw"]
+
+[node name="Player" type="CharacterBody3D" unique_id=439211336 node_paths=PackedStringArray("input", "health", "sectors")]
 collision_mask = 4
 script = ExtResource("1_3vyb7")
 input = NodePath("Input")
 health = NodePath("Health")
-speed = 600.0
-hurt_radius = 19.0
-sector_centered = true
-eyes_normal = ExtResource("5_eyes")
-eyes_lowhp = ExtResource("6_lowhp")
-eyes_hit = ExtResource("7_hit")
+sectors = NodePath("Sectors")
+hurt_radius = 0.4
+sector_radius = null
 
-[node name="HurtCollider" type="CollisionShape2D" parent="." unique_id=1531782285]
+[node name="HurtCollider" type="CollisionShape3D" parent="." unique_id=1401584448]
 unique_name_in_owner = true
-shape = SubResource("CircleShape2D_fjrip")
-debug_color = Color(1, 0, 0, 0.41960785)
+shape = SubResource("SphereShape3D_tuyoq")
+debug_color = Color(0, 0.6, 0.7019608, 0.41960785)
 
 [node name="Health" type="Node" parent="." unique_id=1891742081]
 script = ExtResource("2_g2els")
@@ -41,17 +52,19 @@ one_shot = true
 [node name="InstanceTimers" type="Node" parent="." unique_id=1259921754]
 unique_name_in_owner = true
 
-[node name="Camera2D" type="Camera2D" parent="." unique_id=1450986859]
-
-[node name="Sprite" type="Sprite2D" parent="." unique_id=274062760]
+[node name="Arrows" type="Node3D" parent="." unique_id=208548441]
 unique_name_in_owner = true
-scale = Vector2(0.3, 0.3)
-texture = ExtResource("4_apple")
 
-[node name="Eyes" type="Sprite2D" parent="." unique_id=274062761]
+[node name="Sprite" type="Sprite3D" parent="." unique_id=1671790148]
 unique_name_in_owner = true
-scale = Vector2(0.3, 0.3)
-texture = ExtResource("5_eyes")
+transform = Transform3D(0.59999996, 0, 0, 0, -2.6226832e-08, 0.59999996, 0, -0.59999996, -2.6226832e-08, 0, 0, 0)
+double_sided = false
+texture = ExtResource("4_dqkch")
 
-[node name="Arrows" type="Node2D" parent="." unique_id=1690948396]
-unique_name_in_owner = true
+[node name="Sectors" type="MeshInstance3D" parent="." unique_id=9603647]
+transform = Transform3D(-0.7071067, -0.7071067, -3.090862e-08, 0, -4.3711385e-08, 1, -0.7071067, 0.7071067, 3.090862e-08, 0, 0.0095798075, 0)
+material_override = SubResource("ShaderMaterial_fjrip")
+mesh = SubResource("QuadMesh_ub6uw")
+script = ExtResource("6_tuyoq")
+
+[connection signal="timeout" from="Recovery" to="." method="_on_recovery_timeout"]

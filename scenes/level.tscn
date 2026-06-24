@@ -1,68 +1,64 @@
-[gd_scene format=4 uid="uid://wcfn6hm816x8"]
+[gd_scene format=3 uid="uid://wcfn6hm816x8"]
 
 [ext_resource type="PackedScene" uid="uid://b8rs35o7f45v0" path="res://scenes/enemy.tscn" id="2_w7c3h"]
 [ext_resource type="PackedScene" uid="uid://boryk37cbh1nx" path="res://scenes/player.tscn" id="2_w8frs"]
+[ext_resource type="Texture2D" uid="uid://cm473p31f8mc0" path="res://art/backgrounds/level_1.png" id="3_bg1"]
 [ext_resource type="PackedScene" uid="uid://c7aku7ietdise" path="res://scenes/ui/hud.tscn" id="3_hud"]
 [ext_resource type="Script" uid="uid://dy53cb8kjf73t" path="res://scripts/sector_display.gd" id="4_sd"]
-[ext_resource type="Script" uid="uid://b0hp4oeupnfex" path="res://scripts/wall_tiles.gd" id="6_arena"]
-[ext_resource type="TileSet" uid="uid://cq0p2ietf38fi" path="res://tilesets/grass_tileset.tres" id="8_grass_ts"]
-[ext_resource type="Script" uid="uid://d17a1s7lg4fkp" path="res://scripts/grass_tiles.gd" id="9_grass"]
-[ext_resource type="PackedScene" path="res://scenes/deco/wall.tscn" id="10_wall"]
-[ext_resource type="PackedScene" path="res://scenes/deco/fence_block.tscn" id="11_fence_block"]
-[ext_resource type="PackedScene" path="res://scenes/deco/log.tscn" id="12_log"]
-[ext_resource type="PackedScene" path="res://scenes/deco/stump.tscn" id="13_stump"]
-[ext_resource type="PackedScene" path="res://scenes/deco/fence_pillar.tscn" id="14_fence_pillar"]
-[ext_resource type="PackedScene" path="res://scenes/enemy_incendiary.tscn" id="15_e_inc"]
-[ext_resource type="PackedScene" path="res://scenes/enemy_frost.tscn" id="16_e_frost"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_top"]
+size = Vector2(1216, 32)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_bottom"]
+size = Vector2(1216, 32)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_left"]
+size = Vector2(32, 648)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_right"]
+size = Vector2(32, 648)
 
 [node name="Level" type="Node2D" unique_id=999275406]
 
-[node name="Walls" type="Node2D" parent="." unique_id=1010003266]
-script = ExtResource("6_arena")
+[node name="Background" type="Sprite2D" parent="." unique_id=1131090978]
+z_index = -1
+scale = Vector2(2.25, 2.25)
+texture = ExtResource("3_bg1")
 
-[node name="Grass" type="TileMapLayer" parent="." unique_id=166726213]
-z_index = -2
-scale = Vector2(0.2, 0.2)
-tile_map_data = PackedByteArray("AAD4//v/BQAAAAAAAAD4//z/AQAAAAAAAAD4//3/BAAAAAAAAAD4//7/BQAAAAAAAAD4////AwAAAAAAAAD4/wAABQAAAAAAAAD4/wEAAAAAAAAAAAD4/wIABQAAAAAAAAD4/wMAAQAAAAAAAAD4/wQAAwAAAAAAAAD5//v/BAAAAAAAAAD5//z/AQAAAAAAAAD5//3/AQAAAAAAAAD5//7/AAAAAAAAAAD5////BQAAAAAAAAD5/wAABQAAAAAAAAD5/wEABAAAAAAAAAD5/wIAAAAAAAAAAAD5/wMAAQAAAAAAAAD5/wQAAAAAAAAAAAD6//v/AQAAAAAAAAD6//z/AgAAAAAAAAD6//3/AAAAAAAAAAD6//7/AAAAAAAAAAD6////AwAAAAAAAAD6/wAABAAAAAAAAAD6/wEAAgAAAAAAAAD6/wIAAwAAAAAAAAD6/wMABQAAAAAAAAD6/wQAAwAAAAAAAAD7//v/AgAAAAAAAAD7//z/AgAAAAAAAAD7//3/AQAAAAAAAAD7//7/BQAAAAAAAAD7////BAAAAAAAAAD7/wAAAQAAAAAAAAD7/wEAAgAAAAAAAAD7/wIAAwAAAAAAAAD7/wMAAwAAAAAAAAD7/wQAAwAAAAAAAAD8//v/BAAAAAAAAAD8//z/BQAAAAAAAAD8//3/AgAAAAAAAAD8//7/BQAAAAAAAAD8////AwAAAAAAAAD8/wAAAwAAAAAAAAD8/wEABQAAAAAAAAD8/wIAAwAAAAAAAAD8/wMABQAAAAAAAAD8/wQABAAAAAAAAAD9//v/AQAAAAAAAAD9//z/BAAAAAAAAAD9//3/AwAAAAAAAAD9//7/AgAAAAAAAAD9////BAAAAAAAAAD9/wAABQAAAAAAAAD9/wEABAAAAAAAAAD9/wIABAAAAAAAAAD9/wMABQAAAAAAAAD9/wQAAgAAAAAAAAD+//v/BQAAAAAAAAD+//z/AQAAAAAAAAD+//3/AAAAAAAAAAD+//7/BAAAAAAAAAD+////AAAAAAAAAAD+/wAAAQAAAAAAAAD+/wEAAwAAAAAAAAD+/wIAAwAAAAAAAAD+/wMAAQAAAAAAAAD+/wQAAgAAAAAAAAD///v/AQAAAAAAAAD///z/BQAAAAAAAAD///3/BQAAAAAAAAD///7/AAAAAAAAAAD/////BQAAAAAAAAD//wAAAwAAAAAAAAD//wEAAQAAAAAAAAD//wIAAwAAAAAAAAD//wMAAgAAAAAAAAD//wQAAAAAAAAAAAAAAPv/AgAAAAAAAAAAAPz/AAAAAAAAAAAAAP3/BQAAAAAAAAAAAP7/BQAAAAAAAAAAAP//AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEAAQAAAAAAAAAAAAIAAQAAAAAAAAAAAAMAAAAAAAAAAAAAAAQABQAAAAAAAAABAPv/AwAAAAAAAAABAPz/AgAAAAAAAAABAP3/AgAAAAAAAAABAP7/AQAAAAAAAAABAP//AwAAAAAAAAABAAAAAgAAAAAAAAABAAEAAgAAAAAAAAABAAIAAgAAAAAAAAABAAMAAQAAAAAAAAABAAQAAwAAAAAAAAACAPv/AAAAAAAAAAACAPz/AAAAAAAAAAACAP3/AAAAAAAAAAACAP7/BQAAAAAAAAACAP//AgAAAAAAAAACAAAABAAAAAAAAAACAAEAAwAAAAAAAAACAAIABAAAAAAAAAACAAMAAgAAAAAAAAACAAQAAwAAAAAAAAADAPv/AAAAAAAAAAADAPz/AAAAAAAAAAADAP3/BAAAAAAAAAADAP7/BQAAAAAAAAADAP//AAAAAAAAAAADAAAABAAAAAAAAAADAAEAAgAAAAAAAAADAAIABQAAAAAAAAADAAMAAAAAAAAAAAADAAQAAwAAAAAAAAAEAPv/AwAAAAAAAAAEAPz/BQAAAAAAAAAEAP3/AAAAAAAAAAAEAP7/BAAAAAAAAAAEAP//BQAAAAAAAAAEAAAABAAAAAAAAAAEAAEABAAAAAAAAAAEAAIABAAAAAAAAAAEAAMAAQAAAAAAAAAEAAQABQAAAAAAAAAFAPv/AAAAAAAAAAAFAPz/BQAAAAAAAAAFAP3/AgAAAAAAAAAFAP7/AAAAAAAAAAAFAP//AQAAAAAAAAAFAAAAAgAAAAAAAAAFAAEABAAAAAAAAAAFAAIAAgAAAAAAAAAFAAMAAAAAAAAAAAAFAAQAAwAAAAAAAAAGAPv/AgAAAAAAAAAGAPz/AgAAAAAAAAAGAP3/AgAAAAAAAAAGAP7/AAAAAAAAAAAGAP//AwAAAAAAAAAGAAAABQAAAAAAAAAGAAEAAAAAAAAAAAAGAAIABQAAAAAAAAAGAAMAAAAAAAAAAAAGAAQABAAAAAAAAAAHAPv/AgAAAAAAAAAHAPz/AAAAAAAAAAAHAP3/BAAAAAAAAAAHAP7/AgAAAAAAAAAHAP//AgAAAAAAAAAHAAAABQAAAAAAAAAHAAEAAwAAAAAAAAAHAAIAAwAAAAAAAAAHAAMABQAAAAAAAAAHAAQAAQAAAAAAAAA=")
-tile_set = ExtResource("8_grass_ts")
-script = ExtResource("9_grass")
-half_width_px = 3200
-half_height_px = 2000
+[node name="Border" type="Line2D" parent="." unique_id=1909312251]
+points = PackedVector2Array(-576, -324, 576, -324, 576, 324, -576, 324, -576, -324)
+width = 4.0
+default_color = Color(0.5, 0.55, 0.65, 1)
 
-[node name="Deco" type="Node2D" parent="." unique_id=1974165526]
+[node name="Walls" type="StaticBody2D" parent="." unique_id=1347212842]
+collision_layer = 4
+collision_mask = 0
 
-[node name="Wall" parent="Deco" unique_id=1092116632 instance=ExtResource("10_wall")]
-position = Vector2(200, -120)
+[node name="WallTop" type="CollisionShape2D" parent="Walls" unique_id=182726881]
+position = Vector2(0, -324)
+shape = SubResource("RectangleShape2D_top")
 
-[node name="FenceBlock" parent="Deco" unique_id=118550214 instance=ExtResource("11_fence_block")]
-position = Vector2(-227, 118)
+[node name="WallBottom" type="CollisionShape2D" parent="Walls" unique_id=509221147]
+position = Vector2(0, 324)
+shape = SubResource("RectangleShape2D_bottom")
 
-[node name="FencePillar" parent="Deco" unique_id=424115791 instance=ExtResource("14_fence_pillar")]
-position = Vector2(-112.00001, 67.00001)
+[node name="WallLeft" type="CollisionShape2D" parent="Walls" unique_id=883357540]
+position = Vector2(-576, 0)
+shape = SubResource("RectangleShape2D_left")
 
-[node name="Log" parent="Deco" unique_id=123927237 instance=ExtResource("12_log")]
-position = Vector2(-364, 66)
-
-[node name="Stump" parent="Deco" unique_id=1695711132 instance=ExtResource("13_stump")]
-position = Vector2(-306, -242)
+[node name="WallRight" type="CollisionShape2D" parent="Walls" unique_id=522047324]
+position = Vector2(576, 0)
+shape = SubResource("RectangleShape2D_right")
 
 [node name="Player" parent="." unique_id=508579643 instance=ExtResource("2_w8frs")]
 
-[node name="IncendiaryEnemy" parent="." node_paths=PackedStringArray("player") instance=ExtResource("15_e_inc")]
-position = Vector2(0, 200)
-player = NodePath("../Player")
+[node name="Enemy" parent="." unique_id=1183056859 instance=ExtResource("2_w7c3h")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -300, -150, 0)
 
-[node name="FrostEnemy" parent="." node_paths=PackedStringArray("player") instance=ExtResource("16_e_frost")]
-position = Vector2(300, -150)
-player = NodePath("../Player")
-
-[node name="Enemy" parent="." node_paths=PackedStringArray("player") instance=ExtResource("2_w7c3h")]
-position = Vector2(-300, -150)
-player = NodePath("../Player")
-
-[node name="SectorDisplay" type="Node2D" parent="." unique_id=646221309 node_paths=PackedStringArray("player")]
+[node name="SectorDisplay" type="Node2D" parent="." unique_id=1684153881 node_paths=PackedStringArray("player")]
 z_index = 1
 script = ExtResource("4_sd")
+radius = null
 player = NodePath("../Player")
 
-[node name="Hud" parent="." unique_id=625368645 instance=ExtResource("3_hud")]
+[node name="Hud" parent="." unique_id=2110212236 instance=ExtResource("3_hud")]

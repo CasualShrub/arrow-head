@@ -4,33 +4,21 @@
 [ext_resource type="Script" uid="uid://cq7vk7ukbmts4" path="res://scripts/health_component.gd" id="2_md0e3"]
 [ext_resource type="Script" uid="uid://dn8jqcy1eo7y7" path="res://scripts/sus_component.gd" id="3_4ra3w"]
 [ext_resource type="PackedScene" uid="uid://bxgfy1nvmlb7v" path="res://scenes/arrow.tscn" id="4_arrow"]
-[ext_resource type="Texture2D" uid="uid://b0afwlyjydm7h" path="res://art/enemy/frame1.png" id="5_idle"]
-[ext_resource type="Texture2D" uid="uid://bmqcjg05r8j1e" path="res://art/enemy/frame2.png" id="6_f2"]
-[ext_resource type="Texture2D" uid="uid://6w7p3hufm0km" path="res://art/enemy/frame3.png" id="7_f3"]
-[ext_resource type="Texture2D" uid="uid://ccs6nyr8bd0ba" path="res://art/enemy/frame4.png" id="8_f4"]
-[ext_resource type="Texture2D" uid="uid://c8knl5mhl04ko" path="res://art/enemy/normal_hit.PNG" id="9_hn"]
-[ext_resource type="Texture2D" uid="uid://dc0jaxflx7uj5" path="res://art/enemy/stretch_hit.PNG" id="10_hs"]
+[ext_resource type="Texture2D" uid="uid://ssnmuf3en2ae" path="res://icon.svg" id="5_c4w8v"]
 
-[sub_resource type="CircleShape2D" id="CircleShape2D_5uy6h"]
-radius = 25.0
+[sub_resource type="SphereShape3D" id="SphereShape3D_ensgf"]
 
-[node name="Enemy" type="CharacterBody2D" unique_id=1183056859 node_paths=PackedStringArray("health", "sus")]
+[node name="Enemy" type="CharacterBody3D" unique_id=71488470 node_paths=PackedStringArray("health", "sus")]
 collision_layer = 8
 script = ExtResource("1_7p1mj")
 health = NodePath("Health")
 sus = NodePath("Sus")
 arrow_scene = ExtResource("4_arrow")
-frame1 = ExtResource("5_idle")
-frame2 = ExtResource("6_f2")
-frame3 = ExtResource("7_f3")
-frame4 = ExtResource("8_f4")
-hit_normal = ExtResource("9_hn")
-hit_stretch = ExtResource("10_hs")
 
-[node name="HurtCollider" type="CollisionShape2D" parent="." unique_id=1207359402]
+[node name="HurtCollider" type="CollisionShape3D" parent="." unique_id=1742085930]
 unique_name_in_owner = true
-shape = SubResource("CircleShape2D_5uy6h")
-debug_color = Color(1, 0, 0, 0.41960785)
+shape = SubResource("SphereShape3D_ensgf")
+debug_color = Color(0, 0.6, 0.7019608, 0.41960785)
 
 [node name="Health" type="Node" parent="." unique_id=1511902786]
 script = ExtResource("2_md0e3")
@@ -43,6 +31,11 @@ unique_name_in_owner = true
 [node name="Sus" type="Node" parent="." unique_id=495149280]
 script = ExtResource("3_4ra3w")
 
-[node name="Sprite2D" type="Sprite2D" parent="." unique_id=2023821250]
-scale = Vector2(0.5, 0.5)
-texture = ExtResource("5_idle")
+[node name="Sprite" type="Sprite3D" parent="." unique_id=508008351]
+transform = Transform3D(0.5, 0, 0, 0, -2.1855694e-08, 0.5, 0, -0.5, -2.1855694e-08, 0, 0, 0)
+double_sided = false
+texture = ExtResource("5_c4w8v")
+
+[node name="InstanceTimers" type="Node" parent="." unique_id=160238136]
+
+[connection signal="timeout" from="FireDebounce" to="." method="_on_fire_timeout"]

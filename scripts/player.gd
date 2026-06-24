@@ -1,12 +1,22 @@
 @tool
-extends CharacterBody2D
+extends CharacterBody3D
 class_name Player
 
 const _PLAYER_TEAM = Arrow.Team.PLAYER
 
 @export var input: InputComponent
 @export var health: HealthComponent
+@export var sectors: SectorsComponent
 
+@onready var camera: Camera3D = %Camera
+
+@export var speed := 6.0
+@export_group("arrows")
+@export var fire_cooldown := 1.0:
+	set(value):
+		if value < 0: value = 0
+		%FireDebounce.wait_time = value
+		fire_cooldown = value
 @export var speed := 200.0
 @export_group("melee")
 @export var melee_range := 70.0
@@ -19,6 +29,35 @@ const _PLAYER_TEAM = Arrow.Team.PLAYER
 		if value < 0: value = 0
 		_update_collider(get_node_or_null("%HurtCollider"), value)  # may run before the node exists
 		hurt_radius = value
+@export_group("sectors")
+@export var sector_count: int:
+	set(value):
+		if not sectors: return
+		sectors.sector_count = value
+	get:
+		if not sectors: return -1
+		return sectors.sector_count
+@export var sector_centered: bool:
+	set(value):
+		if not sectors: return
+		sectors.centered = value
+	get:
+		if not sectors: return false
+		return sectors.centered
+@export var sector_radius: float:
+	set(value):
+		if not sectors: return
+		sectors.radius = value
+	get:
+		if not sectors: return false
+		return sectors.radius
+
+func _update_collider(c: CollisionShape2D, r: float) -> void:
+signal hit(arrow: Arrow, sector: int)
+signal fired(arrow: Arrow)
+signal died
+
+var _dead := false
 @export var sector_count := 4
 @export var sector_centered := false
 @export_group("eyes")
@@ -61,12 +100,14 @@ var _burn_spin_dir := 1.0
 
 @onready var _eyes: Sprite2D = %Eyes
 
-func _update_collider(c: CollisionShape2D, r: float) -> void:
+func _update_collider(c: CollisionShape3D, r: float) -> void:
 	if not c: return
-	var s := CircleShape2D.new()
+	var s := SphereShape3D.new()
 	s.radius = r
 	c.shape = s
 
+func get_facing() -> Vector3:
+	return -global_basis.z
 
 func embedded_count() -> int:
 	var n := 0
@@ -90,56 +131,31 @@ func _flash_eyes_hit() -> void:
 	_update_eyes()
 
 func get_facing_angle() -> float:
-	return atan2(_facing.y, _facing.x) + (PI / 2)
-
-func _setup_sectors() -> void:
-	_sectors = []
-	_sectors.resize(sector_count)
-
-func get_sector(pos: Vector2) -> int:
-	var sector_size := 2 * PI / sector_count
-	var theta := atan2(pos.y, pos.x) - get_facing_angle()
-	if sector_centered:
-		theta += sector_size / 2
-	if theta < 0:
-		theta += 2 * PI
-	elif theta >= 2 * PI:
-		theta -= 2 * PI
-	return floor(theta / sector_size)
-
-func get_embedded(sector: int) -> EmbeddedArrow:
-	return _sectors[sector]
-
-func fully_embedded() -> bool:
-	for embedded in _sectors:
-		if not embedded: return false
-	return true
-
-func sector_occupied(sector: int) -> bool:
-	return get_embedded(sector) != null
-
-func sectors_occupied(sectors: Array[int]) -> bool:
-	for s in sectors:
-		if sector_occupied(s): return true
-	return false
+	var facing := get_facing()
+	return atan2(facing.z, facing.x) + (PI / 2)
 
 func embed_arrow(arrow: Arrow, sector: int) -> void:
-	var selected_sectors := arrow.get_sector(sector)
+	var selected_sectors := arrow.get_sectors(sector)
 	var embedded := EmbeddedArrow.new(arrow, sector)
 	for s in selected_sectors:
 		_sectors[s] = embedded
 	_try_absorb()
+	sectors.store(selected_sectors, embedded)
+	if sectors.full():
+		enable_firing()
 
 func try_embed_arrow(arrow: Arrow, sector: int,) -> bool:
-	var selected_sectors := arrow.get_sector(sector)
-	if sectors_occupied(selected_sectors): return false
+	var selected_sectors := arrow.get_sectors(sector)
+	if sectors.occupied(selected_sectors): return false
 	embed_arrow(arrow, sector)
 	return true
 
 func enable_firing():
-	for embedded in _sectors:
+	for embedded in sectors.get_stored():
 		embedded.enable_firing()
 
+func get_hit(arrow: Arrow) -> void:
+	var sector := sectors.get_sector_from_position(arrow.global_position)
 func clear_embedded() -> void:
 	var freed := {}
 	for embedded in _sectors:
@@ -180,12 +196,33 @@ func get_hit(arrow: Arrow) -> void:
 	hit.emit(arrow, sector)
 	_flash_eyes_hit()
 
-func face_mouse(mouse_pos: Vector2) -> void:
-	_facing = global_position.direction_to(mouse_pos)
-	%Arrows.rotation = get_facing_angle()
+func get_mouse_world_position() -> Vector3:
+	var mouse = get_viewport().get_mouse_position()
+
+	var origin := camera.project_ray_origin(mouse)
+	var dir := camera.project_ray_normal(mouse)
+
+	var plane := Plane(Vector3.UP, global_position.y)
+	var hit_plane = plane.intersects_ray(origin, dir)
+
+	return hit_plane
+
+func face_mouse() -> void:
+	var mouse_pos := get_mouse_world_position()
+	var look_target := Vector3(mouse_pos.x, global_position.y, mouse_pos.z)
+	look_at(look_target)
 
 func move(dir: Vector2, _dt: float) -> void:
-	velocity = dir * speed
+	var v = dir * speed
+	velocity.x = v.x
+	velocity.z = v.y
+	velocity.y = 0
+	var selected: int
+	if velocity == Vector3.ZERO:
+		selected = -1
+	else:
+		selected = sectors.get_sector_from_position(global_position + velocity)
+	sectors.highlight_sector(selected)
 	move_and_slide()
 
 func _unhandled_input(event: InputEvent) -> void:
@@ -202,6 +239,9 @@ func melee() -> void:
 	if not _melee_ready: return
 	var sector := get_sector(_facing)
 	var embedded := get_embedded(sector)
+func try_fire(sector: int) -> void:
+	if not %FireDebounce.is_stopped(): return
+	var embedded = sectors.get_stored_at(sector) as EmbeddedArrow
 	if not embedded: return
 	var arrow := embedded.get_arrow()
 	_melee_ready = false
@@ -297,7 +337,7 @@ func shoot() -> void:
 	arrow.free_on_finish = true  # back in flight: clean it up when it leaves the arena
 	if arrow.get_parent() != get_tree().current_scene:
 		arrow.reparent(get_tree().current_scene)
-	arrow.activate(global_position, _facing, _PLAYER_TEAM)
+	arrow.activate(global_position, get_facing(), _PLAYER_TEAM)
 	fired.emit(arrow)
 	ammo_changed.emit(_ammo.size())
 	_try_absorb()
@@ -311,8 +351,11 @@ func die() -> void:
 	_freeze_time = 0.0
 	%Sprite.modulate = Color.WHITE
 	print("You died!")
-	clear_embedded()
+	sectors.clear_stored()
 	died.emit()
+
+func _on_recovery_timeout() -> void:
+	pass
 
 func _physics_process(delta: float) -> void:
 	if Engine.is_editor_hint(): return
@@ -340,6 +383,6 @@ func _process(delta: float) -> void:
 	_update_status_tint()
 
 func _ready() -> void:
-	_setup_sectors()
 	_update_collider(%HurtCollider, hurt_radius)
 	_update_eyes()
+	if Engine.is_editor_hint(): return

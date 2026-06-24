@@ -1,9 +1,9 @@
-extends Node
+extends RefCounted
 class_name EmbeddedArrow
 
 var _arrow: Arrow
 var _sector: int
-var _can_fire: bool
+var _can_fire := false
 
 func toggle_firing(can_fire: bool) -> void:
 	_can_fire = can_fire
@@ -17,21 +17,23 @@ func is_firing_enabled() -> bool:
 func get_sector() -> int:
 	return _sector
 
-func change_sector(sector: int) -> void:
-	_sector = sector
-
 func get_arrow() -> Arrow:
 	return _arrow
 
 func grab() -> Arrow:
-	queue_free()
-	return get_arrow()
+	var a := _arrow
+	_arrow = null
+	return a
 	
 func try_grab() -> Arrow:
 	if not is_firing_enabled(): return null
 	return grab()
 
+func _notification(what):
+	if what == NOTIFICATION_PREDELETE:
+		if _arrow:
+			_arrow.queue_free()
+
 func _init(arrow: Arrow, sector: int) -> void:
 	_arrow = arrow
 	_sector = sector
-	_can_fire = false

@@ -1,4 +1,4 @@
-extends CharacterBody2D
+extends CharacterBody3D
 class_name Arrow
 
 enum Team { ENEMY, PLAYER }
@@ -26,17 +26,19 @@ const _MASK_ENEMY := 1 << 3
 
 @export var damage := 10
 @export_group("movement")
-@export var speed := 700.0
+@export var speed := 7.0
 @export var max_bounces := 8
-@export var direction := Vector2.RIGHT:
+@export var direction := Vector3.RIGHT:
 	set(value):
-		direction = value.normalized() if value != Vector2.ZERO else Vector2.RIGHT
+		direction = value.normalized() if value != Vector3.ZERO else Vector3.RIGHT
 
 @export_group("lifetime")
 @export var max_lifetime := 0.0
 @export var free_on_finish := true
 
-signal hit(target: Node2D)
+@onready var collider: CollisionShape3D = %Collider
+
+signal hit(target: Player)
 signal finished(arrow: Arrow)
 
 var _life := 0.0
@@ -74,12 +76,9 @@ func _apply_kind() -> void:
 		v.color = KIND_COLORS.get(kind, Color.WHITE)
 			
 func _is_wall(body: Object) -> bool:
-	# basically was thinking if the tilemaplayer has a collision box then it must be a wall
-	if body is TileMapLayer:
-		return true
-	return body is CollisionObject2D and body.get_collision_layer_value(3)
+	return body is CollisionObject3D and body.get_collision_layer_value(3)
 
-func _bounce(collision: KinematicCollision2D) -> void:
+func _bounce(collision: KinematicCollision3D) -> void:
 	var n := collision.get_normal()
 	direction = direction.bounce(n)
 	move_and_collide(collision.get_remainder().bounce(n))
@@ -99,31 +98,31 @@ func get_remaining_lifetime() -> float:
 	if max_lifetime == 0: return INF
 	return max_lifetime - _life
 
-func get_sector(collided: int) -> Array[int]:
+func get_sectors(collided: int) -> Array[int]:
 	return [collided]
 
-func activate(pos: Vector2, dir: Vector2, new_team := team) -> void:
+func activate(pos: Vector3, dir: Vector3, new_team := team) -> void:
 	global_position = pos
 	team = new_team
 	direction = dir
-	rotation = direction.angle()
+	_face_vector(direction)
 	_life = 0.0
 	_bounces = 0
 	show()
-	%Collider.set_deferred("disabled", false)
+	collider.set_deferred("disabled", false)
 	set_physics_process(true)
 
-func stick(host: Node2D) -> void:
+func stick(host: Node3D) -> void:
 	set_physics_process(false)
-	velocity = Vector2.ZERO
-	%Collider.set_deferred("disabled", true)
+	velocity = Vector3.ZERO
+	collider.set_deferred("disabled", true)
 	reparent.call_deferred(host)
 
 func deactivate() -> void:
 	set_physics_process(false)
-	velocity = Vector2.ZERO
+	velocity = Vector3.ZERO
 	hide()
-	%Collider.set_deferred("disabled", true)
+	collider.set_deferred("disabled", true)
 
 func _finish() -> void:
 	deactivate()
@@ -131,6 +130,21 @@ func _finish() -> void:
 	if free_on_finish:
 		queue_free()
 
-func _on_screen_exited() -> void:
-	pass
-	#_finish()
+func _face_vector(dir: Vector3) -> void:
+	look_at(global_position + dir)
+
+func _ready() -> void:
+	_apply_team()
+
+func _physics_process(delta: float) -> void:
+	_face_vector(direction)
+	_life += delta
+	if get_remaining_lifetime() <= 0:
+		_finish()
+		return
+	var collision := move_and_collide(direction * speed * delta)
+	if collision:
+		if _is_wall(collision.get_collider()):
+			_bounce(collision)
+		else:
+			_on_hit(collision.get_collider())

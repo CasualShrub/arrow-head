@@ -1,5 +1,5 @@
 @tool
-extends CharacterBody2D
+extends CharacterBody3D
 class_name Enemy
 
 const _ENEMY_TEAM = Arrow.Team.ENEMY
@@ -23,56 +23,47 @@ const _ENEMY_TEAM = Arrow.Team.ENEMY
 		_update_collider(%HurtCollider, value)
 		hurt_radius = value
 
-@export_group("sprites")
-@export var frame1: Texture2D
-@export var frame2: Texture2D
-@export var frame3: Texture2D
-@export var frame4: Texture2D
-@export var hit_normal: Texture2D
-@export var hit_stretch: Texture2D
-
-var _facing := Vector2()
 var _dead := false
-var _alerted := false
-var _aiming := false
-var _hit_showing := false
-var _base_tex: Texture2D
 var _movement_pattern: Dictionary[float, Vector2] = {}
 var _fire_index := 0
 
 @onready var _sprite: Sprite2D = $Sprite2D
 
-signal fired(arrow: Arrow)
+signal fired(arrow: Arrow, dir: Vector3)
 signal died
 
 func get_hit(_arrow: Arrow) -> void:
 	health.take_damage(1)
 	_show_hit()
 
-func _update_collider(c: CollisionShape2D, r: float) -> void:
+func _update_collider(c: CollisionShape3D, r: float) -> void:
 	if not c:
 		return
-	var s := CircleShape2D.new()
+	var s := SphereShape3D.new()
 	s.radius = r
 	c.shape = s
 
-func _on_fire(arrow: Arrow) -> void:
-	pass
+# can return new dir if it wants
+func _on_fire(_arrow: Arrow, dir: Vector3) -> Vector3:
+	return dir
 
-func _parse_movement_pattern(pattern: Dictionary[float, Vector2]) -> Dictionary[float, Vector2]:
+func _parse_movement_pattern(pattern: Dictionary[float, Vector2]) -> Dictionary[float, Vector3]:
 	var parsed := {}
 	var curr_tick = Time.get_ticks_msec()
 	for t in pattern:
 		var o := pattern[t]
-		parsed[t+curr_tick] = position + o
+		var offset := position
+		offset.x += o.x
+		offset.z += o.y
+		parsed[t+curr_tick] = offset
 	return parsed
 
 func _get_arrow_angle(i: int, spread: float, offset: float) -> float:
 	var i_spread := spread / i
 	return i_spread + offset
 
-func _get_arrow_dir(angle: float) -> Vector2:
-	return _facing.rotated(angle)
+func _get_arrow_dir(angle: float) -> Vector3:
+	return -global_basis.z.rotated(Vector3.UP, angle)
 
 func _make_arrow(scene: PackedScene) -> Arrow:
 	var arrow: Arrow = scene.instantiate()
@@ -153,24 +144,41 @@ func perform(pattern: ArrowPattern) -> void:
 	%InstanceTimers.child_exiting_tree.connect(_check_empty)
 	_check_empty.call()
 
-func fire(arrow: Arrow, dir: Vector2) -> void:
+func fire(arrow: Arrow, dir: Vector3) -> void:
+	var new_v := _on_fire(arrow, dir)
+	if new_v: dir = new_v
 	get_tree().current_scene.add_child(arrow)
 	arrow.activate(global_position, dir, _ENEMY_TEAM)
-	fired.emit(arrow)
+	fired.emit(arrow, dir)
 
 func _look_at_player() -> void:
 	if not player:
 		return
-	_facing = (player.global_position - global_position).normalized()
+	look_at(player.global_position)
 
-func _patrol() -> void:
+func _patrol(dt: float) -> void:
 	pass
 
-func _sussy() -> void:
+func _med_sus(dt: float) -> void:
+	_patrol(dt)
+	
+func _high_sus(dt: float) -> void:
+	_patrol(dt)
+
+func _alert(dt: float) -> void:
 	pass
 
-func _alert() -> void:
-	pass
+func _select_behaviour(dt: float) -> void:
+	if sus.is_alert():
+		_alert(dt)
+	else:
+		match sus.get_stage():
+			sus.SusStage.LW:
+				_patrol(dt)
+			sus.SusStage.MD:
+				_med_sus(dt)
+			sus.SusStage.HI:
+				_high_sus(dt)
 
 func is_dead() -> bool:
 	return _dead
@@ -178,6 +186,21 @@ func is_dead() -> bool:
 func die() -> void:
 	died.emit()
 
+func _physics_process(delta: float) -> void:
+	if Engine.is_editor_hint(): return
+	_select_behaviour(delta)
+
+func _ready() -> void:
+	if Engine.is_editor_hint(): return
+	%FireDebounce.wait_time = fire_rate
+	%FireDebounce.start()
+
+func _on_fire_timeout() -> void:
+	print("firing")
+	_look_at_player()
+	if arrow_scene:
+		fire(_make_arrow(arrow_scene), _get_arrow_dir(0))
+	%FireDebounce.start()
 func _ready() -> void:
 	if Engine.is_editor_hint():
 		return
