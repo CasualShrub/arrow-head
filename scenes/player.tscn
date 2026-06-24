@@ -5,7 +5,7 @@
 [ext_resource type="Script" uid="uid://bw22qrc8y4p5b" path="res://scripts/input_component.gd" id="3_qhqgy"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_qhqgy"]
-radius = 25.0
+radius = 19.0
 
 [sub_resource type="CompressedTexture2D" id="CompressedTexture2D_qhqgy"]
 load_path = "res://.godot/imported/icon.svg-218a8f2b3041327d8a5756f3a245f83b.ctex"
@@ -16,6 +16,7 @@ script = ExtResource("1_3vyb7")
 input = NodePath("Input")
 health = NodePath("Health")
 speed = 600.0
+hurt_radius = 19.0
 sector_centered = true
 
 [node name="HurtCollider" type="CollisionShape2D" parent="." unique_id=1531782285]

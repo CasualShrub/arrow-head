@@ -17,7 +17,7 @@ const _PLAYER_TEAM = Arrow.Team.PLAYER
 @export var hurt_radius := 25.0:
 	set(value):
 		if value < 0: value = 0
-		_update_collider(%HurtCollider, value)
+		_update_collider(get_node_or_null("%HurtCollider"), value)  # may run before the node exists
 		hurt_radius = value
 @export var sector_count := 4
 @export var sector_centered := false
