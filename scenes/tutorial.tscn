@@ -1,0 +1,101 @@
+[gd_scene format=4 uid="uid://dkxh0au0tblpd"]
+
+[ext_resource type="TileSet" uid="uid://cq0p2ietf38fi" path="res://tilesets/grass_tileset.tres" id="1_g2equ"]
+[ext_resource type="Script" uid="uid://d17a1s7lg4fkp" path="res://scripts/grass_tiles.gd" id="2_tbcdj"]
+[ext_resource type="PackedScene" path="res://scenes/deco/wall.tscn" id="7_vrdqu"]
+[ext_resource type="PackedScene" uid="uid://boryk37cbh1nx" path="res://scenes/player.tscn" id="8_cmspm"]
+[ext_resource type="Script" uid="uid://dy53cb8kjf73t" path="res://scripts/sector_display.gd" id="9_ikfo1"]
+[ext_resource type="PackedScene" uid="uid://c7aku7ietdise" path="res://scenes/ui/hud.tscn" id="10_dwom6"]
+[ext_resource type="PackedScene" uid="uid://b8rs35o7f45v0" path="res://scenes/enemy.tscn" id="11_bl2xa"]
+
+[node name="Level" type="Node2D" unique_id=999275406]
+
+[node name="Grass" type="TileMapLayer" parent="." unique_id=166726213]
+z_index = -2
+scale = Vector2(0.2, 0.2)
+tile_map_data = PackedByteArray("AAD4//v/BQAAAAAAAAD4//z/AQAAAAAAAAD4//3/BAAAAAAAAAD4//7/BQAAAAAAAAD4////AwAAAAAAAAD4/wAABQAAAAAAAAD4/wEAAAAAAAAAAAD4/wIABQAAAAAAAAD4/wMAAQAAAAAAAAD4/wQAAwAAAAAAAAD5//v/BAAAAAAAAAD5//z/AQAAAAAAAAD5//3/AQAAAAAAAAD5//7/AAAAAAAAAAD5////BQAAAAAAAAD5/wAABQAAAAAAAAD5/wEABAAAAAAAAAD5/wIAAAAAAAAAAAD5/wMAAQAAAAAAAAD5/wQAAAAAAAAAAAD6//v/AQAAAAAAAAD6//z/AgAAAAAAAAD6//3/AAAAAAAAAAD6//7/AAAAAAAAAAD6////AwAAAAAAAAD6/wAABAAAAAAAAAD6/wEAAgAAAAAAAAD6/wIAAwAAAAAAAAD6/wMABQAAAAAAAAD6/wQAAwAAAAAAAAD7//v/AgAAAAAAAAD7//z/AgAAAAAAAAD7//3/AQAAAAAAAAD7//7/BQAAAAAAAAD7////BAAAAAAAAAD7/wAAAQAAAAAAAAD7/wEAAgAAAAAAAAD7/wIAAwAAAAAAAAD7/wMAAwAAAAAAAAD7/wQAAwAAAAAAAAD8//v/BAAAAAAAAAD8//z/BQAAAAAAAAD8//3/AgAAAAAAAAD8//7/BQAAAAAAAAD8////AwAAAAAAAAD8/wAAAwAAAAAAAAD8/wEABQAAAAAAAAD8/wIAAwAAAAAAAAD8/wMABQAAAAAAAAD8/wQABAAAAAAAAAD9//v/AQAAAAAAAAD9//z/BAAAAAAAAAD9//3/AwAAAAAAAAD9//7/AgAAAAAAAAD9////BAAAAAAAAAD9/wAABQAAAAAAAAD9/wEABAAAAAAAAAD9/wIABAAAAAAAAAD9/wMABQAAAAAAAAD9/wQAAgAAAAAAAAD+//v/BQAAAAAAAAD+//z/AQAAAAAAAAD+//3/AAAAAAAAAAD+//7/BAAAAAAAAAD+////AAAAAAAAAAD+/wAAAQAAAAAAAAD+/wEAAwAAAAAAAAD+/wIAAwAAAAAAAAD+/wMAAQAAAAAAAAD+/wQAAgAAAAAAAAD///v/AQAAAAAAAAD///z/BQAAAAAAAAD///3/BQAAAAAAAAD///7/AAAAAAAAAAD/////BQAAAAAAAAD//wAAAwAAAAAAAAD//wEAAQAAAAAAAAD//wIAAwAAAAAAAAD//wMAAgAAAAAAAAD//wQAAAAAAAAAAAAAAPv/AgAAAAAAAAAAAPz/AAAAAAAAAAAAAP3/BQAAAAAAAAAAAP7/BQAAAAAAAAAAAP//AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEAAQAAAAAAAAAAAAIAAQAAAAAAAAAAAAMAAAAAAAAAAAAAAAQABQAAAAAAAAABAPv/AwAAAAAAAAABAPz/AgAAAAAAAAABAP3/AgAAAAAAAAABAP7/AQAAAAAAAAABAP//AwAAAAAAAAABAAAAAgAAAAAAAAABAAEAAgAAAAAAAAABAAIAAgAAAAAAAAABAAMAAQAAAAAAAAABAAQAAwAAAAAAAAACAPv/AAAAAAAAAAACAPz/AAAAAAAAAAACAP3/AAAAAAAAAAACAP7/BQAAAAAAAAACAP//AgAAAAAAAAACAAAABAAAAAAAAAACAAEAAwAAAAAAAAACAAIABAAAAAAAAAACAAMAAgAAAAAAAAACAAQAAwAAAAAAAAADAPv/AAAAAAAAAAADAPz/AAAAAAAAAAADAP3/BAAAAAAAAAADAP7/BQAAAAAAAAADAP//AAAAAAAAAAADAAAABAAAAAAAAAADAAEAAgAAAAAAAAADAAIABQAAAAAAAAADAAMAAAAAAAAAAAADAAQAAwAAAAAAAAAEAPv/AwAAAAAAAAAEAPz/BQAAAAAAAAAEAP3/AAAAAAAAAAAEAP7/BAAAAAAAAAAEAP//BQAAAAAAAAAEAAAABAAAAAAAAAAEAAEABAAAAAAAAAAEAAIABAAAAAAAAAAEAAMAAQAAAAAAAAAEAAQABQAAAAAAAAAFAPv/AAAAAAAAAAAFAPz/BQAAAAAAAAAFAP3/AgAAAAAAAAAFAP7/AAAAAAAAAAAFAP//AQAAAAAAAAAFAAAAAgAAAAAAAAAFAAEABAAAAAAAAAAFAAIAAgAAAAAAAAAFAAMAAAAAAAAAAAAFAAQAAwAAAAAAAAAGAPv/AgAAAAAAAAAGAPz/AgAAAAAAAAAGAP3/AgAAAAAAAAAGAP7/AAAAAAAAAAAGAP//AwAAAAAAAAAGAAAABQAAAAAAAAAGAAEAAAAAAAAAAAAGAAIABQAAAAAAAAAGAAMAAAAAAAAAAAAGAAQABAAAAAAAAAAHAPv/AgAAAAAAAAAHAPz/AAAAAAAAAAAHAP3/BAAAAAAAAAAHAP7/AgAAAAAAAAAHAP//AgAAAAAAAAAHAAAABQAAAAAAAAAHAAEAAwAAAAAAAAAHAAIAAwAAAAAAAAAHAAMABQAAAAAAAAAHAAQAAQAAAAAAAAA=")
+tile_set = ExtResource("1_g2equ")
+script = ExtResource("2_tbcdj")
+half_width_px = 3200
+half_height_px = 2000
+
+[node name="Deco" type="Node2D" parent="." unique_id=1974165526]
+
+[node name="Node2D2" type="Node2D" parent="Deco" unique_id=1165560414]
+
+[node name="Wall" parent="Deco/Node2D2" unique_id=1092116632 instance=ExtResource("7_vrdqu")]
+position = Vector2(-88, 460)
+
+[node name="Wall3" parent="Deco/Node2D2" unique_id=1736923841 instance=ExtResource("7_vrdqu")]
+position = Vector2(-88, 355)
+
+[node name="Wall6" parent="Deco/Node2D2" unique_id=1387973658 instance=ExtResource("7_vrdqu")]
+position = Vector2(-88, 249)
+
+[node name="Wall15" parent="Deco/Node2D2" unique_id=1567674774 instance=ExtResource("7_vrdqu")]
+position = Vector2(-88, -64)
+
+[node name="Wall14" parent="Deco/Node2D2" unique_id=1493577728 instance=ExtResource("7_vrdqu")]
+position = Vector2(-88, 42)
+
+[node name="Wall13" parent="Deco/Node2D2" unique_id=1364112470 instance=ExtResource("7_vrdqu")]
+position = Vector2(-88, 147)
+
+[node name="Wall18" parent="Deco/Node2D2" unique_id=735068133 instance=ExtResource("7_vrdqu")]
+position = Vector2(-88, -169)
+
+[node name="Wall17" parent="Deco/Node2D2" unique_id=10359227 instance=ExtResource("7_vrdqu")]
+position = Vector2(-88, -274)
+
+[node name="Wall16" parent="Deco/Node2D2" unique_id=597008129 instance=ExtResource("7_vrdqu")]
+position = Vector2(-88, -380)
+
+[node name="Wall19" parent="Deco/Node2D2" unique_id=1198908587 instance=ExtResource("7_vrdqu")]
+position = Vector2(-88, -477)
+
+[node name="Wall2" parent="Deco/Node2D2" unique_id=1081289164 instance=ExtResource("7_vrdqu")]
+position = Vector2(-363, 458)
+
+[node name="Wall4" parent="Deco/Node2D2" unique_id=1376306241 instance=ExtResource("7_vrdqu")]
+position = Vector2(-363, 353)
+
+[node name="Wall5" parent="Deco/Node2D2" unique_id=1347283178 instance=ExtResource("7_vrdqu")]
+position = Vector2(-363, 247)
+
+[node name="Wall9" parent="Deco/Node2D2" unique_id=1071672443 instance=ExtResource("7_vrdqu")]
+position = Vector2(-363, -69)
+
+[node name="Wall8" parent="Deco/Node2D2" unique_id=732693264 instance=ExtResource("7_vrdqu")]
+position = Vector2(-363, 37)
+
+[node name="Wall7" parent="Deco/Node2D2" unique_id=338470148 instance=ExtResource("7_vrdqu")]
+position = Vector2(-363, 142)
+
+[node name="Wall12" parent="Deco/Node2D2" unique_id=378289863 instance=ExtResource("7_vrdqu")]
+position = Vector2(-363, -166)
+
+[node name="Wall11" parent="Deco/Node2D2" unique_id=1655077177 instance=ExtResource("7_vrdqu")]
+position = Vector2(-363, -271)
+
+[node name="Wall10" parent="Deco/Node2D2" unique_id=1738986759 instance=ExtResource("7_vrdqu")]
+position = Vector2(-363, -377)
+
+[node name="Wall20" parent="Deco/Node2D2" unique_id=1403375640 instance=ExtResource("7_vrdqu")]
+position = Vector2(-363, -477)
+
+[node name="Player" parent="." unique_id=508579643 instance=ExtResource("8_cmspm")]
+position = Vector2(-242, 442)
+
+[node name="SectorDisplay" type="Node2D" parent="." unique_id=646221309 node_paths=PackedStringArray("player")]
+z_index = 1
+position = Vector2(-242, 442)
+script = ExtResource("9_ikfo1")
+player = NodePath("../Player")
+
+[node name="Hud" parent="." unique_id=625368645 instance=ExtResource("10_dwom6")]
+
+[node name="Enemies" type="Node2D" parent="." unique_id=1300277709]
+
+[node name="Enemy" parent="Enemies" unique_id=1183056859 node_paths=PackedStringArray("player") instance=ExtResource("11_bl2xa")]
+position = Vector2(-231, -404)
+player = NodePath("../../Player")

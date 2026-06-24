@@ -15,7 +15,7 @@ const _MASK_ENEMY := 1 << 3
 
 @export var damage := 10
 @export_group("movement")
-@export var speed := 700.0
+@export var speed := 500.0
 @export var max_bounces := 8
 @export var direction := Vector2.RIGHT:
 	set(value):

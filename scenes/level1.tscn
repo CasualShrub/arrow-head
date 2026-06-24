@@ -1,0 +1,144 @@
+[gd_scene format=4 uid="uid://c8i687jy13ry0"]
+
+[ext_resource type="TileSet" uid="uid://cq0p2ietf38fi" path="res://tilesets/grass_tileset.tres" id="1_76toy"]
+[ext_resource type="Script" uid="uid://d17a1s7lg4fkp" path="res://scripts/grass_tiles.gd" id="2_8g4ke"]
+[ext_resource type="PackedScene" path="res://scenes/deco/fence_block.tscn" id="3_56gwk"]
+[ext_resource type="PackedScene" path="res://scenes/deco/log.tscn" id="4_ve5ok"]
+[ext_resource type="PackedScene" path="res://scenes/deco/stump.tscn" id="5_cleqw"]
+[ext_resource type="PackedScene" path="res://scenes/deco/fence_pillar.tscn" id="6_wvb8j"]
+[ext_resource type="PackedScene" path="res://scenes/deco/wall.tscn" id="7_g8vcy"]
+[ext_resource type="PackedScene" uid="uid://boryk37cbh1nx" path="res://scenes/player.tscn" id="8_cqal4"]
+[ext_resource type="Script" uid="uid://dy53cb8kjf73t" path="res://scripts/sector_display.gd" id="9_o3sye"]
+[ext_resource type="PackedScene" uid="uid://c7aku7ietdise" path="res://scenes/ui/hud.tscn" id="10_24ks5"]
+[ext_resource type="PackedScene" uid="uid://b8rs35o7f45v0" path="res://scenes/enemy.tscn" id="11_s4es8"]
+
+[node name="Level" type="Node2D" unique_id=999275406]
+
+[node name="Grass" type="TileMapLayer" parent="." unique_id=166726213]
+z_index = -2
+scale = Vector2(0.2, 0.2)
+tile_map_data = PackedByteArray("AAD4//v/BQAAAAAAAAD4//z/AQAAAAAAAAD4//3/BAAAAAAAAAD4//7/BQAAAAAAAAD4////AwAAAAAAAAD4/wAABQAAAAAAAAD4/wEAAAAAAAAAAAD4/wIABQAAAAAAAAD4/wMAAQAAAAAAAAD4/wQAAwAAAAAAAAD5//v/BAAAAAAAAAD5//z/AQAAAAAAAAD5//3/AQAAAAAAAAD5//7/AAAAAAAAAAD5////BQAAAAAAAAD5/wAABQAAAAAAAAD5/wEABAAAAAAAAAD5/wIAAAAAAAAAAAD5/wMAAQAAAAAAAAD5/wQAAAAAAAAAAAD6//v/AQAAAAAAAAD6//z/AgAAAAAAAAD6//3/AAAAAAAAAAD6//7/AAAAAAAAAAD6////AwAAAAAAAAD6/wAABAAAAAAAAAD6/wEAAgAAAAAAAAD6/wIAAwAAAAAAAAD6/wMABQAAAAAAAAD6/wQAAwAAAAAAAAD7//v/AgAAAAAAAAD7//z/AgAAAAAAAAD7//3/AQAAAAAAAAD7//7/BQAAAAAAAAD7////BAAAAAAAAAD7/wAAAQAAAAAAAAD7/wEAAgAAAAAAAAD7/wIAAwAAAAAAAAD7/wMAAwAAAAAAAAD7/wQAAwAAAAAAAAD8//v/BAAAAAAAAAD8//z/BQAAAAAAAAD8//3/AgAAAAAAAAD8//7/BQAAAAAAAAD8////AwAAAAAAAAD8/wAAAwAAAAAAAAD8/wEABQAAAAAAAAD8/wIAAwAAAAAAAAD8/wMABQAAAAAAAAD8/wQABAAAAAAAAAD9//v/AQAAAAAAAAD9//z/BAAAAAAAAAD9//3/AwAAAAAAAAD9//7/AgAAAAAAAAD9////BAAAAAAAAAD9/wAABQAAAAAAAAD9/wEABAAAAAAAAAD9/wIABAAAAAAAAAD9/wMABQAAAAAAAAD9/wQAAgAAAAAAAAD+//v/BQAAAAAAAAD+//z/AQAAAAAAAAD+//3/AAAAAAAAAAD+//7/BAAAAAAAAAD+////AAAAAAAAAAD+/wAAAQAAAAAAAAD+/wEAAwAAAAAAAAD+/wIAAwAAAAAAAAD+/wMAAQAAAAAAAAD+/wQAAgAAAAAAAAD///v/AQAAAAAAAAD///z/BQAAAAAAAAD///3/BQAAAAAAAAD///7/AAAAAAAAAAD/////BQAAAAAAAAD//wAAAwAAAAAAAAD//wEAAQAAAAAAAAD//wIAAwAAAAAAAAD//wMAAgAAAAAAAAD//wQAAAAAAAAAAAAAAPv/AgAAAAAAAAAAAPz/AAAAAAAAAAAAAP3/BQAAAAAAAAAAAP7/BQAAAAAAAAAAAP//AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEAAQAAAAAAAAAAAAIAAQAAAAAAAAAAAAMAAAAAAAAAAAAAAAQABQAAAAAAAAABAPv/AwAAAAAAAAABAPz/AgAAAAAAAAABAP3/AgAAAAAAAAABAP7/AQAAAAAAAAABAP//AwAAAAAAAAABAAAAAgAAAAAAAAABAAEAAgAAAAAAAAABAAIAAgAAAAAAAAABAAMAAQAAAAAAAAABAAQAAwAAAAAAAAACAPv/AAAAAAAAAAACAPz/AAAAAAAAAAACAP3/AAAAAAAAAAACAP7/BQAAAAAAAAACAP//AgAAAAAAAAACAAAABAAAAAAAAAACAAEAAwAAAAAAAAACAAIABAAAAAAAAAACAAMAAgAAAAAAAAACAAQAAwAAAAAAAAADAPv/AAAAAAAAAAADAPz/AAAAAAAAAAADAP3/BAAAAAAAAAADAP7/BQAAAAAAAAADAP//AAAAAAAAAAADAAAABAAAAAAAAAADAAEAAgAAAAAAAAADAAIABQAAAAAAAAADAAMAAAAAAAAAAAADAAQAAwAAAAAAAAAEAPv/AwAAAAAAAAAEAPz/BQAAAAAAAAAEAP3/AAAAAAAAAAAEAP7/BAAAAAAAAAAEAP//BQAAAAAAAAAEAAAABAAAAAAAAAAEAAEABAAAAAAAAAAEAAIABAAAAAAAAAAEAAMAAQAAAAAAAAAEAAQABQAAAAAAAAAFAPv/AAAAAAAAAAAFAPz/BQAAAAAAAAAFAP3/AgAAAAAAAAAFAP7/AAAAAAAAAAAFAP//AQAAAAAAAAAFAAAAAgAAAAAAAAAFAAEABAAAAAAAAAAFAAIAAgAAAAAAAAAFAAMAAAAAAAAAAAAFAAQAAwAAAAAAAAAGAPv/AgAAAAAAAAAGAPz/AgAAAAAAAAAGAP3/AgAAAAAAAAAGAP7/AAAAAAAAAAAGAP//AwAAAAAAAAAGAAAABQAAAAAAAAAGAAEAAAAAAAAAAAAGAAIABQAAAAAAAAAGAAMAAAAAAAAAAAAGAAQABAAAAAAAAAAHAPv/AgAAAAAAAAAHAPz/AAAAAAAAAAAHAP3/BAAAAAAAAAAHAP7/AgAAAAAAAAAHAP//AgAAAAAAAAAHAAAABQAAAAAAAAAHAAEAAwAAAAAAAAAHAAIAAwAAAAAAAAAHAAMABQAAAAAAAAAHAAQAAQAAAAAAAAA=")
+tile_set = ExtResource("1_76toy")
+script = ExtResource("2_8g4ke")
+half_width_px = 3200
+half_height_px = 2000
+
+[node name="Deco" type="Node2D" parent="." unique_id=1974165526]
+
+[node name="FenceBlock5" parent="Deco" unique_id=1495234824 instance=ExtResource("3_56gwk")]
+position = Vector2(-205, -159)
+
+[node name="FenceBlock6" parent="Deco" unique_id=1978812184 instance=ExtResource("3_56gwk")]
+position = Vector2(-273, -159)
+
+[node name="FenceBlock8" parent="Deco" unique_id=1902201798 instance=ExtResource("3_56gwk")]
+position = Vector2(-341, -159)
+
+[node name="FenceBlock7" parent="Deco" unique_id=203495093 instance=ExtResource("3_56gwk")]
+position = Vector2(-409, -159)
+
+[node name="Log" parent="Deco" unique_id=123927237 instance=ExtResource("4_ve5ok")]
+position = Vector2(380, -172)
+
+[node name="Stump" parent="Deco" unique_id=1695711132 instance=ExtResource("5_cleqw")]
+position = Vector2(399, 148)
+
+[node name="Node2D" type="Node2D" parent="Deco" unique_id=1028529430]
+position = Vector2(6, 216)
+
+[node name="FenceBlock" parent="Deco/Node2D" unique_id=118550214 instance=ExtResource("3_56gwk")]
+position = Vector2(-162, -2)
+
+[node name="FenceBlock2" parent="Deco/Node2D" unique_id=1226775105 instance=ExtResource("3_56gwk")]
+position = Vector2(-230, -2)
+
+[node name="FencePillar" parent="Deco/Node2D" unique_id=424115791 instance=ExtResource("6_wvb8j")]
+position = Vector2(-112.00001, 93)
+
+[node name="FencePillar4" parent="Deco/Node2D" unique_id=1504387666 instance=ExtResource("6_wvb8j")]
+position = Vector2(-112.00001, 12)
+
+[node name="FencePillar2" parent="Deco/Node2D" unique_id=26658080 instance=ExtResource("6_wvb8j")]
+position = Vector2(-112.00001, 176)
+
+[node name="FencePillar3" parent="Deco/Node2D" unique_id=674555391 instance=ExtResource("6_wvb8j")]
+position = Vector2(-112.00001, 254)
+
+[node name="FenceBlock3" parent="Deco/Node2D" unique_id=889937048 instance=ExtResource("3_56gwk")]
+position = Vector2(-450, -2)
+
+[node name="FenceBlock4" parent="Deco/Node2D" unique_id=275868266 instance=ExtResource("3_56gwk")]
+position = Vector2(-518, -2)
+
+[node name="FenceBlock6" parent="Deco/Node2D" unique_id=1391248414 instance=ExtResource("3_56gwk")]
+position = Vector2(-653, -2)
+
+[node name="FenceBlock5" parent="Deco/Node2D" unique_id=1508110745 instance=ExtResource("3_56gwk")]
+position = Vector2(-585, -2)
+
+[node name="FenceBlock8" parent="Deco/Node2D" unique_id=2047674805 instance=ExtResource("3_56gwk")]
+position = Vector2(-719, -2)
+
+[node name="FenceBlock7" parent="Deco/Node2D" unique_id=1582545674 instance=ExtResource("3_56gwk")]
+position = Vector2(-787, -2)
+
+[node name="Node2D2" type="Node2D" parent="Deco" unique_id=1165560414]
+
+[node name="Wall" parent="Deco/Node2D2" unique_id=1092116632 instance=ExtResource("7_g8vcy")]
+position = Vector2(173, -6)
+
+[node name="Wall2" parent="Deco/Node2D2" unique_id=1081289164 instance=ExtResource("7_g8vcy")]
+position = Vector2(287, -6)
+
+[node name="Wall4" parent="Deco/Node2D2" unique_id=1376306241 instance=ExtResource("7_g8vcy")]
+position = Vector2(287, -111)
+
+[node name="Wall3" parent="Deco/Node2D2" unique_id=1736923841 instance=ExtResource("7_g8vcy")]
+position = Vector2(173, -111)
+
+[node name="Wall6" parent="Deco/Node2D2" unique_id=1387973658 instance=ExtResource("7_g8vcy")]
+position = Vector2(173, -217)
+
+[node name="Wall5" parent="Deco/Node2D2" unique_id=1347283178 instance=ExtResource("7_g8vcy")]
+position = Vector2(287, -217)
+
+[node name="Player" parent="." unique_id=508579643 instance=ExtResource("8_cqal4")]
+position = Vector2(-523, 472)
+
+[node name="SectorDisplay" type="Node2D" parent="." unique_id=646221309 node_paths=PackedStringArray("player")]
+z_index = 1
+position = Vector2(-523, 472)
+script = ExtResource("9_o3sye")
+player = NodePath("../Player")
+
+[node name="Hud" parent="." unique_id=625368645 instance=ExtResource("10_24ks5")]
+
+[node name="Enemies" type="Node2D" parent="." unique_id=1300277709]
+
+[node name="Enemy" parent="Enemies" unique_id=1183056859 node_paths=PackedStringArray("player") instance=ExtResource("11_s4es8")]
+position = Vector2(148, -314)
+player = NodePath("../../Player")
+
+[node name="Enemy2" parent="Enemies" unique_id=709807430 node_paths=PackedStringArray("player") instance=ExtResource("11_s4es8")]
+position = Vector2(-27, 309)
+player = NodePath("../../Player")
+
+[node name="Enemy3" parent="Enemies" unique_id=1701803773 node_paths=PackedStringArray("player") instance=ExtResource("11_s4es8")]
+position = Vector2(417, -92)
+player = NodePath("../../Player")
+
+[node name="Enemy4" parent="Enemies" unique_id=945057241 node_paths=PackedStringArray("player") instance=ExtResource("11_s4es8")]
+position = Vector2(-776, -170)
+player = NodePath("../../Player")
+
+[node name="Enemy5" parent="Enemies" unique_id=102982857 node_paths=PackedStringArray("player") instance=ExtResource("11_s4es8")]
+position = Vector2(-408, -232)
+player = NodePath("../../Player")
+
+[node name="Enemy6" parent="Enemies" unique_id=1091384554 node_paths=PackedStringArray("player") instance=ExtResource("11_s4es8")]
+position = Vector2(-216, 141)
+player = NodePath("../../Player")
+
+[node name="Enemy7" parent="Enemies" unique_id=2052248302 node_paths=PackedStringArray("player") instance=ExtResource("11_s4es8")]
+position = Vector2(-461, 138)
+player = NodePath("../../Player")
