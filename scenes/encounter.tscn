@@ -1,4 +1,8 @@
+<<<<<<< Updated upstream
 [gd_scene format=3 uid="uid://b6c1h2si8ob6l"]
+=======
+[gd_scene format=3 uid="uid://dwc3mahtxxgh3"]
+>>>>>>> Stashed changes
 
 [ext_resource type="Script" uid="uid://cm3vh4qq01y8d" path="res://scripts/encounter.gd" id="1_eu4s7"]
 [ext_resource type="PackedScene" uid="uid://boryk37cbh1nx" path="res://scenes/player.tscn" id="1_lp88p"]
@@ -39,9 +43,12 @@ render_target_update_mode = 4
 [node name="Player" parent="SubViewportContainer/SubViewport/World" unique_id=508579643 instance=ExtResource("1_lp88p")]
 unique_name_in_owner = true
 motion_mode = 1
+<<<<<<< Updated upstream
 sector_count = 4
 sector_centered = true
 sector_radius = 0.5
+=======
+>>>>>>> Stashed changes
 eyes_normal = ExtResource("3_3l52i")
 eyes_lowhp = ExtResource("4_0kgoe")
 eyes_hit = ExtResource("5_nw3qf")

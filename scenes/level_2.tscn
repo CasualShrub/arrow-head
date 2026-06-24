@@ -1,0 +1,81 @@
+[gd_scene format=4 uid="uid://dqicsgxo1nap4"]
+
+[ext_resource type="Texture2D" uid="uid://cp4cnsely21gy" path="res://art/player/eye_normal.png" id="9_guvtl"]
+[ext_resource type="Texture2D" uid="uid://ddhrf02nv342f" path="res://art/player/eyes_lowHP.png" id="10_igmy8"]
+[ext_resource type="Texture2D" uid="uid://bxkglylm44xg" path="res://art/player/eyes_hit.png" id="11_wdtqu"]
+[ext_resource type="PackedScene" path="res://scenes/deco/fence_pillar.tscn" id="d_pillar"]
+[ext_resource type="PackedScene" path="res://scenes/deco/wall.tscn" id="d_wall"]
+[ext_resource type="PackedScene" path="res://scenes/enemy_frost.tscn" id="e_frost"]
+[ext_resource type="PackedScene" path="res://scenes/enemy.tscn" id="e_white"]
+[ext_resource type="Script" uid="uid://d17a1s7lg4fkp" path="res://scripts/grass_tiles.gd" id="grass"]
+[ext_resource type="TileSet" uid="uid://cq0p2ietf38fi" path="res://tilesets/grass_tileset.tres" id="grass_ts"]
+[ext_resource type="PackedScene" uid="uid://c7aku7ietdise" path="res://scenes/ui/hud.tscn" id="hud"]
+[ext_resource type="Script" path="res://scripts/level.gd" id="level"]
+[ext_resource type="PackedScene" path="res://scenes/level_3.tscn" id="next"]
+[ext_resource type="PackedScene" uid="uid://boryk37cbh1nx" path="res://scenes/player.tscn" id="player"]
+[ext_resource type="Script" path="res://scripts/sector_display.gd" id="sd"]
+[ext_resource type="Script" uid="uid://b0hp4oeupnfex" path="res://scripts/wall_tiles.gd" id="walls"]
+
+[node name="Level" type="Node2D" unique_id=1594517575]
+script = ExtResource("level")
+next_scene = ExtResource("next")
+
+[node name="Walls" type="Node2D" parent="." unique_id=936593607]
+script = ExtResource("walls")
+
+[node name="Grass" type="TileMapLayer" parent="." unique_id=967616142]
+z_index = -2
+scale = Vector2(0.2, 0.2)
+tile_map_data = PackedByteArray("AAD4//v/BQAAAAAAAAD4//z/AQAAAAAAAAD4//3/BAAAAAAAAAD4//7/BQAAAAAAAAD4////AwAAAAAAAAD4/wAABQAAAAAAAAD4/wEAAAAAAAAAAAD4/wIABQAAAAAAAAD4/wMAAQAAAAAAAAD4/wQAAwAAAAAAAAD5//v/BAAAAAAAAAD5//z/AQAAAAAAAAD5//3/AQAAAAAAAAD5//7/AAAAAAAAAAD5////BQAAAAAAAAD5/wAABQAAAAAAAAD5/wEABAAAAAAAAAD5/wIAAAAAAAAAAAD5/wMAAQAAAAAAAAD5/wQAAAAAAAAAAAD6//v/AQAAAAAAAAD6//z/AgAAAAAAAAD6//3/AAAAAAAAAAD6//7/AAAAAAAAAAD6////AwAAAAAAAAD6/wAABAAAAAAAAAD6/wEAAgAAAAAAAAD6/wIAAwAAAAAAAAD6/wMABQAAAAAAAAD6/wQAAwAAAAAAAAD7//v/AgAAAAAAAAD7//z/AgAAAAAAAAD7//3/AQAAAAAAAAD7//7/BQAAAAAAAAD7////BAAAAAAAAAD7/wAAAQAAAAAAAAD7/wEAAgAAAAAAAAD7/wIAAwAAAAAAAAD7/wMAAwAAAAAAAAD7/wQAAwAAAAAAAAD8//v/BAAAAAAAAAD8//z/BQAAAAAAAAD8//3/AgAAAAAAAAD8//7/BQAAAAAAAAD8////AwAAAAAAAAD8/wAAAwAAAAAAAAD8/wEABQAAAAAAAAD8/wIAAwAAAAAAAAD8/wMABQAAAAAAAAD8/wQABAAAAAAAAAD9//v/AQAAAAAAAAD9//z/BAAAAAAAAAD9//3/AwAAAAAAAAD9//7/AgAAAAAAAAD9////BAAAAAAAAAD9/wAABQAAAAAAAAD9/wEABAAAAAAAAAD9/wIABAAAAAAAAAD9/wMABQAAAAAAAAD9/wQAAgAAAAAAAAD+//v/BQAAAAAAAAD+//z/AQAAAAAAAAD+//3/AAAAAAAAAAD+//7/BAAAAAAAAAD+////AAAAAAAAAAD+/wAAAQAAAAAAAAD+/wEAAwAAAAAAAAD+/wIAAwAAAAAAAAD+/wMAAQAAAAAAAAD+/wQAAgAAAAAAAAD///v/AQAAAAAAAAD///z/BQAAAAAAAAD///3/BQAAAAAAAAD///7/AAAAAAAAAAD/////BQAAAAAAAAD//wAAAwAAAAAAAAD//wEAAQAAAAAAAAD//wIAAwAAAAAAAAD//wMAAgAAAAAAAAD//wQAAAAAAAAAAAAAAPv/AgAAAAAAAAAAAPz/AAAAAAAAAAAAAP3/BQAAAAAAAAAAAP7/BQAAAAAAAAAAAP//AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEAAQAAAAAAAAAAAAIAAQAAAAAAAAAAAAMAAAAAAAAAAAAAAAQABQAAAAAAAAABAPv/AwAAAAAAAAABAPz/AgAAAAAAAAABAP3/AgAAAAAAAAABAP7/AQAAAAAAAAABAP//AwAAAAAAAAABAAAAAgAAAAAAAAABAAEAAgAAAAAAAAABAAIAAgAAAAAAAAABAAMAAQAAAAAAAAABAAQAAwAAAAAAAAACAPv/AAAAAAAAAAACAPz/AAAAAAAAAAACAP3/AAAAAAAAAAACAP7/BQAAAAAAAAACAP//AgAAAAAAAAACAAAABAAAAAAAAAACAAEAAwAAAAAAAAACAAIABAAAAAAAAAACAAMAAgAAAAAAAAACAAQAAwAAAAAAAAADAPv/AAAAAAAAAAADAPz/AAAAAAAAAAADAP3/BAAAAAAAAAADAP7/BQAAAAAAAAADAP//AAAAAAAAAAADAAAABAAAAAAAAAADAAEAAgAAAAAAAAADAAIABQAAAAAAAAADAAMAAAAAAAAAAAADAAQAAwAAAAAAAAAEAPv/AwAAAAAAAAAEAPz/BQAAAAAAAAAEAP3/AAAAAAAAAAAEAP7/BAAAAAAAAAAEAP//BQAAAAAAAAAEAAAABAAAAAAAAAAEAAEABAAAAAAAAAAEAAIABAAAAAAAAAAEAAMAAQAAAAAAAAAEAAQABQAAAAAAAAAFAPv/AAAAAAAAAAAFAPz/BQAAAAAAAAAFAP3/AgAAAAAAAAAFAP7/AAAAAAAAAAAFAP//AQAAAAAAAAAFAAAAAgAAAAAAAAAFAAEABAAAAAAAAAAFAAIAAgAAAAAAAAAFAAMAAAAAAAAAAAAFAAQAAwAAAAAAAAAGAPv/AgAAAAAAAAAGAPz/AgAAAAAAAAAGAP3/AgAAAAAAAAAGAP7/AAAAAAAAAAAGAP//AwAAAAAAAAAGAAAABQAAAAAAAAAGAAEAAAAAAAAAAAAGAAIABQAAAAAAAAAGAAMAAAAAAAAAAAAGAAQABAAAAAAAAAAHAPv/AgAAAAAAAAAHAPz/AAAAAAAAAAAHAP3/BAAAAAAAAAAHAP7/AgAAAAAAAAAHAP//AgAAAAAAAAAHAAAABQAAAAAAAAAHAAEAAwAAAAAAAAAHAAIAAwAAAAAAAAAHAAMABQAAAAAAAAAHAAQAAQAAAAAAAAA=")
+tile_set = ExtResource("grass_ts")
+script = ExtResource("grass")
+half_width_px = 3200
+half_height_px = 2000
+
+[node name="Deco" type="Node2D" parent="." unique_id=471482112]
+
+[node name="WallL" parent="Deco" unique_id=2032738383 instance=ExtResource("d_wall")]
+position = Vector2(-440, 0)
+
+[node name="WallR" parent="Deco" unique_id=1205422532 instance=ExtResource("d_wall")]
+position = Vector2(440, 0)
+
+[node name="Pillar1" parent="Deco" unique_id=864864859 instance=ExtResource("d_pillar")]
+position = Vector2(-160, -160)
+
+[node name="Pillar2" parent="Deco" unique_id=803437010 instance=ExtResource("d_pillar")]
+position = Vector2(160, -160)
+
+[node name="Pillar3" parent="Deco" unique_id=147547372 instance=ExtResource("d_pillar")]
+position = Vector2(-160, 160)
+
+[node name="Pillar4" parent="Deco" unique_id=907586775 instance=ExtResource("d_pillar")]
+position = Vector2(160, 160)
+
+[node name="Player" parent="." unique_id=675237443 instance=ExtResource("player")]
+speed = 600.0
+hurt_radius = 19.0
+sector_centered = false
+sector_radius = 0.0
+eyes_normal = ExtResource("9_guvtl")
+eyes_lowhp = ExtResource("10_igmy8")
+eyes_hit = ExtResource("11_wdtqu")
+
+[node name="WhiteEnemyL" parent="." unique_id=1924268214 instance=ExtResource("e_white")]
+position = Vector2(-320, -250)
+script = null
+
+[node name="WhiteEnemyR" parent="." unique_id=1819188473 instance=ExtResource("e_white")]
+position = Vector2(320, -250)
+script = null
+
+[node name="FrostEnemy" parent="." unique_id=2065078100 instance=ExtResource("e_frost")]
+position = Vector2(0, 250)
+script = null
+
+[node name="SectorDisplay" type="Node2D" parent="." unique_id=265333396 node_paths=PackedStringArray("player")]
+z_index = 1
+script = ExtResource("sd")
+player = NodePath("../Player")
+
+[node name="Hud" parent="." unique_id=1697595622 instance=ExtResource("hud")]

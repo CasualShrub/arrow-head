@@ -1,12 +1,19 @@
+<<<<<<< Updated upstream
 [gd_scene format=3 uid="uid://wcfn6hm816x8"]
+=======
+[gd_scene format=3 uid="uid://d3qafjntdkh06"]
+>>>>>>> Stashed changes
 
 [ext_resource type="PackedScene" uid="uid://b8rs35o7f45v0" path="res://scenes/enemies/enemy.tscn" id="2_w7c3h"]
 [ext_resource type="PackedScene" uid="uid://boryk37cbh1nx" path="res://scenes/player.tscn" id="2_w8frs"]
 [ext_resource type="Texture2D" uid="uid://cm473p31f8mc0" path="res://art/backgrounds/level_1.png" id="3_bg1"]
 [ext_resource type="PackedScene" uid="uid://c7aku7ietdise" path="res://scenes/ui/hud.tscn" id="3_hud"]
+<<<<<<< Updated upstream
 [ext_resource type="Texture2D" uid="uid://cp4cnsely21gy" path="res://art/player/eye_normal.png" id="3_klq6b"]
 [ext_resource type="Texture2D" uid="uid://ddhrf02nv342f" path="res://art/player/eyes_lowHP.png" id="4_b121j"]
 [ext_resource type="Texture2D" uid="uid://bxkglylm44xg" path="res://art/player/eyes_hit.png" id="5_8c41q"]
+=======
+>>>>>>> Stashed changes
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_top"]
 size = Vector2(1216, 32)
@@ -84,7 +91,11 @@ func _kind_color(sector: int) -> Color:
 	return Arrow.KIND_COLORS.get(k, Color.WHITE)
 "
 
+<<<<<<< Updated upstream
 [node name="Level" type="Node2D" unique_id=999275406]
+=======
+[node name="Level2" type="Node2D" unique_id=999275406]
+>>>>>>> Stashed changes
 
 [node name="Background" type="Sprite2D" parent="." unique_id=1131090978]
 z_index = -1
@@ -117,12 +128,16 @@ position = Vector2(576, 0)
 shape = SubResource("RectangleShape2D_right")
 
 [node name="Player" parent="." unique_id=508579643 instance=ExtResource("2_w8frs")]
+<<<<<<< Updated upstream
 speed = 600.0
 hurt_radius = 19.0
 sector_centered = true
 eyes_normal = ExtResource("3_klq6b")
 eyes_lowhp = ExtResource("4_b121j")
 eyes_hit = ExtResource("5_8c41q")
+=======
+script = null
+>>>>>>> Stashed changes
 
 [node name="Enemy" parent="." unique_id=1183056859 instance=ExtResource("2_w7c3h")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -300, -150, 0)

@@ -1,4 +1,8 @@
+<<<<<<< Updated upstream
 [gd_scene format=3 uid="uid://cbqfgfsy4gakx"]
+=======
+[gd_scene format=3 uid="uid://by6cpdx5d7sdo"]
+>>>>>>> Stashed changes
 
 [ext_resource type="Script" uid="uid://cm3vh4qq01y8d" path="res://scripts/encounter.gd" id="1_7lq1q"]
 [ext_resource type="PackedScene" uid="uid://boryk37cbh1nx" path="res://scenes/player.tscn" id="2_k7ae3"]
