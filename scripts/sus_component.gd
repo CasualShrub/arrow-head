@@ -15,6 +15,10 @@ enum SusStage {LW, MD, HI}
 @export var incident_memory := 1.0
 @export_range(0.0, 1.0) var medium_boundary := 0.65
 @export_range(0.0, 1.0) var low_boundary := 0.35
+
+signal incident_occured
+signal alerted
+
 var _last_incident: float
 
 func get_stage() -> SusStage:
@@ -34,6 +38,9 @@ func time_since_last_incident() -> float:
 func baka(n: float) -> void:
 	amount += n
 	_last_incident = Time.get_ticks_msec()
+	incident_occured.emit()
+	if is_alert():
+		alerted.emit()
 
 func _physics_process(delta: float) -> void:
 	if is_alert() and time_since_last_incident() > incident_memory:
