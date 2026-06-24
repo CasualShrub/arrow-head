@@ -16,11 +16,12 @@ func _ready() -> void:
 
 	vb.add_child(UiStyle.title("Select level", 44))
 
-	# only level 1 is playable so far; 2-5 are locked stubs
+	# levels 1-3 are playable; 4-5 are locked stubs
 	for i in range(1, 6):
 		var b := UiStyle.button("Level %d" % i)
-		if i == 1:
-			b.pressed.connect(func(): get_tree().change_scene_to_file("res://scenes/level.tscn"))
+		if i <= 3:
+			var path := "res://scenes/level_%d.tscn" % i
+			b.pressed.connect(func(): get_tree().change_scene_to_file(path))
 		else:
 			b.text = "Level %d  —  locked" % i
 			b.disabled = true

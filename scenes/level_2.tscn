@@ -1,0 +1,75 @@
+[gd_scene format=4]
+
+[ext_resource type="PackedScene" uid="uid://boryk37cbh1nx" path="res://scenes/player.tscn" id="player"]
+[ext_resource type="PackedScene" uid="uid://c7aku7ietdise" path="res://scenes/ui/hud.tscn" id="hud"]
+[ext_resource type="Script" uid="uid://dy53cb8kjf73t" path="res://scripts/sector_display.gd" id="sd"]
+[ext_resource type="Script" uid="uid://b0hp4oeupnfex" path="res://scripts/wall_tiles.gd" id="walls"]
+[ext_resource type="TileSet" uid="uid://cq0p2ietf38fi" path="res://tilesets/grass_tileset.tres" id="grass_ts"]
+[ext_resource type="Script" uid="uid://d17a1s7lg4fkp" path="res://scripts/grass_tiles.gd" id="grass"]
+[ext_resource type="Script" path="res://scripts/level.gd" id="level"]
+[ext_resource type="PackedScene" uid="uid://b8rs35o7f45v0" path="res://scenes/enemy.tscn" id="e_white"]
+[ext_resource type="PackedScene" path="res://scenes/enemy_frost.tscn" id="e_frost"]
+[ext_resource type="PackedScene" path="res://scenes/deco/wall.tscn" id="d_wall"]
+[ext_resource type="PackedScene" path="res://scenes/deco/fence_pillar.tscn" id="d_pillar"]
+[ext_resource type="PackedScene" path="res://scenes/level_3.tscn" id="next"]
+
+[node name="Level" type="Node2D"]
+script = ExtResource("level")
+next_scene = ExtResource("next")
+
+[node name="Walls" type="Node2D" parent="."]
+script = ExtResource("walls")
+half_width_px = 576
+half_height_px = 324
+
+[node name="Grass" type="TileMapLayer" parent="."]
+z_index = -2
+scale = Vector2(0.2, 0.2)
+tile_set = ExtResource("grass_ts")
+script = ExtResource("grass")
+half_width_px = 3200
+half_height_px = 2000
+
+[node name="Deco" type="Node2D" parent="."]
+
+[node name="WallL" parent="Deco" instance=ExtResource("d_wall")]
+position = Vector2(-440, 0)
+
+[node name="WallR" parent="Deco" instance=ExtResource("d_wall")]
+position = Vector2(440, 0)
+
+[node name="Pillar1" parent="Deco" instance=ExtResource("d_pillar")]
+position = Vector2(-160, -160)
+
+[node name="Pillar2" parent="Deco" instance=ExtResource("d_pillar")]
+position = Vector2(160, -160)
+
+[node name="Pillar3" parent="Deco" instance=ExtResource("d_pillar")]
+position = Vector2(-160, 160)
+
+[node name="Pillar4" parent="Deco" instance=ExtResource("d_pillar")]
+position = Vector2(160, 160)
+
+[node name="Player" parent="." instance=ExtResource("player")]
+
+[node name="WhiteEnemyL" parent="." node_paths=PackedStringArray("player") instance=ExtResource("e_white")]
+position = Vector2(-320, -250)
+player = NodePath("../Player")
+fire_rate = 2.6
+
+[node name="WhiteEnemyR" parent="." node_paths=PackedStringArray("player") instance=ExtResource("e_white")]
+position = Vector2(320, -250)
+player = NodePath("../Player")
+fire_rate = 2.6
+
+[node name="FrostEnemy" parent="." node_paths=PackedStringArray("player") instance=ExtResource("e_frost")]
+position = Vector2(0, 250)
+player = NodePath("../Player")
+fire_rate = 3.0
+
+[node name="SectorDisplay" type="Node2D" parent="." node_paths=PackedStringArray("player")]
+z_index = 1
+script = ExtResource("sd")
+player = NodePath("../Player")
+
+[node name="Hud" parent="." instance=ExtResource("hud")]

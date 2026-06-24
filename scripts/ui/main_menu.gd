@@ -24,7 +24,7 @@ func _ready() -> void:
 	vb.add_child(gap)
 
 	var play := UiStyle.button("Play")
-	play.pressed.connect(func(): _go("res://scenes/level.tscn"))
+	play.pressed.connect(func(): _go("res://scenes/level_1.tscn"))
 	vb.add_child(play)
 
 	var levels := UiStyle.button("Level select")

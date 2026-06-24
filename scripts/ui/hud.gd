@@ -176,4 +176,9 @@ func _to_menu() -> void:
 
 func _next() -> void:
 	get_tree().paused = false
-	get_tree().reload_current_scene()
+	var lvl := owner if owner != null else get_tree().current_scene  # the Level root carries next_scene
+	var nxt = lvl.get("next_scene") if lvl else null
+	if nxt:
+		get_tree().change_scene_to_packed(nxt)
+	else:
+		get_tree().change_scene_to_file("res://scenes/ui/main_menu.tscn")  # last level -> menu
