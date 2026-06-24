@@ -26,6 +26,20 @@ const _PLAYER_TEAM = Arrow.Team.PLAYER
 @export var eyes_lowhp: Texture2D
 @export var eyes_hit: Texture2D
 @export var eyes_hit_time := 0.36
+@export_group("sectors")
+# sector index -> the Arrow.Kind correctly caught there (size should match sector_count)
+@export var sector_kinds: Array[int] = [
+	Arrow.Kind.INCENDIARY,
+	Arrow.Kind.FROST,
+	Arrow.Kind.ENERVATE,
+	Arrow.Kind.DRAIN,
+]
+@export_group("status_effects")
+@export var burn_duration := 2.5
+@export var freeze_duration := 2.0
+@export var disarm_duration := 2.0
+@export var burn_spin_speed := 9.0
+@export var burn_drift_speed := 120.0
 
 signal hit(arrow: Arrow, sector: int)
 signal fired(arrow: Arrow)
@@ -39,6 +53,10 @@ var _facing := Vector2()
 var _melee_ready := true
 var _shoot_ready := true
 var _eyes_hit_showing := false
+var _burn_time := 0.0
+var _freeze_time := 0.0
+var _disarm_time := 0.0
+var _burn_drift := Vector2.ZERO
 
 @onready var _eyes: Sprite2D = %Eyes
 
@@ -134,13 +152,31 @@ func clear_embedded() -> void:
 	_setup_sectors()
 	_update_eyes()
 
+func kind_for_sector(sector: int) -> int:
+	if sector < 0 or sector >= sector_kinds.size():
+		return Arrow.Kind.NORMAL
+	return sector_kinds[sector]
+
+func is_correct_catch(arrow: Arrow, sector: int) -> bool:
+	if arrow.kind == Arrow.Kind.NORMAL:
+		return true  # white wildcard: any sector accepts it
+	return arrow.kind == kind_for_sector(sector)
+
 func get_hit(arrow: Arrow) -> void:
+	if _dead:
+		return
 	var sector := get_sector(arrow.global_position - global_position)
-	if try_embed_arrow(arrow, sector):
-		arrow.stick(%Arrows)
+	if is_correct_catch(arrow, sector):
+		# right color in the right sector -> behaves like a normal catch
+		if try_embed_arrow(arrow, sector):
+			arrow.stick(%Arrows)
+		else:
+			arrow.queue_free()
+			die()
 	else:
+		# wrong sector -> the kind's debuff fires; the arrow is consumed, not embedded
+		_apply_debuff(arrow.kind)
 		arrow.queue_free()
-		die()
 	hit.emit(arrow, sector)
 	_flash_eyes_hit()
 
@@ -154,6 +190,7 @@ func move(dir: Vector2, _dt: float) -> void:
 
 func _unhandled_input(event: InputEvent) -> void:
 	if Engine.is_editor_hint(): return
+	if is_burning(): return  # no control at all while spinning on fire
 	if event is InputEventMouseButton and event.pressed:
 		if event.button_index == MOUSE_BUTTON_LEFT:
 			melee()
@@ -162,6 +199,7 @@ func _unhandled_input(event: InputEvent) -> void:
 
 # swing toward the mouse: weaponize the arrow stuck in the aimed sector, then clear it
 func melee() -> void:
+	if is_disarmed(): return
 	if not _melee_ready: return
 	var sector := get_sector(_facing)
 	var embedded := get_embedded(sector)
@@ -198,6 +236,52 @@ func _consume(embedded: EmbeddedArrow) -> void:
 	embedded.queue_free()
 	_update_eyes()
 
+# status effects from mis-caught special arrows
+func is_burning() -> bool: return _burn_time > 0.0
+func is_frozen() -> bool: return _freeze_time > 0.0
+func is_disarmed() -> bool: return _disarm_time > 0.0
+
+func _apply_debuff(kind: int) -> void:
+	match kind:
+		Arrow.Kind.INCENDIARY:
+			_burn_time = burn_duration
+			_burn_drift = Vector2.RIGHT.rotated(randf() * TAU)
+		Arrow.Kind.FROST:
+			_freeze_time = freeze_duration
+		Arrow.Kind.ENERVATE:
+			_disarm_time = disarm_duration
+		Arrow.Kind.DRAIN:
+			_apply_drain()
+
+func _burn_spin(delta: float) -> void:
+	if _facing == Vector2.ZERO:
+		_facing = Vector2.RIGHT
+	_facing = _facing.rotated(burn_spin_speed * delta)
+	%Arrows.rotation = get_facing_angle()
+
+func _update_status_tint() -> void:
+	if is_burning():
+		%Sprite.modulate = Color(1, 0.5, 0.2)
+	elif is_frozen():
+		%Sprite.modulate = Color(0.6, 0.85, 1)
+	else:
+		%Sprite.modulate = Color.WHITE
+
+# drain one held arrow (a stuck sector arrow first, then the pool); none held = death
+func _apply_drain() -> void:
+	for s in _sectors.size():
+		var em := _sectors[s]
+		if em:
+			_consume(em)
+			return
+	while not _ammo.is_empty():
+		var a: Arrow = _ammo.pop_back()
+		if is_instance_valid(a):
+			a.queue_free()
+			ammo_changed.emit(_ammo.size())
+			return
+	die()
+
 # a full set of 4 gets pulled out of the sectors into a shoot-back pool, but only while the
 # pool is empty — you must spend the current batch before the next one loads
 func _try_absorb() -> void:
@@ -220,6 +304,7 @@ func _try_absorb() -> void:
 
 # right-click: fling one stored arrow back toward the mouse as a player-team projectile
 func shoot() -> void:
+	if is_disarmed(): return
 	if not _shoot_ready:
 		return
 	while not _ammo.is_empty() and not is_instance_valid(_ammo[-1]):
@@ -243,17 +328,34 @@ func is_dead() -> bool:
 
 func die() -> void:
 	_dead = true
+	_burn_time = 0.0
+	_freeze_time = 0.0
+	_disarm_time = 0.0
+	%Sprite.modulate = Color.WHITE
 	print("You died!")
 	clear_embedded()
 	died.emit()
 
 func _physics_process(delta: float) -> void:
 	if Engine.is_editor_hint(): return
-	move(input.get_direction(), delta)
+	if _dead: return
+	if is_burning():
+		velocity = _burn_drift * burn_drift_speed  # drift out of control, input ignored
+		move_and_slide()
+	else:
+		move(input.get_direction(), delta)
 
-func _process(_delta: float) -> void:
+func _process(delta: float) -> void:
 	if Engine.is_editor_hint(): return
-	face_mouse(get_global_mouse_position())
+	if _dead: return
+	if _freeze_time > 0.0: _freeze_time -= delta
+	if _disarm_time > 0.0: _disarm_time -= delta
+	if _burn_time > 0.0:
+		_burn_time -= delta
+		_burn_spin(delta)
+	elif not is_frozen():
+		face_mouse(get_global_mouse_position())
+	_update_status_tint()
 
 func _ready() -> void:
 	_setup_sectors()
