@@ -1,4 +1,4 @@
-extends Node2D
+extends Node3D
 class_name SectorDisplay
 
 # draws the player's quadrants: filled = holds an arrow, white = the one you're aiming at
@@ -9,8 +9,8 @@ func _process(_delta: float) -> void:
 	if not is_instance_valid(player):
 		return
 	global_position = player.global_position
-	rotation = player.get_facing_angle()  # sectors rotate with the apple's facing
-	queue_redraw()
+	#rotation = player.get_facing_angle()  # sectors rotate with the apple's facing
+	#queue_redraw()
 
 func _draw() -> void:
 	if not is_instance_valid(player):

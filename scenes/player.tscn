@@ -3,25 +3,19 @@
 [ext_resource type="Script" uid="uid://djbaojmlgp0lu" path="res://scripts/player.gd" id="1_3vyb7"]
 [ext_resource type="Script" uid="uid://cq7vk7ukbmts4" path="res://scripts/health_component.gd" id="2_g2els"]
 [ext_resource type="Script" uid="uid://bw22qrc8y4p5b" path="res://scripts/input_component.gd" id="3_qhqgy"]
+[ext_resource type="Texture2D" uid="uid://ssnmuf3en2ae" path="res://icon.svg" id="4_dqkch"]
 
-[sub_resource type="CircleShape2D" id="CircleShape2D_qhqgy"]
-radius = 25.0
+[sub_resource type="SphereShape3D" id="SphereShape3D_qlg0r"]
 
-[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_qhqgy"]
-load_path = "res://.godot/imported/icon.svg-218a8f2b3041327d8a5756f3a245f83b.ctex"
-
-[node name="Player" type="CharacterBody2D" unique_id=508579643 node_paths=PackedStringArray("input", "health")]
-collision_layer = 1
+[node name="Player" type="CharacterBody3D" unique_id=439211336 node_paths=PackedStringArray("input", "health")]
 collision_mask = 4
 script = ExtResource("1_3vyb7")
 input = NodePath("Input")
 health = NodePath("Health")
-speed = 600.0
-sector_centered = true
 
-[node name="HurtCollider" type="CollisionShape2D" parent="." unique_id=1531782285]
+[node name="HurtCollider" type="CollisionShape3D" parent="." unique_id=1401584448]
 unique_name_in_owner = true
-shape = SubResource("CircleShape2D_qhqgy")
+shape = SubResource("SphereShape3D_qlg0r")
 debug_color = Color(1, 0, 0, 0.41960785)
 
 [node name="Health" type="Node" parent="." unique_id=1891742081]
@@ -37,13 +31,10 @@ one_shot = true
 [node name="InstanceTimers" type="Node" parent="." unique_id=1259921754]
 unique_name_in_owner = true
 
-[node name="Camera2D" type="Camera2D" parent="." unique_id=1450986859]
-
-[node name="Sprite" type="Sprite2D" parent="." unique_id=274062760]
+[node name="Arrows" type="Node3D" parent="." unique_id=208548441]
 unique_name_in_owner = true
-position = Vector2(3.8146973e-06, 3.8146973e-06)
-scale = Vector2(0.3, 0.3)
-texture = SubResource("CompressedTexture2D_qhqgy")
 
-[node name="Arrows" type="Node2D" parent="." unique_id=1690948396]
+[node name="Sprite" type="Sprite3D" parent="." unique_id=1671790148]
 unique_name_in_owner = true
+transform = Transform3D(0.59999996, 0, 0, 0, -2.6226832e-08, 0.59999996, 0, -0.59999996, -2.6226832e-08, 0, 0, 0)
+texture = ExtResource("4_dqkch")

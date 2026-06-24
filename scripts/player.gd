@@ -1,5 +1,5 @@
 @tool
-extends CharacterBody2D
+extends CharacterBody3D
 class_name Player
 
 const _PLAYER_TEAM = Arrow.Team.PLAYER
@@ -7,7 +7,9 @@ const _PLAYER_TEAM = Arrow.Team.PLAYER
 @export var input: InputComponent
 @export var health: HealthComponent
 
-@export var speed := 200.0
+@onready var camera: Camera3D = %Camera
+
+@export var speed := 6.0
 @export_group("arrows")
 @export var fire_cooldown := 1.0:
 	set(value):
@@ -29,24 +31,26 @@ signal died()
 
 var _sectors: Array[EmbeddedArrow]
 var _dead := false
-var _facing := Vector2()
 
-func _update_collider(c: CollisionShape2D, r: float) -> void:
+func _update_collider(c: CollisionShape3D, r: float) -> void:
 	if not c: return
-	var s := CircleShape2D.new()
-	s.radius = r
+	var s := CapsuleShape3D.new()
 	c.shape = s
 
+func get_facing() -> Vector3:
+	return -global_basis.z
+
 func get_facing_angle() -> float:
-	return atan2(_facing.y, _facing.x) + (PI / 2)
+	var facing := get_facing()
+	return atan2(facing.z, facing.x) + (PI / 2)
 
 func _setup_sectors() -> void:
 	_sectors = []
 	_sectors.resize(sector_count)
 
-func get_sector(pos: Vector2) -> int:
+func get_sector(pos: Vector3) -> int:
 	var sector_size := 2 * PI / sector_count
-	var theta := atan2(pos.y, pos.x) - get_facing_angle()
+	var theta := atan2(pos.z, pos.x) - get_facing_angle()
 	if sector_centered:
 		theta += sector_size / 2
 	if theta < 0:
@@ -110,14 +114,27 @@ func get_hit(arrow: Arrow) -> void:
 		die()
 	hit.emit(arrow, sector)
 
-func face_mouse(mouse_pos: Vector2) -> void:
-	_facing = global_position.direction_to(mouse_pos)
-	var angle := get_facing_angle()
-	%Sprite.rotation = angle
-	%Arrows.rotation = angle
+func get_mouse_world_position() -> Vector3:
+	var mouse = get_viewport().get_mouse_position()
+
+	var origin := camera.project_ray_origin(mouse)
+	var dir := camera.project_ray_normal(mouse)
+
+	var plane := Plane(Vector3.UP, global_position.y)
+	var hit_plane = plane.intersects_ray(origin, dir)
+
+	return hit_plane
+
+func face_mouse() -> void:
+	var mouse_pos := get_mouse_world_position()
+	var look_target := Vector3(mouse_pos.x, global_position.y, mouse_pos.z)
+	look_at(look_target)
 
 func move(dir: Vector2, _dt: float) -> void:
-	velocity = dir * speed
+	var v = dir * speed
+	velocity.x = v.x
+	velocity.z = v.y
+	velocity.y = 0
 	move_and_slide()
 
 func try_fire(sector: int) -> void:
@@ -133,7 +150,7 @@ func fire(arrow: Arrow) -> void:
 	%FireDebounce.start()
 	if arrow.get_parent() != get_tree().current_scene:
 		arrow.reparent(get_tree().current_scene)
-	arrow.activate(global_position, _facing, _PLAYER_TEAM)
+	arrow.activate(global_position, get_facing(), _PLAYER_TEAM)
 	fired.emit(arrow)
 
 func is_dead() -> bool:
@@ -151,7 +168,7 @@ func _physics_process(delta: float) -> void:
 
 func _process(_delta: float) -> void:
 	if Engine.is_editor_hint(): return
-	face_mouse(get_global_mouse_position())
+	face_mouse()
 
 func _ready() -> void:
 	_setup_sectors()

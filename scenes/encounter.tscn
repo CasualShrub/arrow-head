@@ -2,13 +2,44 @@
 
 [ext_resource type="Script" uid="uid://cm3vh4qq01y8d" path="res://scripts/encounter.gd" id="1_eu4s7"]
 [ext_resource type="PackedScene" uid="uid://boryk37cbh1nx" path="res://scenes/player.tscn" id="1_lp88p"]
+[ext_resource type="Script" uid="uid://doms8x46cr1tt" path="res://scripts/camera.gd" id="3_ensgf"]
 
-[node name="Encounter" type="Node2D" unique_id=219280993]
+[sub_resource type="Environment" id="Environment_ub6uw"]
+
+[node name="Encounter" type="Node3D" unique_id=571267862]
 script = ExtResource("1_eu4s7")
 
 [node name="Player" parent="." unique_id=508579643 instance=ExtResource("1_lp88p")]
 unique_name_in_owner = true
-speed = 1.0
 
-[node name="Enemies" type="Node" parent="." unique_id=1575711033]
+[node name="Enemies" type="Node3D" parent="." unique_id=1185931971]
 unique_name_in_owner = true
+
+[node name="CSGBox3D" type="CSGBox3D" parent="." unique_id=1674034061]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1.4670478, 0)
+size = Vector3(100, 1, 100)
+
+[node name="CSGBox3D2" type="CSGBox3D" parent="." unique_id=1034809572]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.8967056, -0.6816474, 0)
+use_collision = true
+collision_layer = 4
+size = Vector3(4.2052155, 2.5708008, 100)
+
+[node name="CSGBox3D3" type="CSGBox3D" parent="." unique_id=1883586222]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.9434004, -0.6442939, -25.800964)
+collision_layer = 4
+size = Vector3(10.082903, 2.6455078, 48.39807)
+
+[node name="CameraPivot" type="Node3D" parent="." unique_id=1563753267 node_paths=PackedStringArray("player")]
+transform = Transform3D(1, 0, 0, 0, -4.371139e-08, 1, 0, -1, -4.371139e-08, 0, 3.7000048, 0)
+script = ExtResource("3_ensgf")
+player = NodePath("../Player")
+
+[node name="Camera" type="Camera3D" parent="CameraPivot" unique_id=349876092]
+unique_name_in_owner = true
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=1158397434]
+environment = SubResource("Environment_ub6uw")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="." unique_id=492064517]
+transform = Transform3D(0.82395685, 0, 0.56665254, -0.2946893, 0.8541341, 0.42850107, -0.48399717, -0.5200528, 0.70376956, 11.038643, 5.709363, 8.527812)
