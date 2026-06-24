@@ -4,11 +4,9 @@
 [ext_resource type="Script" uid="uid://cq7vk7ukbmts4" path="res://scripts/health_component.gd" id="2_md0e3"]
 [ext_resource type="Script" uid="uid://dn8jqcy1eo7y7" path="res://scripts/sus_component.gd" id="3_4ra3w"]
 [ext_resource type="PackedScene" uid="uid://bxgfy1nvmlb7v" path="res://scenes/arrow.tscn" id="4_arrow"]
+[ext_resource type="Texture2D" uid="uid://ssnmuf3en2ae" path="res://icon.svg" id="5_c4w8v"]
 
-[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_ub6uw"]
-
-[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_5uy6h"]
-load_path = "res://.godot/imported/icon.svg-218a8f2b3041327d8a5756f3a245f83b.ctex"
+[sub_resource type="SphereShape3D" id="SphereShape3D_ensgf"]
 
 [node name="Enemy" type="CharacterBody3D" unique_id=71488470 node_paths=PackedStringArray("health", "sus")]
 collision_layer = 8
@@ -19,7 +17,7 @@ arrow_scene = ExtResource("4_arrow")
 
 [node name="HurtCollider" type="CollisionShape3D" parent="." unique_id=1742085930]
 unique_name_in_owner = true
-shape = SubResource("CapsuleShape3D_ub6uw")
+shape = SubResource("SphereShape3D_ensgf")
 debug_color = Color(1, 0, 0, 0.41960785)
 
 [node name="Health" type="Node" parent="." unique_id=1511902786]
@@ -33,7 +31,6 @@ unique_name_in_owner = true
 [node name="Sus" type="Node" parent="." unique_id=495149280]
 script = ExtResource("3_4ra3w")
 
-[node name="Sprite" type="Sprite3D" parent="." unique_id=583825173]
-transform = Transform3D(0.3, 0, 0, 0, 0.3, 0, 0, 0, 0, 3.8146973e-06, 3.8146973e-06, 0)
-billboard = 1
-texture = SubResource("CompressedTexture2D_5uy6h")
+[node name="Sprite" type="Sprite3D" parent="." unique_id=508008351]
+transform = Transform3D(0.5, 0, 0, 0, -2.1855694e-08, 0.5, 0, -0.5, -2.1855694e-08, 0, 0, 0)
+texture = ExtResource("5_c4w8v")
