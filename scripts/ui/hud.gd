@@ -148,6 +148,10 @@ func _lose() -> void:
 	_defeat_panel.visible = true
 
 func _unhandled_input(event: InputEvent) -> void:
+	# R restarts from anywhere (same action as the Restart button)
+	if event is InputEventKey and event.pressed and not event.echo and event.keycode == KEY_R:
+		_restart()
+		return
 	if _ended:
 		return
 	# Esc toggles pause
