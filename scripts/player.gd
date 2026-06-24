@@ -38,7 +38,7 @@ const _PLAYER_TEAM = Arrow.Team.PLAYER
 @export var burn_duration := 2.5
 @export var freeze_duration := 2.0
 @export var burn_spin_speed := 24.0
-@export var burn_drift_speed := 140.0
+@export var burn_drift_speed := 240.0
 @export var burn_redrift := 0.14  # avg time between random drift-direction changes (lurching)
 
 signal hit(arrow: Arrow, sector: int)
