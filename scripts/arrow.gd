@@ -57,6 +57,9 @@ func _apply_team() -> void:
 			collision_mask = _MASK_ENEMY | _MASK_WALL
 			
 func _is_wall(body: Object) -> bool:
+	# basically was thinking if the tilemaplayer has a collision box then it must be a wall
+	if body is TileMapLayer:
+		return true
 	return body is CollisionObject2D and body.get_collision_layer_value(3)
 
 func _bounce(collision: KinematicCollision2D) -> void:
