@@ -31,13 +31,12 @@ const _PLAYER_TEAM = Arrow.Team.PLAYER
 @export var sector_kinds: Array[int] = [
 	Arrow.Kind.INCENDIARY,
 	Arrow.Kind.FROST,
-	Arrow.Kind.ENERVATE,
-	Arrow.Kind.DRAIN,
+	Arrow.Kind.INCENDIARY,
+	Arrow.Kind.FROST,
 ]
 @export_group("status_effects")
 @export var burn_duration := 2.5
 @export var freeze_duration := 2.0
-@export var disarm_duration := 2.0
 @export var burn_spin_speed := 9.0
 @export var burn_drift_speed := 120.0
 
@@ -55,7 +54,6 @@ var _shoot_ready := true
 var _eyes_hit_showing := false
 var _burn_time := 0.0
 var _freeze_time := 0.0
-var _disarm_time := 0.0
 var _burn_drift := Vector2.ZERO
 
 @onready var _eyes: Sprite2D = %Eyes
@@ -199,7 +197,6 @@ func _unhandled_input(event: InputEvent) -> void:
 
 # swing toward the mouse: weaponize the arrow stuck in the aimed sector, then clear it
 func melee() -> void:
-	if is_disarmed(): return
 	if not _melee_ready: return
 	var sector := get_sector(_facing)
 	var embedded := get_embedded(sector)
@@ -239,7 +236,6 @@ func _consume(embedded: EmbeddedArrow) -> void:
 # status effects from mis-caught special arrows
 func is_burning() -> bool: return _burn_time > 0.0
 func is_frozen() -> bool: return _freeze_time > 0.0
-func is_disarmed() -> bool: return _disarm_time > 0.0
 
 func _apply_debuff(kind: int) -> void:
 	match kind:
@@ -248,10 +244,6 @@ func _apply_debuff(kind: int) -> void:
 			_burn_drift = Vector2.RIGHT.rotated(randf() * TAU)
 		Arrow.Kind.FROST:
 			_freeze_time = freeze_duration
-		Arrow.Kind.ENERVATE:
-			_disarm_time = disarm_duration
-		Arrow.Kind.DRAIN:
-			_apply_drain()
 
 func _burn_spin(delta: float) -> void:
 	if _facing == Vector2.ZERO:
@@ -266,21 +258,6 @@ func _update_status_tint() -> void:
 		%Sprite.modulate = Color(0.6, 0.85, 1)
 	else:
 		%Sprite.modulate = Color.WHITE
-
-# drain one held arrow (a stuck sector arrow first, then the pool); none held = death
-func _apply_drain() -> void:
-	for s in _sectors.size():
-		var em := _sectors[s]
-		if em:
-			_consume(em)
-			return
-	while not _ammo.is_empty():
-		var a: Arrow = _ammo.pop_back()
-		if is_instance_valid(a):
-			a.queue_free()
-			ammo_changed.emit(_ammo.size())
-			return
-	die()
 
 # a full set of 4 gets pulled out of the sectors into a shoot-back pool, but only while the
 # pool is empty — you must spend the current batch before the next one loads
@@ -304,7 +281,6 @@ func _try_absorb() -> void:
 
 # right-click: fling one stored arrow back toward the mouse as a player-team projectile
 func shoot() -> void:
-	if is_disarmed(): return
 	if not _shoot_ready:
 		return
 	while not _ammo.is_empty() and not is_instance_valid(_ammo[-1]):
@@ -330,7 +306,6 @@ func die() -> void:
 	_dead = true
 	_burn_time = 0.0
 	_freeze_time = 0.0
-	_disarm_time = 0.0
 	%Sprite.modulate = Color.WHITE
 	print("You died!")
 	clear_embedded()
@@ -349,7 +324,6 @@ func _process(delta: float) -> void:
 	if Engine.is_editor_hint(): return
 	if _dead: return
 	if _freeze_time > 0.0: _freeze_time -= delta
-	if _disarm_time > 0.0: _disarm_time -= delta
 	if _burn_time > 0.0:
 		_burn_time -= delta
 		_burn_spin(delta)

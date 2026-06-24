@@ -2,14 +2,12 @@ extends CharacterBody2D
 class_name Arrow
 
 enum Team { ENEMY, PLAYER }
-enum Kind { NORMAL, INCENDIARY, FROST, ENERVATE, DRAIN }
+enum Kind { NORMAL, INCENDIARY, FROST }
 
 const KIND_COLORS := {
 	Kind.NORMAL: Color(1, 1, 1, 1),
 	Kind.INCENDIARY: Color(0.95, 0.35, 0.12, 1),
 	Kind.FROST: Color(0.35, 0.75, 1.0, 1),
-	Kind.ENERVATE: Color(0.4, 0.85, 0.35, 1),
-	Kind.DRAIN: Color(0.62, 0.35, 0.85, 1),
 }
 
 const _MASK_PLAYER := 1 << 0
