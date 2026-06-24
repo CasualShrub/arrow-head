@@ -164,17 +164,16 @@ func get_hit(arrow: Arrow) -> void:
 	if _dead:
 		return
 	var sector := get_sector(arrow.global_position - global_position)
-	if is_correct_catch(arrow, sector):
-		# right color in the right sector -> behaves like a normal catch
-		if try_embed_arrow(arrow, sector):
-			arrow.stick(%Arrows)
-		else:
-			arrow.queue_free()
-			die()
+	var correct := is_correct_catch(arrow, sector)
+	# arrows always pincushion: stick in the sector they hit, or kill on an occupied one.
+	# a wrong-color arrow still sticks, but its debuff fires as the penalty.
+	if try_embed_arrow(arrow, sector):
+		arrow.stick(%Arrows)
+		if not correct:
+			_apply_debuff(arrow.kind)
 	else:
-		# wrong sector -> the kind's debuff fires; the arrow is consumed, not embedded
-		_apply_debuff(arrow.kind)
 		arrow.queue_free()
+		die()
 	hit.emit(arrow, sector)
 	_flash_eyes_hit()
 
