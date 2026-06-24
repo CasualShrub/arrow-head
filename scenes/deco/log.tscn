@@ -1,0 +1,20 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource type="Texture2D" uid="uid://gculfqr5yumt" path="res://art/deco/log.png" id="1_tex"]
+
+[sub_resource type="CapsuleShape2D" id="cap"]
+radius = 52.0
+height = 147.0
+
+[node name="Log" type="StaticBody2D"]
+scale = Vector2(0.3, 0.3)
+collision_layer = 4
+collision_mask = 0
+
+[node name="Sprite" type="Sprite2D" parent="."]
+texture = ExtResource("1_tex")
+
+[node name="Collider" type="CollisionShape2D" parent="."]
+position = Vector2(54, -150)
+rotation = 1.5707964
+shape = SubResource("cap")

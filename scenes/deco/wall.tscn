@@ -1,0 +1,18 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource type="Texture2D" uid="uid://dvyerojv1okry" path="res://art/deco/wall.png" id="1_tex"]
+
+[sub_resource type="RectangleShape2D" id="rect"]
+size = Vector2(390, 371)
+
+[node name="Wall" type="StaticBody2D"]
+scale = Vector2(0.3, 0.3)
+collision_layer = 4
+collision_mask = 0
+
+[node name="Sprite" type="Sprite2D" parent="."]
+texture = ExtResource("1_tex")
+
+[node name="Collider" type="CollisionShape2D" parent="."]
+position = Vector2(-25, 16)
+shape = SubResource("rect")

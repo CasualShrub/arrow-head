@@ -4,21 +4,22 @@
 [ext_resource type="PackedScene" uid="uid://boryk37cbh1nx" path="res://scenes/player.tscn" id="2_w8frs"]
 [ext_resource type="PackedScene" uid="uid://c7aku7ietdise" path="res://scenes/ui/hud.tscn" id="3_hud"]
 [ext_resource type="Script" uid="uid://dy53cb8kjf73t" path="res://scripts/sector_display.gd" id="4_sd"]
-[ext_resource type="TileSet" uid="uid://yvoqc6ig62j4" path="res://tilesets/wall_tileset.tres" id="5_tileset"]
 [ext_resource type="Script" uid="uid://b0hp4oeupnfex" path="res://scripts/wall_tiles.gd" id="6_arena"]
 [ext_resource type="TileSet" uid="uid://cq0p2ietf38fi" path="res://tilesets/grass_tileset.tres" id="8_grass_ts"]
 [ext_resource type="Script" uid="uid://d17a1s7lg4fkp" path="res://scripts/grass_tiles.gd" id="9_grass"]
+[ext_resource type="PackedScene" path="res://scenes/deco/wall.tscn" id="10_wall"]
+[ext_resource type="PackedScene" path="res://scenes/deco/fence_block.tscn" id="11_fence_block"]
+[ext_resource type="PackedScene" path="res://scenes/deco/log.tscn" id="12_log"]
+[ext_resource type="PackedScene" path="res://scenes/deco/stump.tscn" id="13_stump"]
+[ext_resource type="PackedScene" path="res://scenes/deco/fence_pillar.tscn" id="14_fence_pillar"]
 
 [node name="Level" type="Node2D" unique_id=999275406]
 
-[node name="Ground" type="TileMapLayer" parent="." unique_id=1010003266]
-z_index = -1
-scale = Vector2(2, 2)
-tile_map_data = PackedByteArray("AADu//b/AQABAAEAAADu//f/AQABAAEAAADu//j/AQABAAEAAADu//n/AQABAAEAAADu//r/AQABAAEAAADu//v/AQABAAEAAADu//z/AQABAAEAAADu//3/AQABAAEAAADu//7/AQABAAEAAADu////AQABAAEAAADu/wAAAQABAAEAAADu/wEAAQABAAEAAADu/wIAAQABAAEAAADu/wMAAQABAAEAAADu/wQAAQABAAEAAADu/wUAAQABAAEAAADu/wYAAQABAAEAAADu/wcAAQABAAEAAADu/wgAAQABAAEAAADu/wkAAQABAAEAAADu/woAAQABAAEAAADv//b/AQABAAEAAADv/woAAQABAAEAAADw//b/AQABAAEAAADw/woAAQABAAEAAADx//b/AQABAAEAAADx/woAAQABAAEAAADy//b/AQABAAEAAADy/woAAQABAAEAAADz//b/AQABAAEAAADz/woAAQABAAEAAAD0//b/AQABAAEAAAD0/woAAQABAAEAAAD1//b/AQABAAEAAAD1/woAAQABAAEAAAD2//b/AQABAAEAAAD2/woAAQABAAEAAAD3//b/AQABAAEAAAD3/woAAQABAAEAAAD4//b/AQABAAEAAAD4/woAAQABAAEAAAD5//b/AQABAAEAAAD5/woAAQABAAEAAAD6//b/AQABAAEAAAD6/woAAQABAAEAAAD7//b/AQABAAEAAAD7/woAAQABAAEAAAD8/woAAQABAAEAAAD9//b/AQABAAEAAAD9/woAAQABAAEAAAD+//b/AQABAAEAAAD+/woAAQABAAEAAAD///b/AQABAAEAAAD//woAAQABAAEAAAAAAPb/AQABAAEAAAAAAAoAAQABAAEAAAABAPb/AQABAAEAAAABAAoAAQABAAEAAAACAPb/AQABAAEAAAACAAoAAQABAAEAAAADAPb/AQABAAEAAAADAAoAAQABAAEAAAAEAPb/AQABAAEAAAAEAAoAAQABAAEAAAAFAPb/AQABAAEAAAAFAAoAAQABAAEAAAAGAPb/AQABAAEAAAAGAAoAAQABAAEAAAAHAPb/AQABAAEAAAAHAAoAAQABAAEAAAAIAPb/AQABAAEAAAAIAAoAAQABAAEAAAAJAPb/AQABAAEAAAAJAAoAAQABAAEAAAAKAPb/AQABAAEAAAAKAAoAAQABAAEAAAALAPb/AQABAAEAAAALAAoAAQABAAEAAAAMAPb/AQABAAEAAAAMAAoAAQABAAEAAAANAPb/AQABAAEAAAANAAoAAQABAAEAAAAOAPb/AQABAAEAAAAOAAoAAQABAAEAAAAPAPb/AQABAAEAAAAPAAoAAQABAAEAAAAQAPb/AQABAAEAAAAQAAoAAQABAAEAAAARAPb/AQABAAEAAAARAAoAAQABAAEAAAASAPb/AQABAAEAAAASAPf/AQABAAEAAAASAPj/AQABAAEAAAASAPn/AQABAAEAAAASAPr/AQABAAEAAAASAPv/AQABAAEAAAASAPz/AQABAAEAAAASAP3/AQABAAEAAAASAP7/AQABAAEAAAASAP//AQABAAEAAAASAAAAAQABAAEAAAASAAEAAQABAAEAAAASAAIAAQABAAEAAAASAAMAAQABAAEAAAASAAQAAQABAAEAAAASAAUAAQABAAEAAAASAAYAAQABAAEAAAASAAcAAQABAAEAAAASAAgAAQABAAEAAAASAAkAAQABAAEAAAASAAoAAQABAAEAAAD8//b/AQABAAEAAAA=")
-tile_set = ExtResource("5_tileset")
+[node name="Walls" type="Node2D" parent="." unique_id=1010003266]
 script = ExtResource("6_arena")
-half_width = 18
-half_height = 10
+half_width_px = 576
+half_height_px = 324
+block_scale = 0.3
 
 [node name="Grass" type="TileMapLayer" parent="." unique_id=166726213]
 z_index = -2
@@ -28,6 +29,23 @@ tile_set = ExtResource("8_grass_ts")
 script = ExtResource("9_grass")
 half_width_px = 3200
 half_height_px = 2000
+
+[node name="Deco" type="Node2D" parent="." unique_id=1974165526]
+
+[node name="Wall" parent="Deco" unique_id=1092116632 instance=ExtResource("10_wall")]
+position = Vector2(200, -120)
+
+[node name="FenceBlock" parent="Deco" unique_id=118550214 instance=ExtResource("11_fence_block")]
+position = Vector2(-227, 118)
+
+[node name="FencePillar" parent="Deco" unique_id=424115791 instance=ExtResource("14_fence_pillar")]
+position = Vector2(-112.00001, 67.00001)
+
+[node name="Log" parent="Deco" unique_id=123927237 instance=ExtResource("12_log")]
+position = Vector2(-364, 66)
+
+[node name="Stump" parent="Deco" unique_id=1695711132 instance=ExtResource("13_stump")]
+position = Vector2(-306, -242)
 
 [node name="Player" parent="." unique_id=508579643 instance=ExtResource("2_w8frs")]
 
