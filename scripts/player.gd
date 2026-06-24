@@ -17,7 +17,6 @@ const _PLAYER_TEAM = Arrow.Team.PLAYER
 		if value < 0: value = 0
 		%FireDebounce.wait_time = value
 		fire_cooldown = value
-@export var speed := 200.0
 @export_group("melee")
 @export var melee_range := 70.0
 @export var melee_cooldown := 0.4
@@ -52,14 +51,6 @@ const _PLAYER_TEAM = Arrow.Team.PLAYER
 		if not sectors: return false
 		return sectors.radius
 
-func _update_collider(c: CollisionShape2D, r: float) -> void:
-signal hit(arrow: Arrow, sector: int)
-signal fired(arrow: Arrow)
-signal died
-
-var _dead := false
-@export var sector_count := 4
-@export var sector_centered := false
 @export_group("eyes")
 @export var eyes_normal: Texture2D
 @export var eyes_lowhp: Texture2D
@@ -154,8 +145,6 @@ func enable_firing():
 	for embedded in sectors.get_stored():
 		embedded.enable_firing()
 
-func get_hit(arrow: Arrow) -> void:
-	var sector := sectors.get_sector_from_position(arrow.global_position)
 func clear_embedded() -> void:
 	var freed := {}
 	for embedded in _sectors:
@@ -180,9 +169,10 @@ func is_correct_catch(arrow: Arrow, sector: int) -> bool:
 	return arrow.kind == kind_for_sector(sector)
 
 func get_hit(arrow: Arrow) -> void:
+	var sector := sectors.get_sector_from_position(arrow.global_position)
 	if _dead:
 		return
-	var sector := get_sector(arrow.global_position - global_position)
+	#var sector := get_sector(arrow.global_position - global_position)
 	var correct := is_correct_catch(arrow, sector)
 	# arrows always pincushion: stick in the sector they hit, or kill on an occupied one.
 	# a wrong-color arrow still sticks, but its debuff fires as the penalty.

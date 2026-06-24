@@ -2,9 +2,23 @@
 
 [ext_resource type="Script" uid="uid://dhx7670bsb3xw" path="res://scripts/enemy.gd" id="1_7p1mj"]
 [ext_resource type="Script" uid="uid://cq7vk7ukbmts4" path="res://scripts/health_component.gd" id="2_md0e3"]
+[ext_resource type="Script" uid="uid://d04k7pxjd2u24" path="res://scripts/arrow_pattern.gd" id="2_xwavj"]
 [ext_resource type="Script" uid="uid://dn8jqcy1eo7y7" path="res://scripts/sus_component.gd" id="3_4ra3w"]
-[ext_resource type="PackedScene" uid="uid://bxgfy1nvmlb7v" path="res://scenes/arrow.tscn" id="4_arrow"]
+[ext_resource type="Script" uid="uid://r4qbgt6it8lb" path="res://scripts/firing_instance.gd" id="3_nenq2"]
 [ext_resource type="Texture2D" uid="uid://ssnmuf3en2ae" path="res://icon.svg" id="5_c4w8v"]
+
+[sub_resource type="Resource" id="Resource_c4w8v"]
+script = ExtResource("3_nenq2")
+max_offset = -3.14159265358979
+metadata/_custom_type_script = "uid://r4qbgt6it8lb"
+
+[sub_resource type="TileMapPattern" id="TileMapPattern_xwavj"]
+
+[sub_resource type="Resource" id="Resource_5uy6h"]
+script = ExtResource("2_xwavj")
+instances = Array[ExtResource("3_nenq2")]([SubResource("Resource_c4w8v")])
+tile_map_pattern = SubResource("TileMapPattern_xwavj")
+metadata/_custom_type_script = "uid://d04k7pxjd2u24"
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_ensgf"]
 
@@ -13,7 +27,7 @@ collision_layer = 8
 script = ExtResource("1_7p1mj")
 health = NodePath("Health")
 sus = NodePath("Sus")
-arrow_scene = ExtResource("4_arrow")
+patters = Array[ExtResource("2_xwavj")]([SubResource("Resource_5uy6h")])
 
 [node name="HurtCollider" type="CollisionShape3D" parent="." unique_id=1742085930]
 unique_name_in_owner = true
@@ -25,8 +39,10 @@ script = ExtResource("2_md0e3")
 current = 1
 metadata/_custom_type_script = "uid://cq7vk7ukbmts4"
 
-[node name="FireDebounce" type="Timer" parent="." unique_id=1708563758]
+[node name="Recovery" type="Timer" parent="." unique_id=1708563758]
 unique_name_in_owner = true
+wait_time = 0.3
+autostart = true
 
 [node name="Sus" type="Node" parent="." unique_id=495149280]
 script = ExtResource("3_4ra3w")
@@ -38,4 +54,5 @@ texture = ExtResource("5_c4w8v")
 
 [node name="InstanceTimers" type="Node" parent="." unique_id=160238136]
 
-[connection signal="timeout" from="FireDebounce" to="." method="_on_fire_timeout"]
+[connection signal="changed" from="Health" to="." method="_on_health_changed"]
+[connection signal="timeout" from="Recovery" to="." method="_on_fire_timeout"]

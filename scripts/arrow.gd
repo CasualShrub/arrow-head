@@ -44,25 +44,6 @@ signal finished(arrow: Arrow)
 var _life := 0.0
 var _bounces := 0
 
-func _ready() -> void:
-	_apply_team()
-	_apply_kind()
-	if not %VisibleOnScreenNotifier2D.screen_exited.is_connected(_on_screen_exited):
-		%VisibleOnScreenNotifier2D.screen_exited.connect(_on_screen_exited)
-
-func _physics_process(delta: float) -> void:
-	rotation = direction.angle()
-	_life += delta
-	if get_remaining_lifetime() <= 0:
-		_finish()
-		return
-	var collision := move_and_collide(direction * speed * delta)
-	if collision:
-		if _is_wall(collision.get_collider()):
-			_bounce(collision)
-		else:
-			_on_hit(collision.get_collider())
-
 func _apply_team() -> void:
 	match team:
 		Team.ENEMY:
@@ -135,6 +116,7 @@ func _face_vector(dir: Vector3) -> void:
 
 func _ready() -> void:
 	_apply_team()
+	_apply_kind()
 
 func _physics_process(delta: float) -> void:
 	_face_vector(direction)

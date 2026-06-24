@@ -9,9 +9,7 @@ const _ENEMY_TEAM = Arrow.Team.ENEMY
 @export var player: Player
 
 @export_group("firing")
-@export var arrow_scene: PackedScene
-@export var arrow_scenes: Array[PackedScene] = []  # if non-empty, firing cycles through these
-@export var fire_rate := 2.0
+@export var patters: Array[ArrowPattern] = []
 
 @export var aim_time := 0.4
 @export var release_time := 0.12
@@ -25,7 +23,6 @@ const _ENEMY_TEAM = Arrow.Team.ENEMY
 
 var _dead := false
 var _movement_pattern: Dictionary[float, Vector2] = {}
-var _fire_index := 0
 
 @onready var _sprite: Sprite2D = $Sprite2D
 
@@ -156,6 +153,9 @@ func _look_at_player() -> void:
 		return
 	look_at(player.global_position)
 
+func _select_pattern() -> ArrowPattern:
+	return
+
 func _patrol(dt: float) -> void:
 	pass
 
@@ -186,31 +186,6 @@ func is_dead() -> bool:
 func die() -> void:
 	died.emit()
 
-func _physics_process(delta: float) -> void:
-	if Engine.is_editor_hint(): return
-	_select_behaviour(delta)
-
-func _ready() -> void:
-	if Engine.is_editor_hint(): return
-	%FireDebounce.wait_time = fire_rate
-	%FireDebounce.start()
-
-func _on_fire_timeout() -> void:
-	print("firing")
-	_look_at_player()
-	if arrow_scene:
-		fire(_make_arrow(arrow_scene), _get_arrow_dir(0))
-	%FireDebounce.start()
-func _ready() -> void:
-	if Engine.is_editor_hint():
-		return
-	_set_base(frame1)
-	if health and not health.changed.is_connected(_on_health_changed):
-		health.changed.connect(_on_health_changed)
-	%FireDebounce.wait_time = fire_rate
-	%FireDebounce.timeout.connect(_on_fire_timeout)
-	%FireDebounce.start()
-
 func _on_health_changed() -> void:
 	# drained to 0 = death: stop the zombie (it kept firing) and leave the tree
 	if not _dead and health.current <= 0:
@@ -218,59 +193,34 @@ func _on_health_changed() -> void:
 		die()
 		queue_free()
 
-func _on_fire_timeout() -> void:
-	_look_at_player()
-	_aiming = true
-	var draw := [frame1, frame2, frame3]
-	var step := aim_time / draw.size()
-	for frame in draw:
-		_set_base(frame)
-		await get_tree().create_timer(step).timeout
-		if _dead:
-			return
-	var scene := _next_arrow_scene()
-	if scene:
-		fire(_make_arrow(scene), _facing)
-	_set_base(frame4)
-	await get_tree().create_timer(release_time).timeout
-	if _dead:
-		return
-	_aiming = false
-	_set_base(frame1)
-	%FireDebounce.start()
-
-func _next_arrow_scene() -> PackedScene:
-	if arrow_scenes.is_empty():
-		return arrow_scene
-	var s: PackedScene = arrow_scenes[_fire_index % arrow_scenes.size()]
-	_fire_index += 1
-	return s
+func _on_recovered() -> void:
+	var pattern := _select_pattern()
+	perform(pattern)
 
 func _set_base(tex: Texture2D) -> void:
-	_base_tex = tex
-	if not _hit_showing:
-		_set_sprite(tex)
+	#_base_tex = tex
+	#if not _hit_showing:
+	#	_set_sprite(tex)
+	pass
 
 func _set_sprite(tex: Texture2D) -> void:
 	if _sprite:
 		_sprite.texture = tex
 
 func _show_hit() -> void:
-	_hit_showing = true
-	_set_sprite(hit_stretch if _aiming else hit_normal)
+	#_hit_showing = true
+	#_set_sprite(hit_stretch if _aiming else hit_normal)
 	await get_tree().create_timer(hit_flash_time).timeout
-	_hit_showing = false
+	#_hit_showing = false
 	if _dead:
 		return
-	_set_sprite(_base_tex)
+	#_set_sprite(_base_tex)
 
-func _physics_process(_delta: float) -> void:
-	if Engine.is_editor_hint():
-		return
+func _physics_process(delta: float) -> void:
+	if Engine.is_editor_hint(): return
 	_look_at_player()
-	if _sprite and _facing != Vector2.ZERO:
-		_sprite.rotation = _facing.angle()
-	if not _alerted:
-		_patrol()
-	else:
-		_sussy()
+	_select_behaviour(delta)
+	
+func _ready() -> void:
+	if Engine.is_editor_hint(): return
+	#_set_base(frame1)
