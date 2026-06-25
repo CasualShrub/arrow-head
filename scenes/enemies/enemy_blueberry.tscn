@@ -1,0 +1,11 @@
+[gd_scene format=3 uid="uid://b15vpncjfa5df"]
+
+[ext_resource type="PackedScene" uid="uid://b8rs35o7f45v0" path="res://scenes/enemies/enemy.tscn" id="1_fxwoo"]
+[ext_resource type="SpriteFrames" uid="uid://koik7nq15jej" path="res://sprite_frames/blueberry_frames.tres" id="2_66jb6"]
+
+[node name="Enemy" unique_id=71488470 instance=ExtResource("1_fxwoo")]
+
+[node name="Sprite" parent="." index="5" unique_id=1091610106]
+sprite_frames = ExtResource("2_66jb6")
+animation = &"default"
+frame_progress = 0.7552767

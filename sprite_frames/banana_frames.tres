@@ -7,8 +7,6 @@
 [ext_resource type="Texture2D" uid="uid://bmqcjg05r8j1e" path="res://assets/art/enemy/bannana/normal/frame2.png" id="5_33pt7"]
 [ext_resource type="Texture2D" uid="uid://6w7p3hufm0km" path="res://assets/art/enemy/bannana/normal/frame3.png" id="6_6xu1n"]
 [ext_resource type="Texture2D" uid="uid://ccs6nyr8bd0ba" path="res://assets/art/enemy/bannana/normal/frame4.png" id="7_wpnjo"]
-[ext_resource type="Texture2D" uid="uid://c8knl5mhl04ko" path="res://assets/art/enemy/bannana/normal_hit.PNG" id="8_m13yx"]
-[ext_resource type="Texture2D" uid="uid://dc0jaxflx7uj5" path="res://assets/art/enemy/bannana/stretch_hit.PNG" id="9_y8lwe"]
 
 [resource]
 animations = [{
@@ -55,16 +53,36 @@ animations = [{
 }],
 "loop": 0,
 "name": &"fire",
+"speed": 8.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("7_wpnjo")
+}],
+"loop": 0,
+"name": &"hit",
 "speed": 5.0
 }, {
 "frames": [{
 "duration": 1.0,
-"texture": ExtResource("8_m13yx")
+"texture": ExtResource("1_sq03r")
+}, {
+"duration": 2.0,
+"texture": ExtResource("6_6xu1n")
 }, {
 "duration": 1.0,
-"texture": ExtResource("9_y8lwe")
+"texture": ExtResource("5_33pt7")
+}, {
+"duration": 3.0,
+"texture": ExtResource("6_6xu1n")
+}, {
+"duration": 1.0,
+"texture": ExtResource("7_wpnjo")
+}, {
+"duration": 1.0,
+"texture": ExtResource("1_sq03r")
 }],
 "loop": 0,
-"name": &"hit",
+"name": &"windup",
 "speed": 5.0
 }]

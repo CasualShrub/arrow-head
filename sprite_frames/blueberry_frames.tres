@@ -1,3 +1,89 @@
 [gd_resource type="SpriteFrames" format=3 uid="uid://koik7nq15jej"]
 
+[ext_resource type="Texture2D" uid="uid://cbuywdc4p6aky" path="res://assets/art/enemy/blueberry/berry1.png" id="1_gkvmh"]
+[ext_resource type="Texture2D" uid="uid://cvjt5wjjua03j" path="res://assets/art/enemy/blueberry/berry2.png" id="2_5sjg7"]
+[ext_resource type="Texture2D" uid="uid://c2olfq45mej7c" path="res://assets/art/enemy/blueberry/b_death1.png" id="2_ym5xj"]
+[ext_resource type="Texture2D" uid="uid://d3dgbhlloi114" path="res://assets/art/enemy/blueberry/b_death2.png" id="3_5il2y"]
+[ext_resource type="Texture2D" uid="uid://cap2icd5pkmm2" path="res://assets/art/enemy/blueberry/berry3.png" id="3_qmmha"]
+[ext_resource type="Texture2D" uid="uid://c7ulbubnnm8rr" path="res://assets/art/enemy/blueberry/berry4.png" id="4_gh2b3"]
+[ext_resource type="Texture2D" uid="uid://p4yibquwcrax" path="res://assets/art/enemy/blueberry/b_death3.png" id="4_nu7hy"]
+[ext_resource type="Texture2D" uid="uid://vt7vrqcexufb" path="res://assets/art/enemy/blueberry/b_death4.png" id="5_em820"]
+
 [resource]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("1_gkvmh")
+}, {
+"duration": 1.0,
+"texture": ExtResource("2_ym5xj")
+}, {
+"duration": 1.0,
+"texture": ExtResource("3_5il2y")
+}, {
+"duration": 1.0,
+"texture": ExtResource("4_nu7hy")
+}, {
+"duration": 1.0,
+"texture": ExtResource("5_em820")
+}],
+"loop": 0,
+"name": &"death",
+"speed": 16.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("1_gkvmh")
+}],
+"loop": 1,
+"name": &"default",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("1_gkvmh")
+}, {
+"duration": 1.0,
+"texture": ExtResource("2_5sjg7")
+}, {
+"duration": 1.0,
+"texture": ExtResource("3_qmmha")
+}, {
+"duration": 1.0,
+"texture": ExtResource("4_gh2b3")
+}, {
+"duration": 1.0,
+"texture": ExtResource("1_gkvmh")
+}],
+"loop": 0,
+"name": &"fire",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("4_gh2b3")
+}],
+"loop": 1,
+"name": &"hit",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("1_gkvmh")
+}, {
+"duration": 4.0,
+"texture": ExtResource("2_5sjg7")
+}, {
+"duration": 1.0,
+"texture": ExtResource("3_qmmha")
+}, {
+"duration": 1.0,
+"texture": ExtResource("4_gh2b3")
+}, {
+"duration": 1.0,
+"texture": ExtResource("1_gkvmh")
+}],
+"loop": 0,
+"name": &"windup",
+"speed": 5.0
+}]

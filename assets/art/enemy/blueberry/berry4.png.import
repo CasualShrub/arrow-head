@@ -2,8 +2,8 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://vt7vrqcexufb"
-path.s3tc="res://.godot/imported/b_death4.png-1d3c1b3e8318577fc747bce9956ed8ab.s3tc.ctex"
+uid="uid://c7ulbubnnm8rr"
+path.s3tc="res://.godot/imported/berry4.png-1136405dcd681f4c1735dba532dfc7c2.s3tc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
@@ -11,8 +11,8 @@ metadata={
 
 [deps]
 
-source_file="res://assets/art/enemy/blueberry/b_death4.png"
-dest_files=["res://.godot/imported/b_death4.png-1d3c1b3e8318577fc747bce9956ed8ab.s3tc.ctex"]
+source_file="res://assets/art/enemy/blueberry/berry4.png"
+dest_files=["res://.godot/imported/berry4.png-1136405dcd681f4c1735dba532dfc7c2.s3tc.ctex"]
 
 [params]
 
