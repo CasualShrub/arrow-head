@@ -10,6 +10,14 @@
 [ext_resource type="Texture2D" uid="uid://cp4cnsely21gy" path="res://art/player/eye_normal.png" id="8_eyes"]
 [ext_resource type="Texture2D" uid="uid://ddhrf02nv342f" path="res://art/player/eyes_lowHP.png" id="9_lowhp"]
 [ext_resource type="Texture2D" uid="uid://bxkglylm44xg" path="res://art/player/eyes_hit.png" id="10_hit"]
+[ext_resource type="Texture2D" uid="uid://cwvf53mf4chcj" path="res://art/player/eye_east.png" id="11_east"]
+[ext_resource type="Texture2D" uid="uid://iw3ubmrd3ywx" path="res://art/player/eye_southeast.png" id="12_se"]
+[ext_resource type="Texture2D" uid="uid://dtoqo6xcscqcc" path="res://art/player/eye_southwest.png" id="13_sw"]
+[ext_resource type="Texture2D" uid="uid://cehnqasaukn37" path="res://art/player/eye_west.png" id="14_west"]
+[ext_resource type="Texture2D" uid="uid://ws58vqk400cp" path="res://art/player/hit_eye_east.png" id="15_he"]
+[ext_resource type="Texture2D" uid="uid://cnf6grqoducon" path="res://art/player/hit_eye_southeast.png" id="16_hse"]
+[ext_resource type="Texture2D" uid="uid://c080ywtpel8kh" path="res://art/player/hit_eye_southwest.png" id="17_hsw"]
+[ext_resource type="Texture2D" uid="uid://gvq1q1dey2q0" path="res://art/player/hit_eye_west.png" id="18_hw"]
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_tuyoq"]
 radius = 0.4
@@ -40,8 +48,16 @@ sector_count = 4
 sector_centered = true
 sector_radius = 0.5
 eyes_normal = ExtResource("8_eyes")
+eyes_east = ExtResource("11_east")
+eyes_southeast = ExtResource("12_se")
+eyes_southwest = ExtResource("13_sw")
+eyes_west = ExtResource("14_west")
 eyes_lowhp = ExtResource("9_lowhp")
 eyes_hit = ExtResource("10_hit")
+eyes_hit_east = ExtResource("15_he")
+eyes_hit_southeast = ExtResource("16_hse")
+eyes_hit_southwest = ExtResource("17_hsw")
+eyes_hit_west = ExtResource("18_hw")
 
 [node name="Collider" type="CollisionShape3D" parent="." unique_id=1401584448]
 unique_name_in_owner = true
