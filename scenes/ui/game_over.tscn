@@ -1,0 +1,51 @@
+[gd_scene format=3 uid="uid://bg4meover1ui0"]
+
+[ext_resource type="Script" path="res://scripts/ui/game_over.gd" id="1_s"]
+[ext_resource type="Texture2D" uid="uid://d14uaqs12ctn4" path="res://assets/art/ui/dead-apple1.png" id="2_apple"]
+
+[node name="GameOver" type="CanvasLayer"]
+layer = 10
+script = ExtResource("1_s")
+
+[node name="Root" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+
+[node name="Dim" type="ColorRect" parent="Root"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+color = Color(0, 0, 0, 0.66)
+
+[node name="Center" type="VBoxContainer" parent="Root"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+alignment = 1
+theme_override_constants/separation = 18
+
+[node name="Apple" type="TextureRect" parent="Root/Center"]
+custom_minimum_size = Vector2(240, 252)
+layout_mode = 2
+size_flags_horizontal = 4
+texture = ExtResource("2_apple")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Title" type="Label" parent="Root/Center"]
+layout_mode = 2
+text = "GAME OVER"
+horizontal_alignment = 1
+theme_override_colors/font_color = Color(0.95, 0.3, 0.25, 1)
+theme_override_font_sizes/font_size = 72
+
+[node name="Prompt" type="Label" parent="Root/Center"]
+layout_mode = 2
+text = "press R to restart"
+horizontal_alignment = 1
+theme_override_colors/font_color = Color(0.9, 0.9, 0.9, 1)
+theme_override_font_sizes/font_size = 28
