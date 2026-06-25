@@ -14,11 +14,11 @@ count = 3
 max_count = 5
 metadata/_custom_type_script = "uid://r4qbgt6it8lb"
 
-[sub_resource type="Resource" id="Resource_t8u1i"]
+[sub_resource type="Resource" id="Resource_418y4"]
 script = ExtResource("2_p1wid")
 recovery = 1.0
 instances = Array[ExtResource("3_faw47")]([SubResource("Resource_4rp8h")])
 metadata/_custom_type_script = "uid://d04k7pxjd2u24"
 
 [node name="Enemy" unique_id=568196954 instance=ExtResource("1_418y4")]
-patterns = Array[ExtResource("2_p1wid")]([SubResource("Resource_t8u1i")])
+patterns = Array[ExtResource("2_p1wid")]([SubResource("Resource_418y4")])

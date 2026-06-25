@@ -16,11 +16,11 @@ max_offset = 0.10040734641021
 individual_offset = true
 metadata/_custom_type_script = "uid://r4qbgt6it8lb"
 
-[sub_resource type="Resource" id="Resource_1q05v"]
+[sub_resource type="Resource" id="Resource_g2wok"]
 script = ExtResource("2_i6syy")
 recovery = 2.0
 instances = Array[ExtResource("3_buqei")]([SubResource("Resource_l5n6b")])
 metadata/_custom_type_script = "uid://d04k7pxjd2u24"
 
 [node name="Enemy" unique_id=96558035 instance=ExtResource("1_g2wok")]
-patterns = Array[ExtResource("2_i6syy")]([SubResource("Resource_1q05v")])
+patterns = Array[ExtResource("2_i6syy")]([SubResource("Resource_g2wok")])
