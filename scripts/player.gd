@@ -74,7 +74,7 @@ const _PLAYER_TEAM = Arrow.Team.PLAYER
 @export var freeze_duration := 2.0
 @export var freeze_warn_time := 0.6
 @export var freeze_blink_rate := 12.0
-@export var burn_spin_speed := 0.2
+@export var burn_spin_speed := 24.0
 @export var burn_drift_speed := 7.2
 @export var burn_redrift := 0.14
 
