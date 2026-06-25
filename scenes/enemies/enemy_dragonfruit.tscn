@@ -30,13 +30,14 @@ type = ExtResource("4_3hhx2")
 instance_delay = 0.05
 count = 5
 max_count = 10
-offset = -0.4995926535897901
-max_offset = 0.7504073464102099
+offset = -0.2495926535897901
+max_offset = 0.2504073464102099
 individual_offset = true
 metadata/_custom_type_script = "uid://r4qbgt6it8lb"
 
 [sub_resource type="Resource" id="Resource_o6djv"]
 script = ExtResource("2_cghyj")
+weight = 11.0
 recovery = 1.0
 instances = Array[ExtResource("3_kt87t")]([SubResource("Resource_q8c7o")])
 metadata/_custom_type_script = "uid://d04k7pxjd2u24"
