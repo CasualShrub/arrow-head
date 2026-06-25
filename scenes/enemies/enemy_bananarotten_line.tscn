@@ -1,0 +1,24 @@
+[gd_scene format=3 uid="uid://c5i7j0ac0apq"]
+
+[ext_resource type="PackedScene" uid="uid://db0ry36fopb12" path="res://scenes/enemies/enemy_bananarotten.tscn" id="1_763f7"]
+[ext_resource type="Script" uid="uid://d04k7pxjd2u24" path="res://scripts/arrow_pattern.gd" id="2_t034d"]
+[ext_resource type="Script" uid="uid://r4qbgt6it8lb" path="res://scripts/firing_instance.gd" id="3_p4p3l"]
+[ext_resource type="PackedScene" uid="uid://byh737vkctruq" path="res://scenes/arrows/arrow_fire.tscn" id="4_ouoal"]
+
+[sub_resource type="Resource" id="Resource_iv3c4"]
+script = ExtResource("3_p4p3l")
+type = ExtResource("4_ouoal")
+starting_delay = 0.1
+instance_delay = 0.1
+count = 3
+max_count = 5
+metadata/_custom_type_script = "uid://r4qbgt6it8lb"
+
+[sub_resource type="Resource" id="Resource_xnm8p"]
+script = ExtResource("2_t034d")
+recovery = 4.0
+instances = Array[ExtResource("3_p4p3l")]([SubResource("Resource_iv3c4")])
+metadata/_custom_type_script = "uid://d04k7pxjd2u24"
+
+[node name="Enemy" unique_id=71488470 instance=ExtResource("1_763f7")]
+patterns = Array[ExtResource("2_t034d")]([SubResource("Resource_xnm8p")])
