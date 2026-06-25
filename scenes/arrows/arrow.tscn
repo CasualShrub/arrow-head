@@ -2,10 +2,20 @@
 
 [ext_resource type="Script" uid="uid://ddq3o77rdeao0" path="res://scripts/arrow.gd" id="1_arrow"]
 [ext_resource type="Texture2D" uid="uid://buqutmlha3vbg" path="res://assets/art/arrow/normal_arrow.png" id="2_d85th"]
+[ext_resource type="Shader" uid="uid://4cl7l7a1abfv" path="res://shaders/outline_3d.gdshader" id="3_outline"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_23jat"]
 radius = 0.05
 height = 0.6
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_outline"]
+resource_local_to_scene = true
+render_priority = 0
+shader = ExtResource("3_outline")
+shader_parameter/tex = ExtResource("2_d85th")
+shader_parameter/line_color = Color(0.05, 0.05, 0.05, 1)
+shader_parameter/line_thickness = 2.0
+shader_parameter/tex_pixel_size = Vector2(0.005, 0.005)
 
 [node name="Arrow" type="CharacterBody3D" unique_id=201688871]
 collision_layer = 2
@@ -24,5 +34,6 @@ shape = SubResource("CapsuleShape3D_23jat")
 
 [node name="Sprite3D" type="Sprite3D" parent="." unique_id=1125079801]
 transform = Transform3D(-0.385, 3.365777e-08, 1.4712277e-15, 0, -1.6828885e-08, 0.385, 3.365777e-08, 0.385, 1.6828885e-08, 0, 0, 0)
+material_override = SubResource("ShaderMaterial_outline")
 double_sided = false
 texture = ExtResource("2_d85th")

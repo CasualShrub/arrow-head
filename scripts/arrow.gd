@@ -21,6 +21,7 @@ const _MASK_ENEMY := 1 << 3
 @export var decay_time := -1.0
 
 @onready var _collider: CollisionShape3D = %Collider
+@onready var _sprite: Sprite3D = $Sprite3D
 
 signal hit(target: Player)
 signal finished
@@ -117,6 +118,17 @@ func face(direction: Vector3) -> void:
 
 func _ready() -> void:
 	_apply_team()
+	_apply_outline()
+
+func _apply_outline() -> void:
+	if not _sprite or not _sprite.texture:
+		return
+	var mat := _sprite.material_override
+	if mat is ShaderMaterial:
+		mat.set_shader_parameter("tex", _sprite.texture)
+		var s := _sprite.texture.get_size()
+		if s.x > 0 and s.y > 0:
+			mat.set_shader_parameter("tex_pixel_size", Vector2(1.0 / s.x, 1.0 / s.y))
 
 func _physics_process(delta: float) -> void:
 	_life += delta
