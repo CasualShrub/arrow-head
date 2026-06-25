@@ -6,6 +6,10 @@
 [ext_resource type="Texture2D" uid="uid://ssnmuf3en2ae" path="res://icon.svg" id="4_dqkch"]
 [ext_resource type="Shader" uid="uid://bfi638v144t8g" path="res://shaders/sector_visualiser.gdshader" id="5_qlg0r"]
 [ext_resource type="Script" uid="uid://bdywsusg7sgug" path="res://scripts/components/sectors_component.gd" id="6_tuyoq"]
+[ext_resource type="Texture2D" uid="uid://c5w3uc4upc1av" path="res://art/player/apple_base.png" id="7_apple"]
+[ext_resource type="Texture2D" uid="uid://cp4cnsely21gy" path="res://art/player/eye_normal.png" id="8_eyes"]
+[ext_resource type="Texture2D" uid="uid://ddhrf02nv342f" path="res://art/player/eyes_lowHP.png" id="9_lowhp"]
+[ext_resource type="Texture2D" uid="uid://bxkglylm44xg" path="res://art/player/eyes_hit.png" id="10_hit"]
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_tuyoq"]
 radius = 0.4
@@ -35,6 +39,9 @@ sectors = NodePath("Sectors")
 sector_count = 4
 sector_centered = true
 sector_radius = 0.5
+eyes_normal = ExtResource("8_eyes")
+eyes_lowhp = ExtResource("9_lowhp")
+eyes_hit = ExtResource("10_hit")
 
 [node name="Collider" type="CollisionShape3D" parent="." unique_id=1401584448]
 unique_name_in_owner = true
@@ -61,7 +68,13 @@ unique_name_in_owner = true
 unique_name_in_owner = true
 transform = Transform3D(0.59999996, 0, 0, 0, -2.6226832e-08, 0.59999996, 0, -0.59999996, -2.6226832e-08, 0, 0, 0)
 double_sided = false
-texture = ExtResource("4_dqkch")
+texture = ExtResource("7_apple")
+
+[node name="Eyes" type="Sprite3D" parent="." unique_id=1671790149]
+unique_name_in_owner = true
+transform = Transform3D(0.59999996, 0, 0, 0, -2.6226832e-08, 0.59999996, 0, -0.59999996, -2.6226832e-08, 0, 0.01, 0)
+double_sided = false
+texture = ExtResource("8_eyes")
 
 [node name="Sectors" type="MeshInstance3D" parent="." unique_id=9603647]
 transform = Transform3D(-0.70710677, -0.70710677, -3.090862e-08, 0, -4.371139e-08, 1, -0.70710677, 0.70710677, 3.090862e-08, 0, 0.0095798075, 0)

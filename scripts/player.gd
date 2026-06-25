@@ -88,7 +88,7 @@ var _burn_drift := Vector3.ZERO
 var _burn_redrift := 0.0
 var _burn_spin_dir := 1.0
 
-@onready var _eyes: Sprite2D = %Eyes
+@onready var _eyes: Sprite3D = %Eyes
 @onready var _arrows: Node3D = %Arrows
 
 func _update_collider(c: CollisionShape3D, r: float) -> void:
