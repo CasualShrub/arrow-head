@@ -72,4 +72,6 @@ grow_vertical = 2
 
 [node name="GameOver" parent="." unique_id=1065161674 instance=ExtResource("10_gameover")]
 
+[node name="Pause" type="CanvasLayer" parent="." unique_id=151884917]
+
 [connection signal="ended" from="." to="GameOver" method="_on_encounter_ended"]

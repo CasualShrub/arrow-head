@@ -5,6 +5,7 @@
 [ext_resource type="Shader" uid="uid://br4t4iofbd1o1" path="res://shaders/textured_fade.gdshader" id="3_fade"]
 [ext_resource type="Texture2D" uid="uid://duy7x13uwce0v" path="res://assets/textures/brickwall.png" id="4_bricktex"]
 [ext_resource type="Material" uid="uid://cwoodgate0tut" path="res://materials/wood_gate_material.tres" id="5_woodgate"]
+[ext_resource type="PackedScene" uid="uid://x1mhd7mlveia" path="res://scenes/ui/game_win.tscn" id="7_iig34"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_brickfade"]
 render_priority = 0
@@ -98,3 +99,7 @@ collision_layer = 4
 collision_mask = 9
 size = Vector3(12.452363, 2.4925537, 33.00226)
 material = SubResource("ShaderMaterial_brickfade")
+
+[node name="GameWin" parent="." index="4" unique_id=1577397124 instance=ExtResource("7_iig34")]
+
+[connection signal="cleared" from="." to="GameWin" method="_on_encounter_cleared"]
