@@ -9,6 +9,7 @@
 [ext_resource type="PackedScene" uid="uid://dgwhmtq7epmrm" path="res://scenes/ui/pause.tscn" id="11_pause"]
 [ext_resource type="Script" uid="uid://5fadtmicpyjp" path="res://scripts/ui/level_timer.gd" id="12_timer"]
 [ext_resource type="FontFile" uid="uid://dg3navvnlkmpw" path="res://assets/fonts/Puffy-gxW55.otf" id="13_puffy"]
+[ext_resource type="Script" path="res://scripts/ui/shader_prewarm.gd" id="14_prewarm"]
 
 [sub_resource type="Environment" id="Environment_ub6uw"]
 
@@ -42,6 +43,9 @@ unique_name_in_owner = true
 
 [node name="Enemies" type="Node3D" parent="SubViewportContainer/SubViewport/World" unique_id=1185931971]
 unique_name_in_owner = true
+
+[node name="ShaderPrewarm" type="Node3D" parent="SubViewportContainer/SubViewport/World" unique_id=1185931972]
+script = ExtResource("14_prewarm")
 
 [node name="CameraPivot" type="Node3D" parent="SubViewportContainer/SubViewport/World" unique_id=1563753267 node_paths=PackedStringArray("player")]
 transform = Transform3D(1, 0, 0, 0, -4.371139e-08, 1, 0, -1, -4.371139e-08, 0, 3.7000048, 0)
