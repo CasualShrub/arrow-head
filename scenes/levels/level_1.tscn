@@ -7,9 +7,6 @@
 
 [node name="Encounter" unique_id=571267862 instance=ExtResource("1_1c042")]
 
-[node name="Player" parent="SubViewportContainer/SubViewport/World" parent_id_path=PackedInt32Array(1589957074) index="0" unique_id=508579643]
-has_intro = null
-
 [node name="SubViewportContainer_SubViewport_World_NavigationRegion3D#CSGBox3D4" type="CSGBox3D" parent="SubViewportContainer/SubViewport/World" parent_id_path=PackedInt32Array(1589957074) index="6" unique_id=889470022]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 29.129332, 0.33855522, 15.6918335)
 use_collision = true

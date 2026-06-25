@@ -12,7 +12,7 @@ enum SusStage {LW, MD, HI}
 			amount = value
 		max_value = value
 @export var reduction_speed := 0.5
-@export var increase_speed := 1.0
+@export var increase_speed := 2.0
 @export var incident_memory := 1.0
 @export_range(0.0, 1.0) var medium_boundary := 0.70
 @export_range(0.0, 1.0) var low_boundary := 0.35
