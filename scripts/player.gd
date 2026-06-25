@@ -94,6 +94,8 @@ var _dash_vel: Vector3
 var _in_slowdown := false
 var _slowmo_tween: Tween
 
+var _invul := false
+
 @onready var _camera: Camera3D = %Camera
 @onready var _recovery: Timer = %Recovery
 @onready var _dashing: Timer = %Dashing
@@ -195,8 +197,10 @@ func get_hit(arrow: Arrow) -> void:
 	if is_dead():
 		arrow.deactivate()
 		return
-	if is_dashing():
+	if is_dashing() or _invul:
 		return
+	_invul = true
+	get_tree().create_timer(0.25).timeout.connect(func(): _invul = false)
 	var sector := sectors.get_sector_from_position(arrow.global_position)
 	_spawn_chunks(global_position)  
 	if try_embed_arrow(arrow, sector):
