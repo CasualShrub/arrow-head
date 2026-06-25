@@ -1,7 +1,7 @@
 [gd_scene load_steps=3 format=3]
 
 [ext_resource type="PackedScene" uid="uid://b8rs35o7f45v0" path="res://scenes/enemy.tscn" id="1_base"]
-[ext_resource type="PackedScene" path="res://scenes/arrow_incendiary.tscn" id="2_arrow"]
+[ext_resource type="PackedScene" uid="uid://byh737vkctruq" path="res://scenes/arrows/arrow_fire.tscn" id="2_arrow"]
 
 [node name="Enemy" instance=ExtResource("1_base")]
 modulate = Color(1, 0.62, 0.5, 1)
