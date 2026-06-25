@@ -226,6 +226,7 @@ func _spawn_chunks(_pos: Vector3) -> void:
 	fx.position = Vector3.ZERO
 
 func get_mouse_world_position() -> Vector3:
+	if not _camera: return Vector3.ZERO
 	var mouse = get_viewport().get_mouse_position()
 
 	var origin = _camera.project_ray_origin(mouse)

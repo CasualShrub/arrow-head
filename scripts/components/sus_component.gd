@@ -94,4 +94,5 @@ func _physics_process(delta: float) -> void:
 	pass # Replace with function body.
 	
 func _ready() -> void:
+	_outline.hide()
 	_vision_display.show()

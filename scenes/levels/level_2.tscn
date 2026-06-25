@@ -20,16 +20,11 @@ shader_parameter/wall_height = 0.51
 shader_parameter/fade_start = -0.04
 
 [node name="Encounter2" unique_id=571267862 instance=ExtResource("1_h14sk")]
-is_boss_level = null
 music_track = "Lvl_2_3"
 next_level_path = "res://scenes/levels/level_3.tscn"
 
-[node name="SubViewport" parent="SubViewportContainer" parent_id_path=PackedInt32Array(506783396) index="0" unique_id=1083906358]
-size = Vector2i(1152, 648)
-
 [node name="Player" parent="SubViewportContainer/SubViewport/World" parent_id_path=PackedInt32Array(1589957074) index="0" unique_id=508579643]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 18.24202, 0, 25.049774)
-burn_spin_speed = 24.0
 
 [node name="archer2" parent="SubViewportContainer/SubViewport/World/Enemies" parent_id_path=PackedInt32Array(1185931971) index="0" unique_id=71488470 instance=ExtResource("5_l37oo")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 25.094635, -0.19287515, 13.687416)

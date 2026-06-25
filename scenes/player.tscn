@@ -151,7 +151,6 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.0034347773, 0)
 [node name="DashPreview" type="Node3D" parent="." unique_id=2127933487]
 unique_name_in_owner = true
 transform = Transform3D(1, -9.553433e-16, -4.175938e-23, 0, -4.371139e-08, 1, -9.553433e-16, -1, -4.371139e-08, 0, 0.005001202, 0)
-visible = false
 script = ExtResource("6_ur7pv")
 
 [node name="PreviewSprite" type="Sprite3D" parent="DashPreview" unique_id=575402793]
@@ -181,7 +180,6 @@ collision_mask = 4
 
 [node name="Sectors" type="MeshInstance3D" parent="." unique_id=9603647]
 transform = Transform3D(-0.70710677, -0.70710677, -3.090862e-08, 0, -4.371139e-08, 1, -0.70710677, 0.70710677, 3.090862e-08, 0, 0.015167683, 0)
-visible = false
 material_override = SubResource("ShaderMaterial_fjrip")
 cast_shadow = 0
 mesh = SubResource("QuadMesh_ub6uw")

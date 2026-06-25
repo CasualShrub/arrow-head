@@ -91,14 +91,12 @@ shape = SubResource("CylinderShape3D_twn6s")
 [node name="VisionDisplay" type="MeshInstance3D" parent="Sus/Vision" unique_id=442070290]
 unique_name_in_owner = true
 transform = Transform3D(-4.0143995, -3.804912e-07, -2.6232533e-22, -3.5094993e-07, 4.3523116, -1.6872596e-07, 3.0681024e-14, -3.804912e-07, -1.93, 0, -1.2373967, 0.030000053)
-visible = false
 material_override = SubResource("ShaderMaterial_tihwb")
 mesh = SubResource("QuadMesh_ub6uw")
 
 [node name="Outline" type="AnimatedSprite3D" parent="Sus" unique_id=1078234529]
 unique_name_in_owner = true
 transform = Transform3D(-1.45558925e-08, -0.333, -1.45558925e-08, 0, -1.45558925e-08, 0.333, -0.333, 1.45558925e-08, 6.362583e-16, -0.9502109, 0.108018935, 0)
-visible = false
 sprite_frames = ExtResource("7_qch6t")
 
 [node name="Fill" type="AnimatedSprite3D" parent="Sus/Outline" unique_id=1334762853]

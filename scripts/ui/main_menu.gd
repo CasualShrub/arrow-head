@@ -2,9 +2,26 @@ extends Control
 
 const TUTORIAL_SCENE := "res://scenes/levels/tutorial.tscn"
 
+@export var scenes_to_warm: Array[String] = []
+
 @onready var _level_select: Control = $LevelSelect
 
 func _ready() -> void:
+	var viewport = SubViewport.new()
+	viewport.size = Vector2i(1, 1)  # tiny, barely renders
+	viewport.render_target_update_mode = SubViewport.UPDATE_ALWAYS
+	add_child(viewport)
+	
+	for scene_path in scenes_to_warm:
+		var instance = load(scene_path).instantiate()
+		viewport.add_child(instance)
+	
+	# Wait 2 frames for shaders to compile
+	await get_tree().process_frame
+	await get_tree().process_frame
+	
+	viewport.queue_free()
+	
 	SoundManager.play_music("TITLE_SCREEN")
 	$Play.pressed.connect(_on_play_pressed)
 	$Levels.pressed.connect(_on_levels_pressed)
