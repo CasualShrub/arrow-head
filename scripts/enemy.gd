@@ -31,11 +31,19 @@ const _ENEMY_TEAM = Arrow.Team.ENEMY
 @export var alwayds_alert := false
 @export_group("combat")
 @export var combat_speed := 4.0
+@export var combat_strafe_radius := 4.0
+@export var combat_strafe_speed := 2.0
+@export var combat_reposition_chance := 0.3
 
 var _patrol_world_points: Array[Vector3] = []
 var _patrol_len: float
 var _patrol_progress := 0.0
 var _patrol_dir := 1.0
+
+var _strafe_angle := 0.0
+var _strafe_dir := 1.0
+var _reposition_timer := 0.0
+var _reposition_interval := 2.0
 
 signal fired(arrow: Arrow, dir: Vector3)
 signal died
@@ -45,6 +53,9 @@ signal died
 @onready var _recovery: Timer = %Recovery
 @onready var _inst_timers: Node = %InstanceTimers
 @onready var _patrol_points: Node3D = %PatrolPoints
+@onready var _ray_left: RayCast3D = %RayLeft
+@onready var _ray_right: RayCast3D = %RayRight
+@onready var _ray_forward: RayCast3D = %RayForward
 
 var _dead := false
 var _aiming := false
@@ -226,10 +237,11 @@ func _get_patrol_pos() -> Vector3:
 	return final_pos
 
 func _patrol(dt: float) -> void:
-	if _patrol_len == 0.0:
+	if _patrol_len == 0.0 or len(_patrol_world_points) == 1:
 		return
 	var new_pos := _get_patrol_pos()
-	look_at(new_pos)
+	if new_pos != global_position:
+		look_at(new_pos)
 	global_position = new_pos
 	_patrol_progress += dt * patrol_speed / _patrol_len * _patrol_dir
 	if _patrol_progress > 1.0:
@@ -245,8 +257,44 @@ func _med_sus(_dt: float) -> void:
 func _high_sus(_dt: float) -> void:
 	_look_at_player()
 
-func _alert(_dt: float) -> void:
-	_look_at_player()
+func _alert(dt: float) -> void:
+	if not player:
+		return
+
+	_reposition_timer += dt
+	if _reposition_timer >= _reposition_interval:
+		_reposition_timer = 0.0
+		_reposition_interval = randf_range(1.5, 3.5)
+		_strafe_dir *= -1.0 if randf() < combat_reposition_chance else 1.0
+
+	var to_player := (player.global_position - global_position)
+	to_player.y = 0.0
+	var dist := to_player.length()
+	var forward := to_player.normalized()
+	var right := forward.rotated(Vector3.UP, PI * 0.5)
+
+	# Build desired movement
+	var move := Vector3.ZERO
+
+	if dist > combat_strafe_radius + 1.0:
+		move += forward          # too far, close in
+	elif dist < combat_strafe_radius - 1.0:
+		move -= forward          # too close, back off
+	
+	move += right * _strafe_dir  # always strafing
+
+	# Wall avoidance
+	if _ray_forward.is_colliding():
+		move -= forward * 2.0
+	if _ray_left.is_colliding():
+		move += right
+	if _ray_right.is_colliding():
+		move -= right
+
+	if move.length() > 0.001:
+		global_position += move.normalized() * combat_speed * dt
+
+	look_at(player.global_position)
 
 func _select_behaviour(dt: float) -> void:
 	if sus.is_alert():
@@ -301,10 +349,11 @@ func highlight_off() -> void:
 
 func _show_hit() -> void:
 	_sprite.animation = "hit"
-	if _aiming: _sprite.frame = 1
+	_sprite.modulate = Color(10.0, 10.0, 10.0, 10.0)
 	get_tree().set_deferred("paused", true)
 	await get_tree().create_timer(hit_flash_time, true, false, true).timeout
 	get_tree().paused = false
+	_sprite.modulate = Color(1.0, 1.0, 1.0, 1.0)
 
 func _physics_process(delta: float) -> void:
 	if Engine.is_editor_hint(): return
