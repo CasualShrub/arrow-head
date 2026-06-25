@@ -1,14 +1,25 @@
 [gd_scene format=3 uid="uid://dxidq6hqxgc5t"]
 
 [ext_resource type="PackedScene" uid="uid://b6c1h2si8ob6l" path="res://scenes/levels/encounter.tscn" id="1_r1vs7"]
-[ext_resource type="Shader" uid="uid://buv2tktnh5ufo" path="res://shaders/fade.gdshader" id="2_845dy"]
 [ext_resource type="PackedScene" uid="uid://c5i7j0ac0apq" path="res://scenes/enemies/enemy_bananarotten_line.tscn" id="2_laj7o"]
 [ext_resource type="PackedScene" uid="uid://b0566e6bt2wnb" path="res://scenes/enemies/enemy_bananaunripe_spray.tscn" id="3_fi56y"]
 [ext_resource type="PackedScene" uid="uid://b7xvltf5sfgso" path="res://scenes/enemies/enemy_spray.tscn" id="5_fi56y"]
+[ext_resource type="Shader" uid="uid://br4t4iofbd1o1" path="res://shaders/textured_fade.gdshader" id="5_hldbq"]
+[ext_resource type="Texture2D" uid="uid://w5firgaw1fbf" path="res://assets/textures/obsidian.png" id="6_fsnos"]
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_845dy"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_mxx4w"]
 render_priority = 0
-shader = ExtResource("2_845dy")
+shader = ExtResource("5_hldbq")
+shader_parameter/tex = ExtResource("6_fsnos")
+shader_parameter/tex_scale = 0.5
+shader_parameter/wall_height = 0.51
+shader_parameter/fade_start = -0.04
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_vvoq0"]
+render_priority = 0
+shader = ExtResource("5_hldbq")
+shader_parameter/tex = ExtResource("6_fsnos")
+shader_parameter/tex_scale = 0.5
 shader_parameter/wall_height = 0.51
 shader_parameter/fade_start = -0.04
 
@@ -65,90 +76,90 @@ transform = Transform3D(1, 0, 0, 0, -4.371139e-08, 1, 0, -1, -4.371139e-08, 25.4
 [node name="some hallway" type="Node3D" parent="." index="2" unique_id=1966035763]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.838967, 0, 6.49942)
 
-[node name="SubViewportContainer_SubViewport_World_Walls#CSGBox3D3" type="CSGBox3D" parent="some hallway" index="0" unique_id=740901367]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 27.182518, 2.3838491, -17.231522)
+[node name="SubViewportContainer_SubViewport_World_Walls#CSGBox3D7" type="CSGBox3D" parent="some hallway" index="0" unique_id=410809193]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 27.182518, 2.3838491, -13.91399)
 use_collision = true
 collision_layer = 4
-size = Vector3(54.994644, 5.801819, 10.879425)
-material = SubResource("ShaderMaterial_845dy")
+size = Vector3(54.994644, 5.801819, 4.246002)
+material = SubResource("ShaderMaterial_mxx4w")
 
-[node name="SubViewportContainer_SubViewport_World_Walls#CSGBox3D4" type="CSGBox3D" parent="some hallway" index="1" unique_id=237923923]
+[node name="SubViewportContainer_SubViewport_World_Walls#CSGBox3D8" type="CSGBox3D" parent="some hallway" index="1" unique_id=926636609]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 27.182518, 2.421523, 33.83718)
 use_collision = true
 collision_layer = 4
 size = Vector3(54.994644, 5.8771667, 8.408813)
-material = SubResource("ShaderMaterial_845dy")
+material = SubResource("ShaderMaterial_mxx4w")
 
-[node name="SubViewportContainer_SubViewport_World_Walls#CSGBox3D5" type="CSGBox3D" parent="some hallway" index="2" unique_id=1979992459]
+[node name="SubViewportContainer_SubViewport_World_Walls#CSGBox3D9" type="CSGBox3D" parent="some hallway" index="2" unique_id=1401563776]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 17.08504, 2.4157095, 11.222664)
 use_collision = true
 collision_layer = 4
 size = Vector3(8.714607, 5.8655396, 53.637848)
-material = SubResource("ShaderMaterial_845dy")
+material = SubResource("ShaderMaterial_mxx4w")
 
-[node name="SubViewportContainer_SubViewport_World_Walls#CSGBox3D6" type="CSGBox3D" parent="some hallway" index="3" unique_id=829701429]
+[node name="SubViewportContainer_SubViewport_World_Walls#CSGBox3D10" type="CSGBox3D" parent="some hallway" index="3" unique_id=812518232]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 44.258682, 2.385314, 11.345711)
 use_collision = true
 collision_layer = 4
 size = Vector3(9.330448, 5.8047485, 53.391754)
-material = SubResource("ShaderMaterial_845dy")
+material = SubResource("ShaderMaterial_mxx4w")
 
 [node name="pillars" type="Node3D" parent="." index="3" unique_id=526948520]
 
-[node name="SubViewportContainer_SubViewport_World_Walls#CSGBox3D7" type="CSGBox3D" parent="pillars" index="0" unique_id=1869998688]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 29.824131, 2.385314, 28.711184)
+[node name="SubViewportContainer_SubViewport_World_Walls#CSGBox3D15" type="CSGBox3D" parent="pillars" index="0" unique_id=1587128748]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 20.174522, 2.385314, 28.669191)
 use_collision = true
 collision_layer = 4
-size = Vector3(2.032677, 5.8047485, 1.8213167)
-material = SubResource("ShaderMaterial_845dy")
+size = Vector3(2.0293388, 5.8047485, 1.9053011)
+material = SubResource("ShaderMaterial_vvoq0")
 
-[node name="SubViewportContainer_SubViewport_World_Walls#CSGBox3D10" type="CSGBox3D" parent="pillars" index="1" unique_id=2099551833]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 20.175745, 2.385314, 19.932375)
+[node name="SubViewportContainer_SubViewport_World_Walls#CSGBox3D18" type="CSGBox3D" parent="pillars" index="1" unique_id=2052057168]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 29.84719, 2.385314, 19.907396)
 use_collision = true
 collision_layer = 4
-size = Vector3(2.032677, 5.8047485, 1.8213167)
-material = SubResource("ShaderMaterial_845dy")
+size = Vector3(2.0293388, 5.8047485, 1.9053011)
+material = SubResource("ShaderMaterial_vvoq0")
 
-[node name="SubViewportContainer_SubViewport_World_Walls#CSGBox3D12" type="CSGBox3D" parent="pillars" index="2" unique_id=796477190]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 29.824131, 2.385314, 10.889243)
+[node name="SubViewportContainer_SubViewport_World_Walls#CSGBox3D17" type="CSGBox3D" parent="pillars" index="2" unique_id=1206238523]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 20.174522, 2.385314, 19.907396)
 use_collision = true
 collision_layer = 4
-size = Vector3(2.032677, 5.8047485, 1.8213167)
-material = SubResource("ShaderMaterial_845dy")
+size = Vector3(2.0293388, 5.8047485, 1.9053011)
+material = SubResource("ShaderMaterial_vvoq0")
 
-[node name="SubViewportContainer_SubViewport_World_Walls#CSGBox3D11" type="CSGBox3D" parent="pillars" index="3" unique_id=754584278]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 20.175745, 2.385314, 10.889243)
+[node name="SubViewportContainer_SubViewport_World_Walls#CSGBox3D22" type="CSGBox3D" parent="pillars" index="3" unique_id=1760390678]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 29.84719, 2.385314, 10.918009)
 use_collision = true
 collision_layer = 4
-size = Vector3(2.032677, 5.8047485, 1.8213167)
-material = SubResource("ShaderMaterial_845dy")
+size = Vector3(2.0293388, 5.8047485, 1.9053011)
+material = SubResource("ShaderMaterial_vvoq0")
 
-[node name="SubViewportContainer_SubViewport_World_Walls#CSGBox3D14" type="CSGBox3D" parent="pillars" index="4" unique_id=429875653]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 20.175745, 2.385314, 2.149806)
+[node name="SubViewportContainer_SubViewport_World_Walls#CSGBox3D21" type="CSGBox3D" parent="pillars" index="4" unique_id=678248327]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 20.174522, 2.385314, 2.1562138)
 use_collision = true
 collision_layer = 4
-size = Vector3(2.032677, 5.8047485, 1.8213167)
-material = SubResource("ShaderMaterial_845dy")
+size = Vector3(2.0293388, 5.8047485, 1.9053011)
+material = SubResource("ShaderMaterial_vvoq0")
 
-[node name="SubViewportContainer_SubViewport_World_Walls#CSGBox3D13" type="CSGBox3D" parent="pillars" index="5" unique_id=2133531123]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 29.824131, 2.385314, 2.149806)
+[node name="SubViewportContainer_SubViewport_World_Walls#CSGBox3D20" type="CSGBox3D" parent="pillars" index="5" unique_id=250529281]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 29.84719, 2.385314, 2.1562138)
 use_collision = true
 collision_layer = 4
-size = Vector3(2.032677, 5.8047485, 1.8213167)
-material = SubResource("ShaderMaterial_845dy")
+size = Vector3(2.0293388, 5.8047485, 1.9053011)
+material = SubResource("ShaderMaterial_vvoq0")
 
-[node name="SubViewportContainer_SubViewport_World_Walls#CSGBox3D9" type="CSGBox3D" parent="pillars" index="6" unique_id=433396667]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 29.824131, 2.385314, 19.932375)
+[node name="SubViewportContainer_SubViewport_World_Walls#CSGBox3D19" type="CSGBox3D" parent="pillars" index="6" unique_id=1494929791]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 20.174522, 2.385314, 10.918009)
 use_collision = true
 collision_layer = 4
-size = Vector3(2.032677, 5.8047485, 1.8213167)
-material = SubResource("ShaderMaterial_845dy")
+size = Vector3(2.0293388, 5.8047485, 1.9053011)
+material = SubResource("ShaderMaterial_vvoq0")
 
-[node name="SubViewportContainer_SubViewport_World_Walls#CSGBox3D8" type="CSGBox3D" parent="pillars" index="7" unique_id=425451442]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 20.175745, 2.385314, 28.711184)
+[node name="SubViewportContainer_SubViewport_World_Walls#CSGBox3D16" type="CSGBox3D" parent="pillars" index="7" unique_id=1776976625]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 29.84719, 2.385314, 28.669191)
 use_collision = true
 collision_layer = 4
-size = Vector3(2.032677, 5.8047485, 1.8213167)
-material = SubResource("ShaderMaterial_845dy")
+size = Vector3(2.0293388, 5.8047485, 1.9053011)
+material = SubResource("ShaderMaterial_vvoq0")
 
 [editable path="SubViewportContainer/SubViewport/World/Enemies/Enemy7"]
