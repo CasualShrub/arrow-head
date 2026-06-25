@@ -84,7 +84,7 @@ const _PLAYER_TEAM = Arrow.Team.PLAYER
 @export var burn_duration := 2.5
 @export var freeze_duration := 2.0
 @export var burn_spin_speed := 24.0
-@export var burn_drift_speed := 240.0
+@export var burn_drift_speed := 7.2  # 2D 240 px/s = 1.2x move speed; 1.2 * 6.0 m/s
 @export var burn_redrift := 0.14  # avg time between random drift-direction changes (lurching)
 
 @export_group("death")
@@ -245,13 +245,12 @@ func get_hit(arrow: Arrow) -> void:
 		arrow.deactivate()
 		return
 	var sector := sectors.get_sector_from_position(arrow.global_position)
-	var correct := is_correct_catch(arrow, sector)
 	if try_embed_arrow(arrow, sector):
 		arrow.stick(_arrows, arrow_dig_depth)
 		SoundManager.play("Q%d_fill" % clampi(sector + 1, 1, 4))
 		SoundManager.play("apple_damage1" if arrow.kind != Arrow.Kind.NORMAL else "apple_damage2")
-		if not correct:
-			_apply_debuff(arrow.kind)
+		if arrow.kind != Arrow.Kind.NORMAL:
+			_apply_debuff(arrow.kind)  # any special-arrow hit triggers its effect immediately
 	else:
 		arrow.queue_free()
 		die()
