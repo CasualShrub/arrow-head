@@ -2,11 +2,9 @@
 
 [ext_resource type="Script" uid="uid://cm3vh4qq01y8d" path="res://scripts/encounter.gd" id="1_7lq1q"]
 [ext_resource type="PackedScene" uid="uid://boryk37cbh1nx" path="res://scenes/player.tscn" id="2_k7ae3"]
-[ext_resource type="Texture2D" uid="uid://cp4cnsely21gy" path="res://art/player/eye_normal.png" id="3_xe1k1"]
-[ext_resource type="Texture2D" uid="uid://ddhrf02nv342f" path="res://art/player/eyes_lowHP.png" id="4_3ffim"]
-[ext_resource type="Texture2D" uid="uid://bxkglylm44xg" path="res://art/player/eyes_hit.png" id="5_ooki2"]
+[ext_resource type="PackedScene" uid="uid://dmrt7ufpmohhh" path="res://scenes/enemies/enemy_fire_line.tscn" id="5_b1k5i"]
+[ext_resource type="PackedScene" uid="uid://sxe0iltyolnn" path="res://scenes/enemies/enemy_frost_spray.tscn" id="6_h01yr"]
 [ext_resource type="Script" uid="uid://doms8x46cr1tt" path="res://scripts/camera.gd" id="6_homoq"]
-[ext_resource type="PackedScene" uid="uid://b8rs35o7f45v0" path="res://scenes/enemies/enemy.tscn" id="7_nqiib"]
 [ext_resource type="Shader" uid="uid://dnw37cynwb7od" path="res://shaders/screen_effect.gdshader" id="8_1is2e"]
 
 [sub_resource type="Environment" id="Environment_ub6uw"]
@@ -39,10 +37,6 @@ render_target_update_mode = 4
 [node name="Player" parent="SubViewportContainer/SubViewport/World" unique_id=508579643 instance=ExtResource("2_k7ae3")]
 unique_name_in_owner = true
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9.771292, 0, 40.352577)
-motion_mode = 1
-eyes_normal = ExtResource("3_xe1k1")
-eyes_lowhp = ExtResource("4_3ffim")
-eyes_hit = ExtResource("5_ooki2")
 
 [node name="CameraPivot" type="Node3D" parent="SubViewportContainer/SubViewport/World" unique_id=1563753267 node_paths=PackedStringArray("player")]
 transform = Transform3D(1, 0, 0, 0, -4.371139e-08, 1, 0, -1, -4.371139e-08, 9.771292, 3.7000048, 40.352577)
@@ -54,22 +48,6 @@ unique_name_in_owner = true
 
 [node name="Enemies" type="Node3D" parent="SubViewportContainer/SubViewport/World" unique_id=1185931971]
 unique_name_in_owner = true
-
-[node name="Enemy3" parent="SubViewportContainer/SubViewport/World/Enemies" unique_id=1744938994 instance=ExtResource("7_nqiib")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 19.264427, 0, 28.257896)
-motion_mode = 1
-
-[node name="Enemy6" parent="SubViewportContainer/SubViewport/World/Enemies" unique_id=71488470 instance=ExtResource("7_nqiib")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.990921, 0, -13.670295)
-motion_mode = 1
-
-[node name="Enemy5" parent="SubViewportContainer/SubViewport/World/Enemies" unique_id=415906347 instance=ExtResource("7_nqiib")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.990921, 0, 13.731783)
-motion_mode = 1
-
-[node name="Enemy4" parent="SubViewportContainer/SubViewport/World/Enemies" unique_id=38761330 instance=ExtResource("7_nqiib")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 18.200464, 0, -0.37492418)
-motion_mode = 1
 
 [node name="CSGBox3D" type="CSGBox3D" parent="SubViewportContainer/SubViewport/World" unique_id=1674034061]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.7, 0)
@@ -170,3 +148,15 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+
+[node name="Enemy" parent="." unique_id=1539839590 instance=ExtResource("5_b1k5i")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 18.529144, 0, 28.829779)
+
+[node name="Enemy2" parent="." unique_id=80529919 instance=ExtResource("5_b1k5i")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 18.529144, 0, 0.35152578)
+
+[node name="Enemy3" parent="." unique_id=2084625640 instance=ExtResource("6_h01yr")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.017019, 0, -13.1224)
+
+[node name="Enemy4" parent="." unique_id=1652105953 instance=ExtResource("6_h01yr")]
+transform = Transform3D(0.99990857, -0.013521056, 0, 0.013521056, 0.99990857, 0, 0, 0, 1, 5.0766606, 0, 14.189507)

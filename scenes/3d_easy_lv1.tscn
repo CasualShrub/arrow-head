@@ -2,9 +2,6 @@
 
 [ext_resource type="Script" uid="uid://cm3vh4qq01y8d" path="res://scripts/encounter.gd" id="1_y4755"]
 [ext_resource type="PackedScene" uid="uid://boryk37cbh1nx" path="res://scenes/player.tscn" id="2_x2dqx"]
-[ext_resource type="Texture2D" uid="uid://cp4cnsely21gy" path="res://art/player/eye_normal.png" id="3_d2h53"]
-[ext_resource type="Texture2D" uid="uid://ddhrf02nv342f" path="res://art/player/eyes_lowHP.png" id="4_lfaqb"]
-[ext_resource type="Texture2D" uid="uid://bxkglylm44xg" path="res://art/player/eyes_hit.png" id="5_hl5wf"]
 [ext_resource type="Script" uid="uid://doms8x46cr1tt" path="res://scripts/camera.gd" id="6_ky10n"]
 [ext_resource type="PackedScene" uid="uid://b8rs35o7f45v0" path="res://scenes/enemies/enemy.tscn" id="7_voftd"]
 [ext_resource type="Shader" uid="uid://dnw37cynwb7od" path="res://shaders/screen_effect.gdshader" id="8_7xbk3"]
@@ -39,10 +36,6 @@ render_target_update_mode = 4
 [node name="Player" parent="SubViewportContainer/SubViewport/World" unique_id=508579643 instance=ExtResource("2_x2dqx")]
 unique_name_in_owner = true
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 13.46966, 0, 28.179314)
-motion_mode = 1
-eyes_normal = ExtResource("3_d2h53")
-eyes_lowhp = ExtResource("4_lfaqb")
-eyes_hit = ExtResource("5_hl5wf")
 
 [node name="CameraPivot" type="Node3D" parent="SubViewportContainer/SubViewport/World" unique_id=1563753267 node_paths=PackedStringArray("player")]
 transform = Transform3D(1, 0, 0, 0, -4.371139e-08, 1, 0, -1, -4.371139e-08, 13.46966, 3.7000048, 28.179314)
@@ -57,11 +50,9 @@ unique_name_in_owner = true
 
 [node name="Enemy3" parent="SubViewportContainer/SubViewport/World/Enemies" unique_id=630897354 instance=ExtResource("7_voftd")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 30.71182, 0, 19.467003)
-motion_mode = 1
 
 [node name="Enemy4" parent="SubViewportContainer/SubViewport/World/Enemies" unique_id=750764712 instance=ExtResource("7_voftd")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8.604066, 0, 20.59574)
-motion_mode = 1
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 13.623844, 0, 20.59574)
 
 [node name="CSGBox3D" type="CSGBox3D" parent="SubViewportContainer/SubViewport/World" unique_id=1674034061]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.7, 0)

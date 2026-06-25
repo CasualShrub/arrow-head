@@ -2,11 +2,9 @@
 
 [ext_resource type="Script" uid="uid://cm3vh4qq01y8d" path="res://scripts/encounter.gd" id="1_og5y1"]
 [ext_resource type="PackedScene" uid="uid://boryk37cbh1nx" path="res://scenes/player.tscn" id="2_ipnpg"]
-[ext_resource type="Texture2D" uid="uid://cp4cnsely21gy" path="res://art/player/eye_normal.png" id="3_xvah5"]
-[ext_resource type="Texture2D" uid="uid://ddhrf02nv342f" path="res://art/player/eyes_lowHP.png" id="4_p82r1"]
-[ext_resource type="Texture2D" uid="uid://bxkglylm44xg" path="res://art/player/eyes_hit.png" id="5_2fcg3"]
+[ext_resource type="PackedScene" uid="uid://5cy7tvfvxnyw" path="res://scenes/enemies/enemy_frost.tscn" id="5_5jfja"]
 [ext_resource type="Script" uid="uid://doms8x46cr1tt" path="res://scripts/camera.gd" id="6_7k8aw"]
-[ext_resource type="PackedScene" uid="uid://b8rs35o7f45v0" path="res://scenes/enemies/enemy.tscn" id="7_qrtop"]
+[ext_resource type="PackedScene" uid="uid://dwun4epe1ljmt" path="res://scenes/enemies/enemy_fire.tscn" id="6_058e1"]
 [ext_resource type="Shader" uid="uid://dnw37cynwb7od" path="res://shaders/screen_effect.gdshader" id="8_xnx11"]
 
 [sub_resource type="Environment" id="Environment_ub6uw"]
@@ -39,10 +37,6 @@ render_target_update_mode = 4
 [node name="Player" parent="SubViewportContainer/SubViewport/World" unique_id=508579643 instance=ExtResource("2_ipnpg")]
 unique_name_in_owner = true
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 13.46966, 0, 28.179314)
-motion_mode = 1
-eyes_normal = ExtResource("3_xvah5")
-eyes_lowhp = ExtResource("4_p82r1")
-eyes_hit = ExtResource("5_2fcg3")
 
 [node name="CameraPivot" type="Node3D" parent="SubViewportContainer/SubViewport/World" unique_id=1563753267 node_paths=PackedStringArray("player")]
 transform = Transform3D(1, 0, 0, 0, -4.371139e-08, 1, 0, -1, -4.371139e-08, 13.46966, 3.7000048, 28.179314)
@@ -54,18 +48,6 @@ unique_name_in_owner = true
 
 [node name="Enemies" type="Node3D" parent="SubViewportContainer/SubViewport/World" unique_id=1185931971]
 unique_name_in_owner = true
-
-[node name="Enemy3" parent="SubViewportContainer/SubViewport/World/Enemies" unique_id=630897354 instance=ExtResource("7_qrtop")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 14.242153, 0, 23.79559)
-motion_mode = 1
-
-[node name="Enemy5" parent="SubViewportContainer/SubViewport/World/Enemies" unique_id=71488470 instance=ExtResource("7_qrtop")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 19.007671, 0, 12.983059)
-motion_mode = 1
-
-[node name="Enemy4" parent="SubViewportContainer/SubViewport/World/Enemies" unique_id=750764712 instance=ExtResource("7_qrtop")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11.169136, 0, 12.713102)
-motion_mode = 1
 
 [node name="CSGBox3D" type="CSGBox3D" parent="SubViewportContainer/SubViewport/World" unique_id=1674034061]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.7, 0)
@@ -87,6 +69,30 @@ size = Vector3(0.95706844, 2.5149536, 7.152776)
 
 [node name="CSGBox3D10" type="CSGBox3D" parent="SubViewportContainer/SubViewport/World/Node3D" unique_id=179234881]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11.65624, -0.20848751, 13.922379)
+use_collision = true
+collision_layer = 4
+size = Vector3(1.1519351, 1.5171204, 1.1099944)
+
+[node name="CSGBox3D15" type="CSGBox3D" parent="SubViewportContainer/SubViewport/World/Node3D" unique_id=1304684220]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 13.551626, -0.20848751, 11.734825)
+use_collision = true
+collision_layer = 4
+size = Vector3(1.1519351, 1.5171204, 1.1099944)
+
+[node name="CSGBox3D12" type="CSGBox3D" parent="SubViewportContainer/SubViewport/World/Node3D" unique_id=1934675480]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9.233245, -0.20848751, 16.333855)
+use_collision = true
+collision_layer = 4
+size = Vector3(1.1519351, 1.5171204, 1.1099944)
+
+[node name="CSGBox3D13" type="CSGBox3D" parent="SubViewportContainer/SubViewport/World/Node3D" unique_id=883450875]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 14.197991, -0.20848751, 15.469507)
+use_collision = true
+collision_layer = 4
+size = Vector3(1.1519351, 1.5171204, 1.1099944)
+
+[node name="CSGBox3D14" type="CSGBox3D" parent="SubViewportContainer/SubViewport/World/Node3D" unique_id=1371338834]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9.419814, -0.20848751, 12.914433)
 use_collision = true
 collision_layer = 4
 size = Vector3(1.1519351, 1.5171204, 1.1099944)
@@ -142,3 +148,15 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+
+[node name="Enemy" parent="." unique_id=2084625640 instance=ExtResource("5_5jfja")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 18.11281, 0, 24.204578)
+
+[node name="Enemy2" parent="." unique_id=1539839590 instance=ExtResource("6_058e1")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11.08051, 0, 12.808433)
+
+[node name="Enemy3" parent="." unique_id=848074188 instance=ExtResource("6_058e1")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 18.444702, 0, 16.172142)
+
+[node name="Enemy4" parent="." unique_id=1200843735 instance=ExtResource("5_5jfja")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12.726601, 0, 21.048948)

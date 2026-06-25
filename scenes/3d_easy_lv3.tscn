@@ -2,11 +2,18 @@
 
 [ext_resource type="Script" uid="uid://cm3vh4qq01y8d" path="res://scripts/encounter.gd" id="1_j4vk1"]
 [ext_resource type="PackedScene" uid="uid://boryk37cbh1nx" path="res://scenes/player.tscn" id="2_yldd5"]
-[ext_resource type="Texture2D" uid="uid://cp4cnsely21gy" path="res://art/player/eye_normal.png" id="3_88q50"]
-[ext_resource type="Texture2D" uid="uid://ddhrf02nv342f" path="res://art/player/eyes_lowHP.png" id="4_fwrhn"]
-[ext_resource type="Texture2D" uid="uid://bxkglylm44xg" path="res://art/player/eyes_hit.png" id="5_ns7id"]
+<<<<<<< Updated upstream
+[ext_resource type="PackedScene" uid="uid://lmcxud0k7w51" path="res://scenes/enemies/enemy_archer.tscn" id="5_qx15p"]
 [ext_resource type="Script" uid="uid://doms8x46cr1tt" path="res://scripts/camera.gd" id="6_olrh1"]
+[ext_resource type="PackedScene" uid="uid://b7xvltf5sfgso" path="res://scenes/enemies/enemy_spray.tscn" id="6_pyem4"]
+=======
+[ext_resource type="PackedScene" uid="uid://tmhabgv3ovyb" path="res://scenes/enemies/enemy_archer.tscn" id="5_qx15p"]
+[ext_resource type="Script" uid="uid://doms8x46cr1tt" path="res://scripts/camera.gd" id="6_olrh1"]
+[ext_resource type="PackedScene" uid="uid://b7xvltf5sfgso" path="res://scenes/enemies/enemy_spray.tscn" id="7_j4vk1"]
+>>>>>>> Stashed changes
 [ext_resource type="PackedScene" uid="uid://b8rs35o7f45v0" path="res://scenes/enemies/enemy.tscn" id="7_lbbok"]
+[ext_resource type="PackedScene" uid="uid://dwun4epe1ljmt" path="res://scenes/enemies/enemy_fire.tscn" id="7_yldd5"]
+[ext_resource type="PackedScene" uid="uid://5cy7tvfvxnyw" path="res://scenes/enemies/enemy_frost.tscn" id="8_88q50"]
 [ext_resource type="Shader" uid="uid://dnw37cynwb7od" path="res://shaders/screen_effect.gdshader" id="8_wm0ek"]
 
 [sub_resource type="Environment" id="Environment_ub6uw"]
@@ -39,10 +46,6 @@ render_target_update_mode = 4
 [node name="Player" parent="SubViewportContainer/SubViewport/World" unique_id=508579643 instance=ExtResource("2_yldd5")]
 unique_name_in_owner = true
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 13.46966, 0, 28.179314)
-motion_mode = 1
-eyes_normal = ExtResource("3_88q50")
-eyes_lowhp = ExtResource("4_fwrhn")
-eyes_hit = ExtResource("5_ns7id")
 
 [node name="CameraPivot" type="Node3D" parent="SubViewportContainer/SubViewport/World" unique_id=1563753267 node_paths=PackedStringArray("player")]
 transform = Transform3D(1, 0, 0, 0, -4.371139e-08, 1, 0, -1, -4.371139e-08, 13.46966, 3.7000048, 28.179314)
@@ -55,17 +58,41 @@ unique_name_in_owner = true
 [node name="Enemies" type="Node3D" parent="SubViewportContainer/SubViewport/World" unique_id=1185931971]
 unique_name_in_owner = true
 
-[node name="Enemy" parent="SubViewportContainer/SubViewport/World/Enemies" unique_id=71488470 instance=ExtResource("7_lbbok")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 17.413855, 0, 25.826952)
-
+<<<<<<< Updated upstream
 [node name="Enemy2" parent="SubViewportContainer/SubViewport/World/Enemies" unique_id=439785030 instance=ExtResource("7_lbbok")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 18.939596, 0, 22.045444)
 
 [node name="Enemy3" parent="SubViewportContainer/SubViewport/World/Enemies" unique_id=1273046002 instance=ExtResource("7_lbbok")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 18.939596, 0, 19.34893)
 
+=======
+>>>>>>> Stashed changes
 [node name="Enemy4" parent="SubViewportContainer/SubViewport/World/Enemies" unique_id=1502691408 instance=ExtResource("7_lbbok")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 18.939596, 0, 15.234777)
+
+[node name="Enemy" parent="SubViewportContainer/SubViewport/World/Enemies" unique_id=71488470 instance=ExtResource("5_qx15p")]
+<<<<<<< Updated upstream
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11.605685, -0.17250526, 21.151106)
+
+[node name="Enemy5" parent="SubViewportContainer/SubViewport/World/Enemies" unique_id=532402862 instance=ExtResource("5_qx15p")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 13.368541, -0.17250526, 18.33918)
+=======
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11.64944, -0.12381327, 21.271729)
+
+[node name="spray" parent="SubViewportContainer/SubViewport/World/Enemies" unique_id=1359746656 instance=ExtResource("7_j4vk1")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 18.31089, 4.7683716e-07, 26.836933)
+
+[node name="fire" parent="SubViewportContainer/SubViewport/World/Enemies" unique_id=1539839590 instance=ExtResource("7_yldd5")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 19.109768, 0, 19.439756)
+
+[node name="frosts" type="Node3D" parent="SubViewportContainer/SubViewport/World/Enemies" unique_id=904320746]
+
+[node name="Enemy6" parent="SubViewportContainer/SubViewport/World/Enemies/frosts" unique_id=2084625640 instance=ExtResource("8_88q50")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 19.03982, 0, 22.09745)
+
+[node name="Enemy3" parent="SubViewportContainer/SubViewport/World/Enemies/frosts" unique_id=374201628 instance=ExtResource("8_88q50")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 13.687016, 0, 18.205462)
+>>>>>>> Stashed changes
 
 [node name="CSGBox3D" type="CSGBox3D" parent="SubViewportContainer/SubViewport/World" unique_id=1674034061]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.7, 0)
@@ -109,6 +136,30 @@ use_collision = true
 collision_layer = 4
 size = Vector3(8.676065, 2.5149536, 1.1099944)
 
+[node name="CSGBox3D10" type="CSGBox3D" parent="SubViewportContainer/SubViewport/World/Node3D" unique_id=1769366737]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11.589659, 0.29042912, 22.299036)
+use_collision = true
+collision_layer = 4
+size = Vector3(2.904439, 2.5149536, 0.23175502)
+
+[node name="CSGBox3D19" type="CSGBox3D" parent="SubViewportContainer/SubViewport/World/Node3D" unique_id=594935342]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 16.05588, 0.29042912, 27.430456)
+use_collision = true
+collision_layer = 4
+size = Vector3(2.904439, 2.5149536, 0.23175502)
+
+[node name="CSGBox3D20" type="CSGBox3D" parent="SubViewportContainer/SubViewport/World/Node3D" unique_id=1220442368]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 17.35743, 0.29042912, 28.562218)
+use_collision = true
+collision_layer = 4
+size = Vector3(0.30134058, 2.5149536, 2.5339742)
+
+[node name="CSGBox3D13" type="CSGBox3D" parent="SubViewportContainer/SubViewport/World/Node3D" unique_id=2101994726]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 14.045609, 0.29042912, 19.412537)
+use_collision = true
+collision_layer = 4
+size = Vector3(2.904439, 2.5149536, 0.23175502)
+
 [node name="CSGBox3D15" type="CSGBox3D" parent="SubViewportContainer/SubViewport/World/Node3D" unique_id=690956976]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 18.867203, 0.29042912, 17.843214)
 use_collision = true
@@ -126,6 +177,30 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 20.235926, 0.29042912, 20.966
 use_collision = true
 collision_layer = 4
 size = Vector3(5.9386187, 2.5149536, 0.2885177)
+
+[node name="CSGBox3D19" type="CSGBox3D" parent="SubViewportContainer/SubViewport/World/Node3D" unique_id=44592995]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11.299995, 0.29042912, 22.293692)
+use_collision = true
+collision_layer = 4
+size = Vector3(2.645055, 2.5149536, 0.2885177)
+
+[node name="CSGBox3D21" type="CSGBox3D" parent="SubViewportContainer/SubViewport/World/Node3D" unique_id=1763784561]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 17.562822, 0.29042912, 28.54002)
+use_collision = true
+collision_layer = 4
+size = Vector3(0.255633, 2.5149536, 1.8600886)
+
+[node name="CSGBox3D22" type="CSGBox3D" parent="SubViewportContainer/SubViewport/World/Node3D" unique_id=1526791432]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 16.384117, 0.29042912, 27.623629)
+use_collision = true
+collision_layer = 4
+size = Vector3(2.5828574, 2.5149536, 0.33079177)
+
+[node name="CSGBox3D20" type="CSGBox3D" parent="SubViewportContainer/SubViewport/World/Node3D" unique_id=474203989]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 14.045849, 0.29042912, 19.305796)
+use_collision = true
+collision_layer = 4
+size = Vector3(2.645055, 2.5149536, 0.2885177)
 
 [node name="Walls" type="Node3D" parent="SubViewportContainer/SubViewport/World" unique_id=2116843859]
 
@@ -172,3 +247,6 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+
+[node name="Enemy" parent="." unique_id=598042529 instance=ExtResource("6_pyem4")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 18.181541, 0, 26.934948)
