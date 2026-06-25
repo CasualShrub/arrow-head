@@ -2,11 +2,71 @@
 
 [ext_resource type="PackedScene" uid="uid://b8rs35o7f45v0" path="res://scenes/enemies/enemy.tscn" id="1_u24cr"]
 [ext_resource type="SpriteFrames" uid="uid://dm8flmwcygw4c" path="res://sprite_frames/dragonfruit_frames.tres" id="2_b3sqf"]
+[ext_resource type="Script" uid="uid://d04k7pxjd2u24" path="res://scripts/arrow_pattern.gd" id="2_cghyj"]
+[ext_resource type="Script" uid="uid://r4qbgt6it8lb" path="res://scripts/firing_instance.gd" id="3_kt87t"]
+[ext_resource type="PackedScene" uid="uid://dibxktof00en3" path="res://scenes/arrows/arrow_weak.tscn" id="4_3hhx2"]
+[ext_resource type="PackedScene" uid="uid://byh737vkctruq" path="res://scenes/arrows/arrow_fire.tscn" id="5_3hhx2"]
+[ext_resource type="PackedScene" uid="uid://5ljerioubp6c" path="res://scenes/arrows/arrow_frost.tscn" id="6_e5ay6"]
+
+[sub_resource type="Resource" id="Resource_e5ay6"]
+script = ExtResource("3_kt87t")
+type = ExtResource("4_3hhx2")
+instance_delay = 0.1
+count = 20
+max_count = 25
+spread = 3.14
+max_spread = 3.14
+metadata/_custom_type_script = "uid://r4qbgt6it8lb"
+
+[sub_resource type="Resource" id="Resource_1585h"]
+script = ExtResource("2_cghyj")
+recovery = 1.0
+instances = Array[ExtResource("3_kt87t")]([SubResource("Resource_e5ay6")])
+metadata/_custom_type_script = "uid://d04k7pxjd2u24"
+
+[sub_resource type="Resource" id="Resource_q8c7o"]
+script = ExtResource("3_kt87t")
+type = ExtResource("4_3hhx2")
+instance_delay = 0.05
+count = 5
+max_count = 10
+offset = -0.4995926535897901
+max_offset = 0.7504073464102099
+individual_offset = true
+metadata/_custom_type_script = "uid://r4qbgt6it8lb"
+
+[sub_resource type="Resource" id="Resource_o6djv"]
+script = ExtResource("2_cghyj")
+recovery = 1.0
+instances = Array[ExtResource("3_kt87t")]([SubResource("Resource_q8c7o")])
+metadata/_custom_type_script = "uid://d04k7pxjd2u24"
+
+[sub_resource type="Resource" id="Resource_mjiwy"]
+script = ExtResource("3_kt87t")
+type = ExtResource("5_3hhx2")
+count = 10
+spread = 6.28318530717959
+offset = 0.31440734641020995
+metadata/_custom_type_script = "uid://r4qbgt6it8lb"
+
+[sub_resource type="Resource" id="Resource_vnqk6"]
+script = ExtResource("3_kt87t")
+type = ExtResource("6_e5ay6")
+count = 10
+spread = 6.28318530717959
+metadata/_custom_type_script = "uid://r4qbgt6it8lb"
+
+[sub_resource type="Resource" id="Resource_54hkm"]
+script = ExtResource("2_cghyj")
+recovery = 1.5
+instances = Array[ExtResource("3_kt87t")]([SubResource("Resource_mjiwy"), SubResource("Resource_vnqk6")])
+metadata/_custom_type_script = "uid://d04k7pxjd2u24"
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_u24cr"]
 radius = 0.8
 
 [node name="Enemy" unique_id=71488470 instance=ExtResource("1_u24cr")]
+patterns = Array[ExtResource("2_cghyj")]([SubResource("Resource_1585h"), SubResource("Resource_o6djv"), SubResource("Resource_54hkm")])
 
 [node name="Collider" parent="." index="0" unique_id=1742085930]
 shape = SubResource("SphereShape3D_u24cr")
