@@ -10,6 +10,15 @@ extends Node
 
 const _POOL_SIZE := 12
 const _BUS := "SFX"
+const _MUSIC_BUS := "Music"
+const DEFAULT_MUSIC := "Lvl_1"
+
+const MUSIC := {
+	"Lvl_1": preload("res://assets/audio/music/Lvl_1.wav"),
+	"Lvl_2_3": preload("res://assets/audio/music/Lvl_2&3.wav"),
+	"Lvl_4_5": preload("res://assets/audio/music/Lvl_4&5.wav"),
+	"Lvl_6_7": preload("res://assets/audio/music/Lvl_6&7.wav"),
+}
 
 # event key -> stream. keys are the .wav basenames.
 const SOUNDS := {
@@ -49,6 +58,7 @@ const BASE_VOLUMES := {
 var _pool: Array[AudioStreamPlayer] = []
 var _next := 0
 var _overrides := {}  # key -> dB, per-scenario runtime trim on top of BASE_VOLUMES
+var _music: AudioStreamPlayer
 
 func _ready() -> void:
 	for i in _POOL_SIZE:
@@ -56,6 +66,25 @@ func _ready() -> void:
 		p.bus = _BUS
 		add_child(p)
 		_pool.append(p)
+	_music = AudioStreamPlayer.new()
+	_music.bus = _MUSIC_BUS
+	add_child(_music)
+	_music.finished.connect(func(): _music.play())
+	play_music(DEFAULT_MUSIC)
+
+func play_music(key: String) -> void:
+	var stream: AudioStream = MUSIC.get(key)
+	if stream == null:
+		push_warning("bruh")
+		return
+	if _music.stream == stream and _music.playing:
+		return
+	_music.stream = stream
+	_music.play()
+
+func stop_music() -> void:
+	if _music:
+		_music.stop()
 
 # fling a one-shot effect. volume_db nudges this single play; pitch_var > 0 jitters
 # pitch +/- that amount so rapidly-repeated sounds (fills, bounces) don't fatigue.
@@ -64,7 +93,7 @@ func play(key: String, volume_db := 0.0, pitch_var := 0.0) -> void:
 		return  # called before _ready built the pool — drop it rather than crash
 	var stream: AudioStream = SOUNDS.get(key)
 	if stream == null:
-		push_warning("SoundManager: unknown sfx '%s'" % key)
+		push_warning("bruh no music")
 		return
 	var player := _take_player()
 	player.stream = stream
