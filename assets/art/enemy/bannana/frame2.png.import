@@ -2,8 +2,8 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://6w7p3hufm0km"
-path.s3tc="res://.godot/imported/frame3.png-ab1ae7674fc96e290d3c08023e1e74e9.s3tc.ctex"
+uid="uid://bmqcjg05r8j1e"
+path.s3tc="res://.godot/imported/frame2.png-eb998db3146f84423d671075ef7857e4.s3tc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
@@ -11,8 +11,8 @@ metadata={
 
 [deps]
 
-source_file="res://assets/art/enemy/frame3.png"
-dest_files=["res://.godot/imported/frame3.png-ab1ae7674fc96e290d3c08023e1e74e9.s3tc.ctex"]
+source_file="res://assets/art/enemy/bannana/frame2.png"
+dest_files=["res://.godot/imported/frame2.png-eb998db3146f84423d671075ef7857e4.s3tc.ctex"]
 
 [params]
 

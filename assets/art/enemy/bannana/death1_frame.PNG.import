@@ -2,8 +2,8 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://cdmjg1osh8iqw"
-path.s3tc="res://.godot/imported/death3_frame.PNG-42e1d391f4fedc600ca4cf89adefd710.s3tc.ctex"
+uid="uid://bh6pj83dm5i84"
+path.s3tc="res://.godot/imported/death1_frame.PNG-8f18942f6d1d4870ae79184abb41a9fa.s3tc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
@@ -11,8 +11,8 @@ metadata={
 
 [deps]
 
-source_file="res://assets/art/enemy/death3_frame.PNG"
-dest_files=["res://.godot/imported/death3_frame.PNG-42e1d391f4fedc600ca4cf89adefd710.s3tc.ctex"]
+source_file="res://assets/art/enemy/bannana/death1_frame.PNG"
+dest_files=["res://.godot/imported/death1_frame.PNG-8f18942f6d1d4870ae79184abb41a9fa.s3tc.ctex"]
 
 [params]
 

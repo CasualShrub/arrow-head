@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://dc0jaxflx7uj5"
-path="res://.godot/imported/stretch_hit.PNG-252bfef0f3897d428fb527e944b8eab1.ctex"
+uid="uid://dlfvmpjluvq6a"
+path="res://.godot/imported/eye_down.png-8906a08264fcaf4a6eab7e980c20e043.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/art/enemy/stretch_hit.PNG"
-dest_files=["res://.godot/imported/stretch_hit.PNG-252bfef0f3897d428fb527e944b8eab1.ctex"]
+source_file="res://assets/art/player/eye_down.png"
+dest_files=["res://.godot/imported/eye_down.png-8906a08264fcaf4a6eab7e980c20e043.ctex"]
 
 [params]
 
