@@ -17,6 +17,7 @@ class_name SectorsComponent
 		scale.x = value * 2
 		scale.y = value * 2
 		radius = value
+@export var relative_aim := false
 
 signal changed
 
@@ -32,6 +33,14 @@ var _stored := []
 
 func get_sector_size() -> float:
 	return TAU / sector_count
+
+func get_sector_center(sector: int) -> float:
+	var sector_size := get_sector_size()
+	var center := sector_size * -sector
+	#if centered:
+	#	center -= sector_size / 2
+	center = fposmod(center, TAU)
+	return center
 
 func get_sector_from_angle(angle: float) -> int:
 	var sector_size := get_sector_size()
@@ -65,10 +74,23 @@ func get_sector_from_position(pos: Vector3) -> int:
 
 func get_sector_from_movement(dir: Vector2) -> int:
 	if dir == Vector2.ZERO: return 0
-	var v := global_position
-	v.x += dir.x
-	v.z += dir.y
-	return get_sector_from_position(v)
+	if relative_aim:
+		var v := global_position
+		v.x += dir.x
+		v.z += dir.y
+		return get_sector_from_position(v)
+	else:
+		if dir.y < 0:
+			return 0
+		elif dir.y > 0:
+			return 2
+		else:
+			if dir.x > 0:
+				return 1
+			elif dir.x < 0:
+				return 3
+			else:
+				return -1
 
 func _stored_is_ref(stored: Variant) -> bool:
 	return stored is int

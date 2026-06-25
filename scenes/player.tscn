@@ -32,9 +32,9 @@ script = ExtResource("1_3vyb7")
 input = NodePath("Input")
 health = NodePath("Health")
 sectors = NodePath("Sectors")
-sector_count = 4
-sector_centered = true
-sector_radius = 0.5
+dash_time = 0.2
+eyes_lowhp = 0.36
+eyes_hit_time = Array[int]([1, 2, 1, 2])
 
 [node name="Collider" type="CollisionShape3D" parent="." unique_id=1401584448]
 unique_name_in_owner = true
@@ -64,10 +64,22 @@ double_sided = false
 texture = ExtResource("4_dqkch")
 
 [node name="Sectors" type="MeshInstance3D" parent="." unique_id=9603647]
-transform = Transform3D(-0.70710677, -0.70710677, -3.090862e-08, 0, -4.371139e-08, 1, -0.70710677, 0.70710677, 3.090862e-08, 0, 0.0095798075, 0)
+transform = Transform3D(-0.70710677, -0.70710677, -3.090862e-08, 0, -4.371139e-08, 1, -0.70710677, 0.70710677, 3.090862e-08, 0, 0.015167683, 0)
 material_override = SubResource("ShaderMaterial_fjrip")
 mesh = SubResource("QuadMesh_ub6uw")
 script = ExtResource("6_tuyoq")
+relative_aim = true
+
+[node name="Eyes" type="Sprite3D" parent="." unique_id=1271957415]
+unique_name_in_owner = true
+transform = Transform3D(0.2, 0, 0, 0, -8.742278e-09, 0.2, 0, -0.2, -8.742278e-09, 0, 0.005001202, 0)
+double_sided = false
+texture = ExtResource("4_dqkch")
+
+[node name="Dashing" type="Timer" parent="." unique_id=1626444411]
+unique_name_in_owner = true
+wait_time = 0.05
+one_shot = true
 
 [connection signal="changed" from="Sectors" to="." method="_on_sectors_changed"]
 [connection signal="changed" from="Sectors" to="Sectors" method="_on_changed"]

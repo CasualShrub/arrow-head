@@ -10,6 +10,7 @@ const _PLAYER_TEAM = Arrow.Team.PLAYER
 
 @onready var _camera: Camera3D = %Camera
 @onready var _recovery: Timer = %Recovery
+@onready var _dashing: Timer = %Dashing
 @onready var _sprite: Sprite3D = %Sprite
 @onready var _collider: CollisionShape3D = %Collider
 
@@ -20,8 +21,15 @@ const _PLAYER_TEAM = Arrow.Team.PLAYER
 		if value < 0: value = 0
 		%FireDebounce.wait_time = value
 		fire_cooldown = value
-@export_group("shooting")
-@export var shoot_cooldown := 0.25
+@export_group("dashing")
+@export var dash_time: float:
+	set(value):
+		if not _dashing: return
+		_dashing.wait_time = value
+	get:
+		if not _dashing: return -1.0
+		return _dashing.wait_time
+@export var max_dash_distance := 10.0
 @export_group("hurt")
 @export var hurt_radius := 0.4:
 	set(value):
@@ -51,20 +59,11 @@ const _PLAYER_TEAM = Arrow.Team.PLAYER
 	get:
 		if not sectors: return false
 		return sectors.radius
-
 @export_group("eyes")
 @export var eyes_normal: Texture2D
 @export var eyes_lowhp: Texture2D
 @export var eyes_hit: Texture2D
 @export var eyes_hit_time := 0.36
-@export_group("sectors")
-# sector index -> the Arrow.Kind correctly caught there (size should match sector_count)
-@export var sector_kinds: Array[int] = [
-	Arrow.Kind.INCENDIARY,
-	Arrow.Kind.FROST,
-	Arrow.Kind.INCENDIARY,
-	Arrow.Kind.FROST,
-]
 @export_group("status_effects")
 @export var burn_duration := 2.5
 @export var freeze_duration := 2.0
@@ -74,13 +73,10 @@ const _PLAYER_TEAM = Arrow.Team.PLAYER
 
 signal hit(arrow: Arrow, sector: int)
 signal fired(arrow: Arrow)
-signal ammo_changed(count: int)
 signal died()
 
 var _sectors: Array[EmbeddedArrow]
-var _ammo: Array[Arrow] = []
 var _dead := false
-var _shoot_ready := true
 var _eyes_hit_showing := false
 var _burn_time := 0.0
 var _freeze_time := 0.0
@@ -88,7 +84,9 @@ var _burn_drift := Vector3.ZERO
 var _burn_redrift := 0.0
 var _burn_spin_dir := 1.0
 
-@onready var _eyes: Sprite2D = %Eyes
+var _dash_vel: Vector3
+
+@onready var _eyes: Sprite3D = %Eyes
 @onready var _arrows: Node3D = %Arrows
 
 func _update_collider(c: CollisionShape3D, r: float) -> void:
@@ -141,11 +139,6 @@ func enable_firing():
 		if embedded is EmbeddedArrow:
 			embedded.enable_firing()
 
-func kind_for_sector(sector: int) -> int:
-	if sector < 0 or sector >= sector_kinds.size():
-		return Arrow.Kind.NORMAL
-	return sector_kinds[sector]
-
 func is_correct_catch(_arrow: Arrow, _sector: int) -> bool:
 	#if arrow.kind == Arrow.Kind.NORMAL:
 	#	return true  # white wildcard: any sector accepts it
@@ -189,7 +182,7 @@ func face_mouse() -> void:
 	var look_target := Vector3(mouse_pos.x, global_position.y, mouse_pos.z)
 	look_at(look_target)
 
-func move(dir: Vector2, _dt: float) -> void:
+func _move(dir: Vector2, _dt: float) -> void:
 	var v = dir * speed
 	velocity.x = v.x
 	velocity.z = v.y
@@ -202,25 +195,42 @@ func move(dir: Vector2, _dt: float) -> void:
 	sectors.highlight_sector(selected)
 	move_and_slide()
 
-func _unhandled_input(event: InputEvent) -> void:
-	if Engine.is_editor_hint(): return
-	if is_burning(): return  # no control at all while spinning on fire
-	if event is InputEventMouseButton and event.pressed:
-		if event.button_index == MOUSE_BUTTON_RIGHT:
-			shoot()
+func is_dashing() -> bool:
+	if not _dashing: return false
+	return not _dashing.is_stopped()
 
-func fire(arrow: Arrow) -> void:
+func _dash(dir: Vector3) -> void:
+	var dir_len := dir.length()
+	if dir_len < 0.001: return
+	if dir_len > max_dash_distance:
+		dir = dir.normalized() * max_dash_distance
+	print("dir:",dir)
+	_dash_vel = dir / _dashing.wait_time
+	_dashing.start()
+
+func _try_dash() -> bool:
+	for e in sectors.get_stored():
+		if e is EmbeddedArrow: #and e.is_firing_enabled():
+			print("dashing")
+			var mouse_pos := get_mouse_world_position()
+			var mouse_offset := mouse_pos - global_position
+			_dash(mouse_offset)
+			return true
+	return false
+
+func _fire(arrow: Arrow, angle: float) -> void:
+	var fire_dir := get_facing().rotated(Vector3.UP, angle)
 	arrow.reparent(get_tree().current_scene)
-	arrow.activate(global_position, get_facing(), _PLAYER_TEAM)
+	arrow.activate(global_position, fire_dir, _PLAYER_TEAM)
 	SoundManager.play("apple_shooting")
 
-func try_fire(sector: int) -> void:
+func _try_fire(sector: int) -> void:
 	print("trying to fire")
 	if not _recovery.is_stopped(): return
 	var embedded = sectors.take_stored(sector) as EmbeddedArrow
 	if not embedded: return
 	var arrow := embedded.grab()
-	fire(arrow)
+	_fire(arrow, sectors.get_sector_center(sector))
 	fired.emit(arrow)
 
 # status effects from mis-caught special arrows
@@ -247,26 +257,6 @@ func _update_status_tint() -> void:
 	else:
 		_sprite.modulate = Color.WHITE
 
-# right-click: fling one stored arrow back toward the mouse as a player-team projectile
-func shoot() -> void:
-	if not _shoot_ready:
-		return
-	while not _ammo.is_empty() and not is_instance_valid(_ammo[-1]):
-		_ammo.pop_back()  # discard any pooled arrow that got freed out from under us
-	if _ammo.is_empty():
-		ammo_changed.emit(_ammo.size())
-		return
-	var arrow: Arrow = _ammo.pop_back()
-	_shoot_ready = false
-	get_tree().create_timer(shoot_cooldown).timeout.connect(func(): _shoot_ready = true)
-	arrow.free_on_finish = true  # back in flight: clean it up when it leaves the arena
-	if arrow.get_parent() != get_tree().current_scene:
-		arrow.reparent(get_tree().current_scene)
-	arrow.activate(global_position, get_facing(), _PLAYER_TEAM)
-	SoundManager.play("apple_shooting")
-	fired.emit(arrow)
-	ammo_changed.emit(_ammo.size())
-
 func is_dead() -> bool:
 	return _dead
 
@@ -284,11 +274,15 @@ func _on_sectors_changed() -> void:
 	if sectors.full():
 		enable_firing()
 
+func _update_dash(_delta: float) -> void:
+	velocity = _dash_vel
+	move_and_slide()
+
 func _physics_process(delta: float) -> void:
 	if Engine.is_editor_hint(): return
 	if is_dead(): return
 	if input.consume_fire():
-		try_fire(sectors.get_highlighted())
+		_try_dash()
 	if is_burning():
 		# careen chaotically: re-roll the drift direction on a short random timer
 		_burn_redrift -= delta
@@ -298,7 +292,10 @@ func _physics_process(delta: float) -> void:
 		velocity = _burn_drift * burn_drift_speed
 		move_and_slide()
 	else:
-		move(input.get_direction(), delta)
+		if is_dashing():
+			_update_dash(delta)
+		else:
+			_move(input.get_direction(), delta)
 
 func _process(delta: float) -> void:
 	if Engine.is_editor_hint(): return
