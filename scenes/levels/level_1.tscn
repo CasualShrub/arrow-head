@@ -31,6 +31,7 @@ shader_parameter/wall_height = 0.51
 shader_parameter/fade_start = -0.04
 
 [node name="Encounter2" unique_id=571267862 instance=ExtResource("1_1c042")]
+next_level_path = "res://scenes/levels/level_2.tscn"
 
 [node name="Enemy3" parent="SubViewportContainer/SubViewport/World/Enemies" parent_id_path=PackedInt32Array(1185931971) index="0" unique_id=71488470 instance=ExtResource("2_1c042")]
 transform = Transform3D(-0.9999964, 0, 0.0026782402, 0, 1, 0, -0.0026782402, 0, -0.9999964, -1.3021815, 0, -17.646866)

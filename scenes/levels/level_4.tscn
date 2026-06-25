@@ -17,6 +17,7 @@ shader_parameter/fade_start = -0.04
 
 [node name="Encounter2" unique_id=571267862 instance=ExtResource("1_vmkp1")]
 music_track = "Lvl_4_5"
+next_level_path = "res://scenes/levels/level_5.tscn"
 
 [node name="Player" parent="SubViewportContainer/SubViewport/World" parent_id_path=PackedInt32Array(1589957074) index="0" unique_id=508579643]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 32.7256, 0, 6.8834505)

@@ -3,11 +3,13 @@ extends Node3D
 @export var player: Player
 @export var is_boss_level := false
 @export var music_track := "Lvl_1"
+@export var next_level_path := "res://scenes/levels/level_1.tscn"
 
 var _ongoing := false
 var _won: bool
 
 signal ended(won: bool)
+signal cleared(won: bool, next_path: String)
 
 func get_enemies() -> Array[Enemy]:
 	var enemies: Array[Enemy] = []
@@ -48,7 +50,9 @@ func _end(won: bool) -> void:
 	_won = won
 	if won:
 		SoundManager.play("big_win_kill_boss_jingle" if is_boss_level else "enemy_death_small_win_jingle")
-	ended.emit(_won)
+		cleared.emit(_won, next_level_path)
+	else:
+		ended.emit(_won)
 
 func _on_enemy_died(_enemy: Enemy) -> void:
 	if not enemies_alive():

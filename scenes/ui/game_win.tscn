@@ -1,0 +1,84 @@
+[gd_scene format=3 uid="uid://x1mhd7mlveia"]
+
+[ext_resource type="Script" uid="uid://cii54iucfsr7d" path="res://scripts/ui/game_win.gd" id="1_loxwf"]
+[ext_resource type="Texture2D" uid="uid://cilal3ll3bnij" path="res://assets/art/ui/level_won.png" id="2_loxwf"]
+
+[node name="GameWin" type="CanvasLayer" unique_id=1577397124]
+layer = 10
+script = ExtResource("1_loxwf")
+
+[node name="Root" type="Control" parent="." unique_id=973900867]
+unique_name_in_owner = true
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Dim" type="ColorRect" parent="Root" unique_id=2084304043]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0.66)
+
+[node name="Title" type="Label" parent="Root" unique_id=21770467]
+layout_mode = 0
+offset_top = 123.66
+offset_right = 1152.0
+offset_bottom = 222.66003
+theme_override_colors/font_color = Color(0.95, 0.3, 0.25, 1)
+theme_override_font_sizes/font_size = 72
+text = "LEVEL CLEARED"
+horizontal_alignment = 1
+
+[node name="Prompt" type="Label" parent="Root" unique_id=1906355322]
+layout_mode = 0
+offset_top = 223.455
+offset_right = 1152.0
+offset_bottom = 262.4552
+theme_override_colors/font_color = Color(0.9, 0.9, 0.9, 1)
+theme_override_font_sizes/font_size = 28
+text = "Press Enter to Proceed"
+horizontal_alignment = 1
+
+[node name="Center" type="VBoxContainer" parent="Root" unique_id=30671039]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 18
+alignment = 1
+
+[node name="Control" type="Control" parent="Root/Center" unique_id=766327482]
+custom_minimum_size = Vector2(0, 252)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+
+[node name="Apple" type="TextureRect" parent="Root/Center/Control" unique_id=580109864]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(240, 252)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -177.0
+offset_top = -20.0
+offset_right = 204.0
+offset_bottom = 323.0
+grow_horizontal = 2
+grow_vertical = 2
+pivot_offset_ratio = Vector2(0.5, 0.57)
+size_flags_horizontal = 4
+size_flags_vertical = 4
+texture = ExtResource("2_loxwf")
+expand_mode = 1
+stretch_mode = 5
