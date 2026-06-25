@@ -37,6 +37,7 @@ metadata/_custom_type_script = "uid://d04k7pxjd2u24"
 [sub_resource type="SphereShape3D" id="SphereShape3D_ensgf"]
 
 [sub_resource type="CylinderShape3D" id="CylinderShape3D_twn6s"]
+height = 4.055
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_tihwb"]
 render_priority = 0
@@ -76,19 +77,18 @@ metadata/_custom_type_script = "uid://cq7vk7ukbmts4"
 unique_name_in_owner = true
 wait_time = 0.3
 one_shot = true
-autostart = true
 
 [node name="Sus" type="Node3D" parent="." unique_id=1262353285]
 script = ExtResource("3_fcftc")
 
 [node name="Vision" type="ShapeCast3D" parent="Sus" unique_id=1162433519]
 unique_name_in_owner = true
-transform = Transform3D(1, 1.9106855e-15, -3.5527137e-15, 0, -4.3711392e-08, -1, -8.351871e-23, 1, -4.371139e-08, -5.9604645e-08, 7.450581e-09, -2.0639028e-16)
+transform = Transform3D(1, 1.9106855e-15, -3.5527137e-15, 0, -4.3711392e-08, -1, -8.351871e-23, 1, -4.371139e-08, -5.9604645e-08, 7.450581e-09, -0.9754748)
 shape = SubResource("CylinderShape3D_twn6s")
 
 [node name="VisionDisplay" type="MeshInstance3D" parent="Sus/Vision" unique_id=442070290]
 unique_name_in_owner = true
-transform = Transform3D(-1.93, -1.6872596e-07, 0, -1.6872596e-07, 1.93, -1.6872596e-07, 1.4750493e-14, -1.6872596e-07, -1.93, 0, -1.005, 0.030000044)
+transform = Transform3D(-4.0143995, -3.804912e-07, -2.6232533e-22, -3.5094993e-07, 4.3523116, -1.6872596e-07, 3.0681024e-14, -3.804912e-07, -1.93, 0, -1.2373967, 0.030000053)
 material_override = SubResource("ShaderMaterial_tihwb")
 mesh = SubResource("QuadMesh_ub6uw")
 
@@ -118,4 +118,6 @@ unique_name_in_owner = true
 
 [connection signal="changed" from="Health" to="." method="_on_health_changed"]
 [connection signal="timeout" from="Recovery" to="." method="_on_recovery_timeout"]
+[connection signal="alerted" from="Sus" to="." method="_on_sus_alerted"]
+[connection signal="alerted" from="Sus" to="Sus" method="_on_alerted"]
 [connection signal="frame_changed" from="Sus/Outline/Fill" to="Sus" method="_on_fill_frame_changed"]

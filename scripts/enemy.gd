@@ -31,6 +31,11 @@ const _ENEMY_TEAM = Arrow.Team.ENEMY
 @export_group("combat")
 @export var combat_speed := 4.0
 
+var _patrol_world_points: Array[Vector3] = []
+var _patrol_len: float
+var _patrol_progress := 0.0
+var _patrol_dir := 1.0
+
 signal fired(arrow: Arrow, dir: Vector3)
 signal died
 
@@ -38,6 +43,7 @@ signal died
 @onready var _collider: CollisionShape3D = %Collider
 @onready var _recovery: Timer = %Recovery
 @onready var _inst_timers: Node = %InstanceTimers
+@onready var _patrol_points: Node3D = %PatrolPoints
 
 var _dead := false
 var _aiming := false
@@ -192,14 +198,52 @@ func _select_pattern() -> ArrowPattern:
 			return p
 	return patterns[0]
 
-func _patrol(dt: float) -> void:
-	_alert(dt)
+func _get_patrol_pos() -> Vector3:
+	if _patrol_len == 0.0:
+		return global_position
 
-func _med_sus(dt: float) -> void:
-	_patrol(dt)
+	var target_dist := _patrol_progress * _patrol_len
+	var curr_dist := 0.0
+
+	for i in range(1, len(_patrol_world_points)):
+		var last_pos := _patrol_world_points[i - 1]
+		var p_pos: Vector3 = _patrol_world_points[i]
+		var dist := last_pos.distance_to(p_pos)
+
+		if curr_dist + dist >= target_dist:
+			var offset := target_dist - curr_dist
+			var new_pos := last_pos.lerp(p_pos, offset / dist)
+			new_pos.y = global_position.y
+			return new_pos
+
+		curr_dist += dist
+
+	var final_pos: Vector3 = _patrol_points.get_child(
+		_patrol_points.get_child_count() - 1
+	).global_position
+	final_pos.y = global_position.y
+	return final_pos
+
+func _patrol(dt: float) -> void:
+	if _patrol_len == 0.0:
+		return
+	var new_pos := _get_patrol_pos()
+	look_at(new_pos)
+	global_position = new_pos
+	_patrol_progress += dt * patrol_speed / _patrol_len * _patrol_dir
+	if _patrol_progress > 1.0:
+		_patrol_progress = 1 - (_patrol_progress - 1)
+		_patrol_dir = -1.0
+	elif _patrol_progress < 0.0:
+		_patrol_progress *= -1.0
+		_patrol_dir = 1.0
+	#print("patrolling: ", global_position, " ", _patrol_progress, " ", _patrol_len)
+
+func _med_sus(_dt: float) -> void:
+	_look_at_player()
 	
-func _high_sus(dt: float) -> void:
-	_patrol(dt)
+func _high_sus(_dt: float) -> void:
+	_look_at_player()
 
 func _alert(_dt: float) -> void:
 	_look_at_player()
@@ -224,6 +268,9 @@ func die() -> void:
 	SoundManager.play("banana_death")
 	_sprite.play("death")
 	died.emit()
+
+func _on_sus_alerted() -> void:
+	_recovery.start()
 
 func _on_health_changed() -> void:
 	if not _dead and health.current <= 0:
@@ -261,4 +308,10 @@ func _physics_process(delta: float) -> void:
 	_select_behaviour(delta)
 
 func _ready() -> void:
-	pass
+	_patrol_len = 0.0
+	var last: Node3D = null
+	for p in _patrol_points.get_children():
+		_patrol_world_points.append(p.global_position)
+		if last != null:
+			_patrol_len += last.global_position.distance_to(p.global_position)
+		last = p
