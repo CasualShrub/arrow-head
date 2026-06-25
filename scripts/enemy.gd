@@ -363,7 +363,10 @@ func _on_health_changed() -> void:
 func _on_recovery_timeout() -> void:
 	if _dead: return
 	var pattern := _select_pattern()
-	_sprite.play("fire")
+	if pattern.uses_windup and _sprite.sprite_frames.has_animation("windup"):
+		_sprite.play("windup")
+	else:
+		_sprite.play("fire")
 	await _await_fire_release()
 	if _dead: return
 	perform(pattern)
