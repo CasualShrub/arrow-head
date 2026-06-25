@@ -29,7 +29,7 @@ stretch = true
 
 [node name="SubViewport" type="SubViewport" parent="SubViewportContainer" unique_id=1083906358]
 handle_input_locally = false
-size = Vector2i(1152, 648)
+size = Vector2i(1920, 1080)
 render_target_update_mode = 4
 
 [node name="World" type="Node3D" parent="SubViewportContainer/SubViewport" unique_id=1589957074]
@@ -56,6 +56,9 @@ transform = Transform3D(0.8239569, 7.3667486e-08, 0.5666525, -0.29468933, 0.8541
 
 [node name="Floor" type="CSGBox3D" parent="SubViewportContainer/SubViewport/World" unique_id=1674034061]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.7, 0)
+use_collision = true
+collision_layer = 16
+collision_mask = 0
 size = Vector3(100, 1, 100)
 script = ExtResource("9_floor")
 
