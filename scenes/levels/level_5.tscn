@@ -40,19 +40,16 @@ combat_strafe_speed = 0.0
 
 [node name="Enemy5" parent="SubViewportContainer/SubViewport/World/Enemies" parent_id_path=PackedInt32Array(1185931971) index="4" unique_id=940029620 instance=ExtResource("5_fi56y")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 25.038548, 0, 23.936077)
-alwayds_alert = false
 combat_speed = 0.0
 combat_strafe_speed = 0.0
 
 [node name="Enemy6" parent="SubViewportContainer/SubViewport/World/Enemies" parent_id_path=PackedInt32Array(1185931971) index="5" unique_id=270433667 instance=ExtResource("5_fi56y")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 25.038548, 0, 6.0227203)
-alwayds_alert = false
 combat_speed = 0.0
 combat_strafe_speed = 0.0
 
 [node name="Enemy7" parent="SubViewportContainer/SubViewport/World/Enemies" parent_id_path=PackedInt32Array(1185931971) index="6" unique_id=857749278 instance=ExtResource("5_fi56y")]
 transform = Transform3D(-0.040849328, 0, -0.9991653, 0, 1, 0, 0.9991653, 0, -0.040849328, 17.55699, 0, 13.493114)
-alwayds_alert = false
 combat_speed = 0.0
 combat_strafe_speed = 0.0
 

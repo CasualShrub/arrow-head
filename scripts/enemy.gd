@@ -61,7 +61,6 @@ signal died
 @onready var _ray_forward: RayCast3D = %RayForward
 
 var _dead := false
-var _aiming := false
 var _movement_pattern: Dictionary[float, Vector3] = {}
 var _movement_pattern_start: float
 
@@ -301,8 +300,9 @@ func _alert(dt: float) -> void:
 		move -= right
 
 	if move.length() > 0.001:
-		global_position += move.normalized() * combat_speed * dt
-
+		velocity = move.normalized() * combat_speed
+		move_and_slide()
+	
 	look_at(player.global_position)
 
 func _pick_combat_state(dist: float) -> void:

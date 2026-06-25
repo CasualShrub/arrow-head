@@ -57,7 +57,7 @@ shader_parameter/fade_height = 0.64800003078
 
 [node name="Enemy" type="CharacterBody3D" unique_id=71488470 node_paths=PackedStringArray("health", "sus")]
 collision_layer = 8
-collision_mask = 9
+collision_mask = 13
 motion_mode = 1
 script = ExtResource("1_7p1mj")
 health = NodePath("Health")
