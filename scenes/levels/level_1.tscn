@@ -2,7 +2,7 @@
 
 [ext_resource type="PackedScene" uid="uid://b6c1h2si8ob6l" path="res://scenes/levels/encounter.tscn" id="1_1c042"]
 [ext_resource type="PackedScene" uid="uid://tmhabgv3ovyb" path="res://scenes/enemies/enemy_archer.tscn" id="2_1c042"]
-[ext_resource type="PackedScene" path="res://scenes/enemies/enemy_frost.tscn" id="3_x42e6"]
+[ext_resource type="PackedScene" uid="uid://1jtkc8jlvm65" path="res://scenes/enemies/enemy_frost.tscn" id="3_x42e6"]
 [ext_resource type="PackedScene" uid="uid://sxe0iltyolnn" path="res://scenes/enemies/enemy_frost_spray.tscn" id="4_6761a"]
 
 [node name="Encounter" unique_id=571267862 instance=ExtResource("1_1c042")]
