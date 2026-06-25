@@ -19,19 +19,15 @@ const _PLAYER_TEAM = Arrow.Team.PLAYER
 @export_group("dashing")
 @export var dash_time: float:
 	set(value):
-		if value < 0: value = 0
-		%FireDebounce.wait_time = value
-		fire_cooldown = value
-		
-@export var arrow_dig_depth := 0.15 #dig arrow deeper into apple's skin a bit
-@export var chunk_fx: PackedScene   ## burst of apple bits spawned where an arrow embeds
-@export_group("shooting")
-@export var shoot_cooldown := 0.25
 		if not _dashing: return
 		_dashing.wait_time = value
 	get:
 		if not _dashing: return -1.0
 		return _dashing.wait_time
+@export var arrow_dig_depth := 0.15 #dig arrow deeper into apple's skin a bit
+@export var chunk_fx: PackedScene   ## burst of apple bits spawned where an arrow embeds
+@export_group("shooting")
+@export var shoot_cooldown := 0.25
 @export var dash_cooldown: float:
 	set(value):
 		if not _dash_debounce: return
@@ -107,7 +103,6 @@ signal hit(arrow: Arrow, sector: int)
 signal fired(arrow: Arrow)
 signal died()
 
-var _sectors: Array[EmbeddedArrow]
 var _dead := false
 var _eyes_hit_showing := false
 var _move_dir := Vector2.ZERO   # last movement direction, for the directional eyes
