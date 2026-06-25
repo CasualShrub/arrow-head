@@ -92,3 +92,6 @@ func _physics_process(delta: float) -> void:
 		amount -= reduction_speed * delta
 	_display_fill_percent(amount / max_value)
 	pass # Replace with function body.
+	
+func _ready() -> void:
+	_vision_display.show()

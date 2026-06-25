@@ -21,6 +21,10 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.52670556, 0, 6.239771)
 
 [node name="VisionDisplay" parent="Enemy/Sus/Vision" parent_id_path=PackedInt32Array(955806617, 1162433519) index="0" unique_id=442070290]
 transform = Transform3D(-4.0143995, -3.804912e-07, -2.9142188e-07, -3.5094993e-07, 4.3523116, -1.6872596e-07, 6.061575e-07, -3.8049114e-07, -1.93, 0, -1.2373967, 0.030000053)
+visible = true
+
+[node name="Outline" parent="Enemy/Sus" parent_id_path=PackedInt32Array(955806617, 1262353285) index="1" unique_id=1078234529]
+visible = true
 
 [node name="Marker3D2" type="Marker3D" parent="Enemy/PatrolPoints" parent_id_path=PackedInt32Array(955806617, 1646478367) index="1" unique_id=952222312]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.7042241, 0, -2.557722)

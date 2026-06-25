@@ -307,6 +307,7 @@ func _physics_process(delta: float) -> void:
 	_select_behaviour(delta)
 
 func _ready() -> void:
+	if Engine.is_editor_hint(): return
 	_patrol_len = 0.0
 	var last: Node3D = null
 	for p in _patrol_points.get_children():
