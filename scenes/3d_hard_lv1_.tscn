@@ -7,7 +7,6 @@
 [ext_resource type="Texture2D" uid="uid://bxkglylm44xg" path="res://art/player/eyes_hit.png" id="5_qbasy"]
 [ext_resource type="Script" uid="uid://doms8x46cr1tt" path="res://scripts/camera.gd" id="6_avp7i"]
 [ext_resource type="Shader" uid="uid://dnw37cynwb7od" path="res://shaders/screen_effect.gdshader" id="7_1svh5"]
-[ext_resource type="PackedScene" path="res://scenes/enemies/enemy_fire.tscn" id="7_7wgqi"]
 [ext_resource type="PackedScene" uid="uid://b8rs35o7f45v0" path="res://scenes/enemies/enemy.tscn" id="8_4hit0"]
 
 [sub_resource type="Environment" id="Environment_ub6uw"]
@@ -175,9 +174,6 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.08965945, 0.3557061, 32.830
 use_collision = true
 collision_layer = 4
 size = Vector3(6.6609683, 2.6455078, 12.43816)
-
-[node name="Enemy" parent="SubViewportContainer/SubViewport/World/Node3D" unique_id=277796141 instance=ExtResource("7_7wgqi")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 24.357641, 0, 10.205247)
 
 [node name="Walls" type="Node3D" parent="SubViewportContainer/SubViewport/World" unique_id=2116843859]
 
