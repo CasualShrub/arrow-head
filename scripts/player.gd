@@ -430,6 +430,7 @@ func _physics_process(delta: float) -> void:
 			_move(input.get_direction(), delta)
 		if _in_slowdown:
 			_update_slowdown(delta)
+	global_position.y = 0
 
 func _update_preview(_delta: float) -> void:
 	var pos := get_mouse_world_position()

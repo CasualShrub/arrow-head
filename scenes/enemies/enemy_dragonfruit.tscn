@@ -66,6 +66,7 @@ metadata/_custom_type_script = "uid://d04k7pxjd2u24"
 radius = 0.8
 
 [node name="Enemy" unique_id=71488470 instance=ExtResource("1_u24cr")]
+has_intro = false
 patterns = Array[ExtResource("2_cghyj")]([SubResource("Resource_1585h"), SubResource("Resource_o6djv"), SubResource("Resource_54hkm")])
 
 [node name="Collider" parent="." index="0" unique_id=1742085930]
@@ -74,5 +75,4 @@ shape = SubResource("SphereShape3D_u24cr")
 [node name="Sprite" parent="." index="5" unique_id=1091610106]
 sprite_frames = ExtResource("2_b3sqf")
 animation = &"intro"
-autoplay = "intro"
 frame_progress = 0.77435106
