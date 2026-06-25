@@ -4,25 +4,24 @@ extends CanvasLayer
 @export var max_angle := 5.0
 @export var rot_speed := 0.2
 
+@export var death_anim_delay := 1.0
 @onready var _root: Control = %Root
 @onready var _apple: TextureRect = %Apple
 var _t := 0.0
 
 func _ready() -> void:
-	process_mode = Node.PROCESS_MODE_ALWAYS
 	_root.visible = false
 
 func _on_encounter_ended(won: bool) -> void:
 	if won:
 		return
+	await get_tree().create_timer(death_anim_delay).timeout
 	_root.visible = true
-	get_tree().paused = true
 
 func _unhandled_input(event: InputEvent) -> void:
 	if not _root.visible:
 		return
 	if event is InputEventKey and event.pressed and not event.echo and event.keycode == KEY_R:
-		get_tree().paused = false
 		get_tree().reload_current_scene()
 
 func _process(delta: float) -> void:
