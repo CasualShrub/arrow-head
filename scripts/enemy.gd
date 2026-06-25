@@ -270,6 +270,10 @@ func die() -> void:
 
 func _on_sus_alerted() -> void:
 	_recovery.start()
+	var p = get_parent()
+	for e in p.get_children():
+		if e.global_position.distance_to(global_position) < 10.0 and not e.sus.is_alert(): 
+			e.sus.baka(1.1)
 
 func _on_health_changed() -> void:
 	if not _dead and health.current <= 0:
