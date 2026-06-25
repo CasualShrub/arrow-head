@@ -1,0 +1,70 @@
+[gd_resource type="SpriteFrames" format=3 uid="uid://bk8ta6kcnevxn"]
+
+[ext_resource type="Texture2D" uid="uid://b0afwlyjydm7h" path="res://assets/art/enemy/bannana/normal/frame1.png" id="1_sq03r"]
+[ext_resource type="Texture2D" uid="uid://bh6pj83dm5i84" path="res://assets/art/enemy/bannana/normal/death1_frame.PNG" id="2_4ycfj"]
+[ext_resource type="Texture2D" uid="uid://c22so75ub13ou" path="res://assets/art/enemy/bannana/normal/death2_frame.PNG" id="3_gjynf"]
+[ext_resource type="Texture2D" uid="uid://cdmjg1osh8iqw" path="res://assets/art/enemy/bannana/normal/death3_frame.PNG" id="4_1gvq3"]
+[ext_resource type="Texture2D" uid="uid://bmqcjg05r8j1e" path="res://assets/art/enemy/bannana/normal/frame2.png" id="5_33pt7"]
+[ext_resource type="Texture2D" uid="uid://6w7p3hufm0km" path="res://assets/art/enemy/bannana/normal/frame3.png" id="6_6xu1n"]
+[ext_resource type="Texture2D" uid="uid://ccs6nyr8bd0ba" path="res://assets/art/enemy/bannana/normal/frame4.png" id="7_wpnjo"]
+[ext_resource type="Texture2D" uid="uid://c8knl5mhl04ko" path="res://assets/art/enemy/bannana/normal_hit.PNG" id="8_m13yx"]
+[ext_resource type="Texture2D" uid="uid://dc0jaxflx7uj5" path="res://assets/art/enemy/bannana/stretch_hit.PNG" id="9_y8lwe"]
+
+[resource]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("1_sq03r")
+}, {
+"duration": 1.0,
+"texture": ExtResource("2_4ycfj")
+}, {
+"duration": 1.0,
+"texture": ExtResource("3_gjynf")
+}, {
+"duration": 1.0,
+"texture": ExtResource("4_1gvq3")
+}],
+"loop": 0,
+"name": &"death",
+"speed": 8.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("1_sq03r")
+}],
+"loop": 1,
+"name": &"default",
+"speed": 0.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("1_sq03r")
+}, {
+"duration": 1.0,
+"texture": ExtResource("5_33pt7")
+}, {
+"duration": 2.0,
+"texture": ExtResource("6_6xu1n")
+}, {
+"duration": 1.0,
+"texture": ExtResource("7_wpnjo")
+}, {
+"duration": 1.0,
+"texture": ExtResource("1_sq03r")
+}],
+"loop": 0,
+"name": &"fire",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("8_m13yx")
+}, {
+"duration": 1.0,
+"texture": ExtResource("9_y8lwe")
+}],
+"loop": 0,
+"name": &"hit",
+"speed": 5.0
+}]

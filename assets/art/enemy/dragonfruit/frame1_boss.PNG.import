@@ -2,8 +2,8 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://bdw3wo87h6buh"
-path.s3tc="res://.godot/imported/boss_death_frame2.png-7930e9b0ddf808400ddc3565fec3aea1.s3tc.ctex"
+uid="uid://b2f6s5kdmmx84"
+path.s3tc="res://.godot/imported/frame1_boss.PNG-880b59ba8dbe089b004a695244d465ab.s3tc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
@@ -11,8 +11,8 @@ metadata={
 
 [deps]
 
-source_file="res://assets/art/enemy/dragonfruit/boss_death_frame2.png"
-dest_files=["res://.godot/imported/boss_death_frame2.png-7930e9b0ddf808400ddc3565fec3aea1.s3tc.ctex"]
+source_file="res://assets/art/enemy/dragonfruit/frame1_boss.PNG"
+dest_files=["res://.godot/imported/frame1_boss.PNG-880b59ba8dbe089b004a695244d465ab.s3tc.ctex"]
 
 [params]
 

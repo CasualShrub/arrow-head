@@ -1,0 +1,18 @@
+[gd_scene format=3 uid="uid://dhg4gbfiiobuo"]
+
+[ext_resource type="PackedScene" uid="uid://b8rs35o7f45v0" path="res://scenes/enemies/enemy.tscn" id="1_u24cr"]
+[ext_resource type="SpriteFrames" uid="uid://dm8flmwcygw4c" path="res://sprite_frames/dragonfruit_frames.tres" id="2_b3sqf"]
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_u24cr"]
+radius = 0.8
+
+[node name="Enemy" unique_id=71488470 instance=ExtResource("1_u24cr")]
+
+[node name="Collider" parent="." index="0" unique_id=1742085930]
+shape = SubResource("SphereShape3D_u24cr")
+
+[node name="Sprite" parent="." index="5" unique_id=1091610106]
+sprite_frames = ExtResource("2_b3sqf")
+animation = &"intro"
+autoplay = "intro"
+frame_progress = 0.47898296

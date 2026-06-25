@@ -1,0 +1,38 @@
+[gd_resource type="SpriteFrames" format=3 uid="uid://cmjbdroql258f"]
+
+[ext_resource type="Texture2D" uid="uid://c5w3uc4upc1av" path="res://assets/art/player/apple_base.png" id="1_1nc6c"]
+[ext_resource type="Texture2D" uid="uid://bha24g2kfaosi" path="res://assets/art/player/a_death_frame1.png" id="2_smi8r"]
+[ext_resource type="Texture2D" uid="uid://c34v8ic3dj3rx" path="res://assets/art/player/a_death_frame2.png" id="3_isce3"]
+[ext_resource type="Texture2D" uid="uid://delgixt2v1gld" path="res://assets/art/player/a_death_frame3.png" id="4_roj0g"]
+[ext_resource type="Texture2D" uid="uid://cqi4h8rglp31u" path="res://assets/art/player/a_death_frame4.png" id="5_nwcj7"]
+
+[resource]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("1_1nc6c")
+}, {
+"duration": 1.0,
+"texture": ExtResource("2_smi8r")
+}, {
+"duration": 1.0,
+"texture": ExtResource("3_isce3")
+}, {
+"duration": 1.0,
+"texture": ExtResource("4_roj0g")
+}, {
+"duration": 1.0,
+"texture": ExtResource("5_nwcj7")
+}],
+"loop": 0,
+"name": &"death",
+"speed": 8.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("1_1nc6c")
+}],
+"loop": 1,
+"name": &"default",
+"speed": 0.0
+}]
