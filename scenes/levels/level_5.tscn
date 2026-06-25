@@ -4,6 +4,7 @@
 [ext_resource type="Shader" uid="uid://buv2tktnh5ufo" path="res://shaders/fade.gdshader" id="2_845dy"]
 [ext_resource type="PackedScene" uid="uid://c5i7j0ac0apq" path="res://scenes/enemies/enemy_bananarotten_line.tscn" id="2_laj7o"]
 [ext_resource type="PackedScene" uid="uid://b0566e6bt2wnb" path="res://scenes/enemies/enemy_bananaunripe_spray.tscn" id="3_fi56y"]
+[ext_resource type="PackedScene" uid="uid://b7xvltf5sfgso" path="res://scenes/enemies/enemy_spray.tscn" id="5_fi56y"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_845dy"]
 render_priority = 0
@@ -36,6 +37,30 @@ combat_strafe_speed = 0.0
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 30.01908, 0, 9.422281)
 combat_speed = 0.0
 combat_strafe_speed = 0.0
+
+[node name="Enemy5" parent="SubViewportContainer/SubViewport/World/Enemies" parent_id_path=PackedInt32Array(1185931971) index="4" unique_id=940029620 instance=ExtResource("5_fi56y")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 25.038548, 0, 23.936077)
+alwayds_alert = false
+combat_speed = 0.0
+combat_strafe_speed = 0.0
+
+[node name="Enemy6" parent="SubViewportContainer/SubViewport/World/Enemies" parent_id_path=PackedInt32Array(1185931971) index="5" unique_id=270433667 instance=ExtResource("5_fi56y")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 25.038548, 0, 6.0227203)
+alwayds_alert = false
+combat_speed = 0.0
+combat_strafe_speed = 0.0
+
+[node name="Enemy7" parent="SubViewportContainer/SubViewport/World/Enemies" parent_id_path=PackedInt32Array(1185931971) index="6" unique_id=857749278 instance=ExtResource("5_fi56y")]
+transform = Transform3D(-0.040849328, 0, -0.9991653, 0, 1, 0, 0.9991653, 0, -0.040849328, 17.55699, 0, 13.493114)
+alwayds_alert = false
+combat_speed = 0.0
+combat_strafe_speed = 0.0
+
+[node name="Collider" parent="SubViewportContainer/SubViewport/World/Enemies/Enemy7" index="0" unique_id=1742085930]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.03840065, 0, 0.9392662)
+
+[node name="Marker3D2" type="Marker3D" parent="SubViewportContainer/SubViewport/World/Enemies/Enemy7/PatrolPoints" parent_id_path=PackedInt32Array(857749278, 1646478367) index="1" unique_id=1703968858]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.62277985, 0, -15.233055)
 
 [node name="CameraPivot" parent="SubViewportContainer/SubViewport/World" parent_id_path=PackedInt32Array(1589957074) index="2" unique_id=1563753267]
 transform = Transform3D(1, 0, 0, 0, -4.371139e-08, 1, 0, -1, -4.371139e-08, 25.441023, 3.7000048, 35.128433)
@@ -128,3 +153,5 @@ use_collision = true
 collision_layer = 4
 size = Vector3(2.032677, 5.8047485, 1.8213167)
 material = SubResource("ShaderMaterial_845dy")
+
+[editable path="SubViewportContainer/SubViewport/World/Enemies/Enemy7"]
