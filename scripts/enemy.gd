@@ -28,6 +28,7 @@ const _ENEMY_TEAM = Arrow.Team.ENEMY
 @export_group("patrol")
 @export var patrol_speed := 2.0
 @export var patrol_is_closed_loop := false
+@export var alwayds_alert := false
 @export_group("combat")
 @export var combat_speed := 4.0
 
@@ -319,3 +320,5 @@ func _ready() -> void:
 		if last != null:
 			_patrol_len += last.global_position.distance_to(p.global_position)
 		last = p
+	if alwayds_alert:
+		sus.baka(1.1)
