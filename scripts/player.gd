@@ -265,12 +265,16 @@ func _can_dash() -> bool:
 
 func _try_dash() -> bool:
 	if not _can_dash(): return false
-	for e in sectors.get_stored():
-		if e is EmbeddedArrow: #and e.is_firing_enabled():
-			print("dashing")
+	var stored := sectors.get_stored()
+	for i in range(len(sectors.get_stored())):
+		var e = sectors.get_stored_at(i)
+		if e is EmbeddedArrow and e.is_firing_enabled():
 			var mouse_pos := get_mouse_world_position()
 			mouse_pos = _preview.get_end(mouse_pos)
 			var mouse_offset := mouse_pos - global_position
+			sectors.take_stored(i)
+			var arrow = e.grab()
+			arrow.queue_free()
 			_dash(mouse_offset)
 			return true
 	return false
@@ -290,7 +294,7 @@ func _dash(dir: Vector3) -> void:
 func _can_slowdown() -> bool:
 	var flag := false
 	for e in sectors.get_stored():
-		if e is EmbeddedArrow:
+		if e is EmbeddedArrow and e.is_firing_enabled():
 			flag = true
 			break
 	return not is_dead() and not is_dashing() and not _in_slowdown and _dash_debounce.is_stopped() and flag

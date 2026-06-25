@@ -60,11 +60,9 @@ func baka(n: float) -> void:
 	if amount >= max_value:
 		_alerted = true
 		alerted.emit()
-	print("increased", amount)
 	_display_state()
 
 func _display_fill_percent(p: float) -> void:
-	print("displaying fill")
 	if not _fill: return
 	if p <= 0.0:
 		if _outline.visible:

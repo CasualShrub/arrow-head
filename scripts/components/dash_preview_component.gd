@@ -74,7 +74,6 @@ func get_end(target: Vector3) -> Vector3:
 		var new_target := _dash_cast.get_collision_point()
 		var new_dist := global_position.distance_to(new_target)
 		new_dist -= cast_offset
-		print("was colliding: ", global_position + global_position.direction_to(new_target) * new_dist)
 		return global_position + global_position.direction_to(new_target) * new_dist
 	else:
 		return target

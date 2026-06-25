@@ -237,7 +237,6 @@ func _patrol(dt: float) -> void:
 	elif _patrol_progress < 0.0:
 		_patrol_progress *= -1.0
 		_patrol_dir = 1.0
-	#print("patrolling: ", global_position, " ", _patrol_progress, " ", _patrol_len)
 
 func _med_sus(_dt: float) -> void:
 	_look_at_player()
