@@ -17,10 +17,11 @@ shader_parameter/fade_start = -0.04
 [node name="Encounter" unique_id=571267862 instance=ExtResource("1_rnyxf")]
 
 [node name="Player" parent="SubViewportContainer/SubViewport/World" parent_id_path=PackedInt32Array(1589957074) index="0" unique_id=508579643]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 16.586405, 0, 25.737247)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 17.42201, 0, 25.777952)
+burn_drift_speed = 240.0
 
 [node name="Enemy" parent="SubViewportContainer/SubViewport/World/Enemies" parent_id_path=PackedInt32Array(1185931971) index="0" unique_id=71488470 instance=ExtResource("2_1r3rq")]
-transform = Transform3D(-0.054078814, 0, -0.99853665, 0, 1, 0, 0.99853665, 0, -0.054078814, 12.557728, 0.1, 25.724058)
+transform = Transform3D(-0.054078814, 0, -0.99853665, 0, 1, 0, 0.99853665, 0, -0.054078814, 13.417198, 0.1, 25.724058)
 combat_speed = 0.0
 combat_strafe_radius = 2.0
 combat_strafe_speed = 0.0
@@ -64,10 +65,10 @@ material = ExtResource("5_woodgate")
 [node name="Borders (trees)" type="Node3D" parent="." index="2" unique_id=2065437945]
 
 [node name="SubViewportContainer_SubViewport_World_Walls#CSGBox3D3" type="CSGBox3D" parent="Borders (trees)" index="0" unique_id=1397087008]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 27.182518, 0.7292166, 12.067888)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 27.182518, 0.7292166, 12.802752)
 use_collision = true
 collision_layer = 4
-size = Vector3(54.994644, 2.4925537, 16.92987)
+size = Vector3(54.994644, 2.4925537, 18.399597)
 material = SubResource("ShaderMaterial_brickfade")
 
 [node name="SubViewportContainer_SubViewport_World_Walls#CSGBox3D4" type="CSGBox3D" parent="Borders (trees)" index="1" unique_id=1118518528]
@@ -78,15 +79,15 @@ size = Vector3(27.39737, 2.4925537, 3.2455597)
 material = SubResource("ShaderMaterial_brickfade")
 
 [node name="SubViewportContainer_SubViewport_World_Walls#CSGBox3D5" type="CSGBox3D" parent="Borders (trees)" index="2" unique_id=834377810]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.650795, 0.7292166, 21.540459)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.7043724, 0.7292166, 21.540459)
 use_collision = true
 collision_layer = 4
-size = Vector3(9.931198, 2.4925537, 33.00226)
+size = Vector3(12.038353, 2.4925537, 33.00226)
 material = SubResource("ShaderMaterial_brickfade")
 
 [node name="SubViewportContainer_SubViewport_World_Walls#CSGBox3D6" type="CSGBox3D" parent="Borders (trees)" index="3" unique_id=65664249]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 28.804157, 0.7292166, 21.540459)
 use_collision = true
 collision_layer = 4
-size = Vector3(8.714607, 2.4925537, 33.00226)
+size = Vector3(12.452363, 2.4925537, 33.00226)
 material = SubResource("ShaderMaterial_brickfade")
