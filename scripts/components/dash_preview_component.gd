@@ -67,8 +67,9 @@ func get_enemies_in_path(start: Vector3, end: Vector3) -> Array[Enemy]:
 	return result
 
 func get_end(target: Vector3) -> Vector3:
+	var world_dir := global_position.direction_to(target)
 	var dist := global_position.distance_to(target) + cast_offset
-	_dash_cast.target_position = Vector3(0, dist, 0)
+	_dash_cast.target_position = to_local(global_position + world_dir * dist)
 	_dash_cast.force_raycast_update()
 	if _dash_cast.is_colliding():
 		var new_target := _dash_cast.get_collision_point()

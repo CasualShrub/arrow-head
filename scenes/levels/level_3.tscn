@@ -18,7 +18,7 @@ shader_parameter/tex_scale = 0.5
 shader_parameter/wall_height = 0.51
 shader_parameter/fade_start = -0.04
 
-[node name="Encounter3" unique_id=571267862 instance=ExtResource("1_o8c3j")]
+[node name="Encounter4" unique_id=571267862 instance=ExtResource("1_o8c3j")]
 music_track = "Lvl_2_3"
 next_level_path = "res://scenes/levels/level_4.tscn"
 
