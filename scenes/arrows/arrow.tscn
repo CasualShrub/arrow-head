@@ -4,7 +4,7 @@
 [ext_resource type="Texture2D" uid="uid://buqutmlha3vbg" path="res://art/arrow/normal_arrow.png" id="2_d85th"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_23jat"]
-radius = 0.2
+radius = 0.05
 height = 0.6
 
 [node name="Arrow" type="CharacterBody3D" unique_id=201688871]
