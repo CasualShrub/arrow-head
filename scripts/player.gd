@@ -249,7 +249,6 @@ func _move(dir: Vector2, _dt: float) -> void:
 		selected = -1
 	else:
 		selected = sectors.get_sector_from_movement(dir)
-	sectors.highlight_sector(selected)
 	if dir != _move_dir:
 		_move_dir = dir
 		#_update_eyes()
@@ -438,6 +437,16 @@ func _process(delta: float) -> void:
 		face_mouse()
 	if _in_slowdown:
 		_update_preview(delta)
+	var flag := false
+	var stored := sectors.get_stored()
+	for i in range(len(stored)):
+		var e = stored[i]
+		if e is EmbeddedArrow and e.is_firing_enabled():
+			flag = true
+			sectors.highlight_sector(i)
+			break;
+	if not flag:
+		sectors.highlight_sector()
 	_update_status_tint()
 
 func _ready() -> void:
