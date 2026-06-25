@@ -19,6 +19,9 @@ shader_parameter/fade_start = -0.04
 is_boss_level = true
 music_track = "Lvl_6_7"
 
+[node name="SubViewport" parent="SubViewportContainer" parent_id_path=PackedInt32Array(506783396) index="0" unique_id=1083906358]
+size = Vector2i(1152, 648)
+
 [node name="Player" parent="SubViewportContainer/SubViewport/World" parent_id_path=PackedInt32Array(1589957074) index="0" unique_id=508579643]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 26.14655, 0, 34.66523)
 burn_spin_speed = 24.0
