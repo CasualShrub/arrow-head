@@ -10,11 +10,14 @@ class_name DashPreviewComponent
 @onready var _sprite: Sprite3D = %PreviewSprite
 @onready var _line: MeshInstance3D = %PreviewLine
 
+@onready var _sprite_basis := _sprite.global_basis
+
 const _ENEMY_LAYER := 1 << 3
 
 var _highlighted: Array[Enemy] = []
 
 func _update_sprite(pos: Vector3) -> void:
+	_sprite.global_basis = _sprite_basis
 	_sprite.global_position = pos
 
 func _update_line(start: Vector3, end: Vector3) -> void:

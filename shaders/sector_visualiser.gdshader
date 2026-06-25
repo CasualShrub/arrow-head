@@ -5,6 +5,8 @@ render_mode unshaded, blend_mix, cull_disabled;
 uniform int sector_count = 8;
 uniform int aimed_sector = -1;
 uniform int occupied_mask = 0;
+uniform float inner_radius = 0.35;
+
 
 uniform vec4 empty_color : source_color =
     vec4(0.9, 0.35, 0.15, 0.12);
@@ -30,10 +32,9 @@ void fragment() {
     vec2 p = UV * 2.0 - 1.0;
 
     float r = length(p);
-
-    if (r > 1.0) {
-        discard;
-    }
+	if (r < inner_radius || r > 1.0) {
+    	discard;
+	}
 
     float angle = atan(p.y, p.x);
 
@@ -51,10 +52,11 @@ void fragment() {
         sector_occupied(sector)
         ? occupied_color
         : empty_color;
-
+	
     if (sector == aimed_sector) {
         color = highlight_color;
     }
+	
 
     float local_angle =
         mod(angle, sector_size);

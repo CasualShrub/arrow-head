@@ -104,8 +104,8 @@ var _slowmo_tween: Tween
 @onready var _preview: DashPreviewComponent = %DashPreview
 @onready var _arrows: Node3D = %Arrows
 
-var _sprite_basis: Basis
-var _eyes_basis: Basis
+@onready var _sprite_basis := _sprite.global_basis
+@onready var _eyes_basis := _eyes.global_basis
 
 func _update_collider(c: CollisionShape3D, r: float) -> void:
 	if not c: return
@@ -437,7 +437,3 @@ func _process(delta: float) -> void:
 
 func _ready() -> void:
 	_update_collider(_collider, hurt_radius)
-	_sprite_basis = _sprite.transform.basis
-	_eyes_basis = _eyes.transform.basis
-	if not Engine.is_editor_hint():
-		_update_eyes()

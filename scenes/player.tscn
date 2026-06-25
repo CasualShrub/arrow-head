@@ -160,6 +160,7 @@ shader = ExtResource("5_qlg0r")
 shader_parameter/sector_count = 4
 shader_parameter/aimed_sector = -1
 shader_parameter/occupied_mask = 0
+shader_parameter/inner_radius = 0.79
 shader_parameter/empty_color = Color(0.9, 0.35, 0.15, 0.12)
 shader_parameter/occupied_color = Color(0.9, 0.35, 0.15, 0.5)
 shader_parameter/highlight_color = Color(0.9882353, 0.59607846, 0, 0.7137255)
@@ -264,7 +265,7 @@ mesh = SubResource("PlaneMesh_smehm")
 
 [node name="DashCast" type="RayCast3D" parent="DashPreview" unique_id=1998594313]
 unique_name_in_owner = true
-target_position = Vector3(0, 0.74, 0)
+target_position = Vector3(0, 0, 0)
 collision_mask = 4
 
 [node name="Sectors" type="MeshInstance3D" parent="." unique_id=9603647]
