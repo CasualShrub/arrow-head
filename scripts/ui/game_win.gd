@@ -12,9 +12,12 @@ var _next_scene = "res://scenes/levels/level_1.tscn"
 
 func _ready() -> void:
 	_root.visible = false
+	_apple.visible = false
 
-func _on_encounter_cleared(won: bool, next_scene: String) -> void:
+func _on_encounter_cleared(won: bool, next_scene: String, is_last_level: bool) -> void:
 	_root.visible = true
+	if is_last_level:
+		_apple.visible = true
 	_next_scene = next_scene
 
 func _unhandled_input(event: InputEvent) -> void:

@@ -9,7 +9,7 @@ var _ongoing := false
 var _won: bool
 
 signal ended(won: bool)
-signal cleared(won: bool, next_path: String)
+signal cleared(won: bool, next_path: String, is_last_level: bool)
 
 func get_enemies() -> Array[Enemy]:
 	var enemies: Array[Enemy] = []
@@ -50,7 +50,7 @@ func _end(won: bool) -> void:
 	_won = won
 	if won:
 		SoundManager.play("big_win_kill_boss_jingle" if is_boss_level else "enemy_death_small_win_jingle")
-		cleared.emit(_won, next_level_path)
+		cleared.emit(_won, next_level_path, is_boss_level)
 	else:
 		ended.emit(_won)
 

@@ -5,6 +5,7 @@
 [ext_resource type="PackedScene" uid="uid://c5i7j0ac0apq" path="res://scenes/enemies/enemy_bananarotten_line.tscn" id="2_laj7o"]
 [ext_resource type="PackedScene" uid="uid://b0566e6bt2wnb" path="res://scenes/enemies/enemy_bananaunripe_spray.tscn" id="3_fi56y"]
 [ext_resource type="PackedScene" uid="uid://b7xvltf5sfgso" path="res://scenes/enemies/enemy_spray.tscn" id="5_fi56y"]
+[ext_resource type="PackedScene" uid="uid://x1mhd7mlveia" path="res://scenes/ui/game_win.tscn" id="6_hldbq"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_845dy"]
 render_priority = 0
@@ -151,5 +152,9 @@ use_collision = true
 collision_layer = 4
 size = Vector3(2.032677, 5.8047485, 1.8213167)
 material = SubResource("ShaderMaterial_845dy")
+
+[node name="GameWin" parent="." index="6" unique_id=1577397124 instance=ExtResource("6_hldbq")]
+
+[connection signal="cleared" from="." to="GameWin" method="_on_encounter_cleared"]
 
 [editable path="SubViewportContainer/SubViewport/World/Enemies/Enemy7"]

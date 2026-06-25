@@ -5,6 +5,7 @@
 [ext_resource type="Shader" uid="uid://br4t4iofbd1o1" path="res://shaders/textured_fade.gdshader" id="3_x42e6"]
 [ext_resource type="Texture2D" uid="uid://duy7x13uwce0v" path="res://assets/textures/brickwall.png" id="4_6761a"]
 [ext_resource type="Material" uid="uid://cwoodgate0tut" path="res://materials/wood_gate_material.tres" id="4_x42e6"]
+[ext_resource type="PackedScene" uid="uid://x1mhd7mlveia" path="res://scenes/ui/game_win.tscn" id="6_sk5k4"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_6761a"]
 render_priority = 0
@@ -140,6 +141,10 @@ collision_layer = 4
 collision_mask = 9
 size = Vector3(8.714607, 2.4925537, 33.00226)
 material = SubResource("ShaderMaterial_oc4kc")
+
+[node name="GameWin" parent="." index="5" unique_id=1577397124 instance=ExtResource("6_sk5k4")]
+
+[connection signal="cleared" from="." to="GameWin" method="_on_encounter_cleared"]
 
 [editable path="SubViewportContainer/SubViewport/World/Enemies/Enemy"]
 [editable path="SubViewportContainer/SubViewport/World/Enemies/Enemy2"]

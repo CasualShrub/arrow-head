@@ -9,6 +9,7 @@
 [ext_resource type="PackedScene" uid="uid://b7xvltf5sfgso" path="res://scenes/enemies/enemy_spray.tscn" id="9_3p04p"]
 [ext_resource type="Shader" uid="uid://br4t4iofbd1o1" path="res://shaders/textured_fade.gdshader" id="9_fade"]
 [ext_resource type="Texture2D" uid="uid://duy7x13uwce0v" path="res://assets/textures/brickwall.png" id="10_bricktex"]
+[ext_resource type="PackedScene" uid="uid://x1mhd7mlveia" path="res://scenes/ui/game_win.tscn" id="10_qsp8v"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_brickfade"]
 render_priority = 0
@@ -150,6 +151,10 @@ material = SubResource("ShaderMaterial_brickfade")
 [node name="Enemy" parent="SubViewportContainer/SubViewport/World/Walls2" index="4" unique_id=893105182 instance=ExtResource("9_3p04p")]
 transform = Transform3D(-0.38260564, 0, -0.92391175, 0, 1, 0, 0.92391175, 0, -0.38260564, 14.9575205, 0, 23.711275)
 collision_mask = 9
+
+[node name="GameWin" parent="." index="4" unique_id=1577397124 instance=ExtResource("10_qsp8v")]
+
+[connection signal="cleared" from="." to="GameWin" method="_on_encounter_cleared"]
 
 [editable path="SubViewportContainer/SubViewport/World/Enemies/archer2"]
 [editable path="SubViewportContainer/SubViewport/World/Enemies/frost"]

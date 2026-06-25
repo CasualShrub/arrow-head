@@ -5,6 +5,7 @@
 [ext_resource type="PackedScene" uid="uid://tmhabgv3ovyb" path="res://scenes/enemies/enemy_archer.tscn" id="3_w6h2s"]
 [ext_resource type="PackedScene" uid="uid://b15vpncjfa5df" path="res://scenes/enemies/enemy_blueberry.tscn" id="5_anwe6"]
 [ext_resource type="Shader" uid="uid://br4t4iofbd1o1" path="res://shaders/textured_fade.gdshader" id="6_tfade"]
+[ext_resource type="PackedScene" uid="uid://x1mhd7mlveia" path="res://scenes/ui/game_win.tscn" id="7_5vn0v"]
 [ext_resource type="Texture2D" uid="uid://duy7x13uwce0v" path="res://assets/textures/brickwall.png" id="7_bricktex"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_ogj6a"]
@@ -163,5 +164,9 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1.6545563)
 
 [node name="Enemy2_PatrolPoints#Marker3D3" type="Marker3D" parent="." index="2" unique_id=64993886]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.786171, 0, 1.6545563)
+
+[node name="GameWin" parent="." index="6" unique_id=1577397124 instance=ExtResource("7_5vn0v")]
+
+[connection signal="cleared" from="." to="GameWin" method="_on_encounter_cleared"]
 
 [editable path="SubViewportContainer/SubViewport/World/Enemies/Enemy4"]
