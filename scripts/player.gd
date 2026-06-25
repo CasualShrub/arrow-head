@@ -72,6 +72,8 @@ const _PLAYER_TEAM = Arrow.Team.PLAYER
 @export_group("status_effects")
 @export var burn_duration := 2.5
 @export var freeze_duration := 2.0
+@export var freeze_warn_time := 0.6
+@export var freeze_blink_rate := 12.0
 @export var burn_spin_speed := 24.0
 @export var burn_drift_speed := 7.2  # 2D 240 px/s = 1.2x move speed; 1.2 * 6.0 m/s
 @export var burn_redrift := 0.14  # avg time between random drift-direction changes (lurching)
@@ -412,7 +414,8 @@ func _physics_process(delta: float) -> void:
 	else:
 		if is_frozen():
 			_freeze_time -= delta
-			print("frozen: ", _freeze_time)
+			if _freeze_time < freeze_warn_time:
+				_status_sprite.visible = fmod(_freeze_time * freeze_blink_rate, 2.0) < 1.0
 			if not is_frozen():
 				_display_status()
 		if is_dashing():
