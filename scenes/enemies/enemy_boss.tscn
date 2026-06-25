@@ -1,0 +1,78 @@
+[gd_scene format=3 uid="uid://w8u4ypwm2oym"]
+
+[ext_resource type="PackedScene" uid="uid://b8rs35o7f45v0" path="res://scenes/enemies/enemy.tscn" id="1_ydy32"]
+[ext_resource type="Script" uid="uid://d04k7pxjd2u24" path="res://scripts/arrow_pattern.gd" id="2_2ufu6"]
+[ext_resource type="Script" uid="uid://r4qbgt6it8lb" path="res://scripts/firing_instance.gd" id="3_dnuh1"]
+[ext_resource type="PackedScene" uid="uid://dibxktof00en3" path="res://scenes/arrows/arrow_weak.tscn" id="4_dnuh1"]
+
+[sub_resource type="Resource" id="Resource_pkga2"]
+script = ExtResource("3_dnuh1")
+type = ExtResource("4_dnuh1")
+instance_delay = 0.03
+count = 50
+max_count = 70
+spread = 3.14
+max_spread = 3.14
+metadata/_custom_type_script = "uid://r4qbgt6it8lb"
+
+[sub_resource type="Resource" id="Resource_2elvd"]
+script = ExtResource("2_2ufu6")
+recovery = 1.0
+instances = Array[ExtResource("3_dnuh1")]([SubResource("Resource_pkga2")])
+metadata/_custom_type_script = "uid://d04k7pxjd2u24"
+
+[sub_resource type="Resource" id="Resource_dnuh1"]
+script = ExtResource("3_dnuh1")
+type = ExtResource("4_dnuh1")
+count = 5
+max_count = 5
+spread = 0.3
+max_spread = 0.3
+metadata/_custom_type_script = "uid://r4qbgt6it8lb"
+
+[sub_resource type="Resource" id="Resource_2ufu6"]
+script = ExtResource("2_2ufu6")
+recovery = 1.0
+instances = Array[ExtResource("3_dnuh1")]([SubResource("Resource_dnuh1")])
+metadata/_custom_type_script = "uid://d04k7pxjd2u24"
+
+[sub_resource type="Resource" id="Resource_2orkc"]
+script = ExtResource("3_dnuh1")
+type = ExtResource("4_dnuh1")
+instance_delay = 0.05
+count = 5
+max_count = 10
+offset = -0.4795926535897901
+max_offset = 0.44540734641020974
+individual_offset = true
+metadata/_custom_type_script = "uid://r4qbgt6it8lb"
+
+[sub_resource type="Resource" id="Resource_bfrxa"]
+script = ExtResource("2_2ufu6")
+weight = 3.0
+recovery = 1.0
+instances = Array[ExtResource("3_dnuh1")]([SubResource("Resource_2orkc")])
+metadata/_custom_type_script = "uid://d04k7pxjd2u24"
+
+[sub_resource type="Resource" id="Resource_6k67b"]
+script = ExtResource("3_dnuh1")
+type = ExtResource("4_dnuh1")
+count = 10
+spread = 6.28318530717959
+metadata/_custom_type_script = "uid://r4qbgt6it8lb"
+
+[sub_resource type="Resource" id="Resource_cd64a"]
+script = ExtResource("3_dnuh1")
+type = ExtResource("4_dnuh1")
+count = 10
+spread = 6.28318530717959
+metadata/_custom_type_script = "uid://r4qbgt6it8lb"
+
+[sub_resource type="Resource" id="Resource_ybiqc"]
+script = ExtResource("2_2ufu6")
+recovery = 1.0
+instances = Array[ExtResource("3_dnuh1")]([SubResource("Resource_6k67b"), SubResource("Resource_cd64a")])
+metadata/_custom_type_script = "uid://d04k7pxjd2u24"
+
+[node name="Enemy" unique_id=71488470 instance=ExtResource("1_ydy32")]
+patterns = Array[ExtResource("2_2ufu6")]([SubResource("Resource_2elvd"), SubResource("Resource_2ufu6"), SubResource("Resource_bfrxa"), SubResource("Resource_ybiqc")])
