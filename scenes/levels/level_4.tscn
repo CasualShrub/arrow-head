@@ -23,6 +23,8 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 32.7256, 0, 6.8834505)
 
 [node name="Enemy" parent="SubViewportContainer/SubViewport/World/Enemies" parent_id_path=PackedInt32Array(1185931971) index="0" unique_id=71488470 instance=ExtResource("3_w6h2s")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 31.732197, -0.14855027, 10.668597)
+combat_speed = 0.0
+combat_strafe_speed = 0.0
 
 [node name="Enemy3" parent="SubViewportContainer/SubViewport/World/Enemies" parent_id_path=PackedInt32Array(1185931971) index="1" unique_id=1132135470 instance=ExtResource("5_anwe6")]
 transform = Transform3D(0.2215712, 0, 0.9751442, 0, 1, 0, -0.9751442, 0, 0.2215712, 32.39117, 0, 30.13918)
@@ -47,6 +49,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.838967, 0, 6.49942)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 33.65823, 2.2850332, -8.448704)
 use_collision = true
 collision_layer = 4
+collision_mask = 9
 size = Vector3(42.04322, 5.604187, 15.176575)
 material = SubResource("ShaderMaterial_ogj6a")
 
@@ -54,6 +57,7 @@ material = SubResource("ShaderMaterial_ogj6a")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 33.768337, 2.3549948, 28.362885)
 use_collision = true
 collision_layer = 4
+collision_mask = 9
 size = Vector3(41.823006, 5.74411, 8.408813)
 material = SubResource("ShaderMaterial_ogj6a")
 
@@ -61,6 +65,7 @@ material = SubResource("ShaderMaterial_ogj6a")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 17.08504, 2.3255606, 11.222664)
 use_collision = true
 collision_layer = 4
+collision_mask = 9
 size = Vector3(8.714607, 5.6852417, 53.637848)
 material = SubResource("ShaderMaterial_ogj6a")
 
@@ -68,6 +73,7 @@ material = SubResource("ShaderMaterial_ogj6a")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 44.258682, 2.3894491, 11.345711)
 use_collision = true
 collision_layer = 4
+collision_mask = 9
 size = Vector3(9.330448, 5.813019, 53.391754)
 material = SubResource("ShaderMaterial_ogj6a")
 
@@ -77,6 +83,7 @@ material = SubResource("ShaderMaterial_ogj6a")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 18.033298, 2.6605062, 21.252733)
 use_collision = true
 collision_layer = 4
+collision_mask = 9
 size = Vector3(1.1020739, 6.355133, 14.117258)
 material = SubResource("ShaderMaterial_ogj6a")
 
@@ -84,6 +91,7 @@ material = SubResource("ShaderMaterial_ogj6a")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 26.013264, 2.4470663, 22.12653)
 use_collision = true
 collision_layer = 4
+collision_mask = 9
 size = Vector3(11.16029, 5.928253, 12.369664)
 material = SubResource("ShaderMaterial_ogj6a")
 
@@ -91,6 +99,7 @@ material = SubResource("ShaderMaterial_ogj6a")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 35.018864, 2.409896, 22.12653)
 use_collision = true
 collision_layer = 4
+collision_mask = 9
 size = Vector3(4.2619867, 5.8539124, 12.369664)
 material = SubResource("ShaderMaterial_ogj6a")
 
@@ -98,6 +107,7 @@ material = SubResource("ShaderMaterial_ogj6a")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 25.278948, 2.493209, 21.78979)
 use_collision = true
 collision_layer = 4
+collision_mask = 9
 size = Vector3(9.699258, 6.0205383, 13.971993)
 material = SubResource("ShaderMaterial_ogj6a")
 
@@ -105,6 +115,7 @@ material = SubResource("ShaderMaterial_ogj6a")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 25.278948, 2.4831991, 11.577322)
 use_collision = true
 collision_layer = 4
+collision_mask = 9
 size = Vector3(9.699258, 6.000519, 6.638406)
 material = SubResource("ShaderMaterial_ogj6a")
 
@@ -112,6 +123,7 @@ material = SubResource("ShaderMaterial_ogj6a")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 30.821941, 2.5431967, 9.128967)
 use_collision = true
 collision_layer = 4
+collision_mask = 9
 size = Vector3(1.4924974, 6.120514, 1.7416965)
 material = SubResource("ShaderMaterial_ogj6a")
 
@@ -119,6 +131,7 @@ material = SubResource("ShaderMaterial_ogj6a")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 32.96144, 2.5220175, 9.130432)
 use_collision = true
 collision_layer = 4
+collision_mask = 9
 size = Vector3(2.0926843, 6.0781555, 1.7446262)
 material = SubResource("ShaderMaterial_ogj6a")
 
@@ -126,6 +139,7 @@ material = SubResource("ShaderMaterial_ogj6a")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 25.278948, 2.3069906, 5.2511168)
 use_collision = true
 collision_layer = 4
+collision_mask = 9
 size = Vector3(9.699258, 5.648102, 2.7401676)
 material = SubResource("ShaderMaterial_ogj6a")
 
@@ -133,6 +147,7 @@ material = SubResource("ShaderMaterial_ogj6a")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 25.278948, 2.3452597, 31.24026)
 use_collision = true
 collision_layer = 4
+collision_mask = 9
 size = Vector3(9.699258, 5.72464, 2.1855555)
 material = SubResource("ShaderMaterial_ogj6a")
 

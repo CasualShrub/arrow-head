@@ -1,10 +1,10 @@
 [gd_scene format=3 uid="uid://dxfvw43ommtbh"]
 
 [ext_resource type="PackedScene" uid="uid://b6c1h2si8ob6l" path="res://scenes/levels/encounter.tscn" id="1_o8c3j"]
-[ext_resource type="PackedScene" path="res://scenes/enemies/enemy_fire.tscn" id="3_fkk1g"]
-[ext_resource type="PackedScene" uid="uid://1jtkc8jlvm65" path="res://scenes/enemies/enemy_frost.tscn" id="4_ugcn1"]
+[ext_resource type="PackedScene" uid="uid://db0ry36fopb12" path="res://scenes/enemies/enemy_bananarotten.tscn" id="4_pimnq"]
+[ext_resource type="PackedScene" uid="uid://kwovebw0p15w" path="res://scenes/enemies/enemy_bananaunripe.tscn" id="5_2bnyt"]
 [ext_resource type="PackedScene" uid="uid://b7xvltf5sfgso" path="res://scenes/enemies/enemy_spray.tscn" id="5_pimnq"]
-[ext_resource type="PackedScene" uid="uid://tmhabgv3ovyb" path="res://scenes/enemies/enemy_archer.tscn" id="6_2bnyt"]
+[ext_resource type="PackedScene" uid="uid://b15vpncjfa5df" path="res://scenes/enemies/enemy_blueberry.tscn" id="6_pimnq"]
 [ext_resource type="Material" uid="uid://bspie6d5acqw8" path="res://materials/stone_floor_material.tres" id="6_ugcn1"]
 [ext_resource type="Shader" uid="uid://br4t4iofbd1o1" path="res://shaders/textured_fade.gdshader" id="7_tfade"]
 [ext_resource type="Texture2D" uid="uid://duy7x13uwce0v" path="res://assets/textures/brickwall.png" id="8_bricktex"]
@@ -24,65 +24,31 @@ music_track = "Lvl_2_3"
 [node name="Player" parent="SubViewportContainer/SubViewport/World" parent_id_path=PackedInt32Array(1589957074) index="0" unique_id=508579643]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.7206564, 0, 34.657932)
 
-[node name="fire" parent="SubViewportContainer/SubViewport/World/Enemies" parent_id_path=PackedInt32Array(1185931971) index="0" unique_id=951565459 instance=ExtResource("3_fkk1g")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 15.308413, 0, 25.801744)
-has_intro = false
-
-[node name="frost" parent="SubViewportContainer/SubViewport/World/Enemies" parent_id_path=PackedInt32Array(1185931971) index="1" unique_id=955806617 instance=ExtResource("4_ugcn1")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10.425558, 0, 28.688429)
-has_intro = false
-
-[node name="spray" parent="SubViewportContainer/SubViewport/World/Enemies" parent_id_path=PackedInt32Array(1185931971) index="2" unique_id=71488470 instance=ExtResource("5_pimnq")]
+[node name="spray" parent="SubViewportContainer/SubViewport/World/Enemies" parent_id_path=PackedInt32Array(1185931971) index="0" unique_id=71488470 instance=ExtResource("5_pimnq")]
 transform = Transform3D(0.011440461, 0, 0.99993455, 0, 1, 0, -0.99993455, 0, 0.011440461, 10.525992, 0, 32.87049)
-has_intro = false
+alwayds_alert = false
 
-[node name="spray2" parent="SubViewportContainer/SubViewport/World/Enemies" parent_id_path=PackedInt32Array(1185931971) index="3" unique_id=1429638199 instance=ExtResource("5_pimnq")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 18.202555, 0, 32.234184)
-has_intro = false
-
-[node name="spray3" parent="SubViewportContainer/SubViewport/World/Enemies" parent_id_path=PackedInt32Array(1185931971) index="4" unique_id=573974390 instance=ExtResource("5_pimnq")]
+[node name="spray3" parent="SubViewportContainer/SubViewport/World/Enemies" parent_id_path=PackedInt32Array(1185931971) index="1" unique_id=573974390 instance=ExtResource("5_pimnq")]
 transform = Transform3D(-0.9999976, 0, 0.0021771493, 0, 1, 0, -0.0021771493, 0, -0.9999976, 19.359884, 0, 15.086241)
-has_intro = false
+alwayds_alert = false
 
-[node name="frost2" parent="SubViewportContainer/SubViewport/World/Enemies" parent_id_path=PackedInt32Array(1185931971) index="5" unique_id=1225890532 instance=ExtResource("4_ugcn1")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.735272, 0, 28.48721)
-has_intro = false
+[node name="blueberry" parent="SubViewportContainer/SubViewport/World/Enemies" parent_id_path=PackedInt32Array(1185931971) index="2" unique_id=1259269854 instance=ExtResource("6_pimnq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12.109353, 0, 14.87825)
 
-[node name="Marker3D2" type="Marker3D" parent="SubViewportContainer/SubViewport/World/Enemies/frost2/PatrolPoints" parent_id_path=PackedInt32Array(1225890532, 1646478367) index="1" unique_id=30637454]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.570962, 0, 0)
+[node name="Marker3D2" type="Marker3D" parent="SubViewportContainer/SubViewport/World/Enemies/blueberry/PatrolPoints" parent_id_path=PackedInt32Array(1259269854, 1646478367) index="1" unique_id=1143443460]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.5944366, 0, 0)
 
-[node name="fire2" parent="SubViewportContainer/SubViewport/World/Enemies" parent_id_path=PackedInt32Array(1185931971) index="6" unique_id=992214563 instance=ExtResource("3_fkk1g")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.1543865, 0, 24.59525)
-has_intro = false
+[node name="fire" parent="SubViewportContainer/SubViewport/World/Enemies" parent_id_path=PackedInt32Array(1185931971) index="3" unique_id=2061183902 instance=ExtResource("4_pimnq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 15.368082, 0, 25.631374)
 
-[node name="Marker3D2" type="Marker3D" parent="SubViewportContainer/SubViewport/World/Enemies/fire2/PatrolPoints" parent_id_path=PackedInt32Array(992214563, 1646478367) index="1" unique_id=957532760]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.6909013, 0, 0)
+[node name="Marker3D2" type="Marker3D" parent="SubViewportContainer/SubViewport/World/Enemies/fire/PatrolPoints" parent_id_path=PackedInt32Array(2061183902, 1646478367) index="1" unique_id=1962976489]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.2282705, 0, 0)
 
-[node name="archer" parent="SubViewportContainer/SubViewport/World/Enemies" parent_id_path=PackedInt32Array(1185931971) index="7" unique_id=1949561034 instance=ExtResource("6_2bnyt")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8.633387, -0.1922096, 19.38399)
-has_intro = false
+[node name="frost" parent="SubViewportContainer/SubViewport/World/Enemies" parent_id_path=PackedInt32Array(1185931971) index="4" unique_id=64393236 instance=ExtResource("5_2bnyt")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10.144302, 0, 28.42484)
 
-[node name="Marker3D2" type="Marker3D" parent="SubViewportContainer/SubViewport/World/Enemies/archer/PatrolPoints" parent_id_path=PackedInt32Array(1949561034, 1646478367) index="1" unique_id=644034966]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.276848, 0, 0)
-
-[node name="Marker3D3" type="Marker3D" parent="SubViewportContainer/SubViewport/World/Enemies/archer/PatrolPoints" parent_id_path=PackedInt32Array(1949561034, 1646478367) index="2" unique_id=98704540]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.276848, 0, -4.554716)
-
-[node name="Marker3D4" type="Marker3D" parent="SubViewportContainer/SubViewport/World/Enemies/archer/PatrolPoints" parent_id_path=PackedInt32Array(1949561034, 1646478367) index="3" unique_id=1083416456]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.59609795, 0, -4.554716)
-
-[node name="archer2" parent="SubViewportContainer/SubViewport/World/Enemies" parent_id_path=PackedInt32Array(1185931971) index="8" unique_id=2023711144 instance=ExtResource("6_2bnyt")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.6608362, -0.14746892, 15.0087385)
-has_intro = false
-
-[node name="Marker3D2" type="Marker3D" parent="SubViewportContainer/SubViewport/World/Enemies/archer2/PatrolPoints" parent_id_path=PackedInt32Array(2023711144, 1646478367) index="1" unique_id=748124238]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.488946, 0, 0)
-
-[node name="Marker3D3" type="Marker3D" parent="SubViewportContainer/SubViewport/World/Enemies/archer2/PatrolPoints" parent_id_path=PackedInt32Array(2023711144, 1646478367) index="2" unique_id=1783926073]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.488946, 0, 4.182084)
-
-[node name="Marker3D4" type="Marker3D" parent="SubViewportContainer/SubViewport/World/Enemies/archer2/PatrolPoints" parent_id_path=PackedInt32Array(2023711144, 1646478367) index="3" unique_id=1075147750]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.18187046, 0, 4.182084)
+[node name="Marker3D2" type="Marker3D" parent="SubViewportContainer/SubViewport/World/Enemies/frost/PatrolPoints" parent_id_path=PackedInt32Array(64393236, 1646478367) index="1" unique_id=1790525108]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.1679955, 0, 0)
 
 [node name="CameraPivot" parent="SubViewportContainer/SubViewport/World" parent_id_path=PackedInt32Array(1589957074) index="2" unique_id=1563753267]
 transform = Transform3D(1, 0, 0, 0, -4.371139e-08, 1, 0, -1, -4.371139e-08, 4.7206564, 3.7000048, 34.657932)
@@ -129,15 +95,7 @@ material = SubResource("ShaderMaterial_n6eey")
 
 [node name="book shelves" type="Node3D" parent="SubViewportContainer/SubViewport/World" parent_id_path=PackedInt32Array(1589957074) index="7" unique_id=1723679945]
 
-[node name="CSGBox3D16" type="CSGBox3D" parent="SubViewportContainer/SubViewport/World/book shelves" index="0" unique_id=1526335319]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 13.705206, 0.29042912, 27.217314)
-use_collision = true
-collision_layer = 4
-collision_mask = 9
-size = Vector3(5.9386187, 2.5149536, 0.2885177)
-material = ExtResource("9_pimnq")
-
-[node name="CSGBox3D17" type="CSGBox3D" parent="SubViewportContainer/SubViewport/World/book shelves" index="1" unique_id=976780930]
+[node name="CSGBox3D17" type="CSGBox3D" parent="SubViewportContainer/SubViewport/World/book shelves" index="0" unique_id=976780930]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.4900615, 0.29042912, 29.086546)
 use_collision = true
 collision_layer = 4
@@ -145,7 +103,7 @@ collision_mask = 9
 size = Vector3(3.5338845, 2.5149536, 0.2885177)
 material = ExtResource("9_pimnq")
 
-[node name="CSGBox3D20" type="CSGBox3D" parent="SubViewportContainer/SubViewport/World/book shelves" index="2" unique_id=2146434706]
+[node name="CSGBox3D20" type="CSGBox3D" parent="SubViewportContainer/SubViewport/World/book shelves" index="1" unique_id=2146434706]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.86887, 0.29042912, 33.659832)
 use_collision = true
 collision_layer = 4
@@ -153,7 +111,7 @@ collision_mask = 9
 size = Vector3(3.5338845, 2.5149536, 0.2885177)
 material = ExtResource("9_pimnq")
 
-[node name="CSGBox3D21" type="CSGBox3D" parent="SubViewportContainer/SubViewport/World/book shelves" index="3" unique_id=1568084848]
+[node name="CSGBox3D21" type="CSGBox3D" parent="SubViewportContainer/SubViewport/World/book shelves" index="2" unique_id=1568084848]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9.465781, 0.29042912, 34.90118)
 use_collision = true
 collision_layer = 4
@@ -161,7 +119,7 @@ collision_mask = 9
 size = Vector3(0.34006238, 2.5149536, 2.771212)
 material = ExtResource("9_pimnq")
 
-[node name="CSGBox3D18" type="CSGBox3D" parent="SubViewportContainer/SubViewport/World/book shelves" index="4" unique_id=558494723]
+[node name="CSGBox3D18" type="CSGBox3D" parent="SubViewportContainer/SubViewport/World/book shelves" index="3" unique_id=558494723]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.6487913, 0.29042912, 25.364927)
 use_collision = true
 collision_layer = 4
@@ -169,7 +127,7 @@ collision_mask = 9
 size = Vector3(3.5338845, 2.5149536, 0.2885177)
 material = ExtResource("9_pimnq")
 
-[node name="CSGBox3D19" type="CSGBox3D" parent="SubViewportContainer/SubViewport/World/book shelves" index="5" unique_id=268350208]
+[node name="CSGBox3D19" type="CSGBox3D" parent="SubViewportContainer/SubViewport/World/book shelves" index="4" unique_id=268350208]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.65559, 0.29042912, 20.280573)
 use_collision = true
 collision_layer = 4
@@ -177,7 +135,7 @@ collision_mask = 9
 size = Vector3(7.0419183, 2.5149536, 0.2885177)
 material = ExtResource("9_pimnq")
 
-[node name="brick walls" type="Node3D" parent="SubViewportContainer/SubViewport/World/book shelves" index="6" unique_id=1577970944]
+[node name="brick walls" type="Node3D" parent="SubViewportContainer/SubViewport/World/book shelves" index="5" unique_id=1577970944]
 
 [node name="SubViewportContainer_SubViewport_World_Walls#CSGBox3D5" type="CSGBox3D" parent="SubViewportContainer/SubViewport/World/book shelves/brick walls" index="0" unique_id=691528179]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8.430126, 2.2767324, 27.118809)
@@ -219,10 +177,7 @@ collision_mask = 9
 size = Vector3(0.9604149, 5.5875854, 6.239602)
 material = SubResource("ShaderMaterial_n6eey")
 
+[editable path="SubViewportContainer/SubViewport/World/Enemies/spray"]
+[editable path="SubViewportContainer/SubViewport/World/Enemies/blueberry"]
 [editable path="SubViewportContainer/SubViewport/World/Enemies/fire"]
 [editable path="SubViewportContainer/SubViewport/World/Enemies/frost"]
-[editable path="SubViewportContainer/SubViewport/World/Enemies/spray"]
-[editable path="SubViewportContainer/SubViewport/World/Enemies/frost2"]
-[editable path="SubViewportContainer/SubViewport/World/Enemies/fire2"]
-[editable path="SubViewportContainer/SubViewport/World/Enemies/archer"]
-[editable path="SubViewportContainer/SubViewport/World/Enemies/archer2"]

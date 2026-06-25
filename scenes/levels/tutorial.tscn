@@ -38,6 +38,7 @@ transform = Transform3D(1, 0, 0, 0, -4.371139e-08, 1, 0, -1, -4.371139e-08, 15.0
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12.045044, 0.7292166, 29.864239)
 use_collision = true
 collision_layer = 4
+collision_mask = 9
 size = Vector3(5.3484993, 2.4925537, 0.9723892)
 material = SubResource("ShaderMaterial_brickfade")
 
@@ -45,6 +46,7 @@ material = SubResource("ShaderMaterial_brickfade")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 19.854734, 0.7292166, 29.864239)
 use_collision = true
 collision_layer = 4
+collision_mask = 9
 size = Vector3(5.3484993, 2.4925537, 0.9723892)
 material = SubResource("ShaderMaterial_brickfade")
 
@@ -59,6 +61,7 @@ material = SubResource("ShaderMaterial_brickfade")
 transform = Transform3D(1, 0, 0, 0, 0.9999143, -0.013090792, 0, 0.013090792, 0.9999143, 15.571087, 0.5696453, 29.90075)
 use_collision = true
 collision_layer = 4
+collision_mask = 9
 size = Vector3(3.659051, 1.6159363, 0.51174927)
 material = ExtResource("5_woodgate")
 
@@ -68,6 +71,7 @@ material = ExtResource("5_woodgate")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 27.182518, 0.7292166, 12.802752)
 use_collision = true
 collision_layer = 4
+collision_mask = 9
 size = Vector3(54.994644, 2.4925537, 18.399597)
 material = SubResource("ShaderMaterial_brickfade")
 
@@ -75,6 +79,7 @@ material = SubResource("ShaderMaterial_brickfade")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 21.964916, 0.7292166, 36.418808)
 use_collision = true
 collision_layer = 4
+collision_mask = 9
 size = Vector3(27.39737, 2.4925537, 3.2455597)
 material = SubResource("ShaderMaterial_brickfade")
 
@@ -82,6 +87,7 @@ material = SubResource("ShaderMaterial_brickfade")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.7043724, 0.7292166, 21.540459)
 use_collision = true
 collision_layer = 4
+collision_mask = 9
 size = Vector3(12.038353, 2.4925537, 33.00226)
 material = SubResource("ShaderMaterial_brickfade")
 
@@ -89,5 +95,6 @@ material = SubResource("ShaderMaterial_brickfade")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 28.804157, 0.7292166, 21.540459)
 use_collision = true
 collision_layer = 4
+collision_mask = 9
 size = Vector3(12.452363, 2.4925537, 33.00226)
 material = SubResource("ShaderMaterial_brickfade")
