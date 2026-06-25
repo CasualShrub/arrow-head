@@ -10,6 +10,8 @@ const _ENEMY_TEAM = Arrow.Team.ENEMY
 
 @export_group("firing")
 @export var patterns: Array[ArrowPattern] = []
+# when set, overrides every pattern's arrow type — the fire/frost variants use this
+@export var arrow_scene: PackedScene = null
 @export var aim_time := 0.4
 @export var release_time := 0.12
 
@@ -101,7 +103,7 @@ func _get_rand(min_val: Variant, max_val: Variant) -> Variant:
 func _execute_instance(instance: FiringInstance, offset: float, spread: float, count: int, i: int) -> void:
 	if instance.individual_offset:
 		offset = _get_rand(instance.offset, instance.max_offset)
-	var arrow := _make_arrow(instance.type)
+	var arrow := _make_arrow(arrow_scene if arrow_scene else instance.type)
 	var angle := _get_arrow_angle(offset, spread, count, i)
 	var dir := _get_arrow_dir(angle)
 	fire(arrow, dir)
