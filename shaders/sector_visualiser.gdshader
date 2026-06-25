@@ -7,7 +7,6 @@ uniform int aimed_sector = -1;
 uniform int occupied_mask = 0;
 uniform float inner_radius = 0.35;
 
-
 uniform vec4 empty_color : source_color =
     vec4(0.9, 0.35, 0.15, 0.12);
 

@@ -31,8 +31,9 @@
 [ext_resource type="Texture2D" uid="uid://c34v8ic3dj3rx" path="res://assets/art/player/a_death_frame2.png" id="25_d2"]
 [ext_resource type="Texture2D" uid="uid://delgixt2v1gld" path="res://assets/art/player/a_death_frame3.png" id="26_d3"]
 [ext_resource type="Texture2D" uid="uid://cqi4h8rglp31u" path="res://assets/art/player/a_death_frame4.png" id="27_d4"]
+[ext_resource type="Shader" uid="uid://bcds3powkj5ap" path="res://shaders/triangle.gdshader" id="32_gl8cc"]
 
-[sub_resource type="SphereShape3D" id="SphereShape3D_wnwbv"]
+[sub_resource type="SphereShape3D" id="SphereShape3D_gl8cc"]
 radius = 0.4
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_ub6uw"]
@@ -170,6 +171,16 @@ shader_parameter/outer_ring_width = 0.03
 
 [sub_resource type="QuadMesh" id="QuadMesh_ub6uw"]
 
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_487ah"]
+render_priority = 0
+shader = ExtResource("32_gl8cc")
+shader_parameter/concavity = 0.150000007125
+shader_parameter/fill_color = Color(0.8980392, 0.34901962, 0.15294118, 0.8235294)
+shader_parameter/line_color = Color(0.9490196, 0.4509804, 0.2509804, 1)
+shader_parameter/line_width = 0.11
+
+[sub_resource type="QuadMesh" id="QuadMesh_8wtow"]
+
 [node name="Player" type="CharacterBody3D" unique_id=439211336 node_paths=PackedStringArray("input", "health", "sectors")]
 collision_mask = 4
 motion_mode = 1
@@ -192,7 +203,7 @@ burn_spin_speed = 0.14
 
 [node name="Collider" type="CollisionShape3D" parent="." unique_id=1401584448]
 unique_name_in_owner = true
-shape = SubResource("SphereShape3D_wnwbv")
+shape = SubResource("SphereShape3D_gl8cc")
 debug_color = Color(0, 0.6, 0.7019608, 0.41960785)
 
 [node name="Health" type="Node" parent="." unique_id=1891742081]
@@ -271,9 +282,16 @@ collision_mask = 4
 [node name="Sectors" type="MeshInstance3D" parent="." unique_id=9603647]
 transform = Transform3D(-0.70710677, -0.70710677, -3.090862e-08, 0, -4.371139e-08, 1, -0.70710677, 0.70710677, 3.090862e-08, 0, 0.015167683, 0)
 material_override = SubResource("ShaderMaterial_fjrip")
+cast_shadow = 0
 mesh = SubResource("QuadMesh_ub6uw")
 script = ExtResource("6_tuyoq")
 relative_aim = true
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Sectors" unique_id=1517856374]
+transform = Transform3D(0.22627425, -0.118793964, -3.0908623e-08, 0.22627419, 0.118793964, -1.2802772e-08, 9.890763e-09, -2.1508586e-09, 0.99999994, 0.41643003, -0.41643003, -1.8626451e-08)
+material_override = SubResource("ShaderMaterial_487ah")
+cast_shadow = 0
+mesh = SubResource("QuadMesh_8wtow")
 
 [connection signal="timeout" from="Dashing" to="." method="_on_dashing_timeout"]
 [connection signal="changed" from="Sectors" to="." method="_on_sectors_changed"]

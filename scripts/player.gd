@@ -337,9 +337,10 @@ func _try_fire(sector: int) -> void:
 	_fire(arrow, sectors.get_sector_center(sector))
 	fired.emit(arrow)
 
-# status effects from mis-caught special arrows
-func is_burning() -> bool: return _burn_time > 0.0
-func is_frozen() -> bool: return _freeze_time > 0.0
+func is_burning() -> bool:
+	return _burn_time > 0.0
+func is_frozen() -> bool:
+	return _freeze_time > 0.0
 
 func _apply_debuff(kind: int) -> void:
 	match kind:
