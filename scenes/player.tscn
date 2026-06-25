@@ -173,7 +173,7 @@ slowdown_speed = 0.1
 sector_count = 4
 sector_centered = true
 sector_radius = 0.5
-eyes_hit_time = 2.5
+eyes_hit_time = 0.0
 burn_duration = 24.0
 freeze_duration = 240.0
 burn_spin_speed = 0.14
@@ -190,6 +190,20 @@ script = ExtResource("2_g2els")
 script = ExtResource("3_qhqgy")
 
 [node name="Recovery" type="Timer" parent="." unique_id=191816355]
+unique_name_in_owner = true
+one_shot = true
+
+[node name="Dashing" type="Timer" parent="." unique_id=1626444411]
+unique_name_in_owner = true
+wait_time = 0.05
+one_shot = true
+
+[node name="DashDebounce" type="Timer" parent="." unique_id=389554828]
+unique_name_in_owner = true
+wait_time = 0.001
+one_shot = true
+
+[node name="EyesHit" type="Timer" parent="." unique_id=1891487654]
 unique_name_in_owner = true
 one_shot = true
 
@@ -242,16 +256,6 @@ mesh = SubResource("QuadMesh_ub6uw")
 script = ExtResource("6_tuyoq")
 relative_aim = true
 
-[node name="Dashing" type="Timer" parent="." unique_id=1626444411]
-unique_name_in_owner = true
-wait_time = 0.05
-one_shot = true
-
-[node name="DashDebounce" type="Timer" parent="." unique_id=389554828]
-unique_name_in_owner = true
-wait_time = 0.001
-one_shot = true
-
+[connection signal="timeout" from="Dashing" to="." method="_on_dashing_timeout"]
 [connection signal="changed" from="Sectors" to="." method="_on_sectors_changed"]
 [connection signal="changed" from="Sectors" to="Sectors" method="_on_changed"]
-[connection signal="timeout" from="Dashing" to="." method="_on_dashing_timeout"]

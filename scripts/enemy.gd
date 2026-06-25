@@ -15,14 +15,6 @@ const _ENEMY_TEAM = Arrow.Team.ENEMY
 @export var aim_time := 0.4
 @export var release_time := 0.12
 
-@export_group("sprites")
-@export var frame1: Texture2D
-@export var frame2: Texture2D
-@export var frame3: Texture2D
-@export var frame4: Texture2D   
-@export var hit_normal: Texture2D
-@export var hit_stretch: Texture2D
-
 @export_group("hit")
 @export var hit_flash_time := 0.15
 @export var hurt_radius := 0.4:
@@ -42,16 +34,14 @@ signal died
 
 var _dead := false
 var _aiming := false
-var _hit_showing := false
-var _base_tex: Texture2D
 var _movement_pattern: Dictionary[float, Vector3] = {}
 var _movement_pattern_start: float
 
 func get_hit() -> void:
 	if is_dead():
 		return
+	await _show_hit()
 	health.take_damage(1)
-	_show_hit()
 
 func _update_collider(c: CollisionShape3D, r: float) -> void:
 	if not c:
@@ -225,6 +215,7 @@ func is_dead() -> bool:
 func die() -> void:
 	_dead = true
 	SoundManager.play("banana_death")
+	_sprite.play("death")
 	died.emit()
 
 func _on_health_changed() -> void:
@@ -247,10 +238,9 @@ func highlight_off() -> void:
 func _show_hit() -> void:
 	_sprite.animation = "hit"
 	if _aiming: _sprite.frame = 1
-	get_tree().paused = true
+	get_tree().set_deferred("paused", true)
 	await get_tree().create_timer(hit_flash_time, true, false, true).timeout
 	get_tree().paused = false
-	_sprite.play("death")
 
 func _physics_process(delta: float) -> void:
 	if Engine.is_editor_hint(): return

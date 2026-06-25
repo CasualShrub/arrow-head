@@ -62,7 +62,13 @@ const _PLAYER_TEAM = Arrow.Team.PLAYER
 		return sectors.radius
 @export_group("eyes")
 @export var eye_deadzone := 0.4
-@export var eyes_hit_time := 0.36
+@export var eyes_hit_time := 0.36:
+	set(value):
+		if not _eyes_hit: return
+		_eyes_hit.wait_time = value
+	get:
+		if not _eyes_hit: return false
+		return _eyes_hit.wait_time
 @export_group("status_effects")
 @export var burn_duration := 2.5
 @export var freeze_duration := 2.0
@@ -91,6 +97,7 @@ var _slowmo_tween: Tween
 @onready var _recovery: Timer = %Recovery
 @onready var _dashing: Timer = %Dashing
 @onready var _dash_debounce: Timer = %DashDebounce
+@onready var _eyes_hit: Timer = %EyesHit
 @onready var _sprite: AnimatedSprite3D = %Sprite
 @onready var _eyes: AnimatedSprite3D = %Eyes
 @onready var _collider: CollisionShape3D = %Collider
@@ -111,6 +118,13 @@ func get_facing() -> Vector3:
 
 enum EyeDir { HIDDEN = -1, CENTERED, EAST, SOUTHEAST, SOUTH, SOUTHWEST, WEST }
 
+func _get_eye_state() -> String:
+	if not _eyes_hit.is_stopped():
+		return "hit"
+	if is_angry():
+		return "angry"
+	return "default"
+
 func _get_eye_frame() -> int:
 	var mouse_pos := get_mouse_world_position()
 	var mouse_offset := global_position.direction_to(mouse_pos)
@@ -119,39 +133,37 @@ func _get_eye_frame() -> int:
 	if offset_len < eye_deadzone:
 		return 0
 	var deg := rad_to_deg(atan2(dir.y, dir.x))
-	if deg <= -22.5 and deg >= -157.5:
-		return -1
-	if deg <= 22.5:
-		return 1
-	if deg <= 67.5:
-		return 2
-	if deg <= 112.5:
-		return 0
-	if deg <= 157.5:
-		return 3
-	return 0
+	if deg > -22.5 and deg <= 22.5:
+		return 1 # right
+	elif deg > 22.5 and deg <= 67.5:
+		return 2 # down-right
+	elif deg > 67.5 and deg <= 112.5:
+		return 0 # down
+	elif deg > 112.5 and deg <= 157.5:
+		return 3 # down-left
+	elif deg > 157.5 or deg <= -157.5:
+		return 4 # left
+	elif deg > -157.5 and deg <= -112.5:
+		return -1 # up-left
+	elif deg > -112.5 and deg <= -67.5:
+		return -1 # up
+	else: # -67.5 to -22.5
+		return -1 # up-right
 
 func _update_eyes() -> void:
 	if not _eyes or is_dead():
 		return
 	var frame := _get_eye_frame()
-	if is_angry():
-		_eyes.animation = "angry"
-		_eyes.frame = frame
-	#elif n >= 3:
-	#	_eyes.texture = eyes_lowhp
-	#	_eyes.visible = true
-	else:
-		_eyes.animation = "default"
-		_eyes.frame = frame
-
-func _flash_eyes_hit() -> void:
-	if not _eyes or _dead:
+	if frame == -1:
+		_eyes.hide()
 		return
-	_eyes.animation = "hit"
-	_eyes.frame = _get_eye_frame()
-	await get_tree().create_timer(eyes_hit_time).timeout
-	_update_eyes()
+	elif not _eyes.visible:
+		_eyes.show()
+	var state := _get_eye_state()
+	if _eyes.animation != state:
+		_eyes.animation = state
+	if _eyes.frame != frame:
+		_eyes.frame = frame
 
 func get_facing_angle() -> float:
 	var facing := get_facing()
@@ -194,7 +206,7 @@ func get_hit(arrow: Arrow) -> void:
 		arrow.queue_free()
 		die()
 	hit.emit(arrow, sector)
-	_flash_eyes_hit()
+	_eyes_hit.start()
 
 # burst a few apple bits at the apple's current position
 func _spawn_chunks(_pos: Vector3) -> void:
