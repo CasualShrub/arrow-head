@@ -23,6 +23,10 @@
 [ext_resource type="Texture2D" uid="uid://76emaaqy1ias" path="res://art/player/angry_eyes_southeast.png" id="21_ase"]
 [ext_resource type="Texture2D" uid="uid://ejjxk7l42fus" path="res://art/player/angry_eyes_southwest.png" id="22_asw"]
 [ext_resource type="Texture2D" uid="uid://eva13j6ywpyo" path="res://art/player/angry_eyes_west.png" id="23_aw"]
+[ext_resource type="Texture2D" uid="uid://bha24g2kfaosi" path="res://art/player/a_death_frame1.png" id="24_d1"]
+[ext_resource type="Texture2D" uid="uid://c34v8ic3dj3rx" path="res://art/player/a_death_frame2.png" id="25_d2"]
+[ext_resource type="Texture2D" uid="uid://delgixt2v1gld" path="res://art/player/a_death_frame3.png" id="26_d3"]
+[ext_resource type="Texture2D" uid="uid://cqi4h8rglp31u" path="res://art/player/a_death_frame4.png" id="27_d4"]
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_tuyoq"]
 radius = 0.4
@@ -68,6 +72,10 @@ eyes_hit_east = ExtResource("15_he")
 eyes_hit_southeast = ExtResource("16_hse")
 eyes_hit_southwest = ExtResource("17_hsw")
 eyes_hit_west = ExtResource("18_hw")
+death_frame1 = ExtResource("24_d1")
+death_frame2 = ExtResource("25_d2")
+death_frame3 = ExtResource("26_d3")
+death_frame4 = ExtResource("27_d4")
 
 [node name="Collider" type="CollisionShape3D" parent="." unique_id=1401584448]
 unique_name_in_owner = true

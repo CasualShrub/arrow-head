@@ -87,6 +87,13 @@ const _PLAYER_TEAM = Arrow.Team.PLAYER
 @export var burn_drift_speed := 240.0
 @export var burn_redrift := 0.14  # avg time between random drift-direction changes (lurching)
 
+@export_group("death")
+@export var death_frame1: Texture2D
+@export var death_frame2: Texture2D
+@export var death_frame3: Texture2D
+@export var death_frame4: Texture2D
+@export var death_fps := 8.0
+
 signal hit(arrow: Arrow, sector: int)
 signal fired(arrow: Arrow)
 signal ammo_changed(count: int)
@@ -181,7 +188,7 @@ func _apply_eye(tex: Texture2D) -> void:
 		_eyes.texture = tex
 
 func _update_eyes() -> void:
-	if not _eyes or _eyes_hit_showing:
+	if not _eyes or _eyes_hit_showing or _dead:
 		return
 	var n := embedded_count()
 	var bucket := _dir_bucket(_move_dir)
@@ -194,7 +201,7 @@ func _update_eyes() -> void:
 		_apply_eye(_normal_eye(bucket))
 
 func _flash_eyes_hit() -> void:
-	if not _eyes:
+	if not _eyes or _dead:
 		return
 	_eyes_hit_showing = true
 	_apply_eye(_hit_eye(_dir_bucket(_move_dir)))
@@ -365,6 +372,17 @@ func die() -> void:
 	sectors.clear_stored()
 	SoundManager.play("apple_death")
 	died.emit()
+	_play_death()
+
+func _play_death() -> void:
+	if _eyes:
+		_eyes.visible = false
+	var frames := [death_frame1, death_frame2, death_frame3, death_frame4]
+	var step := 1.0 / maxf(death_fps, 0.01)
+	for f in frames:
+		if f:
+			_sprite.texture = f
+		await get_tree().create_timer(step).timeout
 
 func _on_sectors_changed() -> void:
 	if sectors.full():
