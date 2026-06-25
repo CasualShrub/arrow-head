@@ -21,6 +21,7 @@ metadata/_custom_type_script = "uid://r4qbgt6it8lb"
 [sub_resource type="Resource" id="Resource_1585h"]
 script = ExtResource("2_cghyj")
 recovery = 1.0
+uses_windup = true
 instances = Array[ExtResource("3_kt87t")]([SubResource("Resource_e5ay6")])
 metadata/_custom_type_script = "uid://d04k7pxjd2u24"
 
