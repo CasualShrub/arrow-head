@@ -13,7 +13,7 @@ extends Node3D
 var current_offset := Vector3.ZERO
 var last_move_direction := Vector3.FORWARD
 
-func _process(delta: float) -> void:
+func _physics_process(delta: float) -> void:
 	if not player: return
 	var mouse_offset := player.get_mouse_world_position() - player.global_position
 	mouse_offset.y = 0
