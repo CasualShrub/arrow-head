@@ -1,8 +1,22 @@
-[gd_scene load_steps=3 format=3]
+[gd_scene format=3 uid="uid://dwun4epe1ljmt"]
 
-[ext_resource type="PackedScene" uid="uid://b8rs35o7f45v0" path="res://scenes/enemy.tscn" id="1_base"]
+[ext_resource type="PackedScene" uid="uid://b8rs35o7f45v0" path="res://scenes/enemies/enemy.tscn" id="1_base"]
+[ext_resource type="Script" uid="uid://d04k7pxjd2u24" path="res://scripts/arrow_pattern.gd" id="2_1rsnr"]
 [ext_resource type="PackedScene" uid="uid://byh737vkctruq" path="res://scenes/arrows/arrow_fire.tscn" id="2_arrow"]
+[ext_resource type="Script" uid="uid://r4qbgt6it8lb" path="res://scripts/firing_instance.gd" id="3_32ii4"]
+[ext_resource type="PackedScene" uid="uid://bxgfy1nvmlb7v" path="res://scenes/arrows/arrow.tscn" id="4_3srk4"]
 
-[node name="Enemy" instance=ExtResource("1_base")]
-modulate = Color(1, 0.62, 0.5, 1)
+[sub_resource type="Resource" id="Resource_lxw0j"]
+script = ExtResource("3_32ii4")
+type = ExtResource("4_3srk4")
+metadata/_custom_type_script = "uid://r4qbgt6it8lb"
+
+[sub_resource type="Resource" id="Resource_aopbs"]
+script = ExtResource("2_1rsnr")
+recovery = 2.0
+instances = Array[ExtResource("3_32ii4")]([SubResource("Resource_lxw0j")])
+metadata/_custom_type_script = "uid://d04k7pxjd2u24"
+
+[node name="Enemy" unique_id=1539839590 instance=ExtResource("1_base")]
+patterns = Array[ExtResource("2_1rsnr")]([SubResource("Resource_aopbs")])
 arrow_scene = ExtResource("2_arrow")
