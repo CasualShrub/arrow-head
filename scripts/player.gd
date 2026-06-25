@@ -75,8 +75,8 @@ const _PLAYER_TEAM = Arrow.Team.PLAYER
 @export var freeze_warn_time := 0.6
 @export var freeze_blink_rate := 12.0
 @export var burn_spin_speed := 24.0
-@export var burn_drift_speed := 7.2  # 2D 240 px/s = 1.2x move speed; 1.2 * 6.0 m/s
-@export var burn_redrift := 0.14  # avg time between random drift-direction changes (lurching)
+@export var burn_drift_speed := 7.2
+@export var burn_redrift := 0.14
 
 signal hit(arrow: Arrow, sector: int)
 signal fired(arrow: Arrow)
@@ -408,28 +408,27 @@ func _physics_process(delta: float) -> void:
 		if not _try_dash():
 			_try_cancel_slowdown()
 	if is_burning():
-		_burn_redrift -= delta
-		if _burn_redrift <= 0.0:
-			_burn_drift = Vector3.RIGHT.rotated(Vector3.UP, randf() * TAU)
-			_burn_redrift = burn_redrift * randf_range(0.6, 1.4)
-		velocity = _burn_drift * burn_drift_speed
-		move_and_slide()
+		#_burn_redrift -= delta
+		#if _burn_redrift <= 0.0:
+		#	_burn_drift = Vector3.RIGHT.rotated(Vector3.UP, randf() * TAU)
+		#	_burn_redrift = burn_redrift * randf_range(0.6, 1.4)
+		#velocity = _burn_drift * burn_drift_speed
+		#move_and_slide()
 		_burn_time -= delta
 		if not is_burning():
 			_display_status()
+	elif is_frozen():
+		_freeze_time -= delta
+		if _freeze_time < freeze_warn_time:
+			_status_sprite.visible = fmod(_freeze_time * freeze_blink_rate, 2.0) < 1.0
+		if not is_frozen():
+			_display_status()
+	if is_dashing():
+		_update_dash(delta)
 	else:
-		if is_frozen():
-			_freeze_time -= delta
-			if _freeze_time < freeze_warn_time:
-				_status_sprite.visible = fmod(_freeze_time * freeze_blink_rate, 2.0) < 1.0
-			if not is_frozen():
-				_display_status()
-		if is_dashing():
-			_update_dash(delta)
-		else:
-			_move(input.get_direction(), delta)
-		if _in_slowdown:
-			_update_slowdown(delta)
+		_move(input.get_direction(), delta)
+	if _in_slowdown:
+		_update_slowdown(delta)
 	global_position.y = 0
 
 func _update_preview(_delta: float) -> void:
@@ -463,7 +462,7 @@ func _process(delta: float) -> void:
 		if e is EmbeddedArrow and e.is_firing_enabled():
 			flag = true
 			sectors.highlight_sector(i)
-			break;
+			break
 	if not flag:
 		sectors.highlight_sector()
 	_update_status_tint()
