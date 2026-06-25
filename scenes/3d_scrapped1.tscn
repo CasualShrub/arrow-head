@@ -1,0 +1,162 @@
+[gd_scene format=3 uid="uid://2rgdnxiss257"]
+
+[ext_resource type="Script" uid="uid://cm3vh4qq01y8d" path="res://scripts/encounter.gd" id="1_fn0xi"]
+[ext_resource type="PackedScene" uid="uid://boryk37cbh1nx" path="res://scenes/player.tscn" id="2_7xqke"]
+[ext_resource type="Texture2D" uid="uid://cp4cnsely21gy" path="res://art/player/eye_normal.png" id="3_4mg85"]
+[ext_resource type="Texture2D" uid="uid://ddhrf02nv342f" path="res://art/player/eyes_lowHP.png" id="4_ya8eu"]
+[ext_resource type="Texture2D" uid="uid://bxkglylm44xg" path="res://art/player/eyes_hit.png" id="5_nc65r"]
+[ext_resource type="Script" uid="uid://doms8x46cr1tt" path="res://scripts/camera.gd" id="6_8uiuc"]
+[ext_resource type="PackedScene" uid="uid://b8rs35o7f45v0" path="res://scenes/enemies/enemy.tscn" id="7_y84i8"]
+[ext_resource type="PackedScene" path="res://scenes/enemies/enemy_fire.tscn" id="8_4mg85"]
+[ext_resource type="Shader" uid="uid://dnw37cynwb7od" path="res://shaders/screen_effect.gdshader" id="8_d2lun"]
+[ext_resource type="PackedScene" path="res://scenes/enemies/enemy_frost.tscn" id="9_ya8eu"]
+
+[sub_resource type="Environment" id="Environment_ub6uw"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_tuyoq"]
+shader = ExtResource("8_d2lun")
+shader_parameter/color_steps = 12.0
+shader_parameter/dither_strength = 0.25
+
+[node name="Encounter2" type="Node3D" unique_id=571267862]
+script = ExtResource("1_fn0xi")
+
+[node name="SubViewportContainer" type="SubViewportContainer" parent="." unique_id=506783396]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+stretch = true
+
+[node name="SubViewport" type="SubViewport" parent="SubViewportContainer" unique_id=1083906358]
+handle_input_locally = false
+size = Vector2i(1152, 648)
+render_target_update_mode = 4
+
+[node name="World" type="Node3D" parent="SubViewportContainer/SubViewport" unique_id=1589957074]
+
+[node name="Player" parent="SubViewportContainer/SubViewport/World" unique_id=508579643 instance=ExtResource("2_7xqke")]
+unique_name_in_owner = true
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.5860214, 0, 35.578583)
+motion_mode = 1
+eyes_normal = ExtResource("3_4mg85")
+eyes_lowhp = ExtResource("4_ya8eu")
+eyes_hit = ExtResource("5_nc65r")
+
+[node name="CameraPivot" type="Node3D" parent="SubViewportContainer/SubViewport/World" unique_id=1563753267 node_paths=PackedStringArray("player")]
+transform = Transform3D(1, 0, 0, 0, -4.371139e-08, 1, 0, -1, -4.371139e-08, 1.5860214, 3.7000048, 35.578583)
+script = ExtResource("6_8uiuc")
+player = NodePath("../Player")
+
+[node name="Camera" type="Camera3D" parent="SubViewportContainer/SubViewport/World/CameraPivot" unique_id=349876092]
+unique_name_in_owner = true
+
+[node name="Enemies" type="Node3D" parent="SubViewportContainer/SubViewport/World" unique_id=1185931971]
+unique_name_in_owner = true
+
+[node name="Enemy" parent="SubViewportContainer/SubViewport/World/Enemies" unique_id=71488470 instance=ExtResource("7_y84i8")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8.924767, 0, 30.705393)
+motion_mode = 1
+
+[node name="CSGBox3D" type="CSGBox3D" parent="SubViewportContainer/SubViewport/World" unique_id=1674034061]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.7, 0)
+size = Vector3(100, 1, 100)
+
+[node name="Node3D" type="Node3D" parent="SubViewportContainer/SubViewport/World" unique_id=1355891069]
+
+[node name="CSGBox3D8" type="CSGBox3D" parent="SubViewportContainer/SubViewport/World/Node3D" unique_id=1636562770]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.4213862, -0.10442257, 33.50499)
+use_collision = true
+collision_layer = 4
+size = Vector3(1.1022102, 1.7252502, 1.0305831)
+
+[node name="CSGBox3D14" type="CSGBox3D" parent="SubViewportContainer/SubViewport/World/Node3D" unique_id=1901024467]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 13.020819, -0.10442257, 30.590961)
+use_collision = true
+collision_layer = 4
+size = Vector3(1.1022102, 1.7252502, 1.0305831)
+
+[node name="CSGBox3D9" type="CSGBox3D" parent="SubViewportContainer/SubViewport/World/Node3D" unique_id=1127887023]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9.201496, -0.10442257, 34.878593)
+use_collision = true
+collision_layer = 4
+size = Vector3(1.1022102, 1.7252502, 1.0305831)
+
+[node name="CSGBox3D10" type="CSGBox3D" parent="SubViewportContainer/SubViewport/World/Node3D" unique_id=1203613006]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10.257669, -0.10442257, 34.644974)
+use_collision = true
+collision_layer = 4
+size = Vector3(1.1022102, 1.7252502, 1.0305831)
+
+[node name="CSGBox3D11" type="CSGBox3D" parent="SubViewportContainer/SubViewport/World/Node3D" unique_id=183434324]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9.201496, -0.10442257, 25.934132)
+use_collision = true
+collision_layer = 4
+size = Vector3(1.1022102, 1.7252502, 1.0305831)
+
+[node name="CSGBox3D12" type="CSGBox3D" parent="SubViewportContainer/SubViewport/World/Node3D" unique_id=1059882072]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.458233, -0.10442257, 26.85088)
+use_collision = true
+collision_layer = 4
+size = Vector3(1.1022102, 1.7252502, 1.0305831)
+
+[node name="CSGBox3D13" type="CSGBox3D" parent="SubViewportContainer/SubViewport/World/Node3D" unique_id=1593830146]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12.157664, -0.10442257, 28.568718)
+use_collision = true
+collision_layer = 4
+size = Vector3(1.1022102, 1.7252502, 1.0305831)
+
+[node name="Enemy" parent="SubViewportContainer/SubViewport/World/Node3D" unique_id=1480591036 instance=ExtResource("8_4mg85")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.5906286, 0, 31.28364)
+
+[node name="Enemy2" parent="SubViewportContainer/SubViewport/World/Node3D" unique_id=233465436 instance=ExtResource("9_ya8eu")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8.767337, 0, 31.82548)
+
+[node name="Walls" type="Node3D" parent="SubViewportContainer/SubViewport/World" unique_id=2116843859]
+
+[node name="CSGBox3D2" type="CSGBox3D" parent="SubViewportContainer/SubViewport/World/Walls" unique_id=1034809572]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.8967056, -0.2479316, 0)
+use_collision = true
+collision_layer = 4
+size = Vector3(4.2052155, 1.4382324, 100)
+
+[node name="CSGBox3D3" type="CSGBox3D" parent="SubViewportContainer/SubViewport/World/Walls" unique_id=1883586222]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12.995108, 0.3557061, -13.536339)
+use_collision = true
+collision_layer = 4
+size = Vector3(28.186314, 2.6455078, 71.962845)
+
+[node name="CSGBox3D4" type="CSGBox3D" parent="SubViewportContainer/SubViewport/World/Walls" unique_id=492964473]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 29.589123, 0.8630303, -29.015385)
+use_collision = true
+collision_layer = 4
+size = Vector3(43.256565, 3.6601563, 44.747414)
+
+[node name="CSGBox3D5" type="CSGBox3D" parent="SubViewportContainer/SubViewport/World/Walls" unique_id=406916480]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 24.6574, 0.3557061, 44.449608)
+use_collision = true
+collision_layer = 4
+size = Vector3(51.5109, 2.6455078, 12.04335)
+
+[node name="CSGBox3D6" type="CSGBox3D" parent="SubViewportContainer/SubViewport/World/Walls" unique_id=1936470025]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 36.45335, 0.3557061, 27.731197)
+use_collision = true
+collision_layer = 4
+size = Vector3(38.30651, 2.6455078, 31.131302)
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="SubViewportContainer/SubViewport/World" unique_id=1158397434]
+environment = SubResource("Environment_ub6uw")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="SubViewportContainer/SubViewport/World" unique_id=492064517]
+transform = Transform3D(0.8239569, 7.3667486e-08, 0.5666525, -0.29468933, 0.8541341, 0.4285011, -0.4839972, -0.52005285, 0.7037697, 18.038643, 15.709363, 15.527812)
+
+[node name="ColorRect" type="ColorRect" parent="." unique_id=1172579494]
+material = SubResource("ShaderMaterial_tuyoq")
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2

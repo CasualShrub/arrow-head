@@ -1,0 +1,22 @@
+[gd_scene format=3 uid="uid://tmhabgv3ovyb"]
+
+[ext_resource type="PackedScene" uid="uid://b8rs35o7f45v0" path="res://scenes/enemies/enemy.tscn" id="1_iap3j"]
+[ext_resource type="Script" uid="uid://d04k7pxjd2u24" path="res://scripts/arrow_pattern.gd" id="2_g53nr"]
+[ext_resource type="Script" uid="uid://r4qbgt6it8lb" path="res://scripts/firing_instance.gd" id="3_hs3bi"]
+[ext_resource type="PackedScene" uid="uid://bxgfy1nvmlb7v" path="res://scenes/arrows/arrow.tscn" id="4_g53nr"]
+
+[sub_resource type="Resource" id="Resource_iap3j"]
+script = ExtResource("3_hs3bi")
+type = ExtResource("4_g53nr")
+max_starting_delay = 1.0
+max_instance_delay = 1.0
+metadata/_custom_type_script = "uid://r4qbgt6it8lb"
+
+[sub_resource type="Resource" id="Resource_gbiev"]
+script = ExtResource("2_g53nr")
+recovery = 2.5
+instances = Array[ExtResource("3_hs3bi")]([SubResource("Resource_iap3j")])
+metadata/_custom_type_script = "uid://d04k7pxjd2u24"
+
+[node name="Enemy" unique_id=71488470 instance=ExtResource("1_iap3j")]
+patterns = Array[ExtResource("2_g53nr")]([SubResource("Resource_gbiev")])
