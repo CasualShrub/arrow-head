@@ -17,45 +17,45 @@ shader_parameter/fade_start = -0.04
 [node name="Player" parent="SubViewportContainer/SubViewport/World" parent_id_path=PackedInt32Array(1589957074) index="0" unique_id=508579643]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 18.24202, 0, 25.049774)
 
-[node name="Enemy2" parent="SubViewportContainer/SubViewport/World/Enemies" parent_id_path=PackedInt32Array(1185931971) index="0" unique_id=568196954 instance=ExtResource("2_eqwef")]
+[node name="fire" parent="SubViewportContainer/SubViewport/World/Enemies" parent_id_path=PackedInt32Array(1185931971) index="0" unique_id=568196954 instance=ExtResource("2_eqwef")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 18.272142, -0.1609757, 11.22137)
 
-[node name="Enemy3" parent="SubViewportContainer/SubViewport/World/Enemies" parent_id_path=PackedInt32Array(1185931971) index="1" unique_id=96558035 instance=ExtResource("3_1shg3")]
+[node name="frost" parent="SubViewportContainer/SubViewport/World/Enemies" parent_id_path=PackedInt32Array(1185931971) index="1" unique_id=96558035 instance=ExtResource("3_1shg3")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 23.496803, 0, 22.46748)
 
-[node name="Enemy4" parent="SubViewportContainer/SubViewport/World/Enemies" parent_id_path=PackedInt32Array(1185931971) index="2" unique_id=548100990 instance=ExtResource("3_1shg3")]
+[node name="frost2" parent="SubViewportContainer/SubViewport/World/Enemies" parent_id_path=PackedInt32Array(1185931971) index="2" unique_id=548100990 instance=ExtResource("3_1shg3")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 18.360409, 0, 19.665695)
 
-[node name="Enemy" parent="SubViewportContainer/SubViewport/World/Enemies" parent_id_path=PackedInt32Array(1185931971) index="3" unique_id=71488470 instance=ExtResource("5_l37oo")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 25.213484, -0.18121505, 15.16278)
+[node name="archer" parent="SubViewportContainer/SubViewport/World/Enemies" parent_id_path=PackedInt32Array(1185931971) index="3" unique_id=71488470 instance=ExtResource("5_l37oo")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 25.094635, -0.19287515, 16.111437)
 
 [node name="CameraPivot" parent="SubViewportContainer/SubViewport/World" parent_id_path=PackedInt32Array(1589957074) index="3" unique_id=1563753267]
 transform = Transform3D(1, 0, 0, 0, -4.371139e-08, 1, 0, -1, -4.371139e-08, 18.24202, 3.7000048, 25.049774)
 
-[node name="Borders" type="Node3D" parent="SubViewportContainer/SubViewport/World" parent_id_path=PackedInt32Array(1589957074) index="6" unique_id=1500942371]
+[node name="Borders (trees)" type="Node3D" parent="SubViewportContainer/SubViewport/World" parent_id_path=PackedInt32Array(1589957074) index="6" unique_id=1500942371]
 
-[node name="SubViewportContainer_SubViewport_World_Walls#CSGBox3D3" type="CSGBox3D" parent="SubViewportContainer/SubViewport/World/Borders" index="0" unique_id=1883586222]
+[node name="SubViewportContainer_SubViewport_World_Walls#CSGBox3D3" type="CSGBox3D" parent="SubViewportContainer/SubViewport/World/Borders (trees)" index="0" unique_id=1883586222]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 27.182518, 0.7292166, 2.8772335)
 use_collision = true
 collision_layer = 4
 size = Vector3(54.994644, 2.4925537, 8.408813)
 material = SubResource("ShaderMaterial_a3kad")
 
-[node name="SubViewportContainer_SubViewport_World_Walls#CSGBox3D4" type="CSGBox3D" parent="SubViewportContainer/SubViewport/World/Borders" index="1" unique_id=1699616953]
+[node name="SubViewportContainer_SubViewport_World_Walls#CSGBox3D4" type="CSGBox3D" parent="SubViewportContainer/SubViewport/World/Borders (trees)" index="1" unique_id=1699616953]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 27.182518, 0.7292166, 33.83718)
 use_collision = true
 collision_layer = 4
 size = Vector3(54.994644, 2.4925537, 8.408813)
 material = SubResource("ShaderMaterial_a3kad")
 
-[node name="SubViewportContainer_SubViewport_World_Walls#CSGBox3D5" type="CSGBox3D" parent="SubViewportContainer/SubViewport/World/Borders" index="2" unique_id=403745710]
+[node name="SubViewportContainer_SubViewport_World_Walls#CSGBox3D5" type="CSGBox3D" parent="SubViewportContainer/SubViewport/World/Borders (trees)" index="2" unique_id=403745710]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.0424995, 0.7292166, 21.540459)
 use_collision = true
 collision_layer = 4
 size = Vector3(8.714607, 2.4925537, 33.00226)
 material = SubResource("ShaderMaterial_a3kad")
 
-[node name="SubViewportContainer_SubViewport_World_Walls#CSGBox3D6" type="CSGBox3D" parent="SubViewportContainer/SubViewport/World/Borders" index="3" unique_id=947485054]
+[node name="SubViewportContainer_SubViewport_World_Walls#CSGBox3D6" type="CSGBox3D" parent="SubViewportContainer/SubViewport/World/Borders (trees)" index="3" unique_id=947485054]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 36.41545, 0.7292166, 21.540459)
 use_collision = true
 collision_layer = 4
@@ -96,19 +96,19 @@ use_collision = true
 collision_layer = 4
 size = Vector3(1.0618019, 1.5637817, 1.2058716)
 
-[node name="CSGBox3D4" type="CSGBox3D" parent="SubViewportContainer/SubViewport/World/Walls2" index="1" unique_id=544497723]
+[node name="fences" type="CSGBox3D" parent="SubViewportContainer/SubViewport/World/Walls2" index="1" unique_id=544497723]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 17.577732, 0.27922904, 20.810108)
 use_collision = true
 collision_layer = 4
 size = Vector3(7.315172, 2.4925537, 0.9210205)
 
-[node name="CSGBox3D11" type="CSGBox3D" parent="SubViewportContainer/SubViewport/World/Walls2" index="2" unique_id=783201161]
+[node name="fences3" type="CSGBox3D" parent="SubViewportContainer/SubViewport/World/Walls2" index="2" unique_id=783201161]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 23.621178, 0.27922904, 14.273502)
 use_collision = true
 collision_layer = 4
 size = Vector3(1.1998258, 2.4925537, 8.064484)
 
-[node name="CSGBox3D5" type="CSGBox3D" parent="SubViewportContainer/SubViewport/World/Walls2" index="3" unique_id=1193009974]
+[node name="fences2" type="CSGBox3D" parent="SubViewportContainer/SubViewport/World/Walls2" index="3" unique_id=1193009974]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 29.302803, 0.27922904, 20.810108)
 use_collision = true
 collision_layer = 4

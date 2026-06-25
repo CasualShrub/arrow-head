@@ -1,0 +1,82 @@
+[gd_scene format=3 uid="uid://dw33fnyacoglt"]
+
+[ext_resource type="PackedScene" uid="uid://b6c1h2si8ob6l" path="res://scenes/levels/encounter.tscn" id="1_rnyxf"]
+[ext_resource type="PackedScene" uid="uid://tmhabgv3ovyb" path="res://scenes/enemies/enemy_archer.tscn" id="2_1r3rq"]
+[ext_resource type="Shader" uid="uid://buv2tktnh5ufo" path="res://shaders/fade.gdshader" id="2_ub0e1"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_1r3rq"]
+render_priority = 0
+shader = ExtResource("2_ub0e1")
+shader_parameter/wall_height = 0.51
+shader_parameter/fade_start = -0.04
+
+[node name="Encounter" unique_id=571267862 instance=ExtResource("1_rnyxf")]
+
+[node name="Player" parent="SubViewportContainer/SubViewport/World" parent_id_path=PackedInt32Array(1589957074) index="0" unique_id=508579643]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 15.001652, 0, 27.90976)
+
+[node name="Enemy" parent="SubViewportContainer/SubViewport/World/Enemies" parent_id_path=PackedInt32Array(1185931971) index="0" unique_id=71488470 instance=ExtResource("2_1r3rq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 15.0722, -0.18712926, 24.909813)
+
+[node name="Enemy2" parent="SubViewportContainer/SubViewport/World/Enemies" parent_id_path=PackedInt32Array(1185931971) index="1" unique_id=1941047971 instance=ExtResource("2_1r3rq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 18.147894, -0.1871283, 28.174894)
+
+[node name="CameraPivot" parent="SubViewportContainer/SubViewport/World" parent_id_path=PackedInt32Array(1589957074) index="3" unique_id=1563753267]
+transform = Transform3D(1, 0, 0, 0, -4.371139e-08, 1, 0, -1, -4.371139e-08, 15.001652, 3.7000048, 27.90976)
+
+[node name="cobblestone gate side" type="CSGBox3D" parent="SubViewportContainer/SubViewport/World" parent_id_path=PackedInt32Array(1589957074) index="6" unique_id=1521473732]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12.045044, 0.7292166, 29.864239)
+use_collision = true
+collision_layer = 4
+size = Vector3(5.3484993, 2.4925537, 0.9723892)
+material = SubResource("ShaderMaterial_1r3rq")
+
+[node name="cobblestone gate side2" type="CSGBox3D" parent="SubViewportContainer/SubViewport/World" parent_id_path=PackedInt32Array(1589957074) index="7" unique_id=1296277998]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 19.854734, 0.7292166, 29.864239)
+use_collision = true
+collision_layer = 4
+size = Vector3(5.3484993, 2.4925537, 0.9723892)
+material = SubResource("ShaderMaterial_1r3rq")
+
+[node name="cobblestone gate side3" type="CSGBox3D" parent="SubViewportContainer/SubViewport/World" parent_id_path=PackedInt32Array(1589957074) index="8" unique_id=1432467893]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 25.08304, 0.7292166, 29.864239)
+use_collision = true
+collision_layer = 4
+size = Vector3(5.3484993, 2.4925537, 0.9723892)
+material = SubResource("ShaderMaterial_1r3rq")
+
+[node name="wood gate" type="CSGBox3D" parent="SubViewportContainer/SubViewport/World" parent_id_path=PackedInt32Array(1589957074) index="9" unique_id=1761008234]
+transform = Transform3D(1, 0, 0, 0, 0.9999143, -0.013090792, 0, 0.013090792, 0.9999143, 15.571087, 0.5696453, 29.90075)
+use_collision = true
+collision_layer = 4
+size = Vector3(3.659051, 1.6159363, 0.51174927)
+
+[node name="Borders (trees)" type="Node3D" parent="." index="2" unique_id=2065437945]
+
+[node name="SubViewportContainer_SubViewport_World_Walls#CSGBox3D3" type="CSGBox3D" parent="Borders (trees)" index="0" unique_id=1397087008]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 27.182518, 0.7292166, 7.8073597)
+use_collision = true
+collision_layer = 4
+size = Vector3(54.994644, 2.4925537, 8.408813)
+material = SubResource("ShaderMaterial_1r3rq")
+
+[node name="SubViewportContainer_SubViewport_World_Walls#CSGBox3D4" type="CSGBox3D" parent="Borders (trees)" index="1" unique_id=1118518528]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 21.964916, 0.7292166, 36.418808)
+use_collision = true
+collision_layer = 4
+size = Vector3(27.39737, 2.4925537, 3.2455597)
+material = SubResource("ShaderMaterial_1r3rq")
+
+[node name="SubViewportContainer_SubViewport_World_Walls#CSGBox3D5" type="CSGBox3D" parent="Borders (trees)" index="2" unique_id=834377810]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.650795, 0.7292166, 21.540459)
+use_collision = true
+collision_layer = 4
+size = Vector3(9.931198, 2.4925537, 33.00226)
+material = SubResource("ShaderMaterial_1r3rq")
+
+[node name="SubViewportContainer_SubViewport_World_Walls#CSGBox3D6" type="CSGBox3D" parent="Borders (trees)" index="3" unique_id=65664249]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 31.933506, 0.7292166, 21.540459)
+use_collision = true
+collision_layer = 4
+size = Vector3(8.714607, 2.4925537, 33.00226)
+material = SubResource("ShaderMaterial_1r3rq")
