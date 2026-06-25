@@ -101,7 +101,80 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="Back" type="Button" parent="LevelSelect" unique_id=1699508098]
-layout_mode = 0
-offset_right = 8.0
-offset_bottom = 8.0
+[node name="Buttons" type="VBoxContainer" parent="LevelSelect" unique_id=735805230]
+layout_mode = 1
+offset_left = 177.0
+offset_top = 228.175
+offset_right = 517.0
+offset_bottom = 860.175
+scale = Vector2(0.64, 0.64)
+theme_override_constants/separation = 10
+
+[node name="Tutorial" type="Button" parent="LevelSelect/Buttons" unique_id=1585556067]
+custom_minimum_size = Vector2(340, 64)
+layout_mode = 2
+theme_override_fonts/font = ExtResource("5_x2yvf")
+theme_override_font_sizes/font_size = 42
+text = "Tutorial"
+
+[node name="Level1" type="Button" parent="LevelSelect/Buttons" unique_id=771563180]
+custom_minimum_size = Vector2(340, 64)
+layout_mode = 2
+theme_override_fonts/font = ExtResource("5_x2yvf")
+theme_override_font_sizes/font_size = 42
+text = "Level 1"
+
+[node name="Level2" type="Button" parent="LevelSelect/Buttons" unique_id=719703129]
+custom_minimum_size = Vector2(340, 64)
+layout_mode = 2
+theme_override_fonts/font = ExtResource("5_x2yvf")
+theme_override_font_sizes/font_size = 42
+text = "Level 2"
+
+[node name="Level3" type="Button" parent="LevelSelect/Buttons" unique_id=917836742]
+custom_minimum_size = Vector2(340, 64)
+layout_mode = 2
+theme_override_fonts/font = ExtResource("5_x2yvf")
+theme_override_font_sizes/font_size = 42
+text = "Level 3"
+
+[node name="Level4" type="Button" parent="LevelSelect/Buttons" unique_id=1646546205]
+custom_minimum_size = Vector2(340, 64)
+layout_mode = 2
+theme_override_fonts/font = ExtResource("5_x2yvf")
+theme_override_font_sizes/font_size = 42
+text = "Level 4"
+
+[node name="Level5" type="Button" parent="LevelSelect/Buttons" unique_id=1166170549]
+custom_minimum_size = Vector2(340, 64)
+layout_mode = 2
+theme_override_fonts/font = ExtResource("5_x2yvf")
+theme_override_font_sizes/font_size = 42
+text = "Level 5"
+
+[node name="Boss" type="Button" parent="LevelSelect/Buttons" unique_id=1780378946]
+custom_minimum_size = Vector2(340, 64)
+layout_mode = 2
+theme_override_fonts/font = ExtResource("5_x2yvf")
+theme_override_font_sizes/font_size = 42
+text = "Boss"
+
+[node name="Spacer" type="Control" parent="LevelSelect/Buttons" unique_id=1308263388]
+custom_minimum_size = Vector2(0, 40)
+layout_mode = 2
+
+[node name="Back" type="Button" parent="LevelSelect/Buttons" unique_id=2026175752]
+custom_minimum_size = Vector2(340, 64)
+layout_mode = 2
+theme_override_fonts/font = ExtResource("5_x2yvf")
+theme_override_font_sizes/font_size = 42
+text = "Back"
+
+[connection signal="pressed" from="LevelSelect/Buttons/Tutorial" to="." method="_load_level" binds=["res://scenes/levels/tutorial.tscn"]]
+[connection signal="pressed" from="LevelSelect/Buttons/Level1" to="." method="_load_level" binds=["res://scenes/levels/level_1.tscn"]]
+[connection signal="pressed" from="LevelSelect/Buttons/Level2" to="." method="_load_level" binds=["res://scenes/levels/level_2.tscn"]]
+[connection signal="pressed" from="LevelSelect/Buttons/Level3" to="." method="_load_level" binds=["res://scenes/levels/level_3.tscn"]]
+[connection signal="pressed" from="LevelSelect/Buttons/Level4" to="." method="_load_level" binds=["res://scenes/levels/level_4.tscn"]]
+[connection signal="pressed" from="LevelSelect/Buttons/Level5" to="." method="_load_level" binds=["res://scenes/levels/level_5.tscn"]]
+[connection signal="pressed" from="LevelSelect/Buttons/Boss" to="." method="_load_level" binds=["res://scenes/levels/level_boss.tscn"]]
+[connection signal="pressed" from="LevelSelect/Buttons/Back" to="." method="_close_levels"]
