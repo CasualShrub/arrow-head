@@ -63,6 +63,7 @@ var _overrides := {}  # key -> dB, per-scenario runtime trim on top of BASE_VOLU
 var _music: AudioStreamPlayer
 
 func _ready() -> void:
+	process_mode = Node.PROCESS_MODE_ALWAYS
 	for i in _POOL_SIZE:
 		var p := AudioStreamPlayer.new()
 		p.bus = _BUS

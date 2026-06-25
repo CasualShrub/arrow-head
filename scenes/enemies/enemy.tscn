@@ -62,7 +62,6 @@ motion_mode = 1
 script = ExtResource("1_7p1mj")
 health = NodePath("Health")
 sus = NodePath("Sus")
-has_intro = null
 patterns = Array[ExtResource("2_xwavj")]([SubResource("Resource_fcftc")])
 patrol_speed = 2.0
 

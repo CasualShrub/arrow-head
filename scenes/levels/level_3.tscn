@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://dxfvw43ommtbh"]
 
 [ext_resource type="PackedScene" uid="uid://b6c1h2si8ob6l" path="res://scenes/levels/encounter.tscn" id="1_o8c3j"]
-[ext_resource type="PackedScene" uid="uid://dwun4epe1ljmt" path="res://scenes/enemies/enemy_fire.tscn" id="3_fkk1g"]
+[ext_resource type="PackedScene" path="res://scenes/enemies/enemy_fire.tscn" id="3_fkk1g"]
 [ext_resource type="PackedScene" uid="uid://1jtkc8jlvm65" path="res://scenes/enemies/enemy_frost.tscn" id="4_ugcn1"]
 [ext_resource type="PackedScene" uid="uid://b7xvltf5sfgso" path="res://scenes/enemies/enemy_spray.tscn" id="5_pimnq"]
 [ext_resource type="PackedScene" uid="uid://tmhabgv3ovyb" path="res://scenes/enemies/enemy_archer.tscn" id="6_2bnyt"]
@@ -18,7 +18,7 @@ shader_parameter/tex_scale = 0.5
 shader_parameter/wall_height = 0.51
 shader_parameter/fade_start = -0.04
 
-[node name="Encounter2" unique_id=571267862 instance=ExtResource("1_o8c3j")]
+[node name="Encounter3" unique_id=571267862 instance=ExtResource("1_o8c3j")]
 music_track = "Lvl_2_3"
 
 [node name="Player" parent="SubViewportContainer/SubViewport/World" parent_id_path=PackedInt32Array(1589957074) index="0" unique_id=508579643]
@@ -26,65 +26,41 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.7206564, 0, 34.657932)
 
 [node name="fire" parent="SubViewportContainer/SubViewport/World/Enemies" parent_id_path=PackedInt32Array(1185931971) index="0" unique_id=951565459 instance=ExtResource("3_fkk1g")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 15.308413, 0, 25.801744)
-alwayds_alert = false
-combat_strafe_radius = null
-combat_strafe_speed = null
-combat_reposition_chance = null
+has_intro = false
 
 [node name="frost" parent="SubViewportContainer/SubViewport/World/Enemies" parent_id_path=PackedInt32Array(1185931971) index="1" unique_id=955806617 instance=ExtResource("4_ugcn1")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10.425558, 0, 28.688429)
-alwayds_alert = false
-combat_strafe_radius = null
-combat_strafe_speed = null
-combat_reposition_chance = null
+has_intro = false
 
 [node name="spray" parent="SubViewportContainer/SubViewport/World/Enemies" parent_id_path=PackedInt32Array(1185931971) index="2" unique_id=71488470 instance=ExtResource("5_pimnq")]
 transform = Transform3D(0.011440461, 0, 0.99993455, 0, 1, 0, -0.99993455, 0, 0.011440461, 10.525992, 0, 32.87049)
-alwayds_alert = false
-combat_strafe_radius = null
-combat_strafe_speed = null
-combat_reposition_chance = null
+has_intro = false
 
 [node name="spray2" parent="SubViewportContainer/SubViewport/World/Enemies" parent_id_path=PackedInt32Array(1185931971) index="3" unique_id=1429638199 instance=ExtResource("5_pimnq")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 18.202555, 0, 32.234184)
-alwayds_alert = false
-combat_strafe_radius = null
-combat_strafe_speed = null
-combat_reposition_chance = null
+has_intro = false
 
 [node name="spray3" parent="SubViewportContainer/SubViewport/World/Enemies" parent_id_path=PackedInt32Array(1185931971) index="4" unique_id=573974390 instance=ExtResource("5_pimnq")]
 transform = Transform3D(-0.9999976, 0, 0.0021771493, 0, 1, 0, -0.0021771493, 0, -0.9999976, 19.359884, 0, 15.086241)
-alwayds_alert = false
-combat_strafe_radius = null
-combat_strafe_speed = null
-combat_reposition_chance = null
+has_intro = false
 
 [node name="frost2" parent="SubViewportContainer/SubViewport/World/Enemies" parent_id_path=PackedInt32Array(1185931971) index="5" unique_id=1225890532 instance=ExtResource("4_ugcn1")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.735272, 0, 28.48721)
-alwayds_alert = false
-combat_strafe_radius = null
-combat_strafe_speed = null
-combat_reposition_chance = null
+has_intro = false
 
 [node name="Marker3D2" type="Marker3D" parent="SubViewportContainer/SubViewport/World/Enemies/frost2/PatrolPoints" parent_id_path=PackedInt32Array(1225890532, 1646478367) index="1" unique_id=30637454]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.570962, 0, 0)
 
 [node name="fire2" parent="SubViewportContainer/SubViewport/World/Enemies" parent_id_path=PackedInt32Array(1185931971) index="6" unique_id=992214563 instance=ExtResource("3_fkk1g")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.1543865, 0, 24.59525)
-alwayds_alert = false
-combat_strafe_radius = null
-combat_strafe_speed = null
-combat_reposition_chance = null
+has_intro = false
 
 [node name="Marker3D2" type="Marker3D" parent="SubViewportContainer/SubViewport/World/Enemies/fire2/PatrolPoints" parent_id_path=PackedInt32Array(992214563, 1646478367) index="1" unique_id=957532760]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.6909013, 0, 0)
 
 [node name="archer" parent="SubViewportContainer/SubViewport/World/Enemies" parent_id_path=PackedInt32Array(1185931971) index="7" unique_id=1949561034 instance=ExtResource("6_2bnyt")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8.633387, -0.1922096, 19.38399)
-alwayds_alert = false
-combat_strafe_radius = null
-combat_strafe_speed = null
-combat_reposition_chance = null
+has_intro = false
 
 [node name="Marker3D2" type="Marker3D" parent="SubViewportContainer/SubViewport/World/Enemies/archer/PatrolPoints" parent_id_path=PackedInt32Array(1949561034, 1646478367) index="1" unique_id=644034966]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.276848, 0, 0)
@@ -97,10 +73,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.59609795, 0, -4.554716)
 
 [node name="archer2" parent="SubViewportContainer/SubViewport/World/Enemies" parent_id_path=PackedInt32Array(1185931971) index="8" unique_id=2023711144 instance=ExtResource("6_2bnyt")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.6608362, -0.14746892, 15.0087385)
-alwayds_alert = false
-combat_strafe_radius = null
-combat_strafe_speed = null
-combat_reposition_chance = null
+has_intro = false
 
 [node name="Marker3D2" type="Marker3D" parent="SubViewportContainer/SubViewport/World/Enemies/archer2/PatrolPoints" parent_id_path=PackedInt32Array(2023711144, 1646478367) index="1" unique_id=748124238]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.488946, 0, 0)
@@ -111,12 +84,13 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.488946, 0, 4.182084)
 [node name="Marker3D4" type="Marker3D" parent="SubViewportContainer/SubViewport/World/Enemies/archer2/PatrolPoints" parent_id_path=PackedInt32Array(2023711144, 1646478367) index="3" unique_id=1075147750]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.18187046, 0, 4.182084)
 
-[node name="Floor" parent="SubViewportContainer/SubViewport/World" parent_id_path=PackedInt32Array(1589957074) index="2" unique_id=1674034061]
+[node name="CameraPivot" parent="SubViewportContainer/SubViewport/World" parent_id_path=PackedInt32Array(1589957074) index="2" unique_id=1563753267]
+transform = Transform3D(1, 0, 0, 0, -4.371139e-08, 1, 0, -1, -4.371139e-08, 4.7206564, 3.7000048, 34.657932)
+
+[node name="Floor" parent="SubViewportContainer/SubViewport/World" parent_id_path=PackedInt32Array(1589957074) index="5" unique_id=1674034061]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.028060913, -0.73739165, 0.06108284)
 material = ExtResource("6_ugcn1")
 script = null
-
-[node name="CameraPivot" parent="SubViewportContainer/SubViewport/World" parent_id_path=PackedInt32Array(1589957074) index="3" unique_id=1563753267]
-transform = Transform3D(1, 0, 0, 0, -4.371139e-08, 1, 0, -1, -4.371139e-08, 4.7206564, 3.7000048, 34.657932)
 
 [node name="Borders" type="Node3D" parent="SubViewportContainer/SubViewport/World" parent_id_path=PackedInt32Array(1589957074) index="6" unique_id=1060875730]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.838967, 0, 6.49942)
@@ -244,36 +218,6 @@ collision_layer = 4
 collision_mask = 9
 size = Vector3(0.9604149, 5.5875854, 6.239602)
 material = SubResource("ShaderMaterial_n6eey")
-
-[node name="SubViewportContainer_SubViewport_World_Enemies_archer2_PatrolPoints#Marker3D2" type="Marker3D" parent="." index="1" unique_id=1746851764]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.8338146, 0, 0)
-
-[node name="SubViewportContainer_SubViewport_World_Enemies_archer2_PatrolPoints#Marker3D3" type="Marker3D" parent="." index="2" unique_id=73269436]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.8338146, 0, 4.3076563)
-
-[node name="SubViewportContainer_SubViewport_World_Enemies_archer2_PatrolPoints#Marker3D4" type="Marker3D" parent="." index="3" unique_id=1148494343]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.31773233, 0, 4.3076563)
-
-[node name="SubViewportContainer_SubViewport_World_Enemies_archer_PatrolPoints#Marker3D2" type="Marker3D" parent="." index="4" unique_id=1258351500]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.3362494, 0, 0)
-
-[node name="SubViewportContainer_SubViewport_World_Enemies_archer_PatrolPoints#Marker3D3" type="Marker3D" parent="." index="5" unique_id=256105171]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.3362494, 0, -4.7100563)
-
-[node name="SubViewportContainer_SubViewport_World_Enemies_archer_PatrolPoints#Marker3D4" type="Marker3D" parent="." index="6" unique_id=418480978]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0016651154, 0, -4.7100563)
-
-[node name="SubViewportContainer_SubViewport_World_Enemies_fire2_PatrolPoints#Marker3D2" type="Marker3D" parent="." index="7" unique_id=1795377191]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.8012676, 0, 0)
-
-[node name="SubViewportContainer_SubViewport_World_Enemies_frost2_PatrolPoints#Marker3D2" type="Marker3D" parent="." index="8" unique_id=305183650]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.4674339, 0, 0)
-
-[node name="SubViewportContainer_SubViewport_World_Enemies_frost_PatrolPoints#Marker3D2" type="Marker3D" parent="." index="9" unique_id=4839002]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.947959, 0, 0)
-
-[node name="SubViewportContainer_SubViewport_World_Enemies_fire_PatrolPoints#Marker3D2" type="Marker3D" parent="." index="10" unique_id=1176462868]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.977087, 0, 0)
 
 [editable path="SubViewportContainer/SubViewport/World/Enemies/fire"]
 [editable path="SubViewportContainer/SubViewport/World/Enemies/frost"]
