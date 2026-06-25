@@ -165,37 +165,18 @@ script = ExtResource("1_3vyb7")
 input = NodePath("Input")
 health = NodePath("Health")
 sectors = NodePath("Sectors")
+dash_time = 0.05
 chunk_fx = ExtResource("6_chunks")
-dash_cooldown = 1.0
+dash_cooldown = 0.001
 slowdown = 0.1
 slowdown_speed = 0.1
 sector_count = 4
 sector_centered = true
 sector_radius = 0.5
-eyes_normal = ExtResource("8_eyes")
-eyes_east = ExtResource("11_east")
-eyes_southeast = ExtResource("12_se")
-eyes_southwest = ExtResource("13_sw")
-eyes_west = ExtResource("14_west")
-angry_eyes = ExtResource("19_angry")
-angry_eyes_east = ExtResource("20_ae")
-angry_eyes_southeast = ExtResource("21_ase")
-angry_eyes_southwest = ExtResource("22_asw")
-angry_eyes_west = ExtResource("23_aw")
-eyes_lowhp = ExtResource("9_lowhp")
-eyes_hit = ExtResource("10_hit")
-eyes_hit_east = ExtResource("15_he")
-eyes_hit_southeast = ExtResource("16_hse")
-eyes_hit_southwest = ExtResource("17_hsw")
-eyes_hit_west = ExtResource("18_hw")
 eyes_hit_time = 2.5
 burn_duration = 24.0
 freeze_duration = 240.0
 burn_spin_speed = 0.14
-death_frame1 = ExtResource("24_d1")
-death_frame2 = ExtResource("25_d2")
-death_frame3 = ExtResource("26_d3")
-death_frame4 = ExtResource("27_d4")
 
 [node name="Collider" type="CollisionShape3D" parent="." unique_id=1401584448]
 unique_name_in_owner = true
@@ -220,7 +201,6 @@ unique_name_in_owner = true
 transform = Transform3D(0.6, 0, 0, 0, -2.6226834e-08, 0.6, 0, -0.6, -2.6226834e-08, 0, 0, 0)
 double_sided = false
 sprite_frames = SubResource("SpriteFrames_ub6uw")
-autoplay = "default"
 
 [node name="Eyes" type="AnimatedSprite3D" parent="." unique_id=1772518271]
 unique_name_in_owner = true

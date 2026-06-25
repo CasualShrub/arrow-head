@@ -8,13 +8,6 @@ const _PLAYER_TEAM = Arrow.Team.PLAYER
 @export var health: HealthComponent
 @export var sectors: SectorsComponent
 
-@onready var _camera: Camera3D = %Camera
-@onready var _recovery: Timer = %Recovery
-@onready var _dashing: Timer = %Dashing
-@onready var _dash_debounce: Timer = %DashDebounce
-@onready var _sprite: Sprite3D = %Sprite
-@onready var _collider: CollisionShape3D = %Collider
-
 @export var speed := 6.0
 @export_group("dashing")
 @export var dash_time: float:
@@ -69,22 +62,6 @@ const _PLAYER_TEAM = Arrow.Team.PLAYER
 		return sectors.radius
 @export_group("eyes")
 @export var eye_deadzone := 0.4
-@export var eyes_normal: Texture2D
-@export var eyes_east: Texture2D
-@export var eyes_southeast: Texture2D
-@export var eyes_southwest: Texture2D
-@export var eyes_west: Texture2D
-@export var angry_eyes: Texture2D        # all four sectors filled (south / idle)
-@export var angry_eyes_east: Texture2D
-@export var angry_eyes_southeast: Texture2D
-@export var angry_eyes_southwest: Texture2D
-@export var angry_eyes_west: Texture2D
-@export var eyes_lowhp: Texture2D
-@export var eyes_hit: Texture2D
-@export var eyes_hit_east: Texture2D
-@export var eyes_hit_southeast: Texture2D
-@export var eyes_hit_southwest: Texture2D
-@export var eyes_hit_west: Texture2D
 @export var eyes_hit_time := 0.36
 @export_group("status_effects")
 @export var burn_duration := 2.5
@@ -93,19 +70,11 @@ const _PLAYER_TEAM = Arrow.Team.PLAYER
 @export var burn_drift_speed := 7.2  # 2D 240 px/s = 1.2x move speed; 1.2 * 6.0 m/s
 @export var burn_redrift := 0.14  # avg time between random drift-direction changes (lurching)
 
-@export_group("death")
-@export var death_frame1: Texture2D
-@export var death_frame2: Texture2D
-@export var death_frame3: Texture2D
-@export var death_frame4: Texture2D
-@export var death_fps := 8.0
-
 signal hit(arrow: Arrow, sector: int)
 signal fired(arrow: Arrow)
 signal died()
 
 var _dead := false
-var _eyes_hit_showing := false
 var _move_dir := Vector2.ZERO   # last movement direction, for the directional eyes
 var _burn_time := 0.0
 var _freeze_time := 0.0
@@ -118,8 +87,14 @@ var _dash_vel: Vector3
 var _in_slowdown := false
 var _slowmo_tween: Tween
 
+@onready var _camera: Camera3D = %Camera
+@onready var _recovery: Timer = %Recovery
+@onready var _dashing: Timer = %Dashing
+@onready var _dash_debounce: Timer = %DashDebounce
+@onready var _sprite: AnimatedSprite3D = %Sprite
+@onready var _eyes: AnimatedSprite3D = %Eyes
+@onready var _collider: CollisionShape3D = %Collider
 @onready var _preview: DashPreviewComponent = %DashPreview
-@onready var _eyes: Sprite3D = %Eyes
 @onready var _arrows: Node3D = %Arrows
 
 var _sprite_basis: Basis
@@ -134,92 +109,48 @@ func _update_collider(c: CollisionShape3D, r: float) -> void:
 func get_facing() -> Vector3:
 	return -global_basis.z
 
-func embedded_count() -> int:
-	if not sectors:
-		return 0
-	var n := 0
-	for s in sectors.get_stored():
-		if s != null:
-			n += 1
-	return n
-
 enum EyeDir { HIDDEN = -1, CENTERED, EAST, SOUTHEAST, SOUTH, SOUTHWEST, WEST }
 
-func _get_eye_dir() -> EyeDir:
+func _get_eye_frame() -> int:
 	var mouse_pos := get_mouse_world_position()
 	var mouse_offset := global_position.direction_to(mouse_pos)
-	var len := global_position.distance_to(mouse_pos)
+	var offset_len := global_position.distance_to(mouse_pos)
 	var dir := Vector2(mouse_offset.x, mouse_offset.z)
-	if len < eye_deadzone:
-		return EyeDir.CENTERED
+	if offset_len < eye_deadzone:
+		return 0
 	var deg := rad_to_deg(atan2(dir.y, dir.x))
 	if deg <= -22.5 and deg >= -157.5:
-		return EyeDir.HIDDEN
+		return -1
 	if deg <= 22.5:
-		return EyeDir.EAST
+		return 1
 	if deg <= 67.5:
-		return EyeDir.SOUTHEAST
+		return 2
 	if deg <= 112.5:
-		return EyeDir.SOUTH
+		return 0
 	if deg <= 157.5:
-		return EyeDir.SOUTHWEST
-	return EyeDir.WEST        # |deg| > 157.5
-
-func _normal_eye(bucket: EyeDir) -> Texture2D:
-	match bucket:
-		EyeDir.EAST: return eyes_east
-		EyeDir.SOUTHEAST: return eyes_southeast
-		EyeDir.SOUTH: return eyes_normal
-		EyeDir.SOUTHWEST: return eyes_southwest
-		EyeDir.WEST: return eyes_west
-	return null   # HIDDEN
-
-func _hit_eye(bucket: EyeDir) -> Texture2D:
-	match bucket:
-		#EyeDir.CENTERED: return eyes_hit_centered
-		EyeDir.EAST: return eyes_hit_east
-		EyeDir.SOUTHEAST: return eyes_hit_southeast
-		EyeDir.SOUTH: return eyes_hit
-		EyeDir.SOUTHWEST: return eyes_hit_southwest
-		EyeDir.WEST: return eyes_hit_west
-	return null   # HIDDEN
-
-func _angry_eye(bucket: EyeDir) -> Texture2D:
-	match bucket:
-		EyeDir.EAST: return angry_eyes_east
-		EyeDir.SOUTHEAST: return angry_eyes_southeast
-		EyeDir.SOUTH: return angry_eyes
-		EyeDir.SOUTHWEST: return angry_eyes_southwest
-		EyeDir.WEST: return angry_eyes_west
-	return null   # HIDDEN
-
-func _apply_eye(tex: Texture2D) -> void:
-	if tex == null:
-		_eyes.visible = false
-	else:
-		_eyes.visible = true
-		_eyes.texture = tex
+		return 3
+	return 0
 
 func _update_eyes() -> void:
-	if not _eyes or _eyes_hit_showing or is_dead():
+	if not _eyes or is_dead():
 		return
-	var n := embedded_count()
-	var bucket := _get_eye_dir()
-	if n >= 4:
-		_apply_eye(_angry_eye(bucket))
-	elif n >= 3:
-		_eyes.texture = eyes_lowhp
-		_eyes.visible = true
+	var frame := _get_eye_frame()
+	if is_angry():
+		_eyes.animation = "angry"
+		_eyes.frame = frame
+	#elif n >= 3:
+	#	_eyes.texture = eyes_lowhp
+	#	_eyes.visible = true
 	else:
-		_apply_eye(_normal_eye(bucket))
+		_eyes.animation = "default"
+		_eyes.frame = frame
 
 func _flash_eyes_hit() -> void:
 	if not _eyes or _dead:
 		return
-	_eyes_hit_showing = true
-	_apply_eye(_hit_eye(_get_eye_dir()))
+	_eyes.animation = "hit"
+	_eyes.frame = _get_eye_frame()
 	await get_tree().create_timer(eyes_hit_time).timeout
-	_eyes_hit_showing = false
 	_update_eyes()
 
 func get_facing_angle() -> float:
@@ -242,11 +173,8 @@ func enable_firing():
 		if embedded is EmbeddedArrow:
 			embedded.enable_firing()
 
-func is_correct_catch(_arrow: Arrow, _sector: int) -> bool:
-	#if arrow.kind == Arrow.Kind.NORMAL:
-	#	return true  # white wildcard: any sector accepts it
-	#return arrow.kind == kind_for_sector(sector)
-	return true
+func is_angry() -> bool:
+	return sectors.full()
 
 func get_hit(arrow: Arrow) -> void:
 	if is_dead():
@@ -432,17 +360,8 @@ func die() -> void:
 	sectors.clear_stored()
 	SoundManager.play("apple_death")
 	died.emit()
-	_play_death()
-
-func _play_death() -> void:
-	if _eyes:
-		_eyes.visible = false
-	var frames := [death_frame1, death_frame2, death_frame3, death_frame4]
-	var step := 1.0 / maxf(death_fps, 0.01)
-	for f in frames:
-		if f:
-			_sprite.texture = f
-		await get_tree().create_timer(step).timeout
+	_sprite.play("death")
+	_eyes.hide()
 
 func _on_sectors_changed() -> void:
 	if sectors.full():

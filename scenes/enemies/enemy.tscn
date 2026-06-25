@@ -12,6 +12,9 @@
 [ext_resource type="Texture2D" uid="uid://ccs6nyr8bd0ba" path="res://assets/art/enemy/frame4.png" id="8_f4"]
 [ext_resource type="Texture2D" uid="uid://c8knl5mhl04ko" path="res://assets/art/enemy/normal_hit.PNG" id="9_hn"]
 [ext_resource type="Texture2D" uid="uid://dc0jaxflx7uj5" path="res://assets/art/enemy/stretch_hit.PNG" id="10_hs"]
+[ext_resource type="Texture2D" uid="uid://bh6pj83dm5i84" path="res://assets/art/enemy/death1_frame.PNG" id="13_sb86v"]
+[ext_resource type="Texture2D" uid="uid://c22so75ub13ou" path="res://assets/art/enemy/death2_frame.PNG" id="14_pe3k2"]
+[ext_resource type="Texture2D" uid="uid://cdmjg1osh8iqw" path="res://assets/art/enemy/death3_frame.PNG" id="15_kugq1"]
 
 [sub_resource type="Resource" id="Resource_lu5c6"]
 script = ExtResource("3_nenq2")
@@ -41,9 +44,57 @@ animations = [{
 "frames": [{
 "duration": 1.0,
 "texture": ExtResource("5_c4w8v")
+}, {
+"duration": 1.0,
+"texture": ExtResource("13_sb86v")
+}, {
+"duration": 1.0,
+"texture": ExtResource("14_pe3k2")
+}, {
+"duration": 1.0,
+"texture": ExtResource("15_kugq1")
+}],
+"loop": 0,
+"name": &"death",
+"speed": 8.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("5_c4w8v")
 }],
 "loop": 1,
 "name": &"default",
+"speed": 0.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("5_c4w8v")
+}, {
+"duration": 1.0,
+"texture": ExtResource("6_f2")
+}, {
+"duration": 1.0,
+"texture": ExtResource("7_f3")
+}, {
+"duration": 1.0,
+"texture": ExtResource("8_f4")
+}, {
+"duration": 1.0,
+"texture": ExtResource("5_c4w8v")
+}],
+"loop": 0,
+"name": &"fire",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("9_hn")
+}, {
+"duration": 1.0,
+"texture": ExtResource("10_hs")
+}],
+"loop": 0,
+"name": &"hit",
 "speed": 5.0
 }]
 
@@ -51,6 +102,8 @@ animations = [{
 collision_layer = 8
 motion_mode = 1
 script = ExtResource("1_7p1mj")
+health = NodePath("Health")
+sus = NodePath("Sus")
 patterns = Array[ExtResource("2_xwavj")]([SubResource("Resource_fcftc")])
 frame1 = ExtResource("5_c4w8v")
 frame2 = ExtResource("6_f2")
@@ -58,8 +111,6 @@ frame3 = ExtResource("7_f3")
 frame4 = ExtResource("8_f4")
 hit_normal = ExtResource("9_hn")
 hit_stretch = ExtResource("10_hs")
-health = NodePath("Health")
-sus = NodePath("Sus")
 
 [node name="Collider" type="CollisionShape3D" parent="." unique_id=1742085930]
 unique_name_in_owner = true
@@ -80,17 +131,15 @@ autostart = true
 [node name="Sus" type="Node" parent="." unique_id=495149280]
 script = ExtResource("3_fcftc")
 
-[node name="Sprite" type="Sprite3D" parent="." unique_id=508008351]
-unique_name_in_owner = true
-transform = Transform3D(-2.8412401e-08, -0.65, -2.8412401e-08, 0, -2.8412401e-08, 0.65, -0.65, 2.8412401e-08, 1.2419455e-15, 0, 0, 0)
-double_sided = false
-texture = ExtResource("5_c4w8v")
-
 [node name="InstanceTimers" type="Node" parent="." unique_id=160238136]
 unique_name_in_owner = true
 
-[node name="AnimatedSprite3D" type="AnimatedSprite3D" parent="." unique_id=1091610106]
+[node name="Sprite" type="AnimatedSprite3D" parent="." unique_id=1091610106]
+unique_name_in_owner = true
+transform = Transform3D(-2.8412401e-08, -0.65, -2.8412401e-08, 0, -2.8412401e-08, 0.65, -0.65, 2.8412401e-08, 1.2419455e-15, 0, 0, 0)
+double_sided = false
 sprite_frames = SubResource("SpriteFrames_ub6uw")
+animation = &"hit"
 
 [connection signal="changed" from="Health" to="." method="_on_health_changed"]
 [connection signal="timeout" from="Recovery" to="." method="_on_recovery_timeout"]

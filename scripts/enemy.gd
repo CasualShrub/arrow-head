@@ -35,7 +35,7 @@ const _ENEMY_TEAM = Arrow.Team.ENEMY
 signal fired(arrow: Arrow, dir: Vector3)
 signal died
 
-@onready var _sprite: Sprite3D = %Sprite
+@onready var _sprite: AnimatedSprite3D = %Sprite
 @onready var _collider: CollisionShape3D = %Collider
 @onready var _recovery: Timer = %Recovery
 @onready var _inst_timers: Node = %InstanceTimers
@@ -61,8 +61,6 @@ func _update_collider(c: CollisionShape3D, r: float) -> void:
 	c.shape = s
 
 func _on_fire(_arrow: Arrow, dir: Vector3) -> Vector3:
-	_aiming = false
-	_set_base(frame4)
 	return dir
 
 func _parse_movement_pattern(pattern: Dictionary[float, Vector2]) -> Dictionary[float, Vector3]:
@@ -236,40 +234,23 @@ func _on_health_changed() -> void:
 func _on_recovery_timeout() -> void:
 	if _dead: return
 	var pattern := _select_pattern()
-	await _play_draw()
-	if _dead: return
+	_sprite.play("fire")
 	perform(pattern)
 
-func _set_sprite(tex: Texture2D) -> void:
-	if _sprite:
-		_sprite.texture = tex
-
 func highlight_on(c: Color) -> void:
+	if is_dead(): return
 	_sprite.modulate = c
 
 func highlight_off() -> void:
 	_sprite.modulate = Color(1, 1, 1, 1)
-func _set_base(tex: Texture2D) -> void:
-	_base_tex = tex
-	if not _hit_showing:
-		_set_sprite(tex)
-
-func _play_draw() -> void:
-	_aiming = true
-	var draw := [frame1, frame2, frame3]
-	var step := aim_time / draw.size()
-	for f in draw:
-		_set_base(f)
-		await get_tree().create_timer(step).timeout
-		if _dead: return
 
 func _show_hit() -> void:
-	_hit_showing = true
-	_set_sprite(hit_stretch if _aiming else hit_normal)
-	await get_tree().create_timer(hit_flash_time).timeout
-	_hit_showing = false
-	if _dead: return
-	_set_sprite(_base_tex)
+	_sprite.animation = "hit"
+	if _aiming: _sprite.frame = 1
+	get_tree().paused = true
+	await get_tree().create_timer(hit_flash_time, true, false, true).timeout
+	get_tree().paused = false
+	_sprite.play("death")
 
 func _physics_process(delta: float) -> void:
 	if Engine.is_editor_hint(): return
@@ -277,5 +258,4 @@ func _physics_process(delta: float) -> void:
 	_select_behaviour(delta)
 
 func _ready() -> void:
-	if not Engine.is_editor_hint():
-		_set_base(frame1)
+	pass
