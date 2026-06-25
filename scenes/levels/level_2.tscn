@@ -1,0 +1,87 @@
+[gd_scene format=3 uid="uid://bnsr22owo5uq4"]
+
+[ext_resource type="PackedScene" uid="uid://b6c1h2si8ob6l" path="res://scenes/levels/encounter.tscn" id="1_h14sk"]
+[ext_resource type="PackedScene" uid="uid://dwun4epe1ljmt" path="res://scenes/enemies/enemy_fire.tscn" id="2_eqwef"]
+[ext_resource type="PackedScene" uid="uid://5cy7tvfvxnyw" path="res://scenes/enemies/enemy_frost.tscn" id="3_1shg3"]
+
+[node name="Encounter" unique_id=571267862 instance=ExtResource("1_h14sk")]
+
+[node name="Player" parent="SubViewportContainer/SubViewport/World" parent_id_path=PackedInt32Array(1589957074) index="0" unique_id=508579643]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 18.24202, 0, 25.049774)
+
+[node name="CameraPivot" parent="SubViewportContainer/SubViewport/World" parent_id_path=PackedInt32Array(1589957074) index="1" unique_id=1563753267]
+transform = Transform3D(1, 0, 0, 0, -4.371139e-08, 1, 0, -1, -4.371139e-08, 18.24202, 3.7000048, 25.049774)
+
+[node name="CSGBox3D2" parent="SubViewportContainer/SubViewport/World" parent_id_path=PackedInt32Array(1589957074) index="4" unique_id=1034809572]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 16.529264, 0.27922904, 20.810108)
+size = Vector3(5.218235, 2.4925537, 0.9210205)
+
+[node name="CSGBox3D4" type="CSGBox3D" parent="SubViewportContainer/SubViewport/World" parent_id_path=PackedInt32Array(1589957074) index="5" unique_id=544497723]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 17.577732, 0.27922904, 20.810108)
+use_collision = true
+collision_layer = 4
+size = Vector3(7.315172, 2.4925537, 0.9210205)
+
+[node name="CSGBox3D5" type="CSGBox3D" parent="SubViewportContainer/SubViewport/World" parent_id_path=PackedInt32Array(1589957074) index="6" unique_id=1193009974]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 29.302803, 0.27922904, 20.810108)
+use_collision = true
+collision_layer = 4
+size = Vector3(7.315172, 2.4925537, 0.9210205)
+
+[node name="CSGBox3D3" parent="SubViewportContainer/SubViewport/World" parent_id_path=PackedInt32Array(1589957074) index="7" unique_id=1810942950]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 23.512026, 0.27922904, 12.854126)
+size = Vector3(1.0618019, 2.4925537, 8.408813)
+
+[node name="CSGBox3D6" type="CSGBox3D" parent="SubViewportContainer/SubViewport/World" parent_id_path=PackedInt32Array(1589957074) index="8" unique_id=1534136643]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 18.276566, -0.18515694, 12.377123)
+use_collision = true
+collision_layer = 4
+size = Vector3(1.0618019, 1.5637817, 1.2058716)
+
+[node name="CSGBox3D7" type="CSGBox3D" parent="SubViewportContainer/SubViewport/World" parent_id_path=PackedInt32Array(1589957074) index="9" unique_id=560444053]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 15.806469, -0.18515694, 14.485315)
+use_collision = true
+collision_layer = 4
+size = Vector3(1.0618019, 1.5637817, 1.2058716)
+
+[node name="CSGBox3D8" type="CSGBox3D" parent="SubViewportContainer/SubViewport/World" parent_id_path=PackedInt32Array(1589957074) index="10" unique_id=178257800]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 20.118925, -0.18515694, 13.637535)
+use_collision = true
+collision_layer = 4
+size = Vector3(1.0618019, 1.5637817, 1.2058716)
+
+[node name="CSGBox3D9" type="CSGBox3D" parent="SubViewportContainer/SubViewport/World" parent_id_path=PackedInt32Array(1589957074) index="11" unique_id=421132450]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 16.630892, -0.18515694, 11.11249)
+use_collision = true
+collision_layer = 4
+size = Vector3(1.0618019, 1.5637817, 1.2058716)
+
+[node name="CSGBox3D10" type="CSGBox3D" parent="SubViewportContainer/SubViewport/World" parent_id_path=PackedInt32Array(1589957074) index="12" unique_id=588622321]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 20.165392, -0.18515694, 10.213108)
+use_collision = true
+collision_layer = 4
+size = Vector3(1.0618019, 1.5637817, 1.2058716)
+
+[node name="CSGBox3D3" parent="SubViewportContainer/SubViewport/World/Walls" parent_id_path=PackedInt32Array(1879017839) index="0" unique_id=1883586222]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 24.068428, 0.7292166, -0.5021305)
+
+[node name="CSGBox3D4" parent="SubViewportContainer/SubViewport/World/Walls" parent_id_path=PackedInt32Array(1879017839) index="1" unique_id=30173005]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 24.068428, 0.7292166, 29.736046)
+
+[node name="CSGBox3D5" parent="SubViewportContainer/SubViewport/World/Walls" parent_id_path=PackedInt32Array(1879017839) index="2" unique_id=108645574]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.230611, 0.7292166, 14.404285)
+
+[node name="CSGBox3D6" parent="SubViewportContainer/SubViewport/World/Walls" parent_id_path=PackedInt32Array(1879017839) index="3" unique_id=739514415]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 35.27272, 0.7292166, 14.404285)
+
+[node name="Enemy" parent="SubViewportContainer/SubViewport/World" parent_id_path=PackedInt32Array(1589957074) index="16" unique_id=568196954 instance=ExtResource("2_eqwef")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 18.272142, -0.1609757, 11.22137)
+
+[node name="Enemy2" parent="SubViewportContainer/SubViewport/World" parent_id_path=PackedInt32Array(1589957074) index="17" unique_id=96558035 instance=ExtResource("3_1shg3")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 23.496803, 0, 22.46748)
+
+[node name="Enemy3" parent="SubViewportContainer/SubViewport/World" parent_id_path=PackedInt32Array(1589957074) index="18" unique_id=548100990 instance=ExtResource("3_1shg3")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 18.360409, 0, 19.665695)
+
+[node name="Enemy4" parent="SubViewportContainer/SubViewport/World" parent_id_path=PackedInt32Array(1589957074) index="19" unique_id=60938388 instance=ExtResource("2_eqwef")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 25.14843, 0, 13.778746)
