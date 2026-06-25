@@ -7,6 +7,11 @@
 [ext_resource type="Script" uid="uid://r4qbgt6it8lb" path="res://scripts/firing_instance.gd" id="3_nenq2"]
 [ext_resource type="PackedScene" uid="uid://bxgfy1nvmlb7v" path="res://scenes/arrows/arrow.tscn" id="4_jt03m"]
 [ext_resource type="SpriteFrames" uid="uid://bk8ta6kcnevxn" path="res://sprite_frames/banana_frames.tres" id="7_jt03m"]
+[ext_resource type="SpriteFrames" uid="uid://cmoc4g43xckv2" path="res://sprite_frames/sus_outline.tres" id="7_qch6t"]
+[ext_resource type="Shader" uid="uid://cs8xbkept5f7h" path="res://shaders/meter.gdshader" id="8_tihwb"]
+[ext_resource type="SpriteFrames" uid="uid://prgjo2tsn6yw" path="res://sprite_frames/sus_fill.tres" id="8_y5th1"]
+[ext_resource type="Texture2D" uid="uid://b6bq57ggincn8" path="res://assets/art/enemy/suspicion/question_fill.png" id="9_tihwb"]
+[ext_resource type="Shader" uid="uid://ouqfymeifbpb" path="res://shaders/vision_cone.gdshader" id="12_p7w77"]
 
 [sub_resource type="Resource" id="Resource_lu5c6"]
 script = ExtResource("3_nenq2")
@@ -31,6 +36,22 @@ metadata/_custom_type_script = "uid://d04k7pxjd2u24"
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_ensgf"]
 
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_p7w77"]
+render_priority = 0
+shader = ExtResource("8_tihwb")
+shader_parameter/sprite_texture = ExtResource("9_tihwb")
+shader_parameter/fade_height = 0.59200002812
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_tihwb"]
+render_priority = 0
+shader = ExtResource("12_p7w77")
+shader_parameter/cone_color = Color(1, 0.8, 0.1, 0.35)
+shader_parameter/angle = 0.45
+shader_parameter/edge_softness = 0.08
+shader_parameter/distance_fade = 0.53
+
+[sub_resource type="QuadMesh" id="QuadMesh_ub6uw"]
+
 [node name="Enemy" type="CharacterBody3D" unique_id=71488470 node_paths=PackedStringArray("health", "sus")]
 collision_layer = 8
 motion_mode = 1
@@ -38,6 +59,9 @@ script = ExtResource("1_7p1mj")
 health = NodePath("Health")
 sus = NodePath("Sus")
 patterns = Array[ExtResource("2_xwavj")]([SubResource("Resource_fcftc")])
+patrol_speed = null
+patrol_is_closed_loop = null
+combat_speed = null
 
 [node name="Collider" type="CollisionShape3D" parent="." unique_id=1742085930]
 unique_name_in_owner = true
@@ -58,6 +82,16 @@ autostart = true
 [node name="Sus" type="Node" parent="." unique_id=495149280]
 script = ExtResource("3_fcftc")
 
+[node name="Outline" type="AnimatedSprite3D" parent="Sus" unique_id=1078234529]
+unique_name_in_owner = true
+transform = Transform3D(-1.45558925e-08, -0.333, -1.45558925e-08, 0, -1.45558925e-08, 0.333, -0.333, 1.45558925e-08, 6.362583e-16, -0.9502109, 0.108018935, 0)
+sprite_frames = ExtResource("7_qch6t")
+
+[node name="Fill" type="AnimatedSprite3D" parent="Sus/Outline" unique_id=1334762853]
+unique_name_in_owner = true
+material_override = SubResource("ShaderMaterial_p7w77")
+sprite_frames = ExtResource("8_y5th1")
+
 [node name="InstanceTimers" type="Node" parent="." unique_id=160238136]
 unique_name_in_owner = true
 
@@ -67,5 +101,16 @@ transform = Transform3D(-4.283716e-08, -0.98, -4.283716e-08, 0, -4.283716e-08, 0
 double_sided = false
 sprite_frames = ExtResource("7_jt03m")
 
+[node name="PatrolPoints" type="Node3D" parent="." unique_id=1646478367]
+unique_name_in_owner = true
+
+[node name="Marker3D" type="Marker3D" parent="PatrolPoints" unique_id=211857099]
+
+[node name="VisionDisplay" type="MeshInstance3D" parent="." unique_id=442070290]
+transform = Transform3D(-1.93, -1.6872596e-07, 0, -7.375246e-15, 8.436298e-08, 1.93, -1.6872596e-07, 1.93, -8.436298e-08, 0, -0.03, -1.005)
+material_override = SubResource("ShaderMaterial_tihwb")
+mesh = SubResource("QuadMesh_ub6uw")
+
 [connection signal="changed" from="Health" to="." method="_on_health_changed"]
 [connection signal="timeout" from="Recovery" to="." method="_on_recovery_timeout"]
+[connection signal="frame_changed" from="Sus/Outline/Fill" to="Sus" method="_on_fill_frame_changed"]

@@ -9,6 +9,7 @@ const _ENEMY_TEAM = Arrow.Team.ENEMY
 @export var player: Player
 
 @export_group("firing")
+@export var patrol_route: Array[Vector3] = []
 @export var patterns: Array[ArrowPattern] = []
 # when set, overrides every pattern's arrow type — the fire/frost variants use this
 @export var arrow_scene: PackedScene = null
@@ -23,6 +24,11 @@ const _ENEMY_TEAM = Arrow.Team.ENEMY
 		if _collider:
 			_update_collider(_collider, value)
 		hurt_radius = value
+@export_group("patrol")
+@export var patrol_speed := 2.0
+@export var patrol_is_closed_loop := false
+@export_group("combat")
+@export var combat_speed := 4.0
 
 signal fired(arrow: Arrow, dir: Vector3)
 signal died

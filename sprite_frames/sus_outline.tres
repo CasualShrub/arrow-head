@@ -1,0 +1,18 @@
+[gd_resource type="SpriteFrames" format=3 uid="uid://cmoc4g43xckv2"]
+
+[ext_resource type="Texture2D" uid="uid://bregpbnx8ccvb" path="res://assets/art/enemy/suspicion/question.png" id="1_17k81"]
+[ext_resource type="Texture2D" uid="uid://1wjguojwafuh" path="res://assets/art/enemy/suspicion/alert.png" id="2_2q0ng"]
+
+[resource]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("1_17k81")
+}, {
+"duration": 1.0,
+"texture": ExtResource("2_2q0ng")
+}],
+"loop": 1,
+"name": &"default",
+"speed": 5.0
+}]

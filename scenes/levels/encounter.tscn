@@ -4,7 +4,7 @@
 [ext_resource type="PackedScene" uid="uid://boryk37cbh1nx" path="res://scenes/player.tscn" id="2_br6g5"]
 [ext_resource type="Script" uid="uid://doms8x46cr1tt" path="res://scripts/camera.gd" id="6_02f36"]
 [ext_resource type="Shader" uid="uid://dnw37cynwb7od" path="res://shaders/screen_effect.gdshader" id="8_2xc7y"]
-[ext_resource type="Script" path="res://scripts/floor.gd" id="9_floor"]
+[ext_resource type="Script" uid="uid://eu00f1h8cit6" path="res://scripts/floor.gd" id="9_floor"]
 [ext_resource type="PackedScene" uid="uid://bg4meover1ui0" path="res://scenes/ui/game_over.tscn" id="10_gameover"]
 
 [sub_resource type="Environment" id="Environment_ub6uw"]
@@ -41,7 +41,7 @@ burn_drift_speed = 240.0
 [node name="Enemies" type="Node3D" parent="SubViewportContainer/SubViewport/World" unique_id=1185931971]
 unique_name_in_owner = true
 
-[node name="CSGBox3D" type="CSGBox3D" parent="SubViewportContainer/SubViewport/World" unique_id=1674034061]
+[node name="Floor" type="CSGBox3D" parent="SubViewportContainer/SubViewport/World" unique_id=1674034061]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.7, 0)
 size = Vector3(100, 1, 100)
 script = ExtResource("9_floor")
@@ -68,6 +68,6 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="GameOver" parent="." instance=ExtResource("10_gameover")]
+[node name="GameOver" parent="." unique_id=1065161674 instance=ExtResource("10_gameover")]
 
 [connection signal="ended" from="." to="GameOver" method="_on_encounter_ended"]
