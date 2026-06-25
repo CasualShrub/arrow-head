@@ -15,4 +15,4 @@ shape = SubResource("SphereShape3D_u24cr")
 sprite_frames = ExtResource("2_b3sqf")
 animation = &"intro"
 autoplay = "intro"
-frame_progress = 0.47898296
+frame_progress = 0.77435106

@@ -1,0 +1,85 @@
+[gd_resource type="SpriteFrames" format=3 uid="uid://dq7pl0h6fmit4"]
+
+[ext_resource type="Texture2D" uid="uid://7mg0rd4y6wkr" path="res://assets/art/enemy/bannana/unripe/unripe1.png" id="1_r7ywt"]
+[ext_resource type="Texture2D" uid="uid://103ijpqle637" path="res://assets/art/enemy/bannana/unripe/unripedeath1.PNG" id="2_mumix"]
+[ext_resource type="Texture2D" uid="uid://021ggwnr6hln" path="res://assets/art/enemy/bannana/unripe/unripedeath2.PNG" id="3_n4tur"]
+[ext_resource type="Texture2D" uid="uid://b77hbds6dujuh" path="res://assets/art/enemy/bannana/unripe/unripedeath3.PNG" id="4_hmt6q"]
+[ext_resource type="Texture2D" uid="uid://dosov6fd6j4dm" path="res://assets/art/enemy/bannana/unripe/unripe2.png" id="5_hges8"]
+[ext_resource type="Texture2D" uid="uid://vohr8f28cjgv" path="res://assets/art/enemy/bannana/unripe/unripe3.png" id="6_dixpy"]
+[ext_resource type="Texture2D" uid="uid://cg345clype61m" path="res://assets/art/enemy/bannana/unripe/unripe4.png" id="7_ibilq"]
+
+[resource]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("1_r7ywt")
+}, {
+"duration": 1.0,
+"texture": ExtResource("2_mumix")
+}, {
+"duration": 1.0,
+"texture": ExtResource("3_n4tur")
+}, {
+"duration": 1.0,
+"texture": ExtResource("4_hmt6q")
+}],
+"loop": 0,
+"name": &"death",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("1_r7ywt")
+}],
+"loop": 1,
+"name": &"default",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("1_r7ywt")
+}, {
+"duration": 1.0,
+"texture": ExtResource("5_hges8")
+}, {
+"duration": 1.0,
+"texture": ExtResource("6_dixpy")
+}, {
+"duration": 1.0,
+"texture": ExtResource("7_ibilq")
+}, {
+"duration": 1.0,
+"texture": ExtResource("1_r7ywt")
+}],
+"loop": 0,
+"name": &"fire",
+"speed": 10.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("7_ibilq")
+}],
+"loop": 0,
+"name": &"hit",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("1_r7ywt")
+}, {
+"duration": 1.0,
+"texture": ExtResource("5_hges8")
+}, {
+"duration": 3.0,
+"texture": ExtResource("6_dixpy")
+}, {
+"duration": 1.0,
+"texture": ExtResource("7_ibilq")
+}, {
+"duration": 1.0,
+"texture": ExtResource("1_r7ywt")
+}],
+"loop": 1,
+"name": &"windup",
+"speed": 8.0
+}]

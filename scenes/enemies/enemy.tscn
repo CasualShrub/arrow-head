@@ -6,15 +6,7 @@
 [ext_resource type="Script" uid="uid://dn8jqcy1eo7y7" path="res://scripts/components/sus_component.gd" id="3_fcftc"]
 [ext_resource type="Script" uid="uid://r4qbgt6it8lb" path="res://scripts/firing_instance.gd" id="3_nenq2"]
 [ext_resource type="PackedScene" uid="uid://bxgfy1nvmlb7v" path="res://scenes/arrows/arrow.tscn" id="4_jt03m"]
-[ext_resource type="Texture2D" uid="uid://b0afwlyjydm7h" path="res://assets/art/enemy/bannana/normal/frame1.png" id="5_c4w8v"]
-[ext_resource type="Texture2D" uid="uid://bmqcjg05r8j1e" path="res://assets/art/enemy/bannana/normal/frame2.png" id="6_f2"]
-[ext_resource type="Texture2D" uid="uid://6w7p3hufm0km" path="res://assets/art/enemy/bannana/normal/frame3.png" id="7_f3"]
-[ext_resource type="Texture2D" uid="uid://ccs6nyr8bd0ba" path="res://assets/art/enemy/bannana/normal/frame4.png" id="8_f4"]
-[ext_resource type="Texture2D" uid="uid://c8knl5mhl04ko" path="res://assets/art/enemy/bannana/normal_hit.PNG" id="9_hn"]
-[ext_resource type="Texture2D" uid="uid://dc0jaxflx7uj5" path="res://assets/art/enemy/bannana/stretch_hit.PNG" id="10_hs"]
-[ext_resource type="Texture2D" uid="uid://bh6pj83dm5i84" path="res://assets/art/enemy/bannana/normal/death1_frame.PNG" id="13_sb86v"]
-[ext_resource type="Texture2D" uid="uid://c22so75ub13ou" path="res://assets/art/enemy/bannana/normal/death2_frame.PNG" id="14_pe3k2"]
-[ext_resource type="Texture2D" uid="uid://cdmjg1osh8iqw" path="res://assets/art/enemy/bannana/normal/death3_frame.PNG" id="15_kugq1"]
+[ext_resource type="SpriteFrames" uid="uid://bk8ta6kcnevxn" path="res://sprite_frames/banana_frames.tres" id="7_jt03m"]
 
 [sub_resource type="Resource" id="Resource_lu5c6"]
 script = ExtResource("3_nenq2")
@@ -38,65 +30,6 @@ instances = Array[ExtResource("3_nenq2")]([SubResource("Resource_lu5c6"), SubRes
 metadata/_custom_type_script = "uid://d04k7pxjd2u24"
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_ensgf"]
-
-[sub_resource type="SpriteFrames" id="SpriteFrames_ub6uw"]
-animations = [{
-"frames": [{
-"duration": 1.0,
-"texture": ExtResource("5_c4w8v")
-}, {
-"duration": 1.0,
-"texture": ExtResource("13_sb86v")
-}, {
-"duration": 1.0,
-"texture": ExtResource("14_pe3k2")
-}, {
-"duration": 1.0,
-"texture": ExtResource("15_kugq1")
-}],
-"loop": 0,
-"name": &"death",
-"speed": 8.0
-}, {
-"frames": [{
-"duration": 1.0,
-"texture": ExtResource("5_c4w8v")
-}],
-"loop": 1,
-"name": &"default",
-"speed": 0.0
-}, {
-"frames": [{
-"duration": 1.0,
-"texture": ExtResource("5_c4w8v")
-}, {
-"duration": 1.0,
-"texture": ExtResource("6_f2")
-}, {
-"duration": 2.0,
-"texture": ExtResource("7_f3")
-}, {
-"duration": 1.0,
-"texture": ExtResource("8_f4")
-}, {
-"duration": 1.0,
-"texture": ExtResource("5_c4w8v")
-}],
-"loop": 0,
-"name": &"fire",
-"speed": 5.0
-}, {
-"frames": [{
-"duration": 1.0,
-"texture": ExtResource("9_hn")
-}, {
-"duration": 1.0,
-"texture": ExtResource("10_hs")
-}],
-"loop": 0,
-"name": &"hit",
-"speed": 5.0
-}]
 
 [node name="Enemy" type="CharacterBody3D" unique_id=71488470 node_paths=PackedStringArray("health", "sus")]
 collision_layer = 8
@@ -132,7 +65,7 @@ unique_name_in_owner = true
 unique_name_in_owner = true
 transform = Transform3D(-4.283716e-08, -0.98, -4.283716e-08, 0, -4.283716e-08, 0.98, -0.98, 4.283716e-08, 1.8724718e-15, 0, 0, 0)
 double_sided = false
-sprite_frames = SubResource("SpriteFrames_ub6uw")
+sprite_frames = ExtResource("7_jt03m")
 
 [connection signal="changed" from="Health" to="." method="_on_health_changed"]
 [connection signal="timeout" from="Recovery" to="." method="_on_recovery_timeout"]

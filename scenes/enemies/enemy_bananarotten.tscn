@@ -1,0 +1,10 @@
+[gd_scene format=3 uid="uid://db0ry36fopb12"]
+
+[ext_resource type="PackedScene" uid="uid://b8rs35o7f45v0" path="res://scenes/enemies/enemy.tscn" id="1_tn6su"]
+[ext_resource type="SpriteFrames" uid="uid://c7kn4in7r1h6v" path="res://sprite_frames/bananarotten_frames.tres" id="2_2ktxe"]
+
+[node name="Enemy" unique_id=71488470 instance=ExtResource("1_tn6su")]
+
+[node name="Sprite" parent="." index="5" unique_id=1091610106]
+sprite_frames = ExtResource("2_2ktxe")
+frame_progress = 0.3228897

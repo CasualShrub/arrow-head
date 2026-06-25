@@ -1,0 +1,85 @@
+[gd_resource type="SpriteFrames" format=3 uid="uid://c7kn4in7r1h6v"]
+
+[ext_resource type="Texture2D" uid="uid://njnx1nn4geyt" path="res://assets/art/enemy/bannana/rotten/rot1.png" id="1_uvdac"]
+[ext_resource type="Texture2D" uid="uid://ggshslbq5wd8" path="res://assets/art/enemy/bannana/rotten/rotdeath1.png" id="2_nysk5"]
+[ext_resource type="Texture2D" uid="uid://bf6r05eolcuh6" path="res://assets/art/enemy/bannana/rotten/rotdeath2.png" id="3_hclwh"]
+[ext_resource type="Texture2D" uid="uid://cxrdlyf0tbwm0" path="res://assets/art/enemy/bannana/rotten/rotdeath3.png" id="4_jdwv6"]
+[ext_resource type="Texture2D" uid="uid://dq7ysyvwd1f0a" path="res://assets/art/enemy/bannana/rotten/rot2.png" id="5_lkvws"]
+[ext_resource type="Texture2D" uid="uid://yeq2r0b5os32" path="res://assets/art/enemy/bannana/rotten/rot3.png" id="6_410qg"]
+[ext_resource type="Texture2D" uid="uid://bdqkawark2m11" path="res://assets/art/enemy/bannana/rotten/rot4.png" id="7_0b7ng"]
+
+[resource]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("1_uvdac")
+}, {
+"duration": 1.0,
+"texture": ExtResource("2_nysk5")
+}, {
+"duration": 1.0,
+"texture": ExtResource("3_hclwh")
+}, {
+"duration": 1.0,
+"texture": ExtResource("4_jdwv6")
+}],
+"loop": 0,
+"name": &"death",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("1_uvdac")
+}],
+"loop": 1,
+"name": &"default",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("1_uvdac")
+}, {
+"duration": 1.0,
+"texture": ExtResource("5_lkvws")
+}, {
+"duration": 2.0,
+"texture": ExtResource("6_410qg")
+}, {
+"duration": 1.0,
+"texture": ExtResource("7_0b7ng")
+}, {
+"duration": 1.0,
+"texture": ExtResource("1_uvdac")
+}],
+"loop": 0,
+"name": &"fire",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("7_0b7ng")
+}],
+"loop": 0,
+"name": &"hit",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("1_uvdac")
+}, {
+"duration": 1.0,
+"texture": ExtResource("5_lkvws")
+}, {
+"duration": 1.0,
+"texture": ExtResource("6_410qg")
+}, {
+"duration": 1.0,
+"texture": ExtResource("7_0b7ng")
+}, {
+"duration": 1.0,
+"texture": ExtResource("1_uvdac")
+}],
+"loop": 0,
+"name": &"windup",
+"speed": 2.0
+}]
