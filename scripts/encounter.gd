@@ -37,7 +37,6 @@ func add_player(p: Player):
 func start() -> void:
 	var enemies := find_children("*", "Enemy")
 	for e in enemies:
-		print(e)
 		add_enemy(e)
 	add_player(player)
 	_ongoing = true

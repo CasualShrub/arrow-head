@@ -32,8 +32,7 @@ var _dead := false
 var _movement_pattern: Dictionary[float, Vector3] = {}
 var _movement_pattern_start: float
 
-func get_hit(arrow: Arrow) -> void:
-	arrow.deactivate()
+func get_hit() -> void:
 	if is_dead():
 		return
 	health.take_damage(1)
@@ -230,6 +229,12 @@ func _on_recovery_timeout() -> void:
 func _set_sprite(tex: Texture2D) -> void:
 	if _sprite:
 		_sprite.texture = tex
+
+func highlight_on(c: Color) -> void:
+	_sprite.modulate = c
+
+func highlight_off() -> void:
+	_sprite.modulate = Color(1, 1, 1, 1)
 
 func _physics_process(delta: float) -> void:
 	if Engine.is_editor_hint(): return

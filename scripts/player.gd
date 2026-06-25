@@ -11,16 +11,11 @@ const _PLAYER_TEAM = Arrow.Team.PLAYER
 @onready var _camera: Camera3D = %Camera
 @onready var _recovery: Timer = %Recovery
 @onready var _dashing: Timer = %Dashing
+@onready var _dash_debounce: Timer = %DashDebounce
 @onready var _sprite: Sprite3D = %Sprite
 @onready var _collider: CollisionShape3D = %Collider
 
 @export var speed := 6.0
-@export_group("arrows")
-@export var fire_cooldown := 1.0:
-	set(value):
-		if value < 0: value = 0
-		%FireDebounce.wait_time = value
-		fire_cooldown = value
 @export_group("dashing")
 @export var dash_time: float:
 	set(value):
@@ -29,7 +24,16 @@ const _PLAYER_TEAM = Arrow.Team.PLAYER
 	get:
 		if not _dashing: return -1.0
 		return _dashing.wait_time
+@export var dash_cooldown: float:
+	set(value):
+		if not _dash_debounce: return
+		_dash_debounce.wait_time = value
+	get:
+		if not _dash_debounce: return 0.0
+		return _dash_debounce.wait_time
 @export var max_dash_distance := 10.0
+@export var slowdown := 0.4
+@export var slowdown_speed := 0.5
 @export_group("hurt")
 @export var hurt_radius := 0.4:
 	set(value):
@@ -86,6 +90,10 @@ var _burn_spin_dir := 1.0
 
 var _dash_vel: Vector3
 
+var _in_slowdown := false
+var _slowmo_tween: Tween
+
+@onready var _preview: DashPreviewComponent = %DashPreview
 @onready var _eyes: Sprite3D = %Eyes
 @onready var _arrows: Node3D = %Arrows
 
@@ -149,13 +157,14 @@ func get_hit(arrow: Arrow) -> void:
 	if is_dead():
 		arrow.deactivate()
 		return
+	if is_dashing():
+		return
 	var sector := sectors.get_sector_from_position(arrow.global_position)
-	var correct := is_correct_catch(arrow, sector)
 	if try_embed_arrow(arrow, sector):
 		arrow.stick(_arrows)
 		SoundManager.play("Q%d_fill" % clampi(sector + 1, 1, 4))
 		SoundManager.play("apple_damage1" if arrow.kind != Arrow.Kind.NORMAL else "apple_damage2")
-		if not correct:
+		if not is_correct_catch(arrow, sector):
 			_apply_debuff(arrow.kind)
 	else:
 		arrow.queue_free()
@@ -199,24 +208,68 @@ func is_dashing() -> bool:
 	if not _dashing: return false
 	return not _dashing.is_stopped()
 
+func _can_dash() -> bool:
+	if not _dash_debounce: return false
+	return not is_dead() and _in_slowdown
+
+func _try_dash() -> bool:
+	if not _can_dash(): return false
+	for e in sectors.get_stored():
+		if e is EmbeddedArrow: #and e.is_firing_enabled():
+			print("dashing")
+			var mouse_pos := get_mouse_world_position()
+			mouse_pos = _preview.get_end(mouse_pos)
+			var mouse_offset := mouse_pos - global_position
+			_dash(mouse_offset)
+			return true
+	return false
+
 func _dash(dir: Vector3) -> void:
 	var dir_len := dir.length()
 	if dir_len < 0.001: return
 	if dir_len > max_dash_distance:
 		dir = dir.normalized() * max_dash_distance
-	print("dir:",dir)
 	_dash_vel = dir / _dashing.wait_time
+	var collided := _preview.get_enemies_in_path(global_position, global_position + dir)
+	for e in collided:
+		e.get_hit()
+	_exit_slowdown()
 	_dashing.start()
 
-func _try_dash() -> bool:
+func _can_slowdown() -> bool:
+	var flag := false
 	for e in sectors.get_stored():
-		if e is EmbeddedArrow: #and e.is_firing_enabled():
-			print("dashing")
-			var mouse_pos := get_mouse_world_position()
-			var mouse_offset := mouse_pos - global_position
-			_dash(mouse_offset)
-			return true
-	return false
+		if e is EmbeddedArrow:
+			flag = true
+			break
+	return not is_dead() and not is_dashing() and not _in_slowdown and _dash_debounce.is_stopped() and flag
+
+func _try_start_slowdown() -> bool:
+	print("trying start")
+	if not _can_slowdown(): return false
+	_enter_slowdown()
+	return true
+
+func _try_cancel_slowdown() -> bool:
+	if not _in_slowdown: return false
+	_exit_slowdown()
+	return true
+
+func _enter_slowdown() -> void:
+	print("slowing")
+	_in_slowdown = true
+	_preview.show()
+	_set_time_scale(slowdown, slowdown_speed)
+
+func _exit_slowdown() -> void:
+	_in_slowdown = false
+	_preview.hide()
+	_set_time_scale(1.0, 0.0)
+
+func _set_time_scale(target: float, duration: float) -> void:
+	if _slowmo_tween: _slowmo_tween.kill()
+	_slowmo_tween = create_tween()
+	_slowmo_tween.tween_property(Engine, "time_scale", target, duration)
 
 func _fire(arrow: Arrow, angle: float) -> void:
 	var fire_dir := get_facing().rotated(Vector3.UP, angle)
@@ -265,7 +318,7 @@ func die() -> void:
 	_burn_time = 0.0
 	_freeze_time = 0.0
 	_sprite.modulate = Color.WHITE
-	print("You died!")
+	print("died")
 	sectors.clear_stored()
 	SoundManager.play("apple_death")
 	died.emit()
@@ -274,6 +327,13 @@ func _on_sectors_changed() -> void:
 	if sectors.full():
 		enable_firing()
 
+func _on_dashing_timeout() -> void:
+	if dash_cooldown > 0.001:
+		_dash_debounce.start()
+
+func _update_slowdown(_delta: float) -> void:
+	pass
+
 func _update_dash(_delta: float) -> void:
 	velocity = _dash_vel
 	move_and_slide()
@@ -281,8 +341,11 @@ func _update_dash(_delta: float) -> void:
 func _physics_process(delta: float) -> void:
 	if Engine.is_editor_hint(): return
 	if is_dead(): return
-	if input.consume_fire():
-		_try_dash()
+	if input.consume_fire_pressed():
+		_try_start_slowdown()
+	if input.consume_fire_released():
+		if not _try_dash():
+			_try_cancel_slowdown()
 	if is_burning():
 		# careen chaotically: re-roll the drift direction on a short random timer
 		_burn_redrift -= delta
@@ -296,6 +359,13 @@ func _physics_process(delta: float) -> void:
 			_update_dash(delta)
 		else:
 			_move(input.get_direction(), delta)
+		if _in_slowdown:
+			_update_slowdown(delta)
+
+func _update_preview(_delta: float) -> void:
+	var pos := get_mouse_world_position()
+	pos.y = global_position.y
+	_preview.update(global_position, pos)
 
 func _process(delta: float) -> void:
 	if Engine.is_editor_hint(): return
@@ -306,6 +376,8 @@ func _process(delta: float) -> void:
 		_burn_spin(delta)
 	elif not is_frozen():
 		face_mouse()
+	if _in_slowdown:
+		_update_preview(delta)
 	_update_status_tint()
 
 func _ready() -> void:

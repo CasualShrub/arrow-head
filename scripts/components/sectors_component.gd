@@ -123,7 +123,6 @@ func get_stored_at(sector: int) -> Variant:
 	return s
 
 func occupied(sectors: Array[int]) -> bool:
-	print("getting occupied",_stored)
 	for i in sectors:
 		if _stored[i] == null: return false
 	return true

@@ -6,9 +6,18 @@
 [ext_resource type="Texture2D" uid="uid://ssnmuf3en2ae" path="res://icon.svg" id="4_dqkch"]
 [ext_resource type="Shader" uid="uid://bfi638v144t8g" path="res://shaders/sector_visualiser.gdshader" id="5_qlg0r"]
 [ext_resource type="Script" uid="uid://bdywsusg7sgug" path="res://scripts/components/sectors_component.gd" id="6_tuyoq"]
+[ext_resource type="Script" uid="uid://8jd6wlvsiper" path="res://scripts/components/dash_preview_component.gd" id="6_ur7pv"]
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_tuyoq"]
 radius = 0.4
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_smehm"]
+transparency = 1
+shading_mode = 0
+albedo_color = Color(0.2, 0.8, 1, 0.5)
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_smehm"]
+size = Vector2(0.06, 2.3)
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_fjrip"]
 render_priority = 0
@@ -32,9 +41,13 @@ script = ExtResource("1_3vyb7")
 input = NodePath("Input")
 health = NodePath("Health")
 sectors = NodePath("Sectors")
-dash_time = 0.2
-eyes_lowhp = 0.36
-eyes_hit_time = Array[int]([1, 2, 1, 2])
+dash_cooldown = 1.0
+slowdown = 0.1
+slowdown_speed = 0.1
+eyes_hit_time = 2.5
+burn_duration = 24.0
+freeze_duration = 240.0
+burn_spin_speed = 0.14
 
 [node name="Collider" type="CollisionShape3D" parent="." unique_id=1401584448]
 unique_name_in_owner = true
@@ -63,6 +76,36 @@ transform = Transform3D(0.59999996, 0, 0, 0, -2.6226832e-08, 0.59999996, 0, -0.5
 double_sided = false
 texture = ExtResource("4_dqkch")
 
+[node name="Eyes" type="Sprite3D" parent="." unique_id=1271957415]
+unique_name_in_owner = true
+transform = Transform3D(0.2, 4.612803e-16, 4.440892e-16, -8.881784e-16, -8.74228e-09, 0.2, -1.9106858e-16, -0.2, -8.742278e-09, 0, 0.005001202, 0)
+double_sided = false
+texture = ExtResource("4_dqkch")
+
+[node name="DashPreview" type="Node3D" parent="." unique_id=2127933487]
+unique_name_in_owner = true
+transform = Transform3D(1, -9.553433e-16, -4.175938e-23, 0, -4.371139e-08, 1, -9.553433e-16, -1, -4.371139e-08, 0, 0.005001202, 0)
+script = ExtResource("6_ur7pv")
+
+[node name="PreviewSprite" type="Sprite3D" parent="DashPreview" unique_id=575402793]
+unique_name_in_owner = true
+transform = Transform3D(0.6, 5.7320594e-16, -2.664535e-15, -5.7320594e-16, 0.6, -3.5527137e-15, 2.664535e-15, 3.5527137e-15, 0.6, -1.7586947e-14, 2.2019837, -0.025005914)
+modulate = Color(0.2, 0.8, 1, 0.5019608)
+double_sided = false
+texture = ExtResource("4_dqkch")
+
+[node name="PreviewLine" type="MeshInstance3D" parent="DashPreview" unique_id=210041512]
+unique_name_in_owner = true
+transform = Transform3D(1, -4.440891e-15, 1.941175e-22, 0, -4.371139e-08, -1, 4.440891e-15, 1, -4.371139e-08, -1.4279812e-14, 1.0578076, -0.108490616)
+material_override = SubResource("StandardMaterial3D_smehm")
+gi_mode = 0
+mesh = SubResource("PlaneMesh_smehm")
+
+[node name="DashCast" type="RayCast3D" parent="DashPreview" unique_id=1998594313]
+unique_name_in_owner = true
+target_position = Vector3(0, 0.74, 0)
+collision_mask = 4
+
 [node name="Sectors" type="MeshInstance3D" parent="." unique_id=9603647]
 transform = Transform3D(-0.70710677, -0.70710677, -3.090862e-08, 0, -4.371139e-08, 1, -0.70710677, 0.70710677, 3.090862e-08, 0, 0.015167683, 0)
 material_override = SubResource("ShaderMaterial_fjrip")
@@ -70,16 +113,16 @@ mesh = SubResource("QuadMesh_ub6uw")
 script = ExtResource("6_tuyoq")
 relative_aim = true
 
-[node name="Eyes" type="Sprite3D" parent="." unique_id=1271957415]
-unique_name_in_owner = true
-transform = Transform3D(0.2, 0, 0, 0, -8.742278e-09, 0.2, 0, -0.2, -8.742278e-09, 0, 0.005001202, 0)
-double_sided = false
-texture = ExtResource("4_dqkch")
-
 [node name="Dashing" type="Timer" parent="." unique_id=1626444411]
 unique_name_in_owner = true
 wait_time = 0.05
 one_shot = true
 
+[node name="DashDebounce" type="Timer" parent="." unique_id=389554828]
+unique_name_in_owner = true
+wait_time = 0.001
+one_shot = true
+
 [connection signal="changed" from="Sectors" to="." method="_on_sectors_changed"]
 [connection signal="changed" from="Sectors" to="Sectors" method="_on_changed"]
+[connection signal="timeout" from="Dashing" to="." method="_on_dashing_timeout"]
