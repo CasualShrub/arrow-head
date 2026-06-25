@@ -1,0 +1,8 @@
+[gd_resource type="StandardMaterial3D" format=3 uid="uid://35y6lqa41158"]
+
+[ext_resource type="Texture2D" uid="uid://dtq37n1ls5yqs" path="res://assets/textures/coins.jpg" id="1_tex"]
+
+[resource]
+resource_name = "CoinsMaterial"
+albedo_texture = ExtResource("1_tex")
+uv1_scale = Vector3(1, 1, 1)
