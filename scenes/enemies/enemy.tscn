@@ -73,7 +73,7 @@ animations = [{
 "duration": 1.0,
 "texture": ExtResource("6_f2")
 }, {
-"duration": 1.0,
+"duration": 2.0,
 "texture": ExtResource("7_f3")
 }, {
 "duration": 1.0,
@@ -130,10 +130,9 @@ unique_name_in_owner = true
 
 [node name="Sprite" type="AnimatedSprite3D" parent="." unique_id=1091610106]
 unique_name_in_owner = true
-transform = Transform3D(-2.8412401e-08, -0.65, -2.8412401e-08, 0, -2.8412401e-08, 0.65, -0.65, 2.8412401e-08, 1.2419455e-15, 0, 0, 0)
+transform = Transform3D(-4.283716e-08, -0.98, -4.283716e-08, 0, -4.283716e-08, 0.98, -0.98, 4.283716e-08, 1.8724718e-15, 0, 0, 0)
 double_sided = false
 sprite_frames = SubResource("SpriteFrames_ub6uw")
-animation = &"hit"
 
 [connection signal="changed" from="Health" to="." method="_on_health_changed"]
 [connection signal="timeout" from="Recovery" to="." method="_on_recovery_timeout"]
