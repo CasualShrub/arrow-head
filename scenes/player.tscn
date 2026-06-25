@@ -76,7 +76,7 @@ shader_parameter/line_width = 0.11
 [sub_resource type="QuadMesh" id="QuadMesh_8wtow"]
 
 [node name="Player" type="CharacterBody3D" unique_id=439211336 node_paths=PackedStringArray("input", "health", "sectors")]
-collision_mask = 12
+collision_mask = 4
 motion_mode = 1
 script = ExtResource("1_3vyb7")
 input = NodePath("Input")
@@ -91,8 +91,6 @@ sector_count = 4
 sector_centered = true
 sector_radius = 0.5
 eyes_hit_time = 0.5
-freeze_warn_time = null
-freeze_blink_rate = null
 
 [node name="Collider" type="CollisionShape3D" parent="." unique_id=1401584448]
 unique_name_in_owner = true

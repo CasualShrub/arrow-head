@@ -8,6 +8,7 @@ const _ENEMY_TEAM = Arrow.Team.ENEMY
 @export var sus: SusComponent
 @export var player: Player
 
+@export var has_intro := false
 @export_group("firing")
 @export var patrol_route: Array[Vector3] = []
 @export var patterns: Array[ArrowPattern] = []
@@ -26,11 +27,11 @@ const _ENEMY_TEAM = Arrow.Team.ENEMY
 			_update_collider(_collider, value)
 		hurt_radius = value
 @export_group("patrol")
-@export var patrol_speed := 2.0
+@export var patrol_speed := 1.0
 @export var patrol_is_closed_loop := false
 @export var alwayds_alert := false
 @export_group("combat")
-@export var combat_speed := 4.0
+@export var combat_speed := 1.0
 @export var combat_strafe_radius := 4.0
 @export var combat_strafe_speed := 2.0
 @export var combat_reposition_chance := 0.3
@@ -390,6 +391,7 @@ func _physics_process(delta: float) -> void:
 	if Engine.is_editor_hint(): return
 	if is_dead(): return
 	_select_behaviour(delta)
+	global_position.y = 0
 
 func _ready() -> void:
 	if Engine.is_editor_hint(): return
@@ -400,5 +402,19 @@ func _ready() -> void:
 		if last != null:
 			_patrol_len += last.global_position.distance_to(p.global_position)
 		last = p
+	if has_intro:
+		sus._vision.hide()
+		%CameraPivot.focus(global_position)
+		_sprite.play("intro")
+		_sprite.process_mode = Node.PROCESS_MODE_ALWAYS
+		%CameraPivot.process_mode = Node.PROCESS_MODE_ALWAYS
+		get_tree().set_deferred("paused", true)
+		await _sprite.animation_finished
+		get_tree().paused = false
+		_sprite.process_mode = Node.PROCESS_MODE_INHERIT
+		%CameraPivot.process_mode = Node.PROCESS_MODE_INHERIT
+		_sprite.animation = "default"
+		%CameraPivot.unfocus()
+		sus._vision.show()
 	if alwayds_alert:
 		sus.baka(1.1)

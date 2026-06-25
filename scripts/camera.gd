@@ -21,14 +21,27 @@ var _base_pos := Vector3.ZERO
 var _has_base := false
 var _trauma := 0.0
 
+var _is_focused := false
+var _focused := Vector3()
+
 func add_shake(amount: float) -> void:
 	_trauma = minf(_trauma + amount, 1.0)
 
 func _on_player_hit(_arrow: Arrow, _sector: int) -> void:
 	add_shake(sector_hit_trauma)
 
+func focus(pos) -> void:
+	_is_focused = true
+	_focused = pos
+	
+func unfocus() -> void:
+	_is_focused = false
+
 func _physics_process(delta: float) -> void:
 	if not player: return
+	if _is_focused:
+		global_position = _focused + height * Vector3.UP
+		return
 	var mouse_offset := player.get_mouse_world_position() - player.global_position
 	mouse_offset.y = 0
 
