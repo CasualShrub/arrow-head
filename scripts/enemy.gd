@@ -165,6 +165,7 @@ func fire(arrow: Arrow, dir: Vector3) -> void:
 	if new_v: dir = new_v
 	get_tree().current_scene.add_child(arrow)
 	arrow.activate(global_position, dir, _ENEMY_TEAM)
+	SoundManager.play("banana_shooting")
 	fired.emit(arrow, dir)
 
 func _look_at_player() -> void:
@@ -215,6 +216,7 @@ func is_dead() -> bool:
 
 func die() -> void:
 	_dead = true
+	SoundManager.play("banana_death")
 	died.emit()
 
 func _on_health_changed() -> void:
