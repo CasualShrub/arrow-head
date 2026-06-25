@@ -22,6 +22,7 @@ const _PLAYER_TEAM = Arrow.Team.PLAYER
 		fire_cooldown = value
 		
 @export var arrow_dig_depth := 0.15 #dig arrow deeper into apple's skin a bit
+@export var chunk_fx: PackedScene   ## burst of apple bits spawned where an arrow embeds
 @export_group("shooting")
 @export var shoot_cooldown := 0.25
 @export_group("hurt")
@@ -245,17 +246,26 @@ func get_hit(arrow: Arrow) -> void:
 		arrow.deactivate()
 		return
 	var sector := sectors.get_sector_from_position(arrow.global_position)
+	_spawn_chunks(global_position)  
 	if try_embed_arrow(arrow, sector):
 		arrow.stick(_arrows, arrow_dig_depth)
 		SoundManager.play("Q%d_fill" % clampi(sector + 1, 1, 4))
 		SoundManager.play("apple_damage1" if arrow.kind != Arrow.Kind.NORMAL else "apple_damage2")
 		if arrow.kind != Arrow.Kind.NORMAL:
-			_apply_debuff(arrow.kind)  # any special-arrow hit triggers its effect immediately
+			_apply_debuff(arrow.kind)
 	else:
 		arrow.queue_free()
 		die()
 	hit.emit(arrow, sector)
 	_flash_eyes_hit()
+
+# burst a few apple bits at the apple's current position
+func _spawn_chunks(_pos: Vector3) -> void:
+	if not chunk_fx:
+		return
+	var fx := chunk_fx.instantiate() as Node3D
+	add_child(fx)               # child of the player at local origin -> born at the apple
+	fx.position = Vector3.ZERO
 
 func get_mouse_world_position() -> Vector3:
 	var mouse = get_viewport().get_mouse_position()
