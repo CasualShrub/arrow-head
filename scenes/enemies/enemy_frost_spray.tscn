@@ -1,0 +1,26 @@
+[gd_scene format=3 uid="uid://sxe0iltyolnn"]
+
+[ext_resource type="PackedScene" uid="uid://5cy7tvfvxnyw" path="res://scenes/enemies/enemy_frost.tscn" id="1_g2wok"]
+[ext_resource type="Script" uid="uid://d04k7pxjd2u24" path="res://scripts/arrow_pattern.gd" id="2_i6syy"]
+[ext_resource type="Script" uid="uid://r4qbgt6it8lb" path="res://scripts/firing_instance.gd" id="3_buqei"]
+[ext_resource type="PackedScene" uid="uid://5ljerioubp6c" path="res://scenes/arrows/arrow_frost.tscn" id="4_wk5m1"]
+
+[sub_resource type="Resource" id="Resource_l5n6b"]
+script = ExtResource("3_buqei")
+type = ExtResource("4_wk5m1")
+count = 3
+max_count = 5
+spread = 1.0
+max_spread = 1.5
+max_offset = 0.10040734641021
+individual_offset = true
+metadata/_custom_type_script = "uid://r4qbgt6it8lb"
+
+[sub_resource type="Resource" id="Resource_g2wok"]
+script = ExtResource("2_i6syy")
+recovery = 2.0
+instances = Array[ExtResource("3_buqei")]([SubResource("Resource_l5n6b")])
+metadata/_custom_type_script = "uid://d04k7pxjd2u24"
+
+[node name="Enemy" unique_id=96558035 instance=ExtResource("1_g2wok")]
+patterns = Array[ExtResource("2_i6syy")]([SubResource("Resource_g2wok")])
