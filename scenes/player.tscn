@@ -32,7 +32,7 @@
 [ext_resource type="Texture2D" uid="uid://delgixt2v1gld" path="res://assets/art/player/a_death_frame3.png" id="26_d3"]
 [ext_resource type="Texture2D" uid="uid://cqi4h8rglp31u" path="res://assets/art/player/a_death_frame4.png" id="27_d4"]
 
-[sub_resource type="SphereShape3D" id="SphereShape3D_dt7fs"]
+[sub_resource type="SphereShape3D" id="SphereShape3D_wnwbv"]
 radius = 0.4
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_ub6uw"]
@@ -162,11 +162,11 @@ shader_parameter/aimed_sector = -1
 shader_parameter/occupied_mask = 0
 shader_parameter/inner_radius = 0.79
 shader_parameter/empty_color = Color(0.9, 0.35, 0.15, 0.12)
-shader_parameter/occupied_color = Color(0.9, 0.35, 0.15, 0.5)
+shader_parameter/occupied_color = Color(0.8980392, 0.34901962, 0.15294118, 0.8235294)
 shader_parameter/highlight_color = Color(0.9882353, 0.59607846, 0, 0.7137255)
-shader_parameter/line_color = Color(0.95, 0.45, 0.25, 0.7)
-shader_parameter/edge_width = 0.02
-shader_parameter/outer_ring_width = 0.02
+shader_parameter/line_color = Color(0.9490196, 0.4509804, 0.2509804, 1)
+shader_parameter/edge_width = 0.03
+shader_parameter/outer_ring_width = 0.03
 
 [sub_resource type="QuadMesh" id="QuadMesh_ub6uw"]
 
@@ -185,14 +185,14 @@ slowdown_speed = 0.1
 sector_count = 4
 sector_centered = true
 sector_radius = 0.5
-eyes_hit_time = 1.0
+eyes_hit_time = 0.5
 burn_duration = 24.0
 freeze_duration = 240.0
 burn_spin_speed = 0.14
 
 [node name="Collider" type="CollisionShape3D" parent="." unique_id=1401584448]
 unique_name_in_owner = true
-shape = SubResource("SphereShape3D_dt7fs")
+shape = SubResource("SphereShape3D_wnwbv")
 debug_color = Color(0, 0.6, 0.7019608, 0.41960785)
 
 [node name="Health" type="Node" parent="." unique_id=1891742081]
@@ -217,6 +217,7 @@ one_shot = true
 
 [node name="EyesHit" type="Timer" parent="." unique_id=1891487654]
 unique_name_in_owner = true
+wait_time = 0.5
 one_shot = true
 
 [node name="InstanceTimers" type="Node" parent="." unique_id=1259921754]
@@ -233,7 +234,6 @@ unique_name_in_owner = true
 transform = Transform3D(0.6, 0, 0, 0, -2.6226834e-08, 0.6, 0, -0.6, -2.6226834e-08, 0, 0.0045996904, 0)
 double_sided = false
 sprite_frames = SubResource("SpriteFrames_8wtow")
-animation = &"angry"
 
 [node name="Arrows" type="Node3D" parent="." unique_id=208548441]
 unique_name_in_owner = true
