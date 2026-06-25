@@ -94,7 +94,10 @@ func _disable() -> void:
 	velocity = Vector3.ZERO
 	_collider.set_deferred("disabled", true)
 
-func stick(host: Node3D) -> void:
+# a: i wanted the arrow to stick a bit further in the apple
+func stick(host: Node3D, dig := 0.0) -> void:
+	if dig > 0.0:
+		global_position += _direction * dig
 	_disable()
 	reparent.call_deferred(host)
 

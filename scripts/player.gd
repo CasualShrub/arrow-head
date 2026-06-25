@@ -20,6 +20,8 @@ const _PLAYER_TEAM = Arrow.Team.PLAYER
 		if value < 0: value = 0
 		%FireDebounce.wait_time = value
 		fire_cooldown = value
+		
+@export var arrow_dig_depth := 0.15 #dig arrow deeper into apple's skin a bit
 @export_group("shooting")
 @export var shoot_cooldown := 0.25
 @export_group("hurt")
@@ -238,7 +240,7 @@ func get_hit(arrow: Arrow) -> void:
 	var sector := sectors.get_sector_from_position(arrow.global_position)
 	var correct := is_correct_catch(arrow, sector)
 	if try_embed_arrow(arrow, sector):
-		arrow.stick(_arrows)
+		arrow.stick(_arrows, arrow_dig_depth)
 		SoundManager.play("Q%d_fill" % clampi(sector + 1, 1, 4))
 		SoundManager.play("apple_damage1" if arrow.kind != Arrow.Kind.NORMAL else "apple_damage2")
 		if not correct:
