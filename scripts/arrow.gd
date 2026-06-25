@@ -47,9 +47,10 @@ func _is_wall(body: Object) -> bool:
 	return body.get_collision_layer_value(3)
 
 func _bounce(collision: KinematicCollision3D) -> void:
-	SoundManager.play("arrow_bounce", 0.08)
+	SoundManager.play("arrow_bounce", 0.0, 0.08)
 	var n := collision.get_normal()
 	_direction = _direction.bounce(n)
+	face(_direction)   # re-orient the sprite to the new travel direction
 	move_and_collide(collision.get_remainder().bounce(n))
 	_bounces += 1
 	if max_bounces >= 0 and _bounces > max_bounces:
@@ -93,7 +94,10 @@ func _disable() -> void:
 	velocity = Vector3.ZERO
 	_collider.set_deferred("disabled", true)
 
-func stick(host: Node3D) -> void:
+# a: i wanted the arrow to stick a bit further in the apple
+func stick(host: Node3D, dig := 0.0) -> void:
+	if dig > 0.0:
+		global_position += _direction * dig
 	_disable()
 	reparent.call_deferred(host)
 

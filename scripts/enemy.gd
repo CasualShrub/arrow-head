@@ -10,6 +10,18 @@ const _ENEMY_TEAM = Arrow.Team.ENEMY
 
 @export_group("firing")
 @export var patterns: Array[ArrowPattern] = []
+# when set, overrides every pattern's arrow type — the fire/frost variants use this
+@export var arrow_scene: PackedScene = null
+@export var aim_time := 0.4
+@export var release_time := 0.12
+
+@export_group("sprites")
+@export var frame1: Texture2D
+@export var frame2: Texture2D
+@export var frame3: Texture2D
+@export var frame4: Texture2D   
+@export var hit_normal: Texture2D
+@export var hit_stretch: Texture2D
 
 @export_group("hit")
 @export var hit_flash_time := 0.15
@@ -29,6 +41,9 @@ signal died
 @onready var _inst_timers: Node = %InstanceTimers
 
 var _dead := false
+var _aiming := false
+var _hit_showing := false
+var _base_tex: Texture2D
 var _movement_pattern: Dictionary[float, Vector3] = {}
 var _movement_pattern_start: float
 
@@ -36,12 +51,7 @@ func get_hit() -> void:
 	if is_dead():
 		return
 	health.take_damage(1)
-	#_hit_showing = true
-	#_set_sprite(hit_stretch if _aiming else hit_normal)
-	await get_tree().create_timer(hit_flash_time).timeout
-	#_hit_showing = false
-	
-	#_set_sprite(_base_tex)
+	_show_hit()
 
 func _update_collider(c: CollisionShape3D, r: float) -> void:
 	if not c:
@@ -50,8 +60,9 @@ func _update_collider(c: CollisionShape3D, r: float) -> void:
 	s.radius = r
 	c.shape = s
 
-# can return new dir if it wants
 func _on_fire(_arrow: Arrow, dir: Vector3) -> Vector3:
+	_aiming = false
+	_set_base(frame4)
 	return dir
 
 func _parse_movement_pattern(pattern: Dictionary[float, Vector2]) -> Dictionary[float, Vector3]:
@@ -91,7 +102,7 @@ func _get_rand(min_val: Variant, max_val: Variant) -> Variant:
 func _execute_instance(instance: FiringInstance, offset: float, spread: float, count: int, i: int) -> void:
 	if instance.individual_offset:
 		offset = _get_rand(instance.offset, instance.max_offset)
-	var arrow := _make_arrow(instance.type)
+	var arrow := _make_arrow(arrow_scene if arrow_scene else instance.type)
 	var angle := _get_arrow_angle(offset, spread, count, i)
 	var dir := _get_arrow_dir(angle)
 	fire(arrow, dir)
@@ -223,7 +234,10 @@ func _on_health_changed() -> void:
 		die()
 
 func _on_recovery_timeout() -> void:
+	if _dead: return
 	var pattern := _select_pattern()
+	await _play_draw()
+	if _dead: return
 	perform(pattern)
 
 func _set_sprite(tex: Texture2D) -> void:
@@ -235,6 +249,27 @@ func highlight_on(c: Color) -> void:
 
 func highlight_off() -> void:
 	_sprite.modulate = Color(1, 1, 1, 1)
+func _set_base(tex: Texture2D) -> void:
+	_base_tex = tex
+	if not _hit_showing:
+		_set_sprite(tex)
+
+func _play_draw() -> void:
+	_aiming = true
+	var draw := [frame1, frame2, frame3]
+	var step := aim_time / draw.size()
+	for f in draw:
+		_set_base(f)
+		await get_tree().create_timer(step).timeout
+		if _dead: return
+
+func _show_hit() -> void:
+	_hit_showing = true
+	_set_sprite(hit_stretch if _aiming else hit_normal)
+	await get_tree().create_timer(hit_flash_time).timeout
+	_hit_showing = false
+	if _dead: return
+	_set_sprite(_base_tex)
 
 func _physics_process(delta: float) -> void:
 	if Engine.is_editor_hint(): return
@@ -242,4 +277,5 @@ func _physics_process(delta: float) -> void:
 	_select_behaviour(delta)
 
 func _ready() -> void:
-	pass
+	if not Engine.is_editor_hint():
+		_set_base(frame1)

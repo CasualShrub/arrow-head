@@ -1,10 +1,10 @@
 [gd_scene format=3 uid="uid://bxgfy1nvmlb7v"]
 
 [ext_resource type="Script" uid="uid://ddq3o77rdeao0" path="res://scripts/arrow.gd" id="1_arrow"]
-[ext_resource type="Texture2D" uid="uid://ssnmuf3en2ae" path="res://icon.svg" id="2_23jat"]
+[ext_resource type="Texture2D" uid="uid://buqutmlha3vbg" path="res://art/arrow/normal_arrow.png" id="2_d85th"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_23jat"]
-radius = 0.2
+radius = 0.05
 height = 0.6
 
 [node name="Arrow" type="CharacterBody3D" unique_id=201688871]
@@ -23,6 +23,6 @@ transform = Transform3D(1, 0, 0, 0, -4.371139e-08, 1, 0, -1, -4.371139e-08, 0, 0
 shape = SubResource("CapsuleShape3D_23jat")
 
 [node name="Sprite3D" type="Sprite3D" parent="." unique_id=1125079801]
-transform = Transform3D(0.2, 0, 0, 0, -8.742278e-09, 0.2, 0, -0.2, -8.742278e-09, 0, 0, 0)
+transform = Transform3D(-0.385, 3.365777e-08, 1.4712277e-15, 0, -1.6828885e-08, 0.385, 3.365777e-08, 0.385, 1.6828885e-08, 0, 0, 0)
 double_sided = false
-texture = ExtResource("2_23jat")
+texture = ExtResource("2_d85th")

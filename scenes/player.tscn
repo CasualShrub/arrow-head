@@ -6,6 +6,28 @@
 [ext_resource type="Texture2D" uid="uid://ssnmuf3en2ae" path="res://icon.svg" id="4_dqkch"]
 [ext_resource type="Shader" uid="uid://bfi638v144t8g" path="res://shaders/sector_visualiser.gdshader" id="5_qlg0r"]
 [ext_resource type="Script" uid="uid://bdywsusg7sgug" path="res://scripts/components/sectors_component.gd" id="6_tuyoq"]
+[ext_resource type="PackedScene" uid="uid://bapplchunksfx1" path="res://scenes/fx/apple_chunks.tscn" id="6_chunks"]
+[ext_resource type="Texture2D" uid="uid://c5w3uc4upc1av" path="res://art/player/apple_base.png" id="7_apple"]
+[ext_resource type="Texture2D" uid="uid://cp4cnsely21gy" path="res://art/player/eye_normal.png" id="8_eyes"]
+[ext_resource type="Texture2D" uid="uid://ddhrf02nv342f" path="res://art/player/eyes_lowHP.png" id="9_lowhp"]
+[ext_resource type="Texture2D" uid="uid://bxkglylm44xg" path="res://art/player/eyes_hit.png" id="10_hit"]
+[ext_resource type="Texture2D" uid="uid://cwvf53mf4chcj" path="res://art/player/eye_east.png" id="11_east"]
+[ext_resource type="Texture2D" uid="uid://iw3ubmrd3ywx" path="res://art/player/eye_southeast.png" id="12_se"]
+[ext_resource type="Texture2D" uid="uid://dtoqo6xcscqcc" path="res://art/player/eye_southwest.png" id="13_sw"]
+[ext_resource type="Texture2D" uid="uid://cehnqasaukn37" path="res://art/player/eye_west.png" id="14_west"]
+[ext_resource type="Texture2D" uid="uid://ws58vqk400cp" path="res://art/player/hit_eye_east.png" id="15_he"]
+[ext_resource type="Texture2D" uid="uid://cnf6grqoducon" path="res://art/player/hit_eye_southeast.png" id="16_hse"]
+[ext_resource type="Texture2D" uid="uid://c080ywtpel8kh" path="res://art/player/hit_eye_southwest.png" id="17_hsw"]
+[ext_resource type="Texture2D" uid="uid://gvq1q1dey2q0" path="res://art/player/hit_eye_west.png" id="18_hw"]
+[ext_resource type="Texture2D" uid="uid://wvlanxvgy8iq" path="res://art/player/angry_eyes.png" id="19_angry"]
+[ext_resource type="Texture2D" uid="uid://6a6f7giwojet" path="res://art/player/angry_eyes_east.png" id="20_ae"]
+[ext_resource type="Texture2D" uid="uid://76emaaqy1ias" path="res://art/player/angry_eyes_southeast.png" id="21_ase"]
+[ext_resource type="Texture2D" uid="uid://ejjxk7l42fus" path="res://art/player/angry_eyes_southwest.png" id="22_asw"]
+[ext_resource type="Texture2D" uid="uid://eva13j6ywpyo" path="res://art/player/angry_eyes_west.png" id="23_aw"]
+[ext_resource type="Texture2D" uid="uid://bha24g2kfaosi" path="res://art/player/a_death_frame1.png" id="24_d1"]
+[ext_resource type="Texture2D" uid="uid://c34v8ic3dj3rx" path="res://art/player/a_death_frame2.png" id="25_d2"]
+[ext_resource type="Texture2D" uid="uid://delgixt2v1gld" path="res://art/player/a_death_frame3.png" id="26_d3"]
+[ext_resource type="Texture2D" uid="uid://cqi4h8rglp31u" path="res://art/player/a_death_frame4.png" id="27_d4"]
 [ext_resource type="Script" uid="uid://8jd6wlvsiper" path="res://scripts/components/dash_preview_component.gd" id="6_ur7pv"]
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_tuyoq"]
@@ -48,6 +70,30 @@ eyes_hit_time = 2.5
 burn_duration = 24.0
 freeze_duration = 240.0
 burn_spin_speed = 0.14
+sector_count = 4
+sector_centered = true
+sector_radius = 0.5
+chunk_fx = ExtResource("6_chunks")
+eyes_normal = ExtResource("8_eyes")
+eyes_east = ExtResource("11_east")
+eyes_southeast = ExtResource("12_se")
+eyes_southwest = ExtResource("13_sw")
+eyes_west = ExtResource("14_west")
+angry_eyes = ExtResource("19_angry")
+angry_eyes_east = ExtResource("20_ae")
+angry_eyes_southeast = ExtResource("21_ase")
+angry_eyes_southwest = ExtResource("22_asw")
+angry_eyes_west = ExtResource("23_aw")
+eyes_lowhp = ExtResource("9_lowhp")
+eyes_hit = ExtResource("10_hit")
+eyes_hit_east = ExtResource("15_he")
+eyes_hit_southeast = ExtResource("16_hse")
+eyes_hit_southwest = ExtResource("17_hsw")
+eyes_hit_west = ExtResource("18_hw")
+death_frame1 = ExtResource("24_d1")
+death_frame2 = ExtResource("25_d2")
+death_frame3 = ExtResource("26_d3")
+death_frame4 = ExtResource("27_d4")
 
 [node name="Collider" type="CollisionShape3D" parent="." unique_id=1401584448]
 unique_name_in_owner = true
@@ -74,7 +120,13 @@ unique_name_in_owner = true
 unique_name_in_owner = true
 transform = Transform3D(0.59999996, 0, 0, 0, -2.6226832e-08, 0.59999996, 0, -0.59999996, -2.6226832e-08, 0, 0, 0)
 double_sided = false
-texture = ExtResource("4_dqkch")
+texture = ExtResource("7_apple")
+
+[node name="Eyes" type="Sprite3D" parent="." unique_id=1671790149]
+unique_name_in_owner = true
+transform = Transform3D(0.59999996, 0, 0, 0, -2.6226832e-08, 0.59999996, 0, -0.59999996, -2.6226832e-08, 0, 0.01, 0)
+double_sided = false
+texture = ExtResource("8_eyes")
 
 [node name="Eyes" type="Sprite3D" parent="." unique_id=1271957415]
 unique_name_in_owner = true
