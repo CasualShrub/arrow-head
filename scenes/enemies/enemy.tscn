@@ -57,15 +57,12 @@ shader_parameter/fade_height = 0.64800003078
 
 [node name="Enemy" type="CharacterBody3D" unique_id=71488470 node_paths=PackedStringArray("health", "sus")]
 collision_layer = 8
+collision_mask = 13
 motion_mode = 1
 script = ExtResource("1_7p1mj")
 health = NodePath("Health")
 sus = NodePath("Sus")
 patterns = Array[ExtResource("2_xwavj")]([SubResource("Resource_fcftc")])
-alwayds_alert = null
-combat_strafe_radius = null
-combat_strafe_speed = null
-combat_reposition_chance = null
 
 [node name="Collider" type="CollisionShape3D" parent="." unique_id=1742085930]
 unique_name_in_owner = true

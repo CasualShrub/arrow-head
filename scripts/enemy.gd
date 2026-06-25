@@ -35,12 +35,14 @@ const _ENEMY_TEAM = Arrow.Team.ENEMY
 @export var combat_strafe_speed := 2.0
 @export var combat_reposition_chance := 0.3
 
+enum CombatState { STRAFE, CHARGE, RETREAT, STOP }
+var _combat_state := CombatState.STRAFE
+
 var _patrol_world_points: Array[Vector3] = []
 var _patrol_len: float
 var _patrol_progress := 0.0
 var _patrol_dir := 1.0
 
-var _strafe_angle := 0.0
 var _strafe_dir := 1.0
 var _reposition_timer := 0.0
 var _reposition_interval := 2.0
@@ -94,6 +96,8 @@ func _start_movement_pattern(pattern: Dictionary[float, Vector2]) -> void:
 	_movement_pattern_start = Time.get_ticks_msec()
 
 func _get_arrow_angle(offset: float, spread: float, count: int, i: int) -> float:
+	if count <= 1:
+		return offset
 	var i_spread := -(spread / 2) + (i as float / (count - 1) as float * spread)
 	return i_spread + offset
 
@@ -261,27 +265,31 @@ func _alert(dt: float) -> void:
 	if not player:
 		return
 
-	_reposition_timer += dt
-	if _reposition_timer >= _reposition_interval:
-		_reposition_timer = 0.0
-		_reposition_interval = randf_range(1.5, 3.5)
-		_strafe_dir *= -1.0 if randf() < combat_reposition_chance else 1.0
-
 	var to_player := (player.global_position - global_position)
 	to_player.y = 0.0
 	var dist := to_player.length()
 	var forward := to_player.normalized()
 	var right := forward.rotated(Vector3.UP, PI * 0.5)
-
-	# Build desired movement
 	var move := Vector3.ZERO
 
-	if dist > combat_strafe_radius + 1.0:
-		move += forward          # too far, close in
-	elif dist < combat_strafe_radius - 1.0:
-		move -= forward          # too close, back off
-	
-	move += right * _strafe_dir  # always strafing
+	_reposition_timer += dt
+	if _reposition_timer >= _reposition_interval:
+		_reposition_timer = 0.0
+		_reposition_interval = randf_range(1.5, 3.5)
+		_pick_combat_state(dist)
+
+	match _combat_state:
+		CombatState.STRAFE:
+			if dist > combat_strafe_radius + 1.0:
+				move += forward
+			elif dist < combat_strafe_radius - 1.0:
+				move -= forward
+			move += right * _strafe_dir
+		CombatState.CHARGE:
+			move += forward * 2.0  # faster, aggressive
+		CombatState.RETREAT:
+			move -= forward
+			move += right * _strafe_dir  # sidestep while backing off
 
 	# Wall avoidance
 	if _ray_forward.is_colliding():
@@ -295,6 +303,29 @@ func _alert(dt: float) -> void:
 		global_position += move.normalized() * combat_speed * dt
 
 	look_at(player.global_position)
+
+func _pick_combat_state(dist: float) -> void:
+	_strafe_dir = 1.0 if randf() > 0.5 else -1.0
+	var roll := randf()
+	if dist > combat_strafe_radius * 2.0:
+		# far away — charge or strafe toward them
+		_combat_state = CombatState.CHARGE if roll < 0.6 else CombatState.STRAFE
+	elif dist < combat_strafe_radius * 0.5:
+		# too close — retreat or strafe
+		_combat_state = CombatState.RETREAT if roll < 0.6 else CombatState.STRAFE
+	else:
+		# comfortable range — mostly strafe, occasional charge
+		if roll < 0.45:
+			_combat_state = CombatState.STRAFE
+		elif roll < 0.7:
+			_combat_state = CombatState.CHARGE
+		elif roll < 0.85:
+			_combat_state = CombatState.STOP
+		else:
+			_combat_state = CombatState.RETREAT
+	
+	if _combat_state == CombatState.STOP:
+		_reposition_interval = randf_range(0.5, 1.2)
 
 func _select_behaviour(dt: float) -> void:
 	if sus.is_alert():

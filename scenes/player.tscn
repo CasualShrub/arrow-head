@@ -16,7 +16,7 @@
 [ext_resource type="Texture2D" uid="uid://wvlanxvgy8iq" path="res://assets/art/player/angry_eyes.png" id="19_angry"]
 [ext_resource type="Shader" uid="uid://bcds3powkj5ap" path="res://shaders/triangle.gdshader" id="32_gl8cc"]
 
-[sub_resource type="SphereShape3D" id="SphereShape3D_3v2ag"]
+[sub_resource type="SphereShape3D" id="SphereShape3D_oprun"]
 radius = 0.4
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_jej6c"]
@@ -76,7 +76,7 @@ shader_parameter/line_width = 0.11
 [sub_resource type="QuadMesh" id="QuadMesh_8wtow"]
 
 [node name="Player" type="CharacterBody3D" unique_id=439211336 node_paths=PackedStringArray("input", "health", "sectors")]
-collision_mask = 4
+collision_mask = 12
 motion_mode = 1
 script = ExtResource("1_3vyb7")
 input = NodePath("Input")
@@ -91,10 +91,12 @@ sector_count = 4
 sector_centered = true
 sector_radius = 0.5
 eyes_hit_time = 0.5
+freeze_warn_time = null
+freeze_blink_rate = null
 
 [node name="Collider" type="CollisionShape3D" parent="." unique_id=1401584448]
 unique_name_in_owner = true
-shape = SubResource("SphereShape3D_3v2ag")
+shape = SubResource("SphereShape3D_oprun")
 debug_color = Color(0, 0.6, 0.7019608, 0.41960785)
 
 [node name="Health" type="Node" parent="." unique_id=1891742081]

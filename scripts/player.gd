@@ -282,6 +282,7 @@ func _dash(dir: Vector3) -> void:
 	for e in collided:
 		e.get_hit()
 	_exit_slowdown()
+	_collider.disabled = true
 	_dashing.start()
 
 func _can_slowdown() -> bool:
@@ -383,6 +384,7 @@ func _on_sectors_changed() -> void:
 	_update_eyes()
 
 func _on_dashing_timeout() -> void:
+	_collider.disabled = false
 	if dash_cooldown > 0.001:
 		_dash_debounce.start()
 
