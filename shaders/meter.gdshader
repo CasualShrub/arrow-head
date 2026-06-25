@@ -5,11 +5,9 @@ uniform float fade_height : hint_range(0.0, 1.0) = 0.0;
 
 void fragment() {
     vec4 tex = texture(sprite_texture, UV);
-
-    if ((1.0 - UV.y) > fade_height) {
-        discard;
-    }
+	
+    float fade = step(1.0 - fade_height, UV.y);
 
     ALBEDO = tex.rgb;
-    ALPHA = tex.a;
+    ALPHA = tex.a * fade;
 }

@@ -13,7 +13,7 @@
 [ext_resource type="Texture2D" uid="uid://wvlanxvgy8iq" path="res://assets/art/player/angry_eyes.png" id="19_angry"]
 [ext_resource type="Shader" uid="uid://bcds3powkj5ap" path="res://shaders/triangle.gdshader" id="32_gl8cc"]
 
-[sub_resource type="SphereShape3D" id="SphereShape3D_gl8cc"]
+[sub_resource type="SphereShape3D" id="SphereShape3D_3v2ag"]
 radius = 0.4
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_smehm"]
@@ -72,7 +72,7 @@ burn_spin_speed = 0.14
 
 [node name="Collider" type="CollisionShape3D" parent="." unique_id=1401584448]
 unique_name_in_owner = true
-shape = SubResource("SphereShape3D_gl8cc")
+shape = SubResource("SphereShape3D_3v2ag")
 debug_color = Color(0, 0.6, 0.7019608, 0.41960785)
 
 [node name="Health" type="Node" parent="." unique_id=1891742081]
@@ -122,6 +122,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.0034347773, 0)
 [node name="DashPreview" type="Node3D" parent="." unique_id=2127933487]
 unique_name_in_owner = true
 transform = Transform3D(1, -9.553433e-16, -4.175938e-23, 0, -4.371139e-08, 1, -9.553433e-16, -1, -4.371139e-08, 0, 0.005001202, 0)
+visible = false
 script = ExtResource("6_ur7pv")
 
 [node name="PreviewSprite" type="Sprite3D" parent="DashPreview" unique_id=575402793]
@@ -151,6 +152,7 @@ collision_mask = 4
 
 [node name="Sectors" type="MeshInstance3D" parent="." unique_id=9603647]
 transform = Transform3D(-0.70710677, -0.70710677, -3.090862e-08, 0, -4.371139e-08, 1, -0.70710677, 0.70710677, 3.090862e-08, 0, 0.015167683, 0)
+visible = false
 material_override = SubResource("ShaderMaterial_fjrip")
 cast_shadow = 0
 mesh = SubResource("QuadMesh_ub6uw")
