@@ -41,11 +41,6 @@ burn_drift_speed = 240.0
 [node name="Enemies" type="Node3D" parent="SubViewportContainer/SubViewport/World" unique_id=1185931971]
 unique_name_in_owner = true
 
-[node name="Floor" type="CSGBox3D" parent="SubViewportContainer/SubViewport/World" unique_id=1674034061]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.7, 0)
-size = Vector3(100, 1, 100)
-script = ExtResource("9_floor")
-
 [node name="CameraPivot" type="Node3D" parent="SubViewportContainer/SubViewport/World" unique_id=1563753267 node_paths=PackedStringArray("player")]
 transform = Transform3D(1, 0, 0, 0, -4.371139e-08, 1, 0, -1, -4.371139e-08, 0, 3.7000048, 0)
 script = ExtResource("6_02f36")
@@ -59,6 +54,11 @@ environment = SubResource("Environment_ub6uw")
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="SubViewportContainer/SubViewport/World" unique_id=492064517]
 transform = Transform3D(0.8239569, 7.3667486e-08, 0.5666525, -0.29468933, 0.8541341, 0.4285011, -0.4839972, -0.52005285, 0.7037697, 18.038643, 15.709363, 15.527812)
+
+[node name="Floor" type="CSGBox3D" parent="SubViewportContainer/SubViewport/World" unique_id=1674034061]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.7, 0)
+size = Vector3(100, 1, 100)
+script = ExtResource("9_floor")
 
 [node name="ColorRect" type="ColorRect" parent="." unique_id=1172579494]
 material = SubResource("ShaderMaterial_tuyoq")

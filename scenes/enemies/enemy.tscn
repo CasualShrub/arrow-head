@@ -63,6 +63,9 @@ health = NodePath("Health")
 sus = NodePath("Sus")
 patterns = Array[ExtResource("2_xwavj")]([SubResource("Resource_fcftc")])
 alwayds_alert = null
+combat_strafe_radius = null
+combat_strafe_speed = null
+combat_reposition_chance = null
 
 [node name="Collider" type="CollisionShape3D" parent="." unique_id=1742085930]
 unique_name_in_owner = true
@@ -118,6 +121,21 @@ sprite_frames = ExtResource("7_jt03m")
 unique_name_in_owner = true
 
 [node name="Marker3D" type="Marker3D" parent="PatrolPoints" unique_id=211857099]
+
+[node name="RayLeft" type="RayCast3D" parent="." unique_id=927545949]
+unique_name_in_owner = true
+target_position = Vector3(-1.5, 0, 0)
+collision_mask = 4
+
+[node name="RayRight" type="RayCast3D" parent="." unique_id=1168947804]
+unique_name_in_owner = true
+target_position = Vector3(1.5, 0, 0)
+collision_mask = 4
+
+[node name="RayForward" type="RayCast3D" parent="." unique_id=1067955882]
+unique_name_in_owner = true
+target_position = Vector3(0, 0, -1.5)
+collision_mask = 4
 
 [connection signal="changed" from="Health" to="." method="_on_health_changed"]
 [connection signal="timeout" from="Recovery" to="." method="_on_recovery_timeout"]
