@@ -82,15 +82,9 @@ script = ExtResource("1_3vyb7")
 input = NodePath("Input")
 health = NodePath("Health")
 sectors = NodePath("Sectors")
-dash_time = 0.05
 chunk_fx = ExtResource("6_chunks")
-dash_cooldown = 0.001
 slowdown = 0.1
 slowdown_speed = 0.1
-sector_count = 4
-sector_centered = true
-sector_radius = 0.5
-eyes_hit_time = 0.5
 
 [node name="Collider" type="CollisionShape3D" parent="." unique_id=1401584448]
 unique_name_in_owner = true

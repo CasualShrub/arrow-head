@@ -199,8 +199,6 @@ func get_hit(arrow: Arrow) -> void:
 		return
 	if is_dashing():
 		return
-	_invul = true
-	get_tree().create_timer(0.25).timeout.connect(func(): _invul = false)
 	var sector := sectors.get_sector_from_position(arrow.global_position)
 	_spawn_chunks(global_position)  
 	if try_embed_arrow(arrow, sector):
@@ -213,8 +211,11 @@ func get_hit(arrow: Arrow) -> void:
 		arrow.queue_free()
 		if not _invul:
 			die()
+	_invul = true
+	get_tree().create_timer(0.25).timeout.connect(func(): _invul = false)
 	hit.emit(arrow, sector)
 	_eyes_hit.start()
+	_update_eyes()
 
 # burst a few apple bits at the apple's current position
 func _spawn_chunks(_pos: Vector3) -> void:
@@ -369,7 +370,7 @@ func _apply_debuff(kind: int) -> void:
 	_display_status()
 
 func _burn_spin(delta: float) -> void:
-	_face_dir(get_facing().rotated(Vector3.UP, burn_spin_speed * _burn_spin_dir * delta))
+	_face_dir(global_position + get_facing().rotated(Vector3.UP, burn_spin_speed * _burn_spin_dir * delta))
 
 func _update_status_tint() -> void:
 	if is_burning():
