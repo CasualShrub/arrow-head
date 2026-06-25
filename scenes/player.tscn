@@ -7,14 +7,39 @@
 [ext_resource type="Shader" uid="uid://bfi638v144t8g" path="res://shaders/sector_visualiser.gdshader" id="5_qlg0r"]
 [ext_resource type="PackedScene" uid="uid://dsgml1im16fvw" path="res://scenes/fx/apple_chunks.tscn" id="6_chunks"]
 [ext_resource type="SpriteFrames" uid="uid://dcj3tcewuhc6p" path="res://sprite_frames/player_eyes_frames.tres" id="6_jej6c"]
+[ext_resource type="Texture2D" uid="uid://dxs2lnb7aysuj" path="res://assets/art/player/status/fire_frame1.png" id="6_oprun"]
 [ext_resource type="Script" uid="uid://bdywsusg7sgug" path="res://scripts/components/sectors_component.gd" id="6_tuyoq"]
 [ext_resource type="Script" uid="uid://8jd6wlvsiper" path="res://scripts/components/dash_preview_component.gd" id="6_ur7pv"]
+[ext_resource type="Texture2D" uid="uid://clnx5whue0a7g" path="res://assets/art/player/status/fire_frame2.png" id="7_a8ls1"]
 [ext_resource type="Texture2D" uid="uid://c5w3uc4upc1av" path="res://assets/art/player/apple_base.png" id="7_apple"]
+[ext_resource type="Texture2D" uid="uid://d4flnp6puxus3" path="res://assets/art/player/status/ice.png" id="8_qfm1y"]
 [ext_resource type="Texture2D" uid="uid://wvlanxvgy8iq" path="res://assets/art/player/angry_eyes.png" id="19_angry"]
 [ext_resource type="Shader" uid="uid://bcds3powkj5ap" path="res://shaders/triangle.gdshader" id="32_gl8cc"]
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_3v2ag"]
 radius = 0.4
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_jej6c"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("6_oprun")
+}, {
+"duration": 1.0,
+"texture": ExtResource("7_a8ls1")
+}],
+"loop": 1,
+"name": &"fire",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("8_qfm1y")
+}],
+"loop": 1,
+"name": &"ice",
+"speed": 5.0
+}]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_smehm"]
 transparency = 1
@@ -66,9 +91,6 @@ sector_count = 4
 sector_centered = true
 sector_radius = 0.5
 eyes_hit_time = 0.5
-burn_duration = 24.0
-freeze_duration = 240.0
-burn_spin_speed = 0.14
 
 [node name="Collider" type="CollisionShape3D" parent="." unique_id=1401584448]
 unique_name_in_owner = true
@@ -108,6 +130,13 @@ unique_name_in_owner = true
 transform = Transform3D(0.74, 0, 0, 0, -3.2346428e-08, 0.74, 0, -0.74, -3.2346428e-08, 0, 0, 0)
 double_sided = false
 sprite_frames = ExtResource("5_3v2ag")
+
+[node name="StatusSprite" type="AnimatedSprite3D" parent="Sprite" unique_id=2044122990]
+unique_name_in_owner = true
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -3.3581575e-11, 0.0007682565)
+visible = false
+sprite_frames = SubResource("SpriteFrames_jej6c")
+animation = &"fire"
 
 [node name="Eyes" type="AnimatedSprite3D" parent="." unique_id=1772518271]
 unique_name_in_owner = true
