@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://dc0jaxflx7uj5"
-path="res://.godot/imported/stretch_hit.PNG-252bfef0f3897d428fb527e944b8eab1.ctex"
+uid="uid://cxrdlyf0tbwm0"
+path="res://.godot/imported/rotdeath3.png-dc7566c5d0ca219a60b49ec657acbd97.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/art/enemy/stretch_hit.PNG"
-dest_files=["res://.godot/imported/stretch_hit.PNG-252bfef0f3897d428fb527e944b8eab1.ctex"]
+source_file="res://assets/art/enemy/bannana/rotten/rotdeath3.png"
+dest_files=["res://.godot/imported/rotdeath3.png-dc7566c5d0ca219a60b49ec657acbd97.ctex"]
 
 [params]
 

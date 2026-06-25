@@ -1,23 +1,7 @@
 [gd_scene format=3 uid="uid://5cy7tvfvxnyw"]
 
 [ext_resource type="PackedScene" uid="uid://b8rs35o7f45v0" path="res://scenes/enemies/enemy.tscn" id="1_base"]
-[ext_resource type="Script" uid="uid://d04k7pxjd2u24" path="res://scripts/arrow_pattern.gd" id="2_8oubk"]
 [ext_resource type="PackedScene" uid="uid://5ljerioubp6c" path="res://scenes/arrows/arrow_frost.tscn" id="2_arrow"]
-[ext_resource type="Script" uid="uid://r4qbgt6it8lb" path="res://scripts/firing_instance.gd" id="3_20wgy"]
 
-[sub_resource type="Resource" id="Resource_yppec"]
-script = ExtResource("3_20wgy")
-type = ExtResource("2_arrow")
-starting_delay = 0.1
-instance_delay = 0.1
-metadata/_custom_type_script = "uid://r4qbgt6it8lb"
-
-[sub_resource type="Resource" id="Resource_58app"]
-script = ExtResource("2_8oubk")
-recovery = 1.0
-instances = Array[ExtResource("3_20wgy")]([SubResource("Resource_yppec")])
-metadata/_custom_type_script = "uid://d04k7pxjd2u24"
-
-[node name="Enemy" unique_id=96558035 instance=ExtResource("1_base")]
-patterns = Array[ExtResource("2_8oubk")]([SubResource("Resource_58app")])
+[node name="Enemy" unique_id=955806617 instance=ExtResource("1_base")]
 arrow_scene = ExtResource("2_arrow")

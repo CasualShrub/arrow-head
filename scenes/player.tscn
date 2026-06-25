@@ -3,7 +3,6 @@
 [ext_resource type="Script" uid="uid://djbaojmlgp0lu" path="res://scripts/player.gd" id="1_3vyb7"]
 [ext_resource type="Script" uid="uid://cq7vk7ukbmts4" path="res://scripts/components/health_component.gd" id="2_g2els"]
 [ext_resource type="Script" uid="uid://bw22qrc8y4p5b" path="res://scripts/components/input_component.gd" id="3_qhqgy"]
-[ext_resource type="Texture2D" uid="uid://ssnmuf3en2ae" path="res://icon.svg" id="4_dqkch"]
 [ext_resource type="Shader" uid="uid://bfi638v144t8g" path="res://shaders/sector_visualiser.gdshader" id="5_qlg0r"]
 [ext_resource type="PackedScene" uid="uid://dsgml1im16fvw" path="res://scenes/fx/apple_chunks.tscn" id="6_chunks"]
 [ext_resource type="Script" uid="uid://bdywsusg7sgug" path="res://scripts/components/sectors_component.gd" id="6_tuyoq"]
@@ -14,23 +13,26 @@
 [ext_resource type="Texture2D" uid="uid://bxkglylm44xg" path="res://assets/art/player/eyes_hit.png" id="10_hit"]
 [ext_resource type="Texture2D" uid="uid://cwvf53mf4chcj" path="res://assets/art/player/eye_east.png" id="11_east"]
 [ext_resource type="Texture2D" uid="uid://iw3ubmrd3ywx" path="res://assets/art/player/eye_southeast.png" id="12_se"]
+[ext_resource type="Texture2D" uid="uid://8wu27qv1rkns" path="res://assets/art/player/angry_eyes_down.png" id="13_gl8cc"]
 [ext_resource type="Texture2D" uid="uid://dtoqo6xcscqcc" path="res://assets/art/player/eye_southwest.png" id="13_sw"]
 [ext_resource type="Texture2D" uid="uid://cehnqasaukn37" path="res://assets/art/player/eye_west.png" id="14_west"]
 [ext_resource type="Texture2D" uid="uid://ws58vqk400cp" path="res://assets/art/player/hit_eye_east.png" id="15_he"]
 [ext_resource type="Texture2D" uid="uid://cnf6grqoducon" path="res://assets/art/player/hit_eye_southeast.png" id="16_hse"]
 [ext_resource type="Texture2D" uid="uid://c080ywtpel8kh" path="res://assets/art/player/hit_eye_southwest.png" id="17_hsw"]
 [ext_resource type="Texture2D" uid="uid://gvq1q1dey2q0" path="res://assets/art/player/hit_eye_west.png" id="18_hw"]
+[ext_resource type="Texture2D" uid="uid://dlfvmpjluvq6a" path="res://assets/art/player/eye_down.png" id="18_wqfne"]
 [ext_resource type="Texture2D" uid="uid://wvlanxvgy8iq" path="res://assets/art/player/angry_eyes.png" id="19_angry"]
 [ext_resource type="Texture2D" uid="uid://6a6f7giwojet" path="res://assets/art/player/angry_eyes_east.png" id="20_ae"]
 [ext_resource type="Texture2D" uid="uid://76emaaqy1ias" path="res://assets/art/player/angry_eyes_southeast.png" id="21_ase"]
 [ext_resource type="Texture2D" uid="uid://ejjxk7l42fus" path="res://assets/art/player/angry_eyes_southwest.png" id="22_asw"]
 [ext_resource type="Texture2D" uid="uid://eva13j6ywpyo" path="res://assets/art/player/angry_eyes_west.png" id="23_aw"]
 [ext_resource type="Texture2D" uid="uid://bha24g2kfaosi" path="res://assets/art/player/a_death_frame1.png" id="24_d1"]
+[ext_resource type="Texture2D" uid="uid://bjrivokml7no4" path="res://assets/art/player/eyes_hit_down.png" id="24_wnwbv"]
 [ext_resource type="Texture2D" uid="uid://c34v8ic3dj3rx" path="res://assets/art/player/a_death_frame2.png" id="25_d2"]
 [ext_resource type="Texture2D" uid="uid://delgixt2v1gld" path="res://assets/art/player/a_death_frame3.png" id="26_d3"]
 [ext_resource type="Texture2D" uid="uid://cqi4h8rglp31u" path="res://assets/art/player/a_death_frame4.png" id="27_d4"]
 
-[sub_resource type="SphereShape3D" id="SphereShape3D_tuyoq"]
+[sub_resource type="SphereShape3D" id="SphereShape3D_dt7fs"]
 radius = 0.4
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_ub6uw"]
@@ -77,6 +79,9 @@ animations = [{
 "texture": ExtResource("21_ase")
 }, {
 "duration": 1.0,
+"texture": ExtResource("13_gl8cc")
+}, {
+"duration": 1.0,
 "texture": ExtResource("22_asw")
 }, {
 "duration": 1.0,
@@ -97,6 +102,9 @@ animations = [{
 "texture": ExtResource("12_se")
 }, {
 "duration": 1.0,
+"texture": ExtResource("18_wqfne")
+}, {
+"duration": 1.0,
 "texture": ExtResource("13_sw")
 }, {
 "duration": 1.0,
@@ -115,6 +123,9 @@ animations = [{
 }, {
 "duration": 1.0,
 "texture": ExtResource("16_hse")
+}, {
+"duration": 1.0,
+"texture": ExtResource("24_wnwbv")
 }, {
 "duration": 1.0,
 "texture": ExtResource("17_hsw")
@@ -173,14 +184,14 @@ slowdown_speed = 0.1
 sector_count = 4
 sector_centered = true
 sector_radius = 0.5
-eyes_hit_time = 0.0
+eyes_hit_time = 1.0
 burn_duration = 24.0
 freeze_duration = 240.0
 burn_spin_speed = 0.14
 
 [node name="Collider" type="CollisionShape3D" parent="." unique_id=1401584448]
 unique_name_in_owner = true
-shape = SubResource("SphereShape3D_tuyoq")
+shape = SubResource("SphereShape3D_dt7fs")
 debug_color = Color(0, 0.6, 0.7019608, 0.41960785)
 
 [node name="Health" type="Node" parent="." unique_id=1891742081]
@@ -221,6 +232,7 @@ unique_name_in_owner = true
 transform = Transform3D(0.6, 0, 0, 0, -2.6226834e-08, 0.6, 0, -0.6, -2.6226834e-08, 0, 0.0045996904, 0)
 double_sided = false
 sprite_frames = SubResource("SpriteFrames_8wtow")
+animation = &"angry"
 
 [node name="Arrows" type="Node3D" parent="." unique_id=208548441]
 unique_name_in_owner = true
@@ -235,7 +247,13 @@ unique_name_in_owner = true
 transform = Transform3D(0.6, 5.7320594e-16, -2.664535e-15, -5.7320594e-16, 0.6, -3.5527137e-15, 2.664535e-15, 3.5527137e-15, 0.6, -1.7586947e-14, 2.2019837, -0.025005914)
 modulate = Color(0.2, 0.8, 1, 0.5019608)
 double_sided = false
-texture = ExtResource("4_dqkch")
+texture = ExtResource("7_apple")
+
+[node name="PreviewEyes" type="Sprite3D" parent="DashPreview/PreviewSprite" unique_id=386860605]
+transform = Transform3D(0.99999994, 0, 4.2351647e-22, -2.524355e-29, 0.99999994, 0, -4.2351647e-22, 0, 0.99999994, 8.359199e-17, 0, 0.018823493)
+modulate = Color(0.2, 0.8, 1, 0.5019608)
+double_sided = false
+texture = ExtResource("19_angry")
 
 [node name="PreviewLine" type="MeshInstance3D" parent="DashPreview" unique_id=210041512]
 unique_name_in_owner = true

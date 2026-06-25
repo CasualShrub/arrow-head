@@ -4,15 +4,16 @@
 [ext_resource type="PackedScene" uid="uid://boryk37cbh1nx" path="res://scenes/player.tscn" id="2_br6g5"]
 [ext_resource type="Shader" uid="uid://buv2tktnh5ufo" path="res://shaders/fade.gdshader" id="3_cms0e"]
 [ext_resource type="Script" uid="uid://doms8x46cr1tt" path="res://scripts/camera.gd" id="6_02f36"]
+[ext_resource type="PackedScene" uid="uid://b8rs35o7f45v0" path="res://scenes/enemies/enemy.tscn" id="7_rjfe4"]
 [ext_resource type="Shader" uid="uid://dnw37cynwb7od" path="res://shaders/screen_effect.gdshader" id="8_2xc7y"]
-
-[sub_resource type="Environment" id="Environment_ub6uw"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_a3kad"]
 render_priority = 0
 shader = ExtResource("3_cms0e")
 shader_parameter/wall_height = 0.51
 shader_parameter/fade_start = -0.04
+
+[sub_resource type="Environment" id="Environment_ub6uw"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_tuyoq"]
 shader = ExtResource("8_2xc7y")
@@ -41,17 +42,7 @@ render_target_update_mode = 4
 
 [node name="Player" parent="SubViewportContainer/SubViewport/World" unique_id=508579643 instance=ExtResource("2_br6g5")]
 unique_name_in_owner = true
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11.886877, 0, 23.774015)
-eyes_hit_time = 1.0
 burn_drift_speed = 240.0
-
-[node name="CameraPivot" type="Node3D" parent="SubViewportContainer/SubViewport/World" unique_id=1563753267 node_paths=PackedStringArray("player")]
-transform = Transform3D(1, 0, 0, 0, -4.371139e-08, 1, 0, -1, -4.371139e-08, 11.886877, 3.7000048, 23.774015)
-script = ExtResource("6_02f36")
-player = NodePath("../Player")
-
-[node name="Camera" type="Camera3D" parent="SubViewportContainer/SubViewport/World/CameraPivot" unique_id=349876092]
-unique_name_in_owner = true
 
 [node name="Enemies" type="Node3D" parent="SubViewportContainer/SubViewport/World" unique_id=1185931971]
 unique_name_in_owner = true
@@ -61,16 +52,25 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.7, 0)
 size = Vector3(100, 1, 100)
 
 [node name="CSGBox3D2" type="CSGBox3D" parent="SubViewportContainer/SubViewport/World" unique_id=1034809572]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 18.261944, 0.27922904, 15.341614)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.8967056, -0.2479316, 0)
 use_collision = true
 collision_layer = 4
-size = Vector3(1.7528763, 2.4925537, 3.433838)
+size = Vector3(4.2052155, 1.4382324, 100)
 
-[node name="CSGBox3D3" type="CSGBox3D" parent="SubViewportContainer/SubViewport/World" unique_id=1810942950]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 29.528088, 0.27922904, 15.341614)
+[node name="CSGBox3D3" type="CSGBox3D" parent="SubViewportContainer/SubViewport/World" unique_id=1883586222]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.9434004, 0.7292166, -25.800964)
 use_collision = true
 collision_layer = 4
-size = Vector3(1.9976273, 2.4925537, 3.433838)
+size = Vector3(10.082903, 4.7579346, 48.39807)
+material = SubResource("ShaderMaterial_a3kad")
+
+[node name="CameraPivot" type="Node3D" parent="SubViewportContainer/SubViewport/World" unique_id=1563753267 node_paths=PackedStringArray("player")]
+transform = Transform3D(1, 0, 0, 0, -4.371139e-08, 1, 0, -1, -4.371139e-08, 0, 3.7000048, 0)
+script = ExtResource("6_02f36")
+player = NodePath("../Player")
+
+[node name="Camera" type="Camera3D" parent="SubViewportContainer/SubViewport/World/CameraPivot" unique_id=349876092]
+unique_name_in_owner = true
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="SubViewportContainer/SubViewport/World" unique_id=1158397434]
 environment = SubResource("Environment_ub6uw")
@@ -78,35 +78,8 @@ environment = SubResource("Environment_ub6uw")
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="SubViewportContainer/SubViewport/World" unique_id=492064517]
 transform = Transform3D(0.8239569, 7.3667486e-08, 0.5666525, -0.29468933, 0.8541341, 0.4285011, -0.4839972, -0.52005285, 0.7037697, 18.038643, 15.709363, 15.527812)
 
-[node name="Walls" type="Node3D" parent="SubViewportContainer/SubViewport/World" unique_id=1879017839]
-
-[node name="CSGBox3D3" type="CSGBox3D" parent="SubViewportContainer/SubViewport/World/Walls" unique_id=1883586222]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 24.068428, 0.7292166, -5.611618)
-use_collision = true
-collision_layer = 4
-size = Vector3(50.332954, 4.7579346, 8.019379)
-material = SubResource("ShaderMaterial_a3kad")
-
-[node name="CSGBox3D4" type="CSGBox3D" parent="SubViewportContainer/SubViewport/World/Walls" unique_id=30173005]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 24.068428, 0.7292166, 33.94637)
-use_collision = true
-collision_layer = 4
-size = Vector3(50.332954, 4.7579346, 7.200409)
-material = SubResource("ShaderMaterial_a3kad")
-
-[node name="CSGBox3D5" type="CSGBox3D" parent="SubViewportContainer/SubViewport/World/Walls" unique_id=108645574]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.59159946, 0.7292166, 14.404285)
-use_collision = true
-collision_layer = 4
-size = Vector3(5.614977, 4.7579346, 41.830414)
-material = SubResource("ShaderMaterial_a3kad")
-
-[node name="CSGBox3D6" type="CSGBox3D" parent="SubViewportContainer/SubViewport/World/Walls" unique_id=739514415]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 49.889397, 0.7292166, 14.404285)
-use_collision = true
-collision_layer = 4
-size = Vector3(7.345934, 4.7579346, 41.830414)
-material = SubResource("ShaderMaterial_a3kad")
+[node name="Enemy" parent="SubViewportContainer/SubViewport/World" unique_id=71488470 instance=ExtResource("7_rjfe4")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.883429, 0, 1.6004148)
 
 [node name="ColorRect" type="ColorRect" parent="." unique_id=1172579494]
 material = SubResource("ShaderMaterial_tuyoq")

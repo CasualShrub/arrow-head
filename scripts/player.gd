@@ -138,11 +138,11 @@ func _get_eye_frame() -> int:
 	elif deg > 22.5 and deg <= 67.5:
 		return 2 # down-right
 	elif deg > 67.5 and deg <= 112.5:
-		return 0 # down
+		return 3 # down
 	elif deg > 112.5 and deg <= 157.5:
-		return 3 # down-left
+		return 4 # down-left
 	elif deg > 157.5 or deg <= -157.5:
-		return 4 # left
+		return 5 # left
 	elif deg > -157.5 and deg <= -112.5:
 		return -1 # up-left
 	elif deg > -112.5 and deg <= -67.5:
@@ -155,7 +155,8 @@ func _update_eyes() -> void:
 		return
 	var frame := _get_eye_frame()
 	if frame == -1:
-		_eyes.hide()
+		if _eyes.visible:
+			_eyes.hide()
 		return
 	elif not _eyes.visible:
 		_eyes.show()
@@ -374,6 +375,7 @@ func die() -> void:
 	died.emit()
 	_sprite.play("death")
 	_eyes.hide()
+	sectors.hide()
 
 func _on_sectors_changed() -> void:
 	if sectors.full():
