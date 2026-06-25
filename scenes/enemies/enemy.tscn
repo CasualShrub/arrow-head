@@ -59,7 +59,7 @@ collision_layer = 8
 motion_mode = 1
 script = ExtResource("1_7p1mj")
 health = NodePath("Health")
-sus = NodePath("")
+sus = NodePath("Sus")
 patterns = Array[ExtResource("2_xwavj")]([SubResource("Resource_fcftc")])
 
 [node name="Collider" type="CollisionShape3D" parent="." unique_id=1742085930]
