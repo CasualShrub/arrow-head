@@ -152,10 +152,10 @@ collision_layer = 4
 size = Vector3(51.5109, 2.6455078, 12.04335)
 
 [node name="CSGBox3D6" type="CSGBox3D" parent="SubViewportContainer/SubViewport/World/Walls" unique_id=1936470025]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 50.56516, 0.3557061, 11.305195)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 39.512886, 0.3557061, 11.305195)
 use_collision = true
 collision_layer = 4
-size = Vector3(10.082903, 2.6455078, 63.983307)
+size = Vector3(32.187447, 2.6455078, 63.983307)
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="SubViewportContainer/SubViewport/World" unique_id=1158397434]
 environment = SubResource("Environment_ub6uw")
