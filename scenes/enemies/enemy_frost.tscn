@@ -1,4 +1,4 @@
-[gd_scene format=3 uid="uid://5cy7tvfvxnyw"]
+[gd_scene format=3 uid="uid://1jtkc8jlvm65"]
 
 [ext_resource type="PackedScene" uid="uid://b8rs35o7f45v0" path="res://scenes/enemies/enemy.tscn" id="1_base"]
 [ext_resource type="Script" uid="uid://d04k7pxjd2u24" path="res://scripts/arrow_pattern.gd" id="2_8oubk"]

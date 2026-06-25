@@ -191,5 +191,6 @@ func _on_changed() -> void:
 func _ready() -> void:
 	if not Engine.is_editor_hint():
 		_setup_stored()
+		show()
 	_handle_centering()
 	radius = radius
