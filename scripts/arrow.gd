@@ -50,6 +50,7 @@ func _bounce(collision: KinematicCollision3D) -> void:
 	SoundManager.play("arrow_bounce", 0.0, 0.08)
 	var n := collision.get_normal()
 	_direction = _direction.bounce(n)
+	face(_direction)   # re-orient the sprite to the new travel direction
 	move_and_collide(collision.get_remainder().bounce(n))
 	_bounces += 1
 	if max_bounces >= 0 and _bounces > max_bounces:
