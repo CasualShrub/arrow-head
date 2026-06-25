@@ -15,6 +15,7 @@ const _ENEMY_TEAM = Arrow.Team.ENEMY
 @export var arrow_scene: PackedScene = null
 @export var aim_time := 0.4
 @export var release_time := 0.12
+@export var fire_release_frame := 3
 
 @export_group("hit")
 @export var hit_flash_time := 0.15
@@ -232,7 +233,13 @@ func _on_recovery_timeout() -> void:
 	if _dead: return
 	var pattern := _select_pattern()
 	_sprite.play("fire")
+	await _await_fire_release()
+	if _dead: return
 	perform(pattern)
+
+func _await_fire_release() -> void:
+	while not _dead and _sprite.animation == "fire" and _sprite.frame < fire_release_frame:
+		await _sprite.frame_changed
 
 func highlight_on(c: Color) -> void:
 	if is_dead(): return
