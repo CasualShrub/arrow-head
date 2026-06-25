@@ -72,6 +72,8 @@ const _PLAYER_TEAM = Arrow.Team.PLAYER
 @export_group("status_effects")
 @export var burn_duration := 2.5
 @export var freeze_duration := 2.0
+@export var freeze_warn_time := 0.6
+@export var freeze_blink_rate := 12.0
 @export var burn_spin_speed := 24.0
 @export var burn_drift_speed := 7.2  # 2D 240 px/s = 1.2x move speed; 1.2 * 6.0 m/s
 @export var burn_redrift := 0.14  # avg time between random drift-direction changes (lurching)
@@ -81,7 +83,6 @@ signal fired(arrow: Arrow)
 signal died()
 
 var _dead := false
-var _move_dir := Vector2.ZERO   # last movement direction, for the directional eyes
 var _burn_time := 0.0
 var _freeze_time := 0.0
 var _burn_drift := Vector3.ZERO
@@ -100,6 +101,7 @@ var _slowmo_tween: Tween
 @onready var _eyes_hit: Timer = %EyesHit
 @onready var _sprite: AnimatedSprite3D = %Sprite
 @onready var _eyes: AnimatedSprite3D = %Eyes
+@onready var _status_sprite: AnimatedSprite3D = %StatusSprite
 @onready var _collider: CollisionShape3D = %Collider
 @onready var _preview: DashPreviewComponent = %DashPreview
 @onready var _arrows: Node3D = %Arrows
@@ -244,14 +246,6 @@ func _move(dir: Vector2, _dt: float) -> void:
 	velocity.x = v.x
 	velocity.z = v.y
 	velocity.y = 0
-	var selected: int
-	if velocity == Vector3.ZERO:
-		selected = -1
-	else:
-		selected = sectors.get_sector_from_movement(dir)
-	if dir != _move_dir:
-		_move_dir = dir
-		#_update_eyes()
 	move_and_slide()
 
 func is_dashing() -> bool:
@@ -265,7 +259,7 @@ func _can_dash() -> bool:
 func _try_dash() -> bool:
 	if not _can_dash(): return false
 	var stored := sectors.get_stored()
-	for i in range(len(sectors.get_stored())):
+	for i in range(len(stored)):
 		var e = sectors.get_stored_at(i)
 		if e is EmbeddedArrow and e.is_firing_enabled():
 			var mouse_pos := get_mouse_world_position()
@@ -353,6 +347,7 @@ func _apply_debuff(kind: int) -> void:
 			_burn_spin_dir = 1.0 if randf() < 0.5 else -1.0
 		Arrow.Kind.FROST:
 			_freeze_time = freeze_duration
+	_display_status()
 
 func _burn_spin(delta: float) -> void:
 	rotate(Vector3.UP, burn_spin_speed * _burn_spin_dir * delta)
@@ -379,6 +374,7 @@ func die() -> void:
 	died.emit()
 	_sprite.play("death")
 	_eyes.hide()
+	_status_sprite.hide()
 	sectors.hide()
 
 func _on_sectors_changed() -> void:
@@ -406,14 +402,22 @@ func _physics_process(delta: float) -> void:
 		if not _try_dash():
 			_try_cancel_slowdown()
 	if is_burning():
-		# careen chaotically: re-roll the drift direction on a short random timer
 		_burn_redrift -= delta
 		if _burn_redrift <= 0.0:
 			_burn_drift = Vector3.RIGHT.rotated(Vector3.UP, randf() * TAU)
 			_burn_redrift = burn_redrift * randf_range(0.6, 1.4)
 		velocity = _burn_drift * burn_drift_speed
 		move_and_slide()
+		_burn_time -= delta
+		if not is_burning():
+			_display_status()
 	else:
+		if is_frozen():
+			_freeze_time -= delta
+			if _freeze_time < freeze_warn_time:
+				_status_sprite.visible = fmod(_freeze_time * freeze_blink_rate, 2.0) < 1.0
+			if not is_frozen():
+				_display_status()
 		if is_dashing():
 			_update_dash(delta)
 		else:
@@ -426,12 +430,20 @@ func _update_preview(_delta: float) -> void:
 	pos.y = global_position.y
 	_preview.update(global_position, pos)
 
+func _display_status() -> void:
+	if is_burning():
+		_status_sprite.show()
+		_status_sprite.play("fire")
+	elif is_frozen():
+		_status_sprite.show()
+		_status_sprite.play("ice")
+	else:
+		_status_sprite.hide()
+
 func _process(delta: float) -> void:
 	if Engine.is_editor_hint(): return
 	if _dead: return
-	if _freeze_time > 0.0: _freeze_time -= delta
 	if _burn_time > 0.0:
-		_burn_time -= delta
 		_burn_spin(delta)
 	elif not is_frozen():
 		face_mouse()
