@@ -11,9 +11,10 @@ extends Node
 const _POOL_SIZE := 12
 const _BUS := "SFX"
 const _MUSIC_BUS := "Music"
-const DEFAULT_MUSIC := "Lvl_1"
+const DEFAULT_MUSIC := "TITLE_SCREEN"
 
 const MUSIC := {
+	"TITLE_SCREEN": preload("res://assets/audio/music/TITLE_SCREEN.wav"),
 	"Lvl_1": preload("res://assets/audio/music/Lvl_1.wav"),
 	"Lvl_2_3": preload("res://assets/audio/music/Lvl_2&3.wav"),
 	"Lvl_4_5": preload("res://assets/audio/music/Lvl_4&5.wav"),

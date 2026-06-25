@@ -5,6 +5,7 @@ const TUTORIAL_SCENE := "res://scenes/levels/tutorial.tscn"
 @onready var _level_select: Control = $LevelSelect
 
 func _ready() -> void:
+	SoundManager.play_music("TITLE_SCREEN")
 	$Play.pressed.connect(_on_play_pressed)
 	$Levels.pressed.connect(_on_levels_pressed)
 	$Quit.pressed.connect(_on_quit_pressed)

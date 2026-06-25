@@ -58,4 +58,5 @@ func _on_player_died() -> void:
 
 func _ready() -> void:
 	if not player: player = %Player
+	SoundManager.play_music("Lvl_1")   # switch from title music to level music
 	start()
