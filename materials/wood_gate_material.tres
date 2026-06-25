@@ -1,0 +1,10 @@
+[gd_resource type="StandardMaterial3D" format=3 uid="uid://cwoodgate0tut"]
+
+[ext_resource type="Texture2D" uid="uid://dqfxkik3sr7vy" path="res://assets/textures/woodgateish.png" id="1_tex"]
+
+[resource]
+resource_name = "WoodGateMaterial"
+albedo_texture = ExtResource("1_tex")
+uv1_scale = Vector3(0.5, 0.5, 0.5)
+uv1_triplanar = true
+uv1_world_triplanar = true
