@@ -58,6 +58,11 @@ const _PLAYER_TEAM = Arrow.Team.PLAYER
 @export var eyes_southeast: Texture2D
 @export var eyes_southwest: Texture2D
 @export var eyes_west: Texture2D
+@export var angry_eyes: Texture2D        # all four sectors filled (south / idle)
+@export var angry_eyes_east: Texture2D
+@export var angry_eyes_southeast: Texture2D
+@export var angry_eyes_southwest: Texture2D
+@export var angry_eyes_west: Texture2D
 @export var eyes_lowhp: Texture2D
 @export var eyes_hit: Texture2D
 @export var eyes_hit_east: Texture2D
@@ -113,9 +118,11 @@ func get_facing() -> Vector3:
 	return -global_basis.z
 
 func embedded_count() -> int:
+	if not sectors:
+		return 0
 	var n := 0
-	for em in _sectors:
-		if em:
+	for s in sectors.get_stored():
+		if s != null:
 			n += 1
 	return n
 
@@ -155,6 +162,15 @@ func _hit_eye(bucket: EyeDir) -> Texture2D:
 		EyeDir.WEST: return eyes_hit_west
 	return null   # HIDDEN
 
+func _angry_eye(bucket: EyeDir) -> Texture2D:
+	match bucket:
+		EyeDir.EAST: return angry_eyes_east
+		EyeDir.SOUTHEAST: return angry_eyes_southeast
+		EyeDir.SOUTH: return angry_eyes
+		EyeDir.SOUTHWEST: return angry_eyes_southwest
+		EyeDir.WEST: return angry_eyes_west
+	return null   # HIDDEN
+
 func _apply_eye(tex: Texture2D) -> void:
 	if tex == null:
 		_eyes.visible = false
@@ -165,11 +181,15 @@ func _apply_eye(tex: Texture2D) -> void:
 func _update_eyes() -> void:
 	if not _eyes or _eyes_hit_showing:
 		return
-	if embedded_count() >= 3:
+	var n := embedded_count()
+	var bucket := _dir_bucket(_move_dir)
+	if n >= 4:
+		_apply_eye(_angry_eye(bucket))
+	elif n >= 3:
 		_eyes.texture = eyes_lowhp
 		_eyes.visible = true
-		return
-	_apply_eye(_normal_eye(_dir_bucket(_move_dir)))
+	else:
+		_apply_eye(_normal_eye(bucket))
 
 func _flash_eyes_hit() -> void:
 	if not _eyes:
@@ -347,6 +367,7 @@ func die() -> void:
 func _on_sectors_changed() -> void:
 	if sectors.full():
 		enable_firing()
+	_update_eyes()
 
 func _physics_process(delta: float) -> void:
 	if Engine.is_editor_hint(): return

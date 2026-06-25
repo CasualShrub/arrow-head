@@ -18,6 +18,11 @@
 [ext_resource type="Texture2D" uid="uid://cnf6grqoducon" path="res://art/player/hit_eye_southeast.png" id="16_hse"]
 [ext_resource type="Texture2D" uid="uid://c080ywtpel8kh" path="res://art/player/hit_eye_southwest.png" id="17_hsw"]
 [ext_resource type="Texture2D" uid="uid://gvq1q1dey2q0" path="res://art/player/hit_eye_west.png" id="18_hw"]
+[ext_resource type="Texture2D" uid="uid://wvlanxvgy8iq" path="res://art/player/angry_eyes.png" id="19_angry"]
+[ext_resource type="Texture2D" uid="uid://6a6f7giwojet" path="res://art/player/angry_eyes_east.png" id="20_ae"]
+[ext_resource type="Texture2D" uid="uid://76emaaqy1ias" path="res://art/player/angry_eyes_southeast.png" id="21_ase"]
+[ext_resource type="Texture2D" uid="uid://ejjxk7l42fus" path="res://art/player/angry_eyes_southwest.png" id="22_asw"]
+[ext_resource type="Texture2D" uid="uid://eva13j6ywpyo" path="res://art/player/angry_eyes_west.png" id="23_aw"]
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_tuyoq"]
 radius = 0.4
@@ -52,6 +57,11 @@ eyes_east = ExtResource("11_east")
 eyes_southeast = ExtResource("12_se")
 eyes_southwest = ExtResource("13_sw")
 eyes_west = ExtResource("14_west")
+angry_eyes = ExtResource("19_angry")
+angry_eyes_east = ExtResource("20_ae")
+angry_eyes_southeast = ExtResource("21_ase")
+angry_eyes_southwest = ExtResource("22_asw")
+angry_eyes_west = ExtResource("23_aw")
 eyes_lowhp = ExtResource("9_lowhp")
 eyes_hit = ExtResource("10_hit")
 eyes_hit_east = ExtResource("15_he")
