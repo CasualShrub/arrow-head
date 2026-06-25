@@ -11,17 +11,28 @@ func _ready() -> void:
 	$Quit.pressed.connect(_on_quit_pressed)
 	if _level_select:
 		_level_select.hide()
-		var back := _level_select.get_node_or_null("Back")
-		if back:
-			back.pressed.connect(_level_select.hide)
 	$Play.grab_focus()
+
+func _set_main_buttons(shown: bool) -> void:
+	$Play.visible = shown
+	$Levels.visible = shown
+	$Quit.visible = shown
 
 func _on_play_pressed() -> void:
 	get_tree().change_scene_to_file(TUTORIAL_SCENE)
 
 func _on_levels_pressed() -> void:
 	if _level_select:
+		_set_main_buttons(false)
 		_level_select.show()
+
+func _load_level(path: String) -> void:
+	get_tree().change_scene_to_file(path)
+
+func _close_levels() -> void:
+	if _level_select:
+		_level_select.hide()
+		_set_main_buttons(true)
 
 func _on_quit_pressed() -> void:
 	get_tree().quit()
