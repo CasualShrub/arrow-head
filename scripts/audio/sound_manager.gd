@@ -22,6 +22,7 @@ const SOUNDS := {
 	"apple_death": preload("res://assets/audio/sfx/apple_death.wav"),
 	"apple_shooting": preload("res://assets/audio/sfx/apple_shooting.wav"),
 	"arrow_bounce": preload("res://assets/audio/sfx/arrow_bounce.wav"),
+	"arrow_woosh": preload("res://assets/audio/sfx/arrow_woosh.wav"),
 	"banana_death": preload("res://assets/audio/sfx/banana_death.wav"),
 	"banana_shooting": preload("res://assets/audio/sfx/banana_shooting.wav"),
 	"big_win_kill_boss_jingle": preload("res://assets/audio/sfx/big_win_kill_boss_jingle.wav"),
