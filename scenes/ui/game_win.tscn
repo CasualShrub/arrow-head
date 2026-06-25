@@ -2,6 +2,7 @@
 
 [ext_resource type="Script" uid="uid://cii54iucfsr7d" path="res://scripts/ui/game_win.gd" id="1_loxwf"]
 [ext_resource type="Texture2D" uid="uid://cilal3ll3bnij" path="res://assets/art/ui/level_won.png" id="2_loxwf"]
+[ext_resource type="FontFile" uid="uid://dg3navvnlkmpw" path="res://assets/fonts/Puffy-gxW55.otf" id="3_puffy"]
 
 [node name="GameWin" type="CanvasLayer" unique_id=1577397124]
 layer = 10
@@ -43,6 +44,18 @@ offset_bottom = 262.4552
 theme_override_colors/font_color = Color(0.9, 0.9, 0.9, 1)
 theme_override_font_sizes/font_size = 28
 text = "Press Enter to Proceed"
+horizontal_alignment = 1
+
+[node name="Time" type="Label" parent="Root" unique_id=1906355323]
+unique_name_in_owner = true
+layout_mode = 0
+offset_top = 282.0
+offset_right = 1152.0
+offset_bottom = 338.0
+theme_override_colors/font_color = Color(0.95, 0.85, 0.4, 1)
+theme_override_fonts/font = ExtResource("3_puffy")
+theme_override_font_sizes/font_size = 40
+text = "Time  00:00.00"
 horizontal_alignment = 1
 
 [node name="Center" type="VBoxContainer" parent="Root" unique_id=30671039]

@@ -6,6 +6,7 @@ extends CanvasLayer
 
 @onready var _root: Control = %Root
 @onready var _apple: TextureRect = %Apple
+@onready var _time: Label = %Time
 var _t := 0.0
 
 var _next_scene = "res://scenes/levels/level_1.tscn"
@@ -18,6 +19,9 @@ func _on_encounter_cleared(won: bool, next_scene: String, is_last_level: bool) -
 	_root.visible = true
 	if is_last_level:
 		_apple.visible = true
+	var timer := get_node_or_null("../LevelTimer") as LevelTimer
+	if timer:
+		_time.text = "Time  " + LevelTimer.format_time(timer.get_elapsed())
 	_next_scene = next_scene
 
 func _unhandled_input(event: InputEvent) -> void:

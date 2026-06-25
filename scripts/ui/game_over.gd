@@ -7,6 +7,7 @@ extends CanvasLayer
 @export var death_anim_delay := 1.0
 @onready var _root: Control = %Root
 @onready var _apple: TextureRect = %Apple
+@onready var _time: Label = %Time
 var _t := 0.0
 
 func _ready() -> void:
@@ -15,6 +16,9 @@ func _ready() -> void:
 func _on_encounter_ended(won: bool) -> void:
 	if won:
 		return
+	var timer := get_node_or_null("../LevelTimer") as LevelTimer
+	if timer:
+		_time.text = "Time  " + LevelTimer.format_time(timer.get_elapsed())
 	await get_tree().create_timer(death_anim_delay).timeout
 	_root.visible = true
 
