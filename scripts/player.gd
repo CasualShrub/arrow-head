@@ -372,6 +372,7 @@ func die() -> void:
 	died.emit()
 	_sprite.play("death")
 	_eyes.hide()
+	_status_sprite.hide()
 	sectors.hide()
 
 func _on_sectors_changed() -> void:
