@@ -1,0 +1,6 @@
+[gd_scene format=3 uid="uid://fv7u1uisju2b"]
+
+[ext_resource type="PackedScene" uid="uid://byh737vkctruq" path="res://scenes/arrows/arrow_fire.tscn" id="1_qnk0l"]
+
+[node name="Arrow" unique_id=911050322 instance=ExtResource("1_qnk0l")]
+max_bounces = 1

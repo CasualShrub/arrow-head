@@ -16,7 +16,6 @@ metadata/_custom_type_script = "uid://r4qbgt6it8lb"
 [sub_resource type="Resource" id="Resource_ait0q"]
 script = ExtResource("3_vvqcu")
 type = ExtResource("4_ait0q")
-max_starting_delay = 1.5
 metadata/_custom_type_script = "uid://r4qbgt6it8lb"
 
 [sub_resource type="Resource" id="Resource_sm2vj"]

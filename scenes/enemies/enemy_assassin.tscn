@@ -1,0 +1,22 @@
+[gd_scene format=3 uid="uid://1franpsuiqi5"]
+
+[ext_resource type="PackedScene" uid="uid://b8rs35o7f45v0" path="res://scenes/enemies/enemy.tscn" id="1_bfqem"]
+[ext_resource type="Script" uid="uid://d04k7pxjd2u24" path="res://scripts/arrow_pattern.gd" id="2_1qr7p"]
+[ext_resource type="Script" uid="uid://r4qbgt6it8lb" path="res://scripts/firing_instance.gd" id="3_mso8w"]
+[ext_resource type="PackedScene" uid="uid://fv7u1uisju2b" path="res://scenes/arrows/arrow_fire_fast.tscn" id="4_gluje"]
+
+[sub_resource type="Resource" id="Resource_wgdyj"]
+script = ExtResource("3_mso8w")
+type = ExtResource("4_gluje")
+probability = 0.1
+count = 2
+metadata/_custom_type_script = "uid://r4qbgt6it8lb"
+
+[sub_resource type="Resource" id="Resource_3h82e"]
+script = ExtResource("2_1qr7p")
+recovery = 0.5
+instances = Array[ExtResource("3_mso8w")]([SubResource("Resource_wgdyj")])
+metadata/_custom_type_script = "uid://d04k7pxjd2u24"
+
+[node name="Enemy" unique_id=71488470 instance=ExtResource("1_bfqem")]
+patterns = Array[ExtResource("2_1qr7p")]([SubResource("Resource_3h82e")])
