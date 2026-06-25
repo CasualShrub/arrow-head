@@ -6,12 +6,12 @@
 [ext_resource type="Script" uid="uid://dn8jqcy1eo7y7" path="res://scripts/components/sus_component.gd" id="3_fcftc"]
 [ext_resource type="Script" uid="uid://r4qbgt6it8lb" path="res://scripts/firing_instance.gd" id="3_nenq2"]
 [ext_resource type="PackedScene" uid="uid://bxgfy1nvmlb7v" path="res://scenes/arrows/arrow.tscn" id="4_jt03m"]
-[ext_resource type="Texture2D" uid="uid://b0afwlyjydm7h" path="res://art/enemy/frame1.png" id="5_c4w8v"]
-[ext_resource type="Texture2D" uid="uid://bmqcjg05r8j1e" path="res://art/enemy/frame2.png" id="6_f2"]
-[ext_resource type="Texture2D" uid="uid://6w7p3hufm0km" path="res://art/enemy/frame3.png" id="7_f3"]
-[ext_resource type="Texture2D" uid="uid://ccs6nyr8bd0ba" path="res://art/enemy/frame4.png" id="8_f4"]
-[ext_resource type="Texture2D" uid="uid://c8knl5mhl04ko" path="res://art/enemy/normal_hit.PNG" id="9_hn"]
-[ext_resource type="Texture2D" uid="uid://dc0jaxflx7uj5" path="res://art/enemy/stretch_hit.PNG" id="10_hs"]
+[ext_resource type="Texture2D" uid="uid://b0afwlyjydm7h" path="res://assets/art/enemy/frame1.png" id="5_c4w8v"]
+[ext_resource type="Texture2D" uid="uid://bmqcjg05r8j1e" path="res://assets/art/enemy/frame2.png" id="6_f2"]
+[ext_resource type="Texture2D" uid="uid://6w7p3hufm0km" path="res://assets/art/enemy/frame3.png" id="7_f3"]
+[ext_resource type="Texture2D" uid="uid://ccs6nyr8bd0ba" path="res://assets/art/enemy/frame4.png" id="8_f4"]
+[ext_resource type="Texture2D" uid="uid://c8knl5mhl04ko" path="res://assets/art/enemy/normal_hit.PNG" id="9_hn"]
+[ext_resource type="Texture2D" uid="uid://dc0jaxflx7uj5" path="res://assets/art/enemy/stretch_hit.PNG" id="10_hs"]
 
 [sub_resource type="Resource" id="Resource_lu5c6"]
 script = ExtResource("3_nenq2")
@@ -36,12 +36,21 @@ metadata/_custom_type_script = "uid://d04k7pxjd2u24"
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_ensgf"]
 
+[sub_resource type="SpriteFrames" id="SpriteFrames_ub6uw"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("5_c4w8v")
+}],
+"loop": 1,
+"name": &"default",
+"speed": 5.0
+}]
+
 [node name="Enemy" type="CharacterBody3D" unique_id=71488470 node_paths=PackedStringArray("health", "sus")]
 collision_layer = 8
 motion_mode = 1
 script = ExtResource("1_7p1mj")
-health = NodePath("Health")
-sus = NodePath("Sus")
 patterns = Array[ExtResource("2_xwavj")]([SubResource("Resource_fcftc")])
 frame1 = ExtResource("5_c4w8v")
 frame2 = ExtResource("6_f2")
@@ -49,6 +58,8 @@ frame3 = ExtResource("7_f3")
 frame4 = ExtResource("8_f4")
 hit_normal = ExtResource("9_hn")
 hit_stretch = ExtResource("10_hs")
+health = NodePath("Health")
+sus = NodePath("Sus")
 
 [node name="Collider" type="CollisionShape3D" parent="." unique_id=1742085930]
 unique_name_in_owner = true
@@ -77,6 +88,9 @@ texture = ExtResource("5_c4w8v")
 
 [node name="InstanceTimers" type="Node" parent="." unique_id=160238136]
 unique_name_in_owner = true
+
+[node name="AnimatedSprite3D" type="AnimatedSprite3D" parent="." unique_id=1091610106]
+sprite_frames = SubResource("SpriteFrames_ub6uw")
 
 [connection signal="changed" from="Health" to="." method="_on_health_changed"]
 [connection signal="timeout" from="Recovery" to="." method="_on_recovery_timeout"]

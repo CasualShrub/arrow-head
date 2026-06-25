@@ -1,6 +1,6 @@
-[gd_scene load_steps=3 format=3]
+[gd_scene format=3]
 
-[ext_resource type="Texture2D" uid="uid://dvyerojv1okry" path="res://art/deco/wall.png" id="1_tex"]
+[ext_resource type="Texture2D" uid="uid://dvyerojv1okry" path="res://assets/art/deco/wall.png" id="1_tex"]
 
 [sub_resource type="RectangleShape2D" id="rect"]
 size = Vector2(390, 371)

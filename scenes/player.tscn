@@ -8,30 +8,132 @@
 [ext_resource type="PackedScene" uid="uid://dsgml1im16fvw" path="res://scenes/fx/apple_chunks.tscn" id="6_chunks"]
 [ext_resource type="Script" uid="uid://bdywsusg7sgug" path="res://scripts/components/sectors_component.gd" id="6_tuyoq"]
 [ext_resource type="Script" uid="uid://8jd6wlvsiper" path="res://scripts/components/dash_preview_component.gd" id="6_ur7pv"]
-[ext_resource type="Texture2D" uid="uid://c5w3uc4upc1av" path="res://art/player/apple_base.png" id="7_apple"]
-[ext_resource type="Texture2D" uid="uid://cp4cnsely21gy" path="res://art/player/eye_normal.png" id="8_eyes"]
-[ext_resource type="Texture2D" uid="uid://ddhrf02nv342f" path="res://art/player/eyes_lowHP.png" id="9_lowhp"]
-[ext_resource type="Texture2D" uid="uid://bxkglylm44xg" path="res://art/player/eyes_hit.png" id="10_hit"]
-[ext_resource type="Texture2D" uid="uid://cwvf53mf4chcj" path="res://art/player/eye_east.png" id="11_east"]
-[ext_resource type="Texture2D" uid="uid://iw3ubmrd3ywx" path="res://art/player/eye_southeast.png" id="12_se"]
-[ext_resource type="Texture2D" uid="uid://dtoqo6xcscqcc" path="res://art/player/eye_southwest.png" id="13_sw"]
-[ext_resource type="Texture2D" uid="uid://cehnqasaukn37" path="res://art/player/eye_west.png" id="14_west"]
-[ext_resource type="Texture2D" uid="uid://ws58vqk400cp" path="res://art/player/hit_eye_east.png" id="15_he"]
-[ext_resource type="Texture2D" uid="uid://cnf6grqoducon" path="res://art/player/hit_eye_southeast.png" id="16_hse"]
-[ext_resource type="Texture2D" uid="uid://c080ywtpel8kh" path="res://art/player/hit_eye_southwest.png" id="17_hsw"]
-[ext_resource type="Texture2D" uid="uid://gvq1q1dey2q0" path="res://art/player/hit_eye_west.png" id="18_hw"]
-[ext_resource type="Texture2D" uid="uid://wvlanxvgy8iq" path="res://art/player/angry_eyes.png" id="19_angry"]
-[ext_resource type="Texture2D" uid="uid://6a6f7giwojet" path="res://art/player/angry_eyes_east.png" id="20_ae"]
-[ext_resource type="Texture2D" uid="uid://76emaaqy1ias" path="res://art/player/angry_eyes_southeast.png" id="21_ase"]
-[ext_resource type="Texture2D" uid="uid://ejjxk7l42fus" path="res://art/player/angry_eyes_southwest.png" id="22_asw"]
-[ext_resource type="Texture2D" uid="uid://eva13j6ywpyo" path="res://art/player/angry_eyes_west.png" id="23_aw"]
-[ext_resource type="Texture2D" uid="uid://bha24g2kfaosi" path="res://art/player/a_death_frame1.png" id="24_d1"]
-[ext_resource type="Texture2D" uid="uid://c34v8ic3dj3rx" path="res://art/player/a_death_frame2.png" id="25_d2"]
-[ext_resource type="Texture2D" uid="uid://delgixt2v1gld" path="res://art/player/a_death_frame3.png" id="26_d3"]
-[ext_resource type="Texture2D" uid="uid://cqi4h8rglp31u" path="res://art/player/a_death_frame4.png" id="27_d4"]
+[ext_resource type="Texture2D" uid="uid://c5w3uc4upc1av" path="res://assets/art/player/apple_base.png" id="7_apple"]
+[ext_resource type="Texture2D" uid="uid://cp4cnsely21gy" path="res://assets/art/player/eye_normal.png" id="8_eyes"]
+[ext_resource type="Texture2D" uid="uid://ddhrf02nv342f" path="res://assets/art/player/eyes_lowHP.png" id="9_lowhp"]
+[ext_resource type="Texture2D" uid="uid://bxkglylm44xg" path="res://assets/art/player/eyes_hit.png" id="10_hit"]
+[ext_resource type="Texture2D" uid="uid://cwvf53mf4chcj" path="res://assets/art/player/eye_east.png" id="11_east"]
+[ext_resource type="Texture2D" uid="uid://iw3ubmrd3ywx" path="res://assets/art/player/eye_southeast.png" id="12_se"]
+[ext_resource type="Texture2D" uid="uid://dtoqo6xcscqcc" path="res://assets/art/player/eye_southwest.png" id="13_sw"]
+[ext_resource type="Texture2D" uid="uid://cehnqasaukn37" path="res://assets/art/player/eye_west.png" id="14_west"]
+[ext_resource type="Texture2D" uid="uid://ws58vqk400cp" path="res://assets/art/player/hit_eye_east.png" id="15_he"]
+[ext_resource type="Texture2D" uid="uid://cnf6grqoducon" path="res://assets/art/player/hit_eye_southeast.png" id="16_hse"]
+[ext_resource type="Texture2D" uid="uid://c080ywtpel8kh" path="res://assets/art/player/hit_eye_southwest.png" id="17_hsw"]
+[ext_resource type="Texture2D" uid="uid://gvq1q1dey2q0" path="res://assets/art/player/hit_eye_west.png" id="18_hw"]
+[ext_resource type="Texture2D" uid="uid://wvlanxvgy8iq" path="res://assets/art/player/angry_eyes.png" id="19_angry"]
+[ext_resource type="Texture2D" uid="uid://6a6f7giwojet" path="res://assets/art/player/angry_eyes_east.png" id="20_ae"]
+[ext_resource type="Texture2D" uid="uid://76emaaqy1ias" path="res://assets/art/player/angry_eyes_southeast.png" id="21_ase"]
+[ext_resource type="Texture2D" uid="uid://ejjxk7l42fus" path="res://assets/art/player/angry_eyes_southwest.png" id="22_asw"]
+[ext_resource type="Texture2D" uid="uid://eva13j6ywpyo" path="res://assets/art/player/angry_eyes_west.png" id="23_aw"]
+[ext_resource type="Texture2D" uid="uid://bha24g2kfaosi" path="res://assets/art/player/a_death_frame1.png" id="24_d1"]
+[ext_resource type="Texture2D" uid="uid://c34v8ic3dj3rx" path="res://assets/art/player/a_death_frame2.png" id="25_d2"]
+[ext_resource type="Texture2D" uid="uid://delgixt2v1gld" path="res://assets/art/player/a_death_frame3.png" id="26_d3"]
+[ext_resource type="Texture2D" uid="uid://cqi4h8rglp31u" path="res://assets/art/player/a_death_frame4.png" id="27_d4"]
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_tuyoq"]
 radius = 0.4
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_ub6uw"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("7_apple")
+}, {
+"duration": 1.0,
+"texture": ExtResource("24_d1")
+}, {
+"duration": 1.0,
+"texture": ExtResource("25_d2")
+}, {
+"duration": 1.0,
+"texture": ExtResource("26_d3")
+}, {
+"duration": 1.0,
+"texture": ExtResource("27_d4")
+}],
+"loop": 0,
+"name": &"death",
+"speed": 8.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("7_apple")
+}],
+"loop": 1,
+"name": &"default",
+"speed": 0.0
+}]
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_8wtow"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("19_angry")
+}, {
+"duration": 1.0,
+"texture": ExtResource("20_ae")
+}, {
+"duration": 1.0,
+"texture": ExtResource("21_ase")
+}, {
+"duration": 1.0,
+"texture": ExtResource("22_asw")
+}, {
+"duration": 1.0,
+"texture": ExtResource("23_aw")
+}],
+"loop": 1,
+"name": &"angry",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("8_eyes")
+}, {
+"duration": 1.0,
+"texture": ExtResource("11_east")
+}, {
+"duration": 1.0,
+"texture": ExtResource("12_se")
+}, {
+"duration": 1.0,
+"texture": ExtResource("13_sw")
+}, {
+"duration": 1.0,
+"texture": ExtResource("14_west")
+}],
+"loop": 1,
+"name": &"default",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("10_hit")
+}, {
+"duration": 1.0,
+"texture": ExtResource("15_he")
+}, {
+"duration": 1.0,
+"texture": ExtResource("16_hse")
+}, {
+"duration": 1.0,
+"texture": ExtResource("17_hsw")
+}, {
+"duration": 1.0,
+"texture": ExtResource("18_hw")
+}],
+"loop": 1,
+"name": &"hit",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("9_lowhp")
+}],
+"loop": 1,
+"name": &"low_hp",
+"speed": 0.0
+}]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_smehm"]
 transparency = 1
@@ -60,17 +162,16 @@ shader_parameter/outer_ring_width = 0.02
 collision_mask = 4
 motion_mode = 1
 script = ExtResource("1_3vyb7")
+input = NodePath("Input")
+health = NodePath("Health")
+sectors = NodePath("Sectors")
+chunk_fx = ExtResource("6_chunks")
 dash_cooldown = 1.0
 slowdown = 0.1
 slowdown_speed = 0.1
-eyes_hit_time = 2.5
-burn_duration = 24.0
-freeze_duration = 240.0
-burn_spin_speed = 0.14
 sector_count = 4
 sector_centered = true
 sector_radius = 0.5
-chunk_fx = ExtResource("6_chunks")
 eyes_normal = ExtResource("8_eyes")
 eyes_east = ExtResource("11_east")
 eyes_southeast = ExtResource("12_se")
@@ -87,13 +188,14 @@ eyes_hit_east = ExtResource("15_he")
 eyes_hit_southeast = ExtResource("16_hse")
 eyes_hit_southwest = ExtResource("17_hsw")
 eyes_hit_west = ExtResource("18_hw")
+eyes_hit_time = 2.5
+burn_duration = 24.0
+freeze_duration = 240.0
+burn_spin_speed = 0.14
 death_frame1 = ExtResource("24_d1")
 death_frame2 = ExtResource("25_d2")
 death_frame3 = ExtResource("26_d3")
 death_frame4 = ExtResource("27_d4")
-input = NodePath("Input")
-health = NodePath("Health")
-sectors = NodePath("Sectors")
 
 [node name="Collider" type="CollisionShape3D" parent="." unique_id=1401584448]
 unique_name_in_owner = true
@@ -113,20 +215,21 @@ one_shot = true
 [node name="InstanceTimers" type="Node" parent="." unique_id=1259921754]
 unique_name_in_owner = true
 
+[node name="Sprite" type="AnimatedSprite3D" parent="." unique_id=1733920157]
+unique_name_in_owner = true
+transform = Transform3D(0.6, 0, 0, 0, -2.6226834e-08, 0.6, 0, -0.6, -2.6226834e-08, 0, 0, 0)
+double_sided = false
+sprite_frames = SubResource("SpriteFrames_ub6uw")
+autoplay = "default"
+
+[node name="Eyes" type="AnimatedSprite3D" parent="." unique_id=1772518271]
+unique_name_in_owner = true
+transform = Transform3D(0.6, 0, 0, 0, -2.6226834e-08, 0.6, 0, -0.6, -2.6226834e-08, 0, 0.0045996904, 0)
+double_sided = false
+sprite_frames = SubResource("SpriteFrames_8wtow")
+
 [node name="Arrows" type="Node3D" parent="." unique_id=208548441]
 unique_name_in_owner = true
-
-[node name="Sprite" type="Sprite3D" parent="." unique_id=1671790148]
-unique_name_in_owner = true
-transform = Transform3D(0.59999996, 0, 0, 0, -2.6226832e-08, 0.59999996, 0, -0.59999996, -2.6226832e-08, 0, 0, 0)
-double_sided = false
-texture = ExtResource("7_apple")
-
-[node name="Eyes" type="Sprite3D" parent="." unique_id=1671790149]
-unique_name_in_owner = true
-transform = Transform3D(0.59999996, 0, 0, 0, -2.6226832e-08, 0.59999996, 0, -0.59999996, -2.6226832e-08, 0, 0.01, 0)
-double_sided = false
-texture = ExtResource("8_eyes")
 
 [node name="DashPreview" type="Node3D" parent="." unique_id=2127933487]
 unique_name_in_owner = true

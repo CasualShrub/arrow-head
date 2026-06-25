@@ -1,9 +1,9 @@
 [gd_scene format=4 uid="uid://ckprnfsvw04t8"]
 
 [ext_resource type="PackedScene" path="res://scenes/deco/fence_block.tscn" id="5_ax3dk"]
-[ext_resource type="Texture2D" uid="uid://cp4cnsely21gy" path="res://art/player/eye_normal.png" id="8_5xqnf"]
-[ext_resource type="Texture2D" uid="uid://ddhrf02nv342f" path="res://art/player/eyes_lowHP.png" id="9_una4e"]
-[ext_resource type="Texture2D" uid="uid://bxkglylm44xg" path="res://art/player/eyes_hit.png" id="10_ema3p"]
+[ext_resource type="Texture2D" uid="uid://cp4cnsely21gy" path="res://assets/art/player/eye_normal.png" id="8_5xqnf"]
+[ext_resource type="Texture2D" uid="uid://ddhrf02nv342f" path="res://assets/art/player/eyes_lowHP.png" id="9_una4e"]
+[ext_resource type="Texture2D" uid="uid://bxkglylm44xg" path="res://assets/art/player/eyes_hit.png" id="10_ema3p"]
 [ext_resource type="PackedScene" path="res://scenes/deco/fence_pillar.tscn" id="d_pillar"]
 [ext_resource type="PackedScene" path="res://scenes/deco/wall.tscn" id="d_wall"]
 [ext_resource type="PackedScene" path="res://scenes/enemy_frost.tscn" id="e_frost"]

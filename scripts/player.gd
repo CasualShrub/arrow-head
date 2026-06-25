@@ -68,6 +68,7 @@ const _PLAYER_TEAM = Arrow.Team.PLAYER
 		if not sectors: return false
 		return sectors.radius
 @export_group("eyes")
+@export var eye_deadzone := 0.4
 @export var eyes_normal: Texture2D
 @export var eyes_east: Texture2D
 @export var eyes_southeast: Texture2D
@@ -142,11 +143,15 @@ func embedded_count() -> int:
 			n += 1
 	return n
 
-enum EyeDir { HIDDEN = -1, EAST, SOUTHEAST, SOUTH, SOUTHWEST, WEST }
+enum EyeDir { HIDDEN = -1, CENTERED, EAST, SOUTHEAST, SOUTH, SOUTHWEST, WEST }
 
-func _dir_bucket(dir: Vector2) -> EyeDir:
-	if dir == Vector2.ZERO:
-		return EyeDir.SOUTH
+func _get_eye_dir() -> EyeDir:
+	var mouse_pos := get_mouse_world_position()
+	var mouse_offset := global_position.direction_to(mouse_pos)
+	var len := global_position.distance_to(mouse_pos)
+	var dir := Vector2(mouse_offset.x, mouse_offset.z)
+	if len < eye_deadzone:
+		return EyeDir.CENTERED
 	var deg := rad_to_deg(atan2(dir.y, dir.x))
 	if deg <= -22.5 and deg >= -157.5:
 		return EyeDir.HIDDEN
@@ -171,6 +176,7 @@ func _normal_eye(bucket: EyeDir) -> Texture2D:
 
 func _hit_eye(bucket: EyeDir) -> Texture2D:
 	match bucket:
+		#EyeDir.CENTERED: return eyes_hit_centered
 		EyeDir.EAST: return eyes_hit_east
 		EyeDir.SOUTHEAST: return eyes_hit_southeast
 		EyeDir.SOUTH: return eyes_hit
@@ -195,10 +201,10 @@ func _apply_eye(tex: Texture2D) -> void:
 		_eyes.texture = tex
 
 func _update_eyes() -> void:
-	if not _eyes or _eyes_hit_showing or _dead:
+	if not _eyes or _eyes_hit_showing or is_dead():
 		return
 	var n := embedded_count()
-	var bucket := _dir_bucket(_move_dir)
+	var bucket := _get_eye_dir()
 	if n >= 4:
 		_apply_eye(_angry_eye(bucket))
 	elif n >= 3:
@@ -211,7 +217,7 @@ func _flash_eyes_hit() -> void:
 	if not _eyes or _dead:
 		return
 	_eyes_hit_showing = true
-	_apply_eye(_hit_eye(_dir_bucket(_move_dir)))
+	_apply_eye(_hit_eye(_get_eye_dir()))
 	await get_tree().create_timer(eyes_hit_time).timeout
 	_eyes_hit_showing = false
 	_update_eyes()
@@ -290,6 +296,7 @@ func face_mouse() -> void:
 	look_at(look_target)
 	_sprite.global_basis = _sprite_basis
 	_eyes.global_basis = _eyes_basis
+	_update_eyes()
 
 func _move(dir: Vector2, _dt: float) -> void:
 	var v = dir * speed
@@ -304,7 +311,7 @@ func _move(dir: Vector2, _dt: float) -> void:
 	sectors.highlight_sector(selected)
 	if dir != _move_dir:
 		_move_dir = dir
-		_update_eyes()
+		#_update_eyes()
 	move_and_slide()
 
 func is_dashing() -> bool:

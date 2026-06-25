@@ -1,6 +1,6 @@
-[gd_scene load_steps=3 format=3]
+[gd_scene format=3]
 
-[ext_resource type="Texture2D" uid="uid://cwd2hhgu2ebnw" path="res://art/deco/stump.png" id="1_tex"]
+[ext_resource type="Texture2D" uid="uid://cwd2hhgu2ebnw" path="res://assets/art/deco/stump.png" id="1_tex"]
 
 [sub_resource type="CapsuleShape2D" id="cap"]
 radius = 87.0
