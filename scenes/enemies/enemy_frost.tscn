@@ -1,8 +1,7 @@
-[gd_scene load_steps=3 format=3]
+[gd_scene format=3 uid="uid://5cy7tvfvxnyw"]
 
-[ext_resource type="PackedScene" uid="uid://b8rs35o7f45v0" path="res://scenes/enemy.tscn" id="1_base"]
+[ext_resource type="PackedScene" uid="uid://b8rs35o7f45v0" path="res://scenes/enemies/enemy.tscn" id="1_base"]
 [ext_resource type="PackedScene" uid="uid://5ljerioubp6c" path="res://scenes/arrows/arrow_frost.tscn" id="2_arrow"]
 
-[node name="Enemy" instance=ExtResource("1_base")]
-modulate = Color(0.6, 0.82, 1, 1)
+[node name="Enemy" unique_id=955806617 instance=ExtResource("1_base")]
 arrow_scene = ExtResource("2_arrow")
