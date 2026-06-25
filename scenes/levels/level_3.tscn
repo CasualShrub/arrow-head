@@ -1,7 +1,6 @@
 [gd_scene format=3 uid="uid://dxfvw43ommtbh"]
 
 [ext_resource type="PackedScene" uid="uid://b6c1h2si8ob6l" path="res://scenes/levels/encounter.tscn" id="1_o8c3j"]
-[ext_resource type="PackedScene" uid="uid://db0ry36fopb12" path="res://scenes/enemies/enemy_bananarotten.tscn" id="4_pimnq"]
 [ext_resource type="PackedScene" uid="uid://kwovebw0p15w" path="res://scenes/enemies/enemy_bananaunripe.tscn" id="5_2bnyt"]
 [ext_resource type="PackedScene" uid="uid://b7xvltf5sfgso" path="res://scenes/enemies/enemy_spray.tscn" id="5_pimnq"]
 [ext_resource type="PackedScene" uid="uid://b15vpncjfa5df" path="res://scenes/enemies/enemy_blueberry.tscn" id="6_pimnq"]
@@ -42,13 +41,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12.109353, 0, 14.87825)
 [node name="Marker3D2" type="Marker3D" parent="SubViewportContainer/SubViewport/World/Enemies/blueberry/PatrolPoints" parent_id_path=PackedInt32Array(1259269854, 1646478367) index="1" unique_id=1143443460]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.5944366, 0, 0)
 
-[node name="fire" parent="SubViewportContainer/SubViewport/World/Enemies" parent_id_path=PackedInt32Array(1185931971) index="3" unique_id=2061183902 instance=ExtResource("4_pimnq")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 15.368082, 0, 25.631374)
-
-[node name="Marker3D2" type="Marker3D" parent="SubViewportContainer/SubViewport/World/Enemies/fire/PatrolPoints" parent_id_path=PackedInt32Array(2061183902, 1646478367) index="1" unique_id=1962976489]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.2282705, 0, 0)
-
-[node name="frost" parent="SubViewportContainer/SubViewport/World/Enemies" parent_id_path=PackedInt32Array(1185931971) index="4" unique_id=64393236 instance=ExtResource("5_2bnyt")]
+[node name="frost" parent="SubViewportContainer/SubViewport/World/Enemies" parent_id_path=PackedInt32Array(1185931971) index="3" unique_id=64393236 instance=ExtResource("5_2bnyt")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10.144302, 0, 28.42484)
 
 [node name="Marker3D2" type="Marker3D" parent="SubViewportContainer/SubViewport/World/Enemies/frost/PatrolPoints" parent_id_path=PackedInt32Array(64393236, 1646478367) index="1" unique_id=1790525108]
@@ -187,5 +180,4 @@ material = SubResource("ShaderMaterial_n6eey")
 
 [editable path="SubViewportContainer/SubViewport/World/Enemies/spray"]
 [editable path="SubViewportContainer/SubViewport/World/Enemies/blueberry"]
-[editable path="SubViewportContainer/SubViewport/World/Enemies/fire"]
 [editable path="SubViewportContainer/SubViewport/World/Enemies/frost"]
