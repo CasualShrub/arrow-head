@@ -19,6 +19,7 @@ config/icon="res://icon.svg"
 
 Settings="*res://scripts/ui/settings.gd"
 SoundManager="*res://scripts/audio/sound_manager.gd"
+CusteneManager="*uid://b4y6wals7vj5q"
 
 [display]
 

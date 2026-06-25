@@ -30,7 +30,7 @@ size = Vector3(1.4441817, 1.0779877, 1.271492)
 [sub_resource type="BoxShape3D" id="BoxShape3D_chestB"]
 size = Vector3(1.4441817, 1.0779877, 1.271492)
 
-[node name="Encounter3" unique_id=571267862 instance=ExtResource("1_3qrbd")]
+[node name="Encounter4" unique_id=571267862 instance=ExtResource("1_3qrbd")]
 is_boss_level = true
 music_track = "Lvl_6_7"
 next_level_path = "res://scenes/ui/main_menu.tscn"
