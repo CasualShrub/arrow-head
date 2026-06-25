@@ -6,6 +6,7 @@
 [ext_resource type="Shader" uid="uid://dnw37cynwb7od" path="res://shaders/screen_effect.gdshader" id="8_2xc7y"]
 [ext_resource type="Script" uid="uid://eu00f1h8cit6" path="res://scripts/floor.gd" id="9_floor"]
 [ext_resource type="PackedScene" uid="uid://bg4meover1ui0" path="res://scenes/ui/game_over.tscn" id="10_gameover"]
+[ext_resource type="PackedScene" uid="uid://dgwhmtq7epmrm" path="res://scenes/ui/pause.tscn" id="11_pause"]
 
 [sub_resource type="Environment" id="Environment_ub6uw"]
 
@@ -72,6 +73,6 @@ grow_vertical = 2
 
 [node name="GameOver" parent="." unique_id=1065161674 instance=ExtResource("10_gameover")]
 
-[node name="Pause" type="CanvasLayer" parent="." unique_id=151884917]
+[node name="Pause" parent="." unique_id=151884917 instance=ExtResource("11_pause")]
 
 [connection signal="ended" from="." to="GameOver" method="_on_encounter_ended"]
