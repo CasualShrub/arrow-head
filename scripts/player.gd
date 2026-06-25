@@ -483,4 +483,5 @@ func _process(delta: float) -> void:
 	_update_status_tint()
 
 func _ready() -> void:
+	sectors._update_occupied_mask()
 	_update_collider(_collider, hurt_radius)
