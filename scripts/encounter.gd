@@ -2,6 +2,7 @@ extends Node3D
 
 @export var player: Player
 @export var is_boss_level := false
+@export var music_track := "Lvl_1"
 
 var _ongoing := false
 var _won: bool
@@ -58,4 +59,5 @@ func _on_player_died() -> void:
 
 func _ready() -> void:
 	if not player: player = %Player
+	SoundManager.play_music(music_track)   # switch from title music to this level's track
 	start()
