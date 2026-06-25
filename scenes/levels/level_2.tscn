@@ -6,6 +6,7 @@
 [ext_resource type="PackedScene" uid="uid://5cy7tvfvxnyw" path="res://scenes/enemies/enemy_frost.tscn" id="3_1shg3"]
 [ext_resource type="PackedScene" uid="uid://tmhabgv3ovyb" path="res://scenes/enemies/enemy_archer.tscn" id="5_l37oo"]
 [ext_resource type="Material" uid="uid://6w5rlqbtx4yb" path="res://materials/crate_material.tres" id="6_rock"]
+[ext_resource type="Material" uid="uid://d2kjjnnke50p2" path="res://materials/brickwall_material.tres" id="7_brick"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_a3kad"]
 render_priority = 0
@@ -68,38 +69,38 @@ material = SubResource("ShaderMaterial_a3kad")
 [node name="Rocks" type="Node3D" parent="SubViewportContainer/SubViewport/World/Walls2" index="0" unique_id=229560603]
 
 [node name="CSGBox3D6" type="CSGBox3D" parent="SubViewportContainer/SubViewport/World/Walls2/Rocks" index="0" unique_id=1534136643]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 18.276566, 0.31179678, 12.377123)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 18.276566, 0.34050477, 12.377123)
 use_collision = true
 collision_layer = 4
-size = Vector3(1.062, 1.089, 1.206)
+size = Vector3(1.1, 1.1, 1.1)
 material = ExtResource("6_rock")
 
 [node name="CSGBox3D7" type="CSGBox3D" parent="SubViewportContainer/SubViewport/World/Walls2/Rocks" index="1" unique_id=560444053]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 15.806469, 0.36980027, 14.485315)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 15.806469, 0.34421015, 14.485315)
 use_collision = true
 collision_layer = 4
-size = Vector3(1.062, 1.2, 1.206)
+size = Vector3(1.1, 1.1, 1.1)
 material = ExtResource("6_rock")
 
 [node name="CSGBox3D8" type="CSGBox3D" parent="SubViewportContainer/SubViewport/World/Walls2/Rocks" index="2" unique_id=178257800]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 20.118925, 0.35821986, 13.637535)
 use_collision = true
 collision_layer = 4
-size = Vector3(1.062, 1.2, 1.206)
+size = Vector3(1.1, 1.1, 1.1)
 material = ExtResource("6_rock")
 
 [node name="CSGBox3D9" type="CSGBox3D" parent="SubViewportContainer/SubViewport/World/Walls2/Rocks" index="3" unique_id=421132450]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 16.630892, 0.36229956, 11.11249)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 16.630892, 0.3421504, 11.11249)
 use_collision = true
 collision_layer = 4
-size = Vector3(1.062, 1.2, 1.206)
+size = Vector3(1.1, 1.1, 1.1)
 material = ExtResource("6_rock")
 
 [node name="CSGBox3D10" type="CSGBox3D" parent="SubViewportContainer/SubViewport/World/Walls2/Rocks" index="4" unique_id=588622321]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 20.165392, 0.3564613, 10.213108)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 20.165392, 0.34129453, 10.213108)
 use_collision = true
 collision_layer = 4
-size = Vector3(1.062, 1.2, 1.206)
+size = Vector3(1.1, 1.1, 1.1)
 material = ExtResource("6_rock")
 
 [node name="fences" type="CSGBox3D" parent="SubViewportContainer/SubViewport/World/Walls2" index="1" unique_id=544497723]
@@ -107,15 +108,18 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 17.577732, 0.27922904, 20.810
 use_collision = true
 collision_layer = 4
 size = Vector3(7.315172, 2.4925537, 0.9210205)
+material = ExtResource("7_brick")
 
 [node name="fences3" type="CSGBox3D" parent="SubViewportContainer/SubViewport/World/Walls2" index="2" unique_id=783201161]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 23.621178, 0.27922904, 14.273502)
 use_collision = true
 collision_layer = 4
 size = Vector3(1.1998258, 2.4925537, 8.064484)
+material = ExtResource("7_brick")
 
 [node name="fences2" type="CSGBox3D" parent="SubViewportContainer/SubViewport/World/Walls2" index="3" unique_id=1193009974]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 29.302803, 0.27922904, 20.810108)
 use_collision = true
 collision_layer = 4
 size = Vector3(7.315172, 2.4925537, 0.9210205)
+material = ExtResource("7_brick")
