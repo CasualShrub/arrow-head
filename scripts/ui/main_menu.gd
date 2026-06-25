@@ -1,6 +1,7 @@
 extends Control
 
 func _ready() -> void:
+	return
 	var bg := ColorRect.new()
 	bg.color = UiStyle.BG
 	bg.set_anchors_preset(Control.PRESET_FULL_RECT)
