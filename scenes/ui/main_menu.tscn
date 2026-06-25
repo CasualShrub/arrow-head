@@ -170,11 +170,11 @@ theme_override_fonts/font = ExtResource("5_x2yvf")
 theme_override_font_sizes/font_size = 42
 text = "Back"
 
-[connection signal="pressed" from="LevelSelect/Buttons/Tutorial" to="." method="_load_level" binds=["res://scenes/levels/tutorial.tscn"]]
-[connection signal="pressed" from="LevelSelect/Buttons/Level1" to="." method="_load_level" binds=["res://scenes/levels/level_1.tscn"]]
-[connection signal="pressed" from="LevelSelect/Buttons/Level2" to="." method="_load_level" binds=["res://scenes/levels/level_2.tscn"]]
-[connection signal="pressed" from="LevelSelect/Buttons/Level3" to="." method="_load_level" binds=["res://scenes/levels/level_3.tscn"]]
-[connection signal="pressed" from="LevelSelect/Buttons/Level4" to="." method="_load_level" binds=["res://scenes/levels/level_4.tscn"]]
-[connection signal="pressed" from="LevelSelect/Buttons/Level5" to="." method="_load_level" binds=["res://scenes/levels/level_5.tscn"]]
-[connection signal="pressed" from="LevelSelect/Buttons/Boss" to="." method="_load_level" binds=["res://scenes/levels/level_boss.tscn"]]
+[connection signal="pressed" from="LevelSelect/Buttons/Tutorial" to="." method="_load_level" binds= ["res://scenes/levels/tutorial.tscn"]]
+[connection signal="pressed" from="LevelSelect/Buttons/Level1" to="." method="_load_level" binds= ["res://scenes/levels/level_1.tscn"]]
+[connection signal="pressed" from="LevelSelect/Buttons/Level2" to="." method="_load_level" binds= ["res://scenes/levels/level_2.tscn"]]
+[connection signal="pressed" from="LevelSelect/Buttons/Level3" to="." method="_load_level" binds= ["res://scenes/levels/level_3.tscn"]]
+[connection signal="pressed" from="LevelSelect/Buttons/Level4" to="." method="_load_level" binds= ["res://scenes/levels/level_4.tscn"]]
+[connection signal="pressed" from="LevelSelect/Buttons/Level5" to="." method="_load_level" binds= ["res://scenes/levels/level_5.tscn"]]
+[connection signal="pressed" from="LevelSelect/Buttons/Boss" to="." method="_load_level" binds= ["res://scenes/levels/level_boss.tscn"]]
 [connection signal="pressed" from="LevelSelect/Buttons/Back" to="." method="_close_levels"]

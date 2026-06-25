@@ -74,7 +74,7 @@ const _PLAYER_TEAM = Arrow.Team.PLAYER
 @export var freeze_duration := 2.0
 @export var freeze_warn_time := 0.6
 @export var freeze_blink_rate := 12.0
-@export var burn_spin_speed := 24.0
+@export var burn_spin_speed := 0.2
 @export var burn_drift_speed := 7.2
 @export var burn_redrift := 0.14
 
@@ -197,7 +197,7 @@ func get_hit(arrow: Arrow) -> void:
 	if is_dead():
 		arrow.deactivate()
 		return
-	if is_dashing() or _invul:
+	if is_dashing():
 		return
 	_invul = true
 	get_tree().create_timer(0.25).timeout.connect(func(): _invul = false)
@@ -211,7 +211,8 @@ func get_hit(arrow: Arrow) -> void:
 			_apply_debuff(arrow.kind)
 	else:
 		arrow.queue_free()
-		die()
+		if not _invul:
+			die()
 	hit.emit(arrow, sector)
 	_eyes_hit.start()
 
@@ -226,24 +227,34 @@ func _spawn_chunks(_pos: Vector3) -> void:
 func get_mouse_world_position() -> Vector3:
 	var mouse = get_viewport().get_mouse_position()
 
-	var origin := _camera.project_ray_origin(mouse)
-	var dir := _camera.project_ray_normal(mouse)
+	var origin = _camera.project_ray_origin(mouse)
+	var dir = _camera.project_ray_normal(mouse)
 
-	var plane := Plane(Vector3.UP, global_position.y)
-	var hit_plane = plane.intersects_ray(origin, dir)
+	var query = PhysicsRayQueryParameters3D.new()
+	query.from = origin
+	query.to = origin + dir * 2000.0
+	query.collision_mask = 1 << 4
 
-	if hit_plane == null:
+	var result = get_world_3d().direct_space_state.intersect_ray(query)
+
+	if result.is_empty():
 		return Vector3.ZERO
 
-	return hit_plane
+	var pos: Vector3 = result.position
+	pos.y = global_position.y
 
-func face_mouse() -> void:
-	var mouse_pos := get_mouse_world_position()
-	var look_target := Vector3(mouse_pos.x, global_position.y, mouse_pos.z)
+	return pos
+
+func _face_dir(look_target: Vector3) -> void:
 	look_at(look_target)
 	_sprite.global_basis = _sprite_basis
 	_eyes.global_basis = _eyes_basis
 	_update_eyes()
+
+func face_mouse() -> void:
+	var mouse_pos := get_mouse_world_position()
+	var look_target := Vector3(mouse_pos.x, global_position.y, mouse_pos.z)
+	_face_dir(look_target)
 
 func _move(dir: Vector2, _dt: float) -> void:
 	var v = dir * speed
@@ -279,6 +290,9 @@ func _try_dash() -> bool:
 func _dash(dir: Vector3) -> void:
 	var dir_len := dir.length()
 	if dir_len < 0.001: return
+	var tween = create_tween()
+	tween.tween_property(_sprite, "scale", Vector3(0.6, 1.4, 1.0), 0.08)
+	tween.tween_property(_sprite, "scale", Vector3(1.0, 1.0, 1.0), 0.12)
 	if dir_len > max_dash_distance:
 		dir = dir.normalized() * max_dash_distance
 	_dash_vel = dir / _dashing.wait_time
@@ -355,7 +369,7 @@ func _apply_debuff(kind: int) -> void:
 	_display_status()
 
 func _burn_spin(delta: float) -> void:
-	rotate(Vector3.UP, burn_spin_speed * _burn_spin_dir * delta)
+	_face_dir(get_facing().rotated(Vector3.UP, burn_spin_speed * _burn_spin_dir * delta))
 
 func _update_status_tint() -> void:
 	if is_burning():
@@ -449,7 +463,7 @@ func _display_status() -> void:
 func _process(delta: float) -> void:
 	if Engine.is_editor_hint(): return
 	if _dead: return
-	if _burn_time > 0.0:
+	if is_burning():
 		_burn_spin(delta)
 	elif not is_frozen():
 		face_mouse()
