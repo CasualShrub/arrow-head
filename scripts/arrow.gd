@@ -47,7 +47,7 @@ func _is_wall(body: Object) -> bool:
 	return body.get_collision_layer_value(3)
 
 func _bounce(collision: KinematicCollision3D) -> void:
-	SoundManager.play("arrow_bounce", 0.08)
+	SoundManager.play("arrow_bounce", 0.0, 0.08)
 	var n := collision.get_normal()
 	_direction = _direction.bounce(n)
 	move_and_collide(collision.get_remainder().bounce(n))
