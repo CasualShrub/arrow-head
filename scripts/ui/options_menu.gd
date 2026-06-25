@@ -16,21 +16,9 @@ func _ready() -> void:
 
 	vb.add_child(UiStyle.title("Options", 44))
 
-	var vol_row := HBoxContainer.new()
-	vol_row.add_theme_constant_override("separation", 12)
-	var vol_label := UiStyle.label("Volume", 20)
-	vol_label.custom_minimum_size = Vector2(120, 0)
-	vol_row.add_child(vol_label)
-	var slider := HSlider.new()
-	slider.min_value = 0.0
-	slider.max_value = 1.0
-	slider.step = 0.01
-	slider.value = Settings.master_volume
-	slider.custom_minimum_size = Vector2(240, 0)
-	slider.size_flags_vertical = Control.SIZE_SHRINK_CENTER
-	slider.value_changed.connect(func(v): Settings.set_master_volume(v))  # live-apply + save
-	vol_row.add_child(slider)
-	vb.add_child(vol_row)
+	vb.add_child(_volume_row("Master", Settings.master_volume, Settings.set_master_volume))
+	vb.add_child(_volume_row("Music", Settings.music_volume, Settings.set_music_volume))
+	vb.add_child(_volume_row("SFX", Settings.sfx_volume, Settings.set_sfx_volume))
 
 	var fs := CheckButton.new()
 	fs.text = "Fullscreen"
@@ -44,3 +32,21 @@ func _ready() -> void:
 	back.pressed.connect(func(): get_tree().change_scene_to_file("res://scenes/ui/main_menu.tscn"))
 	vb.add_child(back)
 	back.grab_focus()
+
+# one labelled volume slider wired to a Settings setter (live-apply + save)
+func _volume_row(label: String, value: float, setter: Callable) -> HBoxContainer:
+	var row := HBoxContainer.new()
+	row.add_theme_constant_override("separation", 12)
+	var lbl := UiStyle.label(label, 20)
+	lbl.custom_minimum_size = Vector2(120, 0)
+	row.add_child(lbl)
+	var slider := HSlider.new()
+	slider.min_value = 0.0
+	slider.max_value = 1.0
+	slider.step = 0.01
+	slider.value = value
+	slider.custom_minimum_size = Vector2(240, 0)
+	slider.size_flags_vertical = Control.SIZE_SHRINK_CENTER
+	slider.value_changed.connect(setter)
+	row.add_child(slider)
+	return row

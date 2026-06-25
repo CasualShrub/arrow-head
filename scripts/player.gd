@@ -160,6 +160,8 @@ func get_hit(arrow: Arrow) -> void:
 	var correct := is_correct_catch(arrow, sector)
 	if try_embed_arrow(arrow, sector):
 		arrow.stick(_arrows)
+		SoundManager.play("Q%d_fill" % clampi(sector + 1, 1, 4))
+		SoundManager.play("apple_damage1" if arrow.kind != Arrow.Kind.NORMAL else "apple_damage2")
 		if not correct:
 			_apply_debuff(arrow.kind)
 	else:
@@ -210,6 +212,7 @@ func _unhandled_input(event: InputEvent) -> void:
 func fire(arrow: Arrow) -> void:
 	arrow.reparent(get_tree().current_scene)
 	arrow.activate(global_position, get_facing(), _PLAYER_TEAM)
+	SoundManager.play("apple_shooting")
 
 func try_fire(sector: int) -> void:
 	print("trying to fire")
@@ -260,6 +263,7 @@ func shoot() -> void:
 	if arrow.get_parent() != get_tree().current_scene:
 		arrow.reparent(get_tree().current_scene)
 	arrow.activate(global_position, get_facing(), _PLAYER_TEAM)
+	SoundManager.play("apple_shooting")
 	fired.emit(arrow)
 	ammo_changed.emit(_ammo.size())
 
@@ -273,6 +277,7 @@ func die() -> void:
 	_sprite.modulate = Color.WHITE
 	print("You died!")
 	sectors.clear_stored()
+	SoundManager.play("apple_death")
 	died.emit()
 
 func _on_sectors_changed() -> void:

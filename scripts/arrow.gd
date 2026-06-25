@@ -10,6 +10,7 @@ const _MASK_ENEMY := 1 << 3
 
 @export var scene: PackedScene
 @export var damage := 10
+@export var kind: Kind = Kind.NORMAL
 @export_group("movement")
 @export var speed := 7.0
 
@@ -46,6 +47,7 @@ func _is_wall(body: Object) -> bool:
 	return body.get_collision_layer_value(3)
 
 func _bounce(collision: KinematicCollision3D) -> void:
+	SoundManager.play("arrow_bounce", 0.08)
 	var n := collision.get_normal()
 	_direction = _direction.bounce(n)
 	move_and_collide(collision.get_remainder().bounce(n))

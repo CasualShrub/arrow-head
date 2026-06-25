@@ -1,6 +1,7 @@
 extends Node3D
 
 @export var player: Player
+@export var is_boss_level := false
 
 var _ongoing := false
 var _won: bool
@@ -45,6 +46,8 @@ func _end(won: bool) -> void:
 	if not _ongoing: return
 	_ongoing = false
 	_won = won
+	if won:
+		SoundManager.play("big_win_kill_boss_jingle" if is_boss_level else "enemy_death_small_win_jingle")
 	ended.emit(_won)
 
 func _on_enemy_died(_enemy: Enemy) -> void:

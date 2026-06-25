@@ -3,3 +3,4 @@
 [ext_resource type="PackedScene" uid="uid://bxgfy1nvmlb7v" path="res://scenes/arrows/arrow.tscn" id="1_base"]
 
 [node name="Arrow" unique_id=911050322 instance=ExtResource("1_base")]
+kind = 1
