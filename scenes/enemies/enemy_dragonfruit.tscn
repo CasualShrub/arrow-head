@@ -73,6 +73,9 @@ patrol_speed = 1.0
 [node name="Collider" parent="." index="0" unique_id=1742085930]
 shape = SubResource("SphereShape3D_u24cr")
 
+[node name="Health" parent="." index="1" unique_id=1511902786]
+current = 4
+
 [node name="Sprite" parent="." index="5" unique_id=1091610106]
 sprite_frames = ExtResource("2_b3sqf")
 animation = &"intro"

@@ -402,7 +402,8 @@ func _ready() -> void:
 		if last != null:
 			_patrol_len += last.global_position.distance_to(p.global_position)
 		last = p
-	if has_intro:
+	if has_intro and not CusteneManager.played:
+		CusteneManager.played = true
 		sus._vision.hide()
 		%CameraPivot.focus(global_position)
 		_sprite.play("intro")

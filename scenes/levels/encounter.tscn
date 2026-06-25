@@ -7,7 +7,7 @@
 [ext_resource type="Script" uid="uid://eu00f1h8cit6" path="res://scripts/floor.gd" id="9_floor"]
 [ext_resource type="PackedScene" uid="uid://bg4meover1ui0" path="res://scenes/ui/game_over.tscn" id="10_gameover"]
 [ext_resource type="PackedScene" uid="uid://dgwhmtq7epmrm" path="res://scenes/ui/pause.tscn" id="11_pause"]
-[ext_resource type="Script" path="res://scripts/ui/level_timer.gd" id="12_timer"]
+[ext_resource type="Script" uid="uid://5fadtmicpyjp" path="res://scripts/ui/level_timer.gd" id="12_timer"]
 [ext_resource type="FontFile" uid="uid://dg3navvnlkmpw" path="res://assets/fonts/Puffy-gxW55.otf" id="13_puffy"]
 
 [sub_resource type="Environment" id="Environment_ub6uw"]
@@ -32,7 +32,7 @@ stretch = true
 
 [node name="SubViewport" type="SubViewport" parent="SubViewportContainer" unique_id=1083906358]
 handle_input_locally = false
-size = Vector2i(1920, 1080)
+size = Vector2i(1152, 648)
 render_target_update_mode = 4
 
 [node name="World" type="Node3D" parent="SubViewportContainer/SubViewport" unique_id=1589957074]
@@ -100,6 +100,6 @@ text = "00:00.00"
 horizontal_alignment = 2
 vertical_alignment = 2
 
+[connection signal="cleared" from="." to="LevelTimer" method="stop"]
 [connection signal="ended" from="." to="GameOver" method="_on_encounter_ended"]
 [connection signal="ended" from="." to="LevelTimer" method="stop"]
-[connection signal="cleared" from="." to="LevelTimer" method="stop"]
