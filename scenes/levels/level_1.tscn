@@ -19,5 +19,13 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 23.051857, 0.88664186, 13.432
 [node name="Enemy" parent="." index="2" unique_id=955806617 instance=ExtResource("3_x42e6")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.52670556, 0, 6.239771)
 
+[node name="Marker3D2" type="Marker3D" parent="Enemy/PatrolPoints" parent_id_path=PackedInt32Array(955806617, 1646478367) index="1" unique_id=952222312]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.7042241, 0, -2.557722)
+
+[node name="Marker3D3" type="Marker3D" parent="Enemy/PatrolPoints" parent_id_path=PackedInt32Array(955806617, 1646478367) index="2" unique_id=1342497551]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.7485867, 0, -4.1673193)
+
 [node name="Enemy2" parent="." index="3" unique_id=96558035 instance=ExtResource("4_6761a")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.364171, 0, 6.284465)
+
+[editable path="Enemy"]
