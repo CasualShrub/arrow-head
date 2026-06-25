@@ -2,43 +2,49 @@
 
 [ext_resource type="PackedScene" uid="uid://b6c1h2si8ob6l" path="res://scenes/levels/encounter.tscn" id="1_1c042"]
 [ext_resource type="PackedScene" uid="uid://tmhabgv3ovyb" path="res://scenes/enemies/enemy_archer.tscn" id="2_1c042"]
-[ext_resource type="PackedScene" uid="uid://1jtkc8jlvm65" path="res://scenes/enemies/enemy_frost.tscn" id="3_x42e6"]
-[ext_resource type="PackedScene" uid="uid://sxe0iltyolnn" path="res://scenes/enemies/enemy_frost_spray.tscn" id="4_6761a"]
+[ext_resource type="Shader" uid="uid://br4t4iofbd1o1" path="res://shaders/textured_fade.gdshader" id="3_x42e6"]
+[ext_resource type="Texture2D" uid="uid://duy7x13uwce0v" path="res://assets/textures/brickwall.png" id="4_6761a"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_sk5k4"]
+render_priority = 0
+shader = ExtResource("3_x42e6")
+shader_parameter/tex = ExtResource("4_6761a")
+shader_parameter/tex_scale = 0.5
+shader_parameter/wall_height = 0.51
+shader_parameter/fade_start = -0.04
 
 [node name="Encounter" unique_id=571267862 instance=ExtResource("1_1c042")]
 
-[node name="Player" parent="SubViewportContainer/SubViewport/World" parent_id_path=PackedInt32Array(1589957074) index="0" unique_id=508579643]
-has_intro = null
+[node name="Enemy" parent="SubViewportContainer/SubViewport/World/Enemies" parent_id_path=PackedInt32Array(1185931971) index="0" unique_id=71488470 instance=ExtResource("2_1c042")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.293197, 0, 0)
 
-[node name="SubViewportContainer_SubViewport_World_NavigationRegion3D#CSGBox3D4" type="CSGBox3D" parent="SubViewportContainer/SubViewport/World" parent_id_path=PackedInt32Array(1589957074) index="6" unique_id=889470022]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 29.129332, 0.33855522, 15.6918335)
+[node name="Borders (trees)" type="Node3D" parent="SubViewportContainer/SubViewport/World" parent_id_path=PackedInt32Array(1589957074) index="6" unique_id=1738600705]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -29.061384, 0.88664186, -26.92692)
+
+[node name="SubViewportContainer_SubViewport_World_Walls#CSGBox3D3" type="CSGBox3D" parent="SubViewportContainer/SubViewport/World/Borders (trees)" index="0" unique_id=1986126783]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 27.182518, 0.7292166, 2.8772335)
 use_collision = true
 collision_layer = 4
-size = Vector3(4.2052155, 2.611206, 1.8304443)
+size = Vector3(54.994644, 2.4925537, 8.408813)
+material = SubResource("ShaderMaterial_sk5k4")
 
-[node name="Enemy2" parent="SubViewportContainer/SubViewport/World" parent_id_path=PackedInt32Array(1589957074) index="7" unique_id=71488470 instance=ExtResource("2_1c042")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 23.052, 0, 13.433)
-collision_mask = 1
+[node name="SubViewportContainer_SubViewport_World_Walls#CSGBox3D4" type="CSGBox3D" parent="SubViewportContainer/SubViewport/World/Borders (trees)" index="1" unique_id=3754211]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 27.182518, 0.7292166, 35.22381)
+use_collision = true
+collision_layer = 4
+size = Vector3(54.994644, 2.4925537, 5.635559)
+material = SubResource("ShaderMaterial_sk5k4")
 
-[node name="Enemy" parent="SubViewportContainer/SubViewport/World" parent_id_path=PackedInt32Array(1589957074) index="8" unique_id=955806617 instance=ExtResource("3_x42e6")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.52670556, 0, 6.239771)
-collision_mask = 1
+[node name="SubViewportContainer_SubViewport_World_Walls#CSGBox3D5" type="CSGBox3D" parent="SubViewportContainer/SubViewport/World/Borders (trees)" index="2" unique_id=864244339]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.2918262, 0.7292166, 21.540459)
+use_collision = true
+collision_layer = 4
+size = Vector3(13.213261, 2.4925537, 33.00226)
+material = SubResource("ShaderMaterial_sk5k4")
 
-[node name="VisionDisplay" parent="SubViewportContainer/SubViewport/World/Enemy/Sus/Vision" parent_id_path=PackedInt32Array(955806617, 1162433519) index="0" unique_id=442070290]
-transform = Transform3D(-4.0143995, -3.804912e-07, -2.9142188e-07, -3.5094993e-07, 4.3523116, -1.6872596e-07, 6.061575e-07, -3.8049114e-07, -1.93, 0, -1.2373967, 0.030000053)
-visible = true
-
-[node name="Outline" parent="SubViewportContainer/SubViewport/World/Enemy/Sus" parent_id_path=PackedInt32Array(955806617, 1262353285) index="1" unique_id=1078234529]
-visible = true
-
-[node name="Marker3D2" type="Marker3D" parent="SubViewportContainer/SubViewport/World/Enemy/PatrolPoints" parent_id_path=PackedInt32Array(955806617, 1646478367) index="1" unique_id=952222312]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.7042241, 0, -2.557722)
-
-[node name="Marker3D3" type="Marker3D" parent="SubViewportContainer/SubViewport/World/Enemy/PatrolPoints" parent_id_path=PackedInt32Array(955806617, 1646478367) index="2" unique_id=1342497551]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.7485867, 0, -4.1673193)
-
-[node name="Enemy3" parent="SubViewportContainer/SubViewport/World" parent_id_path=PackedInt32Array(1589957074) index="9" unique_id=96558035 instance=ExtResource("4_6761a")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.364171, 0, 6.284465)
-collision_mask = 1
-
-[editable path="SubViewportContainer/SubViewport/World/Enemy"]
+[node name="SubViewportContainer_SubViewport_World_Walls#CSGBox3D6" type="CSGBox3D" parent="SubViewportContainer/SubViewport/World/Borders (trees)" index="3" unique_id=2114251066]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 36.41545, 0.7292166, 21.540459)
+use_collision = true
+collision_layer = 4
+size = Vector3(8.714607, 2.4925537, 33.00226)
+material = SubResource("ShaderMaterial_sk5k4")

@@ -8,17 +8,14 @@
 [sub_resource type="Resource" id="Resource_lu5c6"]
 script = ExtResource("3_4ap13")
 type = ExtResource("4_0jjhd")
-starting_delay = 1.0
-instance_delay = 0.1
-count = 0
 metadata/_custom_type_script = "uid://r4qbgt6it8lb"
 
 [sub_resource type="Resource" id="Resource_75j4p"]
 script = ExtResource("2_josdy")
-recovery = 1.0
+recovery = 2.0
 instances = Array[ExtResource("3_4ap13")]([SubResource("Resource_lu5c6")])
 metadata/_custom_type_script = "uid://d04k7pxjd2u24"
 
 [node name="Enemy" unique_id=71488470 instance=ExtResource("1_8r7h4")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.8770522, 0.88664186, -0.0728066)
 patterns = Array[ExtResource("2_josdy")]([SubResource("Resource_75j4p")])
+alwayds_alert = false
