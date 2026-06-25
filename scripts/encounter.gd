@@ -61,6 +61,10 @@ func _on_enemy_died(_enemy: Enemy) -> void:
 func _on_player_died() -> void:
 	_end(false)
 
+func _input(event: InputEvent) -> void:
+	if event is InputEventKey and event.pressed and not event.echo and event.keycode == KEY_R:
+		get_tree().reload_current_scene()
+
 func _ready() -> void:
 	if not player: player = %Player
 	SoundManager.play_music(music_track)   # switch from title music to this level's track
