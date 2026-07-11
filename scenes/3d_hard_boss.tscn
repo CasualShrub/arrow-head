@@ -2,9 +2,10 @@
 
 [ext_resource type="Script" uid="uid://cm3vh4qq01y8d" path="res://scripts/encounter.gd" id="1_8mbf4"]
 [ext_resource type="PackedScene" uid="uid://boryk37cbh1nx" path="res://scenes/player.tscn" id="2_jlhqg"]
-[ext_resource type="PackedScene" uid="uid://w8u4ypwm2oym" path="res://scenes/enemies/enemy_boss.tscn" id="5_tkla1"]
+[ext_resource type="PackedScene" uid="uid://w8u4ypwm2oym" path="res://scenes/enemies/unused/enemy_boss.tscn" id="5_tkla1"]
 [ext_resource type="Script" uid="uid://doms8x46cr1tt" path="res://scripts/camera.gd" id="6_idbkn"]
 [ext_resource type="Shader" uid="uid://dnw37cynwb7od" path="res://shaders/screen_effect.gdshader" id="8_j5u1p"]
+
 
 [sub_resource type="Environment" id="Environment_ub6uw"]
 

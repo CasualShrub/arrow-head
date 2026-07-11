@@ -8,18 +8,20 @@
 [sub_resource type="Resource" id="Resource_jqglh"]
 script = ExtResource("3_lglju")
 type = ExtResource("4_smcyo")
-starting_delay = 0.1
-instance_delay = 0.1
-count = 4
-max_count = 4
-spread = 4.71
-max_spread = 4.71
+metadata/_custom_type_script = "uid://r4qbgt6it8lb"
+
+[sub_resource type="Resource" id="Resource_3o1yk"]
+script = ExtResource("3_lglju")
+type = ExtResource("4_smcyo")
+count = 3
+spread = 1.04
+offset = 3.1414073464102104
 metadata/_custom_type_script = "uid://r4qbgt6it8lb"
 
 [sub_resource type="Resource" id="Resource_6p32c"]
 script = ExtResource("2_5nhyc")
 recovery = 1.0
-instances = Array[ExtResource("3_lglju")]([SubResource("Resource_jqglh")])
+instances = Array[ExtResource("3_lglju")]([SubResource("Resource_jqglh"), SubResource("Resource_3o1yk")])
 metadata/_custom_type_script = "uid://d04k7pxjd2u24"
 
 [node name="Enemy" unique_id=71488470 instance=ExtResource("1_gelj1")]

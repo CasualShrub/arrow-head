@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://sxe0iltyolnn"]
 
-[ext_resource type="PackedScene" uid="uid://5cy7tvfvxnyw" path="res://scenes/enemies/enemy_frost.tscn" id="1_g2wok"]
+[ext_resource type="PackedScene" uid="uid://1jtkc8jlvm65" path="res://scenes/enemies/unused/enemy_frost.tscn" id="1_g2wok"]
 [ext_resource type="Script" uid="uid://d04k7pxjd2u24" path="res://scripts/arrow_pattern.gd" id="2_i6syy"]
 [ext_resource type="Script" uid="uid://r4qbgt6it8lb" path="res://scripts/firing_instance.gd" id="3_buqei"]
 [ext_resource type="PackedScene" uid="uid://5ljerioubp6c" path="res://scenes/arrows/arrow_frost.tscn" id="4_wk5m1"]
@@ -9,7 +9,6 @@
 script = ExtResource("3_buqei")
 type = ExtResource("4_wk5m1")
 count = 3
-max_count = 5
 spread = 1.0
 max_spread = 1.5
 max_offset = 0.10040734641021
