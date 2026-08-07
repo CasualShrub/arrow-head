@@ -337,6 +337,9 @@ func _exit_slowdown() -> void:
 
 func _set_time_scale(target: float, duration: float) -> void:
 	if _slowmo_tween: _slowmo_tween.kill()
+	if duration <= 0.0:
+		Engine.time_scale = target
+		return
 	_slowmo_tween = create_tween()
 	_slowmo_tween.tween_property(Engine, "time_scale", target, duration)
 
@@ -386,6 +389,7 @@ func is_dead() -> bool:
 
 func die() -> void:
 	_dead = true
+	_exit_slowdown()
 	_burn_time = 0.0
 	_freeze_time = 0.0
 	_sprite.modulate = Color.WHITE

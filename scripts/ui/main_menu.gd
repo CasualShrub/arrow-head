@@ -7,6 +7,7 @@ const TUTORIAL_SCENE := "res://scenes/levels/tutorial.tscn"
 @onready var _level_select: Control = $LevelSelect
 
 func _ready() -> void:
+	Engine.time_scale = 1.0  # clear leftover slowmo when quitting out mid-game
 	var viewport = SubViewport.new()
 	viewport.size = Vector2i(1, 1)  # tiny, barely renders
 	viewport.render_target_update_mode = SubViewport.UPDATE_ALWAYS

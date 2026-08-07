@@ -66,6 +66,7 @@ func _input(event: InputEvent) -> void:
 		get_tree().reload_current_scene()
 
 func _ready() -> void:
+	Engine.time_scale = 1.0  # clear leftover slowmo from a restart
 	if not player: player = %Player
 	SoundManager.play_music(music_track)   # switch from title music to this level's track
 	start()
