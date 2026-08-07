@@ -49,13 +49,15 @@ func _is_wall(body: Object) -> bool:
 
 func _bounce(collision: KinematicCollision3D) -> void:
 	SoundManager.play("arrow_bounce", 0.0, 0.08)
+	if max_bounces >= 0 and _bounces >= max_bounces:
+		# out of bounces: stick facing the way we flew in, don't reflect
+		_wall_stick()
+		return
 	var n := collision.get_normal()
 	_direction = _direction.bounce(n)
 	face(_direction)   # re-orient the sprite to the new travel direction
 	move_and_collide(collision.get_remainder().bounce(n))
 	_bounces += 1
-	if max_bounces >= 0 and _bounces > max_bounces:
-		_wall_stick()
 
 func _wall_stick() -> void:
 	stuck.emit()
