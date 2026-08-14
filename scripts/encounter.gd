@@ -5,6 +5,9 @@ extends Node3D
 @export var music_track := "Lvl_1"
 @export var next_level_path := "res://scenes/levels/level_1.tscn"
 
+const PIXEL_LAYER := 1 << 1
+const ALL_LAYERS := 0xFFFFF
+
 var _ongoing := false
 var _won: bool
 
@@ -72,6 +75,19 @@ func _input(event: InputEvent) -> void:
 func _ready() -> void:
 	Engine.time_scale = 1.0  # clear leftover slowmo from a restart
 	get_tree().paused = false
+	RenderingServer.global_shader_parameter_set(&"wall_fade_amount", 1.0)
+	_setup_pixel_layers()
 	if not player: player = %Player
 	SoundManager.play_music(music_track)   # switch from title music to this level's track
 	start()
+
+func _setup_pixel_layers() -> void:
+	var env: Array[Node] = find_children("*", "CSGShape3D", true, false)
+	env.append_array(get_tree().get_nodes_in_group(&"pixelated"))
+	for node in env:
+		if node is VisualInstance3D:
+			node.layers = PIXEL_LAYER
+	for light in find_children("*", "Light3D", true, false):
+		light.layers = ALL_LAYERS
+	%Camera.cull_mask = PIXEL_LAYER
+	%CharCamera.cull_mask = ALL_LAYERS & ~PIXEL_LAYER

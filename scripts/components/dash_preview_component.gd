@@ -93,4 +93,4 @@ func _notification(what: int) -> void:
 func _ready() -> void:
 	hide()
 	_sprite.modulate = color
-	_line.material_override.color = color
+	_line.material_override.albedo_color = color

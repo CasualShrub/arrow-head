@@ -7,6 +7,7 @@ uniform sampler2D tex : source_color;
 uniform float tex_scale = 0.5;       // matches a StandardMaterial uv1_scale
 uniform float wall_height = 4.0;
 uniform float fade_start = 0.5;      // fraction of height where the fade begins
+global uniform float wall_fade_amount;
 
 varying vec3 w_pos;
 varying vec3 w_norm;
@@ -26,6 +27,6 @@ void fragment() {
 	vec3 cz = texture(tex, w_pos.xy * tex_scale).rgb;
 	vec3 col = cx * bw.x + cy * bw.y + cz * bw.z;
 
-	float fade = smoothstep(fade_start, 1.0, height_factor);
+	float fade = smoothstep(fade_start, 1.0, height_factor) * wall_fade_amount;
 	ALBEDO = col * (1.0 - fade);
 }

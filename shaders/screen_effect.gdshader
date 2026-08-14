@@ -1,8 +1,9 @@
 shader_type canvas_item;
 
-uniform sampler2D screen_tex : hint_screen_texture;
+uniform sampler2D screen_tex : hint_screen_texture, filter_nearest;
 uniform float color_steps : hint_range(4.0, 32.0) = 16.0;
 uniform float dither_strength : hint_range(0.0, 1.0) = 0.25;
+uniform float pixel_size : hint_range(1.0, 16.0) = 2.0;
 
 const float bayer[16] = float[](
     0.0, 8.0, 2.0, 10.0,
@@ -21,9 +22,13 @@ vec3 quant(vec3 c, float steps) {
 }
 
 void fragment() {
-    vec3 col = texture(screen_tex, SCREEN_UV).rgb;
+    vec2 resolution = 1.0 / SCREEN_PIXEL_SIZE;
+    vec2 block = floor(SCREEN_UV * resolution / pixel_size);
+    vec2 pixelToGrab = (block * pixel_size + pixel_size * 0.2) * SCREEN_PIXEL_SIZE;
 
-    col += dither(FRAGCOORD.xy) *
+    vec3 col = texture(screen_tex, pixelToGrab).rgb;
+
+    col += dither(block) *
            (1.0 / color_steps) *
            dither_strength;
 

@@ -51,6 +51,9 @@ player = NodePath("../Player")
 [node name="Camera" type="Camera3D" parent="SubViewportContainer/SubViewport/World/CameraPivot" unique_id=349876092]
 unique_name_in_owner = true
 
+[node name="CamSync" type="RemoteTransform3D" parent="SubViewportContainer/SubViewport/World/CameraPivot/Camera"]
+remote_path = NodePath("%CharCamera")
+
 [node name="WorldEnvironment" type="WorldEnvironment" parent="SubViewportContainer/SubViewport/World" unique_id=1158397434]
 environment = SubResource("Environment_ub6uw")
 
@@ -72,6 +75,25 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+
+[node name="CharViewportContainer" type="SubViewportContainer" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+stretch = true
+
+[node name="SubViewport" type="SubViewport" parent="CharViewportContainer"]
+handle_input_locally = false
+size = Vector2i(1152, 648)
+transparent_bg = true
+render_target_update_mode = 4
+
+[node name="CharCamera" type="Camera3D" parent="CharViewportContainer/SubViewport"]
+unique_name_in_owner = true
+cull_mask = 2
 
 [node name="GameOver" parent="." unique_id=1065161674 instance=ExtResource("10_gameover")]
 
