@@ -2,9 +2,11 @@
 
 [ext_resource type="Script" uid="uid://ciw3wf4ubux6c" path="res://scripts/pause.gd" id="1_xld5c"]
 [ext_resource type="FontFile" uid="uid://dg3navvnlkmpw" path="res://assets/fonts/Puffy-gxW55.otf" id="2_k23cl"]
+[ext_resource type="Script" uid="uid://bgra1aqfhtseu" path="res://scripts/ui/hold_to_quit.gd" id="9_hold"]
 
 [node name="Pause" type="CanvasLayer" unique_id=677715933]
 process_mode = 3
+layer = 20
 script = ExtResource("1_xld5c")
 
 [node name="ColorRect" type="ColorRect" parent="." unique_id=2004863360]
@@ -17,18 +19,13 @@ grow_vertical = 2
 color = Color(0, 0, 0, 0.5)
 
 [node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=1198775407]
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -160.0
-offset_top = -120.0
-offset_right = 160.0
-offset_bottom = 120.0
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_constants/separation = 24
+theme_override_constants/separation = 16
+alignment = 1
 
 [node name="Label" type="Label" parent="VBoxContainer" unique_id=911441642]
 layout_mode = 2
@@ -40,18 +37,95 @@ horizontal_alignment = 1
 
 [node name="Continue" type="Button" parent="VBoxContainer" unique_id=1213127397]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(280, 64)
+custom_minimum_size = Vector2(280, 56)
 layout_mode = 2
 size_flags_horizontal = 4
+focus_mode = 0
 theme_override_fonts/font = ExtResource("2_k23cl")
 theme_override_font_sizes/font_size = 24
 text = "Continue"
 
-[node name="MainMenu" type="Button" parent="VBoxContainer" unique_id=1213127398]
+[node name="Restart" type="Button" parent="VBoxContainer" unique_id=1213127399]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(280, 64)
+custom_minimum_size = Vector2(280, 56)
 layout_mode = 2
 size_flags_horizontal = 4
+focus_mode = 0
+theme_override_fonts/font = ExtResource("2_k23cl")
+theme_override_font_sizes/font_size = 24
+text = "Restart"
+
+[node name="MainMenu" type="Button" parent="VBoxContainer" unique_id=1213127398]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(280, 56)
+layout_mode = 2
+size_flags_horizontal = 4
+focus_mode = 0
 theme_override_fonts/font = ExtResource("2_k23cl")
 theme_override_font_sizes/font_size = 24
 text = "Main Menu"
+script = ExtResource("9_hold")
+
+[node name="Sweep" type="ColorRect" parent="VBoxContainer/MainMenu"]
+layout_mode = 1
+anchor_bottom = 1.0
+offset_right = 0.0
+mouse_filter = 2
+color = Color(1, 1, 1, 0.32)
+
+[node name="Badge" type="Label" parent="VBoxContainer/MainMenu"]
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = 14.0
+offset_top = -14.0
+offset_right = 100.0
+offset_bottom = 14.0
+grow_horizontal = 1
+grow_vertical = 2
+mouse_filter = 2
+theme_override_colors/font_color = Color(0.95, 0.85, 0.4, 1)
+theme_override_fonts/font = ExtResource("2_k23cl")
+theme_override_font_sizes/font_size = 18
+text = "tab"
+horizontal_alignment = 0
+vertical_alignment = 1
+
+[node name="Badge" type="Label" parent="VBoxContainer/Continue"]
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = 14.0
+offset_top = -14.0
+offset_right = 100.0
+offset_bottom = 14.0
+grow_horizontal = 1
+grow_vertical = 2
+mouse_filter = 2
+theme_override_colors/font_color = Color(0.95, 0.85, 0.4, 1)
+theme_override_fonts/font = ExtResource("2_k23cl")
+theme_override_font_sizes/font_size = 18
+text = "space"
+horizontal_alignment = 0
+vertical_alignment = 1
+
+[node name="Badge" type="Label" parent="VBoxContainer/Restart"]
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = 14.0
+offset_top = -14.0
+offset_right = 100.0
+offset_bottom = 14.0
+grow_horizontal = 1
+grow_vertical = 2
+mouse_filter = 2
+theme_override_colors/font_color = Color(0.95, 0.85, 0.4, 1)
+theme_override_fonts/font = ExtResource("2_k23cl")
+theme_override_font_sizes/font_size = 18
+text = "r"
+horizontal_alignment = 0
+vertical_alignment = 1

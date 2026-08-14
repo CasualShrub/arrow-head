@@ -1,12 +1,29 @@
 [gd_scene format=3 uid="uid://x1mhd7mlveia"]
 
 [ext_resource type="Script" uid="uid://cii54iucfsr7d" path="res://scripts/ui/game_win.gd" id="1_loxwf"]
-[ext_resource type="Texture2D" uid="uid://cilal3ll3bnij" path="res://assets/art/ui/level_won.png" id="2_loxwf"]
+[ext_resource type="Texture2D" uid="uid://cilal3ll3bnij" path="res://assets/art/ui/level_won.png" id="2_apple"]
 [ext_resource type="FontFile" uid="uid://dg3navvnlkmpw" path="res://assets/fonts/Puffy-gxW55.otf" id="3_puffy"]
+[ext_resource type="Script" uid="uid://bgra1aqfhtseu" path="res://scripts/ui/hold_to_quit.gd" id="9_hold"]
+
+[sub_resource type="Gradient" id="Gradient_spark"]
+offsets = PackedFloat32Array(0, 0.45, 1)
+colors = PackedColorArray(1, 1, 1, 1, 1, 0.85, 0.35, 0.85, 1, 0.6, 0.1, 0)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_spark"]
+gradient = SubResource("Gradient_spark")
+width = 24
+height = 24
+fill = 1
+fill_from = Vector2(0.5, 0.5)
+fill_to = Vector2(1, 0.5)
 
 [node name="GameWin" type="CanvasLayer" unique_id=1577397124]
+process_mode = 3
 layer = 10
 script = ExtResource("1_loxwf")
+primary_button = "NextLevel"
+min_angle = 6.0
+rot_speed = 0.6
 
 [node name="Root" type="Control" parent="." unique_id=973900867]
 unique_name_in_owner = true
@@ -24,39 +41,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-color = Color(0, 0, 0, 0.66)
-
-[node name="Title" type="Label" parent="Root" unique_id=21770467]
-layout_mode = 0
-offset_top = 123.66
-offset_right = 1152.0
-offset_bottom = 222.66003
-theme_override_colors/font_color = Color(0.95, 0.3, 0.25, 1)
-theme_override_font_sizes/font_size = 72
-text = "LEVEL CLEARED"
-horizontal_alignment = 1
-
-[node name="Prompt" type="Label" parent="Root" unique_id=1906355322]
-layout_mode = 0
-offset_top = 223.455
-offset_right = 1152.0
-offset_bottom = 262.4552
-theme_override_colors/font_color = Color(0.9, 0.9, 0.9, 1)
-theme_override_font_sizes/font_size = 28
-text = "Press Enter to Proceed"
-horizontal_alignment = 1
-
-[node name="Time" type="Label" parent="Root" unique_id=1906355323]
-unique_name_in_owner = true
-layout_mode = 0
-offset_top = 282.0
-offset_right = 1152.0
-offset_bottom = 338.0
-theme_override_colors/font_color = Color(0.95, 0.85, 0.4, 1)
-theme_override_fonts/font = ExtResource("3_puffy")
-theme_override_font_sizes/font_size = 40
-text = "Time  00:00.00"
-horizontal_alignment = 1
+color = Color(0, 0, 0, 0.5)
 
 [node name="Center" type="VBoxContainer" parent="Root" unique_id=30671039]
 layout_mode = 1
@@ -65,7 +50,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_constants/separation = 18
+theme_override_constants/separation = 16
 alignment = 1
 
 [node name="Control" type="Control" parent="Root/Center" unique_id=766327482]
@@ -73,6 +58,23 @@ custom_minimum_size = Vector2(0, 252)
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
+
+[node name="Sparks" type="CPUParticles2D" parent="Root/Center/Control"]
+position = Vector2(0, 10)
+amount = 26
+lifetime = 1.1
+randomness = 0.4
+texture = SubResource("GradientTexture2D_spark")
+emission_shape = 1
+emission_sphere_radius = 70.0
+direction = Vector2(0, -1)
+spread = 165.0
+gravity = Vector2(0, 130)
+initial_velocity_min = 45.0
+initial_velocity_max = 150.0
+scale_amount_min = 0.12
+scale_amount_max = 0.4
+color = Color(1, 0.9, 0.5, 1)
 
 [node name="Apple" type="TextureRect" parent="Root/Center/Control" unique_id=580109864]
 unique_name_in_owner = true
@@ -83,15 +85,128 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -177.0
-offset_top = -20.0
-offset_right = 204.0
-offset_bottom = 323.0
+offset_left = -123.0
+offset_top = -147.99997
+offset_right = 117.31
+offset_bottom = 104.00003
 grow_horizontal = 2
 grow_vertical = 2
+scale = Vector2(3.2, 3.2)
 pivot_offset_ratio = Vector2(0.5, 0.57)
 size_flags_horizontal = 4
 size_flags_vertical = 4
-texture = ExtResource("2_loxwf")
+texture = ExtResource("2_apple")
 expand_mode = 1
 stretch_mode = 5
+
+[node name="Title" type="Label" parent="Root/Center" unique_id=21770467]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.95, 0.85, 0.4, 1)
+theme_override_fonts/font = ExtResource("3_puffy")
+theme_override_font_sizes/font_size = 60
+text = "Level Cleared"
+horizontal_alignment = 1
+
+[node name="Time" type="Label" parent="Root/Center" unique_id=1906355323]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(0.95, 0.85, 0.4, 1)
+theme_override_fonts/font = ExtResource("3_puffy")
+theme_override_font_sizes/font_size = 36
+text = "Time  00:00.00"
+horizontal_alignment = 1
+
+[node name="NextLevel" type="Button" parent="Root/Center" unique_id=1213127397]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(280, 56)
+layout_mode = 2
+size_flags_horizontal = 4
+focus_mode = 0
+theme_override_fonts/font = ExtResource("3_puffy")
+theme_override_font_sizes/font_size = 24
+text = "Next Level"
+
+[node name="Restart" type="Button" parent="Root/Center" unique_id=1213127399]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(280, 56)
+layout_mode = 2
+size_flags_horizontal = 4
+focus_mode = 0
+theme_override_fonts/font = ExtResource("3_puffy")
+theme_override_font_sizes/font_size = 24
+text = "Restart"
+
+[node name="MainMenu" type="Button" parent="Root/Center" unique_id=1213127398]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(280, 56)
+layout_mode = 2
+size_flags_horizontal = 4
+focus_mode = 0
+theme_override_fonts/font = ExtResource("3_puffy")
+theme_override_font_sizes/font_size = 24
+text = "Main Menu"
+script = ExtResource("9_hold")
+
+[node name="Sweep" type="ColorRect" parent="Root/Center/MainMenu"]
+layout_mode = 1
+anchor_bottom = 1.0
+offset_right = 0.0
+mouse_filter = 2
+color = Color(1, 1, 1, 0.32)
+
+[node name="Badge" type="Label" parent="Root/Center/MainMenu"]
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = 14.0
+offset_top = -14.0
+offset_right = 100.0
+offset_bottom = 14.0
+grow_horizontal = 1
+grow_vertical = 2
+mouse_filter = 2
+theme_override_colors/font_color = Color(0.95, 0.85, 0.4, 1)
+theme_override_fonts/font = ExtResource("3_puffy")
+theme_override_font_sizes/font_size = 18
+text = "tab"
+horizontal_alignment = 0
+vertical_alignment = 1
+
+[node name="Badge" type="Label" parent="Root/Center/NextLevel"]
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = 14.0
+offset_top = -14.0
+offset_right = 100.0
+offset_bottom = 14.0
+grow_horizontal = 1
+grow_vertical = 2
+mouse_filter = 2
+theme_override_colors/font_color = Color(0.95, 0.85, 0.4, 1)
+theme_override_fonts/font = ExtResource("3_puffy")
+theme_override_font_sizes/font_size = 18
+text = "space"
+horizontal_alignment = 0
+vertical_alignment = 1
+
+[node name="Badge" type="Label" parent="Root/Center/Restart"]
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = 14.0
+offset_top = -14.0
+offset_right = 100.0
+offset_bottom = 14.0
+grow_horizontal = 1
+grow_vertical = 2
+mouse_filter = 2
+theme_override_colors/font_color = Color(0.95, 0.85, 0.4, 1)
+theme_override_fonts/font = ExtResource("3_puffy")
+theme_override_font_sizes/font_size = 18
+text = "r"
+horizontal_alignment = 0
+vertical_alignment = 1

@@ -61,12 +61,17 @@ func _on_enemy_died(_enemy: Enemy) -> void:
 func _on_player_died() -> void:
 	_end(false)
 
+func is_ongoing() -> bool:
+	return _ongoing
+
 func _input(event: InputEvent) -> void:
+	if not _ongoing: return   # end screens handle their own keys
 	if event is InputEventKey and event.pressed and not event.echo and event.keycode == KEY_R:
 		get_tree().reload_current_scene()
 
 func _ready() -> void:
 	Engine.time_scale = 1.0  # clear leftover slowmo from a restart
+	get_tree().paused = false
 	if not player: player = %Player
 	SoundManager.play_music(music_track)   # switch from title music to this level's track
 	start()
