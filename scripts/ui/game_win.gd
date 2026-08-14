@@ -1,37 +1,19 @@
-extends CanvasLayer
+extends EndScreen
 
-@export var min_angle := 4.0
-@export var max_angle := 5.0
-@export var rot_speed := 0.2
+var _next_scene := "res://scenes/levels/level_1.tscn"
 
-@onready var _root: Control = %Root
-@onready var _apple: TextureRect = %Apple
-@onready var _time: Label = %Time
-var _t := 0.0
-
-var _next_scene = "res://scenes/levels/level_1.tscn"
-
-func _ready() -> void:
-	_root.visible = false
-	_apple.visible = false
-
-func _on_encounter_cleared(won: bool, next_scene: String, is_last_level: bool) -> void:
-	_root.visible = true
-	if is_last_level:
-		_apple.visible = true
-	var timer := get_node_or_null("../LevelTimer") as LevelTimer
-	if timer:
-		_time.text = "Time  " + LevelTimer.format_time(timer.get_elapsed())
+func _on_encounter_cleared(_won: bool, next_scene: String, is_last_level: bool) -> void:
+	_show_time()
 	_next_scene = next_scene
+	if is_last_level:
+		%NextLevel.text = "Finish"
+	open()
 
 func _unhandled_input(event: InputEvent) -> void:
-	if not _root.visible:
-		return
+	super(event)
+	if not is_open(): return
 	if event is InputEventKey and event.pressed and not event.echo and event.keycode == KEY_ENTER:
-		get_tree().change_scene_to_file(_next_scene)
+		_on_primary()
 
-func _process(delta: float) -> void:
-	_t += delta * rot_speed
-	_apple.rotation_degrees = sin(_t * max_angle) * min_angle
-	var s = 1.0 + sin(_t * 6.0) * 0.05
-	_apple.scale = Vector2.ONE * s
+func _on_primary() -> void:
+	MenuNav.go(get_tree(), _next_scene)
