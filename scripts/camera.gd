@@ -1,8 +1,10 @@
-extends Node3D
+extends Camera3D
+class_name PlayerCamera
 
-@export var player: Player
-
-@export var height := 5.0
+@export var height := 5.0:
+	set(value):
+		position = position + Vector3(0, height, 0)
+		height = value
 @export_group("lookahead")
 @export var lookahead_smoothing := 6.0
 @export var mouse_lookahead_distance := 0.25
@@ -24,26 +26,12 @@ var _trauma := 0.0
 var _is_focused := false
 var _focused := Vector3()
 
-func add_shake(amount: float) -> void:
-	_trauma = minf(_trauma + amount, 1.0)
-
-func _on_player_hit(_arrow: Arrow, _sector: int) -> void:
-	add_shake(sector_hit_trauma)
-
-func focus(pos) -> void:
-	_is_focused = true
-	_focused = pos
-	
-func unfocus() -> void:
-	_is_focused = false
-
 func _physics_process(delta: float) -> void:
-	if not player: return
 	if _is_focused:
 		global_position = _focused + height * Vector3.UP
 		return
-	var mouse_offset := player.get_mouse_world_position() - player.global_position
-	mouse_offset.y = 0
+	var mouse_pos := get_mouse_position()
+	mouse_pos.y = 0
 
 	var strength := clampf(
 		mouse_offset.length() / max_mouse_distance, 0.0, 1.0
@@ -67,7 +55,35 @@ func _physics_process(delta: float) -> void:
 	var jitter := Vector3(randf_range(-1.0, 1.0), 0.0, randf_range(-1.0, 1.0))
 	global_position = _base_pos + jitter * shake * max_shake_offset
 
-func _ready() -> void:
-	if not player: player = %Player
-	if player and not player.hit.is_connected(_on_player_hit):
-		player.hit.connect(_on_player_hit)
+func add_shake(amount: float) -> void:
+	_trauma = minf(_trauma + amount, 1.0)
+
+func _on_player_hit(_arrow: Arrow, _sector: int) -> void:
+	add_shake(sector_hit_trauma)
+
+func focus(pos) -> void:
+	_is_focused = true
+	_focused = pos
+	
+func unfocus() -> void:
+	_is_focused = false
+
+func get_mouse_position(collision_mask: int = 1 << 4) -> Vector3:
+	var mouse = get_viewport().get_mouse_position()
+
+	var origin = project_ray_origin(mouse)
+	var dir = project_ray_normal(mouse)
+
+	var query = PhysicsRayQueryParameters3D.new()
+	query.from = origin
+	query.to = origin + dir * 2000.0
+	query.collision_mask = collision_mask
+
+	var result = get_world_3d().direct_space_state.intersect_ray(query)
+
+	if result.is_empty():
+		return Vector3.ZERO
+
+	var pos: Vector3 = result.position
+
+	return pos

@@ -20,8 +20,10 @@ class_name Arrow
 
 signal activated()
 signal deactivated()
+signal enabled()
+signal disabled()
 signal bounced(off: Node3D)
-signal stuck_into(wall: Node3D)
+signal stuck_into(wall: CollisionShape3D)
 signal embedded(player: Player)
 
 var _shape_cast: ShapeCast3D
@@ -58,26 +60,29 @@ func _physics_process(delta: float) -> void:
 func _update_mask() -> void:
 	_shape_cast.collision_mask = damage_mask & bounce_mask
 
-func _start_lifetime(duration: float) -> void:
-	_lifetime_ends = -1.0 if duration < 0.0 else Time.get_ticks_msec() + duration
+func _has_lifetime() -> bool:
+	return _lifetime_ends >= 0.0
+
+func _start_lifetime(dur: float) -> void:
+	_lifetime_ends = -1.0 if dur < 0.0 else Time.get_ticks_msec() + dur
 
 func get_remaining_lifetime() -> float:
-	return INF if _lifetime_ends < 0.0 else _lifetime_ends - Time.get_ticks_msec()
+	return _lifetime_ends - Time.get_ticks_msec() if _has_lifetime() else INF
 
 func is_active() -> bool:
 	return _active
 
 func activate(
 	at: Vector3,
+	facing: Vector3,
 	target_mask: int,
-	new_direction: Vector3 = direction,
 	new_speed: float = speed
 ) -> void:
 	if is_active(): return
 	_active = true
 	
 	position = at
-	direction = new_direction
+	direction = facing
 	speed = new_speed
 	
 	_start_lifetime(max_lifetime)
@@ -97,15 +102,17 @@ func deactivate() -> void:
 		queue_free()
 
 func is_enabled() -> bool:
-	return _active and _enabled
+	return _enabled
 	
 func enable() -> void:
 	if is_enabled(): return
 	_enabled = true
+	enabled.emit()
 
 func disable() -> void:
 	if not is_enabled(): return
 	_enabled = false
+	disabled.emit()
 
 func _any_layer_matches(mask1: int, mask2: int) -> bool:
 	return mask1 & mask2
@@ -142,23 +149,31 @@ func _handle_collision(
 	if _any_layer_matches(damage_mask, layer_mask):
 		_hit(collider, collision_point)
 	elif _any_layer_matches(bounce_mask, layer_mask):
-		_bounce(collision_normal)
+		_bounce(collider, collision_point, collision_normal)
 
 func _hit(target: Object, collision_point: Vector3) -> void:
-	if target is Player:
-		var player := target as Player
 	var arrows_components := find_children("*", "ShapeCast3D", true, false)
 	for a: ArrowsComponent in arrows_components:
 		a.add_arrow(self)
 	if target.has_method("get_hit"):
 		target.get_hit(self, collision_point)
-	
 
-func _bounce(normal: Vector3) -> void:
-	direction.bounce(normal)
-	_bounces += 1
+func _bounce(
+	collider: CollisionObject3D,
+	point: Vector3,
+	normal: Vector3
+) -> void:
 	if _bounces >= max_bounces:
-		deactivate()
+		_stick_into(collider, point)
+	else:
+		direction.bounce(normal)
+		_bounces += 1
+		bounced.emit(collider)
+
+func _stick_into(collider: CollisionObject3D, point: Vector3) -> void:
+	disable()
+	global_position = point
+	stuck_into.emit(collider)
 
 func get_occupied_slots(collided_with: int) -> Array[int]:
 	return [collided_with]

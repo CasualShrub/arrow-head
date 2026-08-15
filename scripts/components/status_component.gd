@@ -5,6 +5,7 @@ signal statusAdded(Status)
 signal statusRemoved(Status)
 signal statusExpired(Status)
 
+## Contains script -> instance.
 var _active: Dictionary[Status, Status] = {}
 
 func _get_key(status: Status) -> Variant:

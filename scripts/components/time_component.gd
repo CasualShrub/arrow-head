@@ -2,7 +2,7 @@ extends Node
 class_name TimeComponent
 
 @export_category("bar")
-@export var max_bar := 1.0
+@export var bar: BarComponent
 @export var activation_cost := 0.0
 @export var tick_regen := 0.05
 @export var tick_consumption := 0.1
@@ -12,59 +12,47 @@ class_name TimeComponent
 @export var normal_scale := 1.0
 @export var transition_speed := 1.0
 
-signal bar_changed(current: float)
-signal bar_consumed(amount: float)
-signal activated()
-signal deactivated()
+signal slowed()
+signal resumed()
 
-var _curr_bar := 1.0:
-	set(value):
-		value = clampf(value, 0.0, max_bar)
-		if value == _curr_bar: return
-		bar_changed.emit(value)
-		_curr_bar = value
 var _active := false
 var _target_scale := 1.0
 
-func try_consume(amount: float) -> bool:
-	if not can_pay(amount): return false
-	consume(amount)
-	return true
-
-func can_pay(amount: float) -> bool:
-	return _curr_bar >= amount
-
-func consume(amount: float) -> void:
-	if amount <= 0: return
-	_curr_bar -= amount
-	bar_consumed.emit(amount)
+func _process(delta: float) -> void:
+	# do not slow down the slower
+	var real_delta := delta / Engine.time_scale
+	
+	if Engine.time_scale != _target_scale:
+		Engine.time_scale = move_toward(
+			Engine.time_scale,
+			_target_scale,
+			transition_speed * real_delta
+		)
+	
+	if is_slowed():
+		var cons := tick_consumption * real_delta
+		if not bar.try_consume(cons):
+			resume()
+	else:
+		if not bar.is_full():
+			var reg = tick_regen * real_delta
+			bar.regenerate(reg)
 
 func is_slowed() -> bool: return _active
 
-func slow() -> void:
-	if is_slowed(): return
-	if not try_consume(activation_cost): return
+func slow() -> bool:
+	if is_slowed() or (
+		activation_cost > 0.0
+		and not bar.try_consume(activation_cost)
+	): return false
 	_active = true
 	_target_scale = slow_scale
-	activated.emit()
+	slowed.emit()
+	return true
 
-func try_slow() -> bool:
-	if can_pay(activation_cost):
-		slow()
-		return true
-	return false
-
-func resume() -> void:
-	if not is_slowed(): return
+func resume() -> bool:
+	if not is_slowed(): return false
 	_active = false
 	_target_scale = normal_scale
-	deactivated.emit()
-
-func _physics_process(delta: float) -> void:
-	if Engine.time_scale != _target_scale:
-		Engine.time_scale = lerpf(Engine.time_scale, _target_scale, transition_speed * delta)
-	
-	if is_slowed():
-		_curr_bar -= tick_consumption * delta
-	else:
-		_curr_bar += tick_regen * delta
+	resumed.emit()
+	return true

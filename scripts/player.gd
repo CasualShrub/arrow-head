@@ -2,25 +2,47 @@
 extends CharacterBody3D
 class_name Player
 
-@export var input: InputComponent
-@export var health: HealthComponent
-@export var arrows: SectorArrowsComponent
-@export var time: TimeComponent
-@export var dash: DashComponent
+@export var health: HealthComponent:
+	set(value):
+		health = value
+		update_configuration_warnings()
+@export var fire_input: InputComponent:
+	set(value):
+		fire_input = value
+		update_configuration_warnings()
+@export var slow_input: InputComponent:
+	set(value):
+		slow_input = value
+		update_configuration_warnings()
+@export var movement_input: VectorInputComponent:
+	set(value):
+		movement_input = value
+		update_configuration_warnings()
+@export var arrows: SectorArrowsComponent:
+	set(value):
+		arrows = value
+		update_configuration_warnings()
+@export var time: TimeComponent:
+	set(value):
+		time = value
+		update_configuration_warnings()
+@export var dash: DashComponent:
+	set(value):
+		dash = value
+		update_configuration_warnings()
 
 @export var speed := 6.0
-@export var arrow_dig_depth := 0.15 #dig arrow deeper into apple's skin a bit
-@export var chunk_fx: PackedScene   ## burst of apple bits spawned where an arrow embeds
+## how far arrows dig into apples skin
+@export var arrow_dig_depth := 0.15
+## burst of apple bits spawned where an arrow embeds
 @export_group("hurt")
 @export var hurt_radius := 0.4:
 	set(value):
 		if value < 0: value = 0
-		if _collider:
-			_update_collider(_collider, value)  # may run before the node exists
+		_update_collider(_collider, value)
 		hurt_radius = value
 @export_group("eyes")
-@export var eye_deadzone := 0.4
-@export var eyes_hit_time := 0.36:
+@export var eyes_hit_time: float:
 	set(value):
 		if not _eyes_hit: return
 		_eyes_hit.wait_time = value
@@ -28,42 +50,71 @@ class_name Player
 		if not _eyes_hit: return false
 		return _eyes_hit.wait_time
 
-@onready var _camera: Camera3D = %Camera
-@onready var _recovery: Timer = %Recovery
+@onready var _camera: PlayerCamera = %Camera
 @onready var _eyes_hit: Timer = %EyesHit
 @onready var _sprite: AnimatedSprite3D = %Sprite
-@onready var _eyes: AnimatedSprite3D = %Eyes
+@onready var _eyes: PlayerEyes = %Eyes
 @onready var _status_sprite: AnimatedSprite3D = %StatusSprite
 @onready var _collider: CollisionShape3D = %Collider
 @onready var _dash_preview: DashPreview = %DashPreview
-@onready var _sectors := %Sectors
-@onready var _arrows: Node3D = %Arrows
-
-@onready var _sprite_basis := _sprite.global_basis
-@onready var _eyes_basis := _eyes.global_basis
+@onready var _mouse_pivot: Node3D = %MousePivot
+@onready var _sectors: Sectors = %Sectors
+@onready var _chunks: GPUParticles3D = %AppleChunks
 
 func _ready() -> void:
+	if Engine.is_editor_hint():
+		update_configuration_warnings()
+	
 	_sectors._update_occupied_mask()
 	_update_collider(_collider, hurt_radius)
 
 func _process(_delta: float) -> void:
-	if Engine.is_editor_hint(): return
+	if Engine.is_editor_hint():
+		return
+	
 	if health.is_dead(): return
-	if time.is_slowed():
+	if _dash_preview.is_enabled():
 		var mouse_pos := get_mouse_world_position()
-		_dash_preview.update_preview_position(mouse_pos)
+		var dash_dest := dash.get_dash_destination(global_position, mouse_pos)
+		var dash_targets := dash.get_dash_targets(global_position, dash_dest)
+		_dash_preview.set_preview_position(dash_dest)
+		_dash_preview.set_preview_targets(dash_targets)
 
 func _physics_process(delta: float) -> void:
-	if Engine.is_editor_hint(): return
-	if health.is_dead(): return
-	if input.consume_fire_pressed():
-		if time.is_slowed():
-			var mouse_pos := get_mouse_world_position()
-			var dash_to := dash.get_dash_destination(global_position, mouse_pos)
-			dash.dash(global_position, dash_to)
-	_move(input.get_direction(), delta)
+	if Engine.is_editor_hint():
+		return
 	
+	if health.is_dead(): return
+	
+	if slow_input.consume_pressed():
+		time.slow()
+	if slow_input.consume_released():
+		time.resume()
+	
+	if fire_input.consume_released():
+		if time.is_slowed():
+			var wish_pos = _camera.get_mouse_position()
+			dash.dash(global_position, wish_pos)
+	
+	_move(movement_input.get_vector(), delta)
+	
+	# keep on same plane
 	global_position.y = 0
+
+func _get_component_warning(comp: Variant, comp_name: String) -> Variant:
+	if not comp: return "Player has no {0}.".format([comp_name])
+	return null
+
+func _get_configuration_warnings() -> PackedStringArray:
+	return [
+		_get_component_warning(health, "HealthComponent"),
+		_get_component_warning(fire_input, "FireInput"),
+		_get_component_warning(slow_input, "SlowInput"),
+		_get_component_warning(movement_input, "MovementInput"),
+		_get_component_warning(arrows, "ArrowsComponent"),
+		_get_component_warning(time, "TimeComponent"),
+		_get_component_warning(dash, "DashComponent"),
+	].filter(func(element): return element != null)
 
 func _update_collider(c: CollisionShape3D, r: float) -> void:
 	if not c: return
@@ -74,64 +125,11 @@ func _update_collider(c: CollisionShape3D, r: float) -> void:
 		s.radius = r
 		c.shape = s
 
-func get_facing() -> Vector3:
-	return -global_basis.z
-
-enum EyeDir { HIDDEN = -1, CENTERED, EAST, SOUTHEAST, SOUTH, SOUTHWEST, WEST }
-
-func _get_eye_state() -> String:
-	if not _eyes_hit.is_stopped():
-		return "hit"
-	if _sectors.full():
-		return "angry"
-	return "default"
-
-func _get_eye_frame() -> int:
-	var mouse_pos := get_mouse_world_position()
-	var mouse_offset := global_position.direction_to(mouse_pos)
-	var offset_len := global_position.distance_to(mouse_pos)
-	var dir := Vector2(mouse_offset.x, mouse_offset.z)
-	if offset_len < eye_deadzone:
-		return 0
-	var deg := rad_to_deg(atan2(dir.y, dir.x))
-	if deg > -22.5 and deg <= 22.5:
-		return 1 # right
-	elif deg > 22.5 and deg <= 67.5:
-		return 2 # down-right
-	elif deg > 67.5 and deg <= 112.5:
-		return 3 # down
-	elif deg > 112.5 and deg <= 157.5:
-		return 4 # down-left
-	elif deg > 157.5 or deg <= -157.5:
-		return 5 # left
-	elif deg > -157.5 and deg <= -112.5:
-		return -1 # up-left
-	elif deg > -112.5 and deg <= -67.5:
-		return -1 # up
-	else: # -67.5 to -22.5
-		return -1 # up-right
-
-func _update_eyes() -> void:
-	if health.is_dead():
-		return
-	var frame := _get_eye_frame()
-	if frame == -1:
-		if _eyes.visible:
-			_eyes.hide()
-		return
-	elif not _eyes.visible:
-		_eyes.show()
-	var state := _get_eye_state()
-	if _eyes.animation != state:
-		_eyes.animation = state
-	if _eyes.frame != frame:
-		_eyes.frame = frame
-
 func get_hit(arrow: Arrow) -> void:
 	if health.is_dead():
 		arrow.deactivate()
 		return
-	_spawn_chunks(global_position)  
+	_chunks.emitting = true
 	if arrows.add_arrow(arrow):
 		var slots := arrows.get_slots_of(arrow)
 		var sector := slots[0] if slots.size() > 0 else 0
@@ -145,15 +143,7 @@ func get_hit(arrow: Arrow) -> void:
 		func(): health.make_vulnerable()
 	)
 	_eyes_hit.start()
-	_update_eyes()
-
-# burst a few apple bits at the apple's current position
-func _spawn_chunks(_pos: Vector3) -> void:
-	if not chunk_fx:
-		return
-	var fx := chunk_fx.instantiate() as Node3D
-	add_child(fx)               # child of the player at local origin -> born at the apple
-	fx.position = Vector3.ZERO
+	_eyes.set_eyes_state("hit")
 
 func get_mouse_world_position() -> Vector3:
 	if not _camera: return Vector3.ZERO
@@ -178,10 +168,8 @@ func get_mouse_world_position() -> Vector3:
 	return pos
 
 func face(direction: Vector3) -> void:
-	look_at(direction)
-	_sprite.global_basis = _sprite_basis
-	_eyes.global_basis = _eyes_basis
-	_update_eyes()
+	_mouse_pivot.look_at(direction)
+	_eyes.make_eyes_look_at(direction)
 
 func _move(dir: Vector2, _dt: float) -> void:
 	var v = dir * speed
@@ -202,6 +190,7 @@ func _on_died() -> void:
 	_sectors.hide()
 
 func _on_dash_activated(destination: Vector3, targets: Array) -> void:
+	_dash_preview.disable()
 	global_position = destination
 	for target in targets:
 		if target is Enemy:
@@ -214,7 +203,24 @@ func _on_slot_cleared(slot: int) -> void:
 	_sectors.unhighlight_sector(slot)
 
 func _on_firing_enabled(_arrow: Arrow) -> void:
-	pass # Replace with function body.
+	pass
 
 func _on_firing_disabled(_arrow: Arrow) -> void:
 	pass # Replace with function body.
+
+func _on_time_slowed() -> void:
+	if arrows.has_fireable():
+		_dash_preview.enable()
+
+func _on_time_resumed() -> void:
+	_dash_preview.disable()
+
+func _on_fire_pressed() -> void:
+	if dash.can_dash():
+		_dash_preview.enable()
+
+func _on_fire_released() -> void:
+	_dash_preview.disable()
+	var mouse_pos := _camera.get_mouse_position()
+	if dash.try_activate(global_position, mouse_pos):
+		time.resume()

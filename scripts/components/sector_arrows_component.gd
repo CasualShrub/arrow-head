@@ -43,6 +43,16 @@ func get_embedded_in(slot: int) -> Arrow:
 func is_fireable(arrow: Arrow) -> bool:
 	return _fireable.get(arrow, false)
 
+func has_fireable() -> bool:
+	for f in _fireable.values():
+		if f: return true
+	return false
+
+func get_firing_next() -> Arrow:
+	for a in _fireable.keys():
+		if is_fireable(a): return a
+	return null
+
 func is_slot_fireable(slot: int) -> bool:
 	return is_fireable(get_embedded_in(slot))
 

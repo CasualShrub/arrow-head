@@ -1,29 +1,24 @@
-[gd_scene load_steps=4 format=3 uid="uid://bapplchunksfx1"]
-
-[ext_resource type="Script" path="res://scripts/fx/apple_chunks.gd" id="1_s"]
-
-[sub_resource type="BoxMesh" id="box"]
-size = Vector3(0.06, 0.06, 0.06)
+[gd_scene format=3 uid="uid://dsgml1im16fvw"]
 
 [sub_resource type="StandardMaterial3D" id="mat"]
 albedo_color = Color(0.83, 0.13, 0.15, 1)
 roughness = 0.85
 
-[node name="AppleChunks" type="CPUParticles3D"]
+[sub_resource type="BoxMesh" id="box"]
+size = Vector3(0.06, 0.06, 0.06)
+
+[node name="AppleChunks" type="CPUParticles3D" unique_id=702073064]
+material_override = SubResource("mat")
 emitting = false
 amount = 16
 lifetime = 0.7
 one_shot = true
 explosiveness = 1.0
 mesh = SubResource("box")
-material_override = SubResource("mat")
 direction = Vector3(0, 1, 0)
 spread = 75.0
-gravity = Vector3(0, -9.8, 0)
 initial_velocity_min = 1.5
 initial_velocity_max = 3.5
 angular_velocity_min = -540.0
 angular_velocity_max = 540.0
 scale_amount_min = 0.4
-scale_amount_max = 1.0
-script = ExtResource("1_s")
