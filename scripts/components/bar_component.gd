@@ -35,3 +35,7 @@ func regenerate(amount: float) -> void:
 
 func is_full() -> bool:
 	return value == max_value
+
+## Returns the percent of the max value the bar is at.
+func get_percentage() -> float:
+	return value / max_value

@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://boryk37cbh1nx"]
 
-[ext_resource type="Script" uid="uid://djbaojmlgp0lu" path="res://scripts/player.gd" id="1_fcs02"]
+[ext_resource type="Script" uid="uid://djbaojmlgp0lu" path="res://scripts/player/player.gd" id="1_fcs02"]
 [ext_resource type="PackedScene" uid="uid://dsgml1im16fvw" path="res://scenes/effects/apple_chunks.tscn" id="2_myrg7"]
 [ext_resource type="Script" uid="uid://cq7vk7ukbmts4" path="res://scripts/components/health_component.gd" id="3_kvlxm"]
 [ext_resource type="Script" uid="uid://bw22qrc8y4p5b" path="res://scripts/components/input_component.gd" id="4_uf5tr"]
@@ -10,14 +10,14 @@
 [ext_resource type="Script" uid="uid://b2h82wpoguve8" path="res://scripts/components/bar_component.gd" id="7_lgqa7"]
 [ext_resource type="Script" uid="uid://dcfpc1boe1bn7" path="res://scripts/components/status_component.gd" id="7_ugbui"]
 [ext_resource type="Script" uid="uid://360h68v2nvph" path="res://scripts/components/sector_arrows_component.gd" id="8_fcs02"]
-[ext_resource type="SpriteFrames" uid="uid://cmjbdroql258f" path="res://sprite_frames/player_frames.tres" id="8_yj68g"]
+[ext_resource type="SpriteFrames" uid="uid://cmjbdroql258f" path="res://sprite_frames/player/player_frames.tres" id="8_yj68g"]
 [ext_resource type="Texture2D" uid="uid://dxs2lnb7aysuj" path="res://assets/art/player/status/fire_frame1.png" id="9_ioxgp"]
 [ext_resource type="Texture2D" uid="uid://clnx5whue0a7g" path="res://assets/art/player/status/fire_frame2.png" id="10_cnsyf"]
 [ext_resource type="Texture2D" uid="uid://d4flnp6puxus3" path="res://assets/art/player/status/ice.png" id="11_007i1"]
-[ext_resource type="SpriteFrames" uid="uid://dcj3tcewuhc6p" path="res://sprite_frames/player_eyes_frames.tres" id="12_6cv16"]
-[ext_resource type="Script" uid="uid://d05r0wt3n7g6i" path="res://scripts/player_eyes.gd" id="12_kvlxm"]
+[ext_resource type="SpriteFrames" uid="uid://dcj3tcewuhc6p" path="res://sprite_frames/player/player_eyes_frames.tres" id="12_6cv16"]
+[ext_resource type="Script" uid="uid://d05r0wt3n7g6i" path="res://scripts/player/player_eyes.gd" id="12_kvlxm"]
 [ext_resource type="PackedScene" uid="uid://cl12r2to8hcdp" path="res://scenes/player/sectors.tscn" id="13_gx1jg"]
-[ext_resource type="Script" uid="uid://doms8x46cr1tt" path="res://scripts/camera.gd" id="16_myrg7"]
+[ext_resource type="Script" uid="uid://doms8x46cr1tt" path="res://scripts/player/player_camera.gd" id="16_myrg7"]
 [ext_resource type="Script" uid="uid://qahpn0qappgp" path="res://scripts/components/vector_input_component.gd" id="18_uf5tr"]
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_oprun"]
@@ -45,7 +45,7 @@ animations = [{
 "speed": 5.0
 }]
 
-[node name="Player" type="CharacterBody3D" unique_id=439211336 node_paths=PackedStringArray("health", "fire_input", "slow_input", "movement_input", "arrows", "time", "dash")]
+[node name="Player" type="CharacterBody3D" unique_id=775136311 node_paths=PackedStringArray("health", "fire_input", "slow_input", "movement_input", "arrows", "time", "dash")]
 collision_mask = 4
 motion_mode = 1
 script = ExtResource("1_fcs02")
@@ -56,47 +56,66 @@ movement_input = NodePath("MovementInput")
 arrows = NodePath("ArrowsComponent")
 time = NodePath("TimeComponent")
 dash = NodePath("DashComponent")
+metadata/_custom_type_script = "uid://djbaojmlgp0lu"
 
 [node name="Collider" type="CollisionShape3D" parent="." unique_id=1401584448]
 unique_name_in_owner = true
 shape = SubResource("SphereShape3D_oprun")
 
-[node name="HealthComponent" type="Node" parent="." unique_id=1891742081]
-script = ExtResource("3_kvlxm")
+[node name="Camera" type="Camera3D" parent="." unique_id=1534654778]
+unique_name_in_owner = true
+transform = Transform3D(1, 0, 0, 0, -4.371139e-08, 1, 0, -1, -4.371139e-08, 0, 1, 0)
+current = true
+script = ExtResource("16_myrg7")
+metadata/_custom_type_script = "uid://doms8x46cr1tt"
 
-[node name="FireInput" type="Node" parent="." unique_id=1653167200]
+[node name="HealthComponent" type="Node" parent="." unique_id=827183956]
+script = ExtResource("3_kvlxm")
+value = 1
+max_value = 1
+metadata/_custom_type_script = "uid://cq7vk7ukbmts4"
+
+[node name="FireInput" type="Node" parent="." unique_id=1034469442]
 script = ExtResource("4_uf5tr")
 action_name = &"fire"
+metadata/_custom_type_script = "uid://bw22qrc8y4p5b"
 
-[node name="SlowInput" type="Node" parent="." unique_id=381723332]
+[node name="SlowInput" type="Node" parent="." unique_id=382822114]
 script = ExtResource("4_uf5tr")
 action_name = &"slow"
+metadata/_custom_type_script = "uid://bw22qrc8y4p5b"
 
-[node name="MovementInput" type="Node" parent="." unique_id=1349681333]
+[node name="MovementInput" type="Node" parent="." unique_id=742566340]
 script = ExtResource("18_uf5tr")
 left_action = &"move_left"
 right_action = &"move_right"
 up_action = &"move_up"
 down_action = &"move_down"
+metadata/_custom_type_script = "uid://qahpn0qappgp"
 
-[node name="TimeComponent" type="Node" parent="." unique_id=671242309 node_paths=PackedStringArray("bar")]
+[node name="TimeComponent" type="Node" parent="." unique_id=1620176038 node_paths=PackedStringArray("bar")]
 script = ExtResource("5_lgqa7")
 bar = NodePath("../TimeBar")
+metadata/_custom_type_script = "uid://dah5jq04qfdtm"
 
-[node name="TimeBar" type="Node" parent="." unique_id=1575688409]
+[node name="TimeBar" type="Node" parent="." unique_id=2124484905]
 script = ExtResource("7_lgqa7")
+metadata/_custom_type_script = "uid://b2h82wpoguve8"
 
-[node name="DashComponent" type="Node" parent="." unique_id=1998859168]
+[node name="DashComponent" type="Node" parent="." unique_id=1199737807]
 script = ExtResource("6_8ydkj")
+metadata/_custom_type_script = "uid://dn5uch0ibf7dr"
 
-[node name="StatusComponent" type="Node" parent="." unique_id=624673837]
+[node name="StatusComponent" type="Node" parent="." unique_id=299980531]
 script = ExtResource("7_ugbui")
+metadata/_custom_type_script = "uid://dcfpc1boe1bn7"
 
-[node name="ArrowsComponent" type="Node" parent="." unique_id=2021552659 node_paths=PackedStringArray("container")]
+[node name="ArrowsComponent" type="Node" parent="." unique_id=1757650454]
 script = ExtResource("8_fcs02")
-container = NodePath("../MousePivot/ArrowsContainer")
+metadata/_custom_type_script = "uid://360h68v2nvph"
 
 [node name="DashPreview" parent="." unique_id=1586639351 instance=ExtResource("7_3j4b4")]
+visible = false
 
 [node name="MousePivot" type="Node3D" parent="." unique_id=1177089586]
 unique_name_in_owner = true
@@ -110,18 +129,14 @@ centered = true
 [node name="ArrowsContainer" type="Node3D" parent="MousePivot" unique_id=208548441]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.0034347773, 0)
 
-[node name="EyesHit" type="Timer" parent="." unique_id=1891487654]
-unique_name_in_owner = true
-wait_time = 0.5
-one_shot = true
-
-[node name="Eyes" type="AnimatedSprite3D" parent="." unique_id=1772518271]
+[node name="Eyes" type="AnimatedSprite3D" parent="." unique_id=284666599]
 unique_name_in_owner = true
 transform = Transform3D(0.75, 0, 0, 0, -3.278354e-08, 0.75, 0, -0.75, -3.278354e-08, 0, 0.0045996904, 0)
 double_sided = false
 sprite_frames = ExtResource("12_6cv16")
 script = ExtResource("12_kvlxm")
 deadzone = 0.4
+metadata/_custom_type_script = "uid://d05r0wt3n7g6i"
 
 [node name="Sprite" type="AnimatedSprite3D" parent="." unique_id=1733920157]
 unique_name_in_owner = true
@@ -138,27 +153,14 @@ animation = &"fire"
 
 [node name="AppleChunks" parent="." unique_id=702073064 instance=ExtResource("2_myrg7")]
 unique_name_in_owner = true
-
-[node name="Camera" type="Camera3D" parent="." unique_id=228130632]
-unique_name_in_owner = true
-transform = Transform3D(1, 0, 0, 0, -4.371139e-08, 1, 0, -1, -4.371139e-08, 0, 1, 0)
-script = ExtResource("16_myrg7")
-height = null
-lookahead_smoothing = null
-mouse_lookahead_distance = null
-movement_lookahead_distance = null
-max_mouse_distance = null
-follow_speed = null
-sector_hit_trauma = null
-trauma_decay = null
-max_shake_offset = null
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.023803711, 0)
 
 [connection signal="died" from="HealthComponent" to="." method="_on_died"]
-[connection signal="pressed" from="FireInput" to="." method="_on_fire_pressed"]
-[connection signal="released" from="FireInput" to="." method="_on_fire_released"]
 [connection signal="resumed" from="TimeComponent" to="." method="_on_time_resumed"]
 [connection signal="slowed" from="TimeComponent" to="." method="_on_time_slowed"]
 [connection signal="activated" from="DashComponent" to="." method="_on_dash_activated"]
+[connection signal="disabled" from="DashComponent" to="." method="_on_dash_disabled"]
+[connection signal="enabled" from="DashComponent" to="." method="_on_dash_enabled"]
 [connection signal="firing_disabled" from="ArrowsComponent" to="." method="_on_firing_disabled"]
 [connection signal="firing_enabled" from="ArrowsComponent" to="." method="_on_firing_enabled"]
 [connection signal="slot_cleared" from="ArrowsComponent" to="." method="_on_slot_cleared"]

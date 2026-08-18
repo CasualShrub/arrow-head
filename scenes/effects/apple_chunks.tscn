@@ -1,24 +1,41 @@
 [gd_scene format=3 uid="uid://dsgml1im16fvw"]
 
-[sub_resource type="StandardMaterial3D" id="mat"]
-albedo_color = Color(0.83, 0.13, 0.15, 1)
-roughness = 0.85
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_1p348"]
+vertex_color_use_as_albedo = true
+vertex_color_is_srgb = true
 
-[sub_resource type="BoxMesh" id="box"]
-size = Vector3(0.06, 0.06, 0.06)
+[sub_resource type="QuadMesh" id="QuadMesh_5ntgu"]
+material = SubResource("StandardMaterial3D_1p348")
+size = Vector2(0.06, 0.06)
+orientation = 1
+
+[sub_resource type="Curve" id="Curve_rc14o"]
+_limits = [0.0, 100.0, 0.0, 1.0]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(0.4923077, 46.778717), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="Curve" id="Curve_8wtow"]
+_data = [Vector2(0, 0.49859947), 0.0, 0.0, 0, 0, Vector2(0.2576923, 0.8627451), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 3
 
 [node name="AppleChunks" type="CPUParticles3D" unique_id=702073064]
-material_override = SubResource("mat")
 emitting = false
 amount = 16
-lifetime = 0.7
+lifetime = 0.5
 one_shot = true
 explosiveness = 1.0
-mesh = SubResource("box")
-direction = Vector3(0, 1, 0)
-spread = 75.0
-initial_velocity_min = 1.5
-initial_velocity_max = 3.5
-angular_velocity_min = -540.0
-angular_velocity_max = 540.0
-scale_amount_min = 0.4
+lifetime_randomness = 0.5
+mesh = SubResource("QuadMesh_5ntgu")
+direction = Vector3(0, 0, 0)
+spread = 180.0
+flatness = 1.0
+gravity = Vector3(0, 0, 0)
+initial_velocity_min = 5.5
+initial_velocity_max = 6.5
+damping_min = 0.5
+damping_max = 1.5
+damping_curve = SubResource("Curve_rc14o")
+scale_amount_min = 0.6
+scale_amount_max = 1.2
+scale_amount_curve = SubResource("Curve_8wtow")
+color = Color(0.83137256, 0.12941177, 0.14901961, 1)

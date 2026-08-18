@@ -16,22 +16,23 @@ class_name PlayerCamera
 @export var trauma_decay := 1.5   
 @export var max_shake_offset := 0.30
 
+signal shaken(amount: float)
+
 var current_offset := Vector3.ZERO
 var last_move_direction := Vector3.FORWARD
 
-var _base_pos := Vector3.ZERO
 var _has_base := false
+var _base_pos := Vector3.ZERO
+
 var _trauma := 0.0
 
-var _is_focused := false
-var _focused := Vector3()
 
 func _physics_process(delta: float) -> void:
-	if _is_focused:
-		global_position = _focused + height * Vector3.UP
-		return
 	var mouse_pos := get_mouse_position()
 	mouse_pos.y = 0
+	
+	var p := get_parent_node_3d()
+	var mouse_offset := p.to_local(global_position)
 
 	var strength := clampf(
 		mouse_offset.length() / max_mouse_distance, 0.0, 1.0
@@ -39,10 +40,10 @@ func _physics_process(delta: float) -> void:
 	strength *= strength
 
 	var lookahead_offset := mouse_offset.normalized() * strength * mouse_lookahead_distance
-	var movement_offset := player.velocity.normalized() * movement_lookahead_distance
+	#var movement_offset := player.velocity.normalized() * movement_lookahead_distance
 	var height_offset := height * Vector3.UP
 
-	var target := player.global_position + lookahead_offset + movement_offset + height_offset
+	var target := global_position + lookahead_offset + height_offset# + movement_offset
 	if not _has_base:
 		_base_pos = global_position
 		_has_base = true
@@ -61,12 +62,8 @@ func add_shake(amount: float) -> void:
 func _on_player_hit(_arrow: Arrow, _sector: int) -> void:
 	add_shake(sector_hit_trauma)
 
-func focus(pos) -> void:
-	_is_focused = true
-	_focused = pos
-	
-func unfocus() -> void:
-	_is_focused = false
+func shake() -> void:
+	shaken.emit()
 
 func get_mouse_position(collision_mask: int = 1 << 4) -> Vector3:
 	var mouse = get_viewport().get_mouse_position()
@@ -84,6 +81,4 @@ func get_mouse_position(collision_mask: int = 1 << 4) -> Vector3:
 	if result.is_empty():
 		return Vector3.ZERO
 
-	var pos: Vector3 = result.position
-
-	return pos
+	return result.position as Vector3

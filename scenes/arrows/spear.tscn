@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://dvqaa0fclthbs"]
 
-[ext_resource type="Script" uid="uid://ddq3o77rdeao0" path="res://scripts/arrow.gd" id="1_mbixx"]
+[ext_resource type="Script" uid="uid://ddq3o77rdeao0" path="res://scripts/arrow/arrow.gd" id="1_mbixx"]
 
 [node name="Spear" type="CharacterBody3D" unique_id=1774071434]
 script = ExtResource("1_mbixx")

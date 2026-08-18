@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://bqcvh8djsf5bj"]
 
-[ext_resource type="Script" uid="uid://8jd6wlvsiper" path="res://scripts/dash_preview.gd" id="1_miij3"]
+[ext_resource type="Script" uid="uid://8jd6wlvsiper" path="res://scripts/player/dash_preview.gd" id="1_miij3"]
 [ext_resource type="Texture2D" uid="uid://c5w3uc4upc1av" path="res://assets/art/player/apple_base.png" id="2_x6rtf"]
 [ext_resource type="Texture2D" uid="uid://wvlanxvgy8iq" path="res://assets/art/player/angry_eyes.png" id="3_i17dr"]
 
@@ -15,12 +15,12 @@ albedo_color = Color(0.2, 0.8, 1, 0.5)
 [sub_resource type="PlaneMesh" id="PlaneMesh_f03aa"]
 size = Vector2(0.06, 2.3)
 
-[node name="DashPreview" type="Node3D" unique_id=1586639351]
+[node name="DashPreview" type="Node3D" unique_id=609039478]
 transform = Transform3D(1, 0, 0, 0, -4.371139e-08, 1, 0, -1, -4.371139e-08, 0, 0, 0)
-visible = false
 script = ExtResource("1_miij3")
 body_texture = ExtResource("2_x6rtf")
 eyes_texture = ExtResource("3_i17dr")
+metadata/_custom_type_script = "uid://8jd6wlvsiper"
 
 [node name="PreviewSprite" type="Sprite3D" parent="." unique_id=2125678008]
 unique_name_in_owner = true

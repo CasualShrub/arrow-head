@@ -41,21 +41,13 @@ class_name Player
 		if value < 0: value = 0
 		_update_collider(_collider, value)
 		hurt_radius = value
-@export_group("eyes")
-@export var eyes_hit_time: float:
-	set(value):
-		if not _eyes_hit: return
-		_eyes_hit.wait_time = value
-	get:
-		if not _eyes_hit: return false
-		return _eyes_hit.wait_time
+@export var hurt_reaction_duration := 0.35
 
-@onready var _camera: PlayerCamera = %Camera
-@onready var _eyes_hit: Timer = %EyesHit
-@onready var _sprite: AnimatedSprite3D = %Sprite
-@onready var _eyes: PlayerEyes = %Eyes
-@onready var _status_sprite: AnimatedSprite3D = %StatusSprite
 @onready var _collider: CollisionShape3D = %Collider
+@onready var _camera: PlayerCamera = %Camera
+@onready var _sprite: AnimatedSprite3D = %Sprite
+@onready var _status_sprite: AnimatedSprite3D = %StatusSprite
+@onready var _eyes: PlayerEyes = %Eyes
 @onready var _dash_preview: DashPreview = %DashPreview
 @onready var _mouse_pivot: Node3D = %MousePivot
 @onready var _sectors: Sectors = %Sectors
@@ -91,17 +83,18 @@ func _physics_process(delta: float) -> void:
 	if slow_input.consume_released():
 		time.resume()
 	
+	if fire_input.consume_pressed():
+		dash.enable()
+	
 	if fire_input.consume_released():
-		if time.is_slowed():
-			var wish_pos = _camera.get_mouse_position()
-			dash.dash(global_position, wish_pos)
+		dash.try_activate(global_position, _camera.get_mouse_position())
 	
 	_move(movement_input.get_vector(), delta)
 	
 	# keep on same plane
 	global_position.y = 0
 
-func _get_component_warning(comp: Variant, comp_name: String) -> Variant:
+func _get_component_warning(comp: Variant, comp_name: StringName) -> Variant:
 	if not comp: return "Player has no {0}.".format([comp_name])
 	return null
 
@@ -134,7 +127,8 @@ func get_hit(arrow: Arrow) -> void:
 		var slots := arrows.get_slots_of(arrow)
 		var sector := slots[0] if slots.size() > 0 else 0
 		SoundManager.play("Q%d_fill" % clampi(sector + 1, 1, 4))
-		SoundManager.play("apple_damage1") #if arrow.kind != Arrow.Kind.NORMAL else "apple_damage2")
+		SoundManager.play("apple_damage1") 
+		#if arrow.kind != Arrow.Kind.NORMAL else "apple_damage2")
 	else:
 		arrow.queue_free()
 		health.die()
@@ -142,7 +136,7 @@ func get_hit(arrow: Arrow) -> void:
 	get_tree().create_timer(0.25).timeout.connect(
 		func(): health.make_vulnerable()
 	)
-	_eyes_hit.start()
+	#_eyes_hit.start()
 	_eyes.set_eyes_state("hit")
 
 func get_mouse_world_position() -> Vector3:
@@ -177,7 +171,7 @@ func _move(dir: Vector2, _dt: float) -> void:
 	velocity.z = v.y
 	velocity.y = 0
 	move_and_slide()
-	
+
 func _on_died() -> void:
 	arrows.clear_arrows()
 	time.resume()
@@ -203,24 +197,23 @@ func _on_slot_cleared(slot: int) -> void:
 	_sectors.unhighlight_sector(slot)
 
 func _on_firing_enabled(_arrow: Arrow) -> void:
-	pass
+	if time.is_slowed():
+		dash.enable()
 
 func _on_firing_disabled(_arrow: Arrow) -> void:
-	pass # Replace with function body.
+	if not arrows.has_fireable():
+		dash.disable()
 
 func _on_time_slowed() -> void:
-	if arrows.has_fireable():
-		_dash_preview.enable()
+	#if arrows.has_fireable():
+	#	dash.enable()
+	pass
 
 func _on_time_resumed() -> void:
-	_dash_preview.disable()
+	dash.disable()
 
-func _on_fire_pressed() -> void:
-	if dash.can_dash():
-		_dash_preview.enable()
+func _on_dash_enabled() -> void:
+	_dash_preview.enable()
 
-func _on_fire_released() -> void:
+func _on_dash_disabled() -> void:
 	_dash_preview.disable()
-	var mouse_pos := _camera.get_mouse_position()
-	if dash.try_activate(global_position, mouse_pos):
-		time.resume()

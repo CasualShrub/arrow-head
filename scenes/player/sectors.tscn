@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://cl12r2to8hcdp"]
 
 [ext_resource type="Shader" uid="uid://bfi638v144t8g" path="res://shaders/sector_visualiser.gdshader" id="1_tp26x"]
-[ext_resource type="Script" uid="uid://bdywsusg7sgug" path="res://scripts/sectors.gd" id="2_div16"]
+[ext_resource type="Script" uid="uid://bdywsusg7sgug" path="res://scripts/player/sectors.gd" id="2_div16"]
 [ext_resource type="Shader" uid="uid://bcds3powkj5ap" path="res://shaders/triangle.gdshader" id="3_5d62w"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_3qflg"]
@@ -30,9 +30,10 @@ shader_parameter/outer_ring_width = 0.03
 
 [sub_resource type="QuadMesh" id="QuadMesh_k3x5r"]
 
-[node name="Sectors" type="Node3D" unique_id=2027747339]
+[node name="Sectors" type="Node3D" unique_id=179679829]
 script = ExtResource("2_div16")
 centered = false
+metadata/_custom_type_script = "uid://bdywsusg7sgug"
 
 [node name="Pointer" type="MeshInstance3D" parent="." unique_id=1839492618]
 transform = Transform3D(4.196294e-08, 0.16800003, -4.3711385e-08, 1.222839e-15, 7.3435142e-09, 0.99999994, 0.32000008, -2.2030543e-08, 1.9106853e-15, -0.589, 0.014999974, 2.5746008e-08)

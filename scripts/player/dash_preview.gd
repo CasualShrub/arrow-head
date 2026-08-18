@@ -27,6 +27,13 @@ func _ready() -> void:
 	_sprite.modulate = color
 	_line.material_override.color = color
 
+func _notification(what: int) -> void:
+	if what == NOTIFICATION_VISIBILITY_CHANGED:
+		# stop showing/hiding outside enable
+		if visible != _enabled:
+			if visible: hide()
+			else: show()
+
 func is_enabled() -> bool:
 	return _enabled
 

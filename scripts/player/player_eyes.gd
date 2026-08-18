@@ -2,29 +2,29 @@ extends AnimatedSprite3D
 class_name PlayerEyes
 
 enum EyeDirection {
-	Hidden,
-	Centered,
-	North,
-	NorthEast,
-	East,
-	SouthEast,
-	South,
-	SouthWest,
-	West,
-	NorthWest,
+	HIDDEN,
+	CENTERED,
+	NORTH,
+	NORTH_EAST,
+	EAST,
+	SOUTH_EAST,
+	SOUTH,
+	SOUTH_WEST,
+	WEST,
+	NORTH_WEST,
 }
 
 const STATE_MAP: Dictionary[EyeDirection, int] = {
-	EyeDirection.Hidden: -1,
-	EyeDirection.Centered: 0,
-	EyeDirection.North: -1,
-	EyeDirection.NorthEast: -1,
-	EyeDirection.East: 1,
-	EyeDirection.SouthEast: 2,
-	EyeDirection.South: 3,
-	EyeDirection.SouthWest: 4,
-	EyeDirection.West: 5,
-	EyeDirection.NorthWest: -1,
+	EyeDirection.HIDDEN: -1,
+	EyeDirection.CENTERED: 0,
+	EyeDirection.NORTH: -1,
+	EyeDirection.NORTH_EAST: -1,
+	EyeDirection.EAST: 1,
+	EyeDirection.SOUTH_EAST: 2,
+	EyeDirection.SOUTH: 3,
+	EyeDirection.SOUTH_WEST: 4,
+	EyeDirection.WEST: 5,
+	EyeDirection.NORTH_WEST: -1,
 }
 
 @export var deadzone := -1.0
@@ -32,7 +32,7 @@ const STATE_MAP: Dictionary[EyeDirection, int] = {
 signal state_changed(state: StringName)
 signal direction_changed(direction: EyeDirection)
 
-var _dir := EyeDirection.Hidden
+var _dir := EyeDirection.HIDDEN
 
 func _ready() -> void:
 	STATE_MAP.make_read_only()
@@ -41,11 +41,11 @@ func _notification(what: int) -> void:
 	if what == NOTIFICATION_VISIBILITY_CHANGED:
 		var dir := get_eyes_direction()
 		if visible:
-			if dir == EyeDirection.Hidden:
-				set_eyes_direction(EyeDirection.Centered)
+			if dir == EyeDirection.HIDDEN:
+				set_eyes_direction(EyeDirection.CENTERED)
 		else:
-			if dir != EyeDirection.Hidden:
-				set_eyes_direction(EyeDirection.Hidden)
+			if dir != EyeDirection.HIDDEN:
+				set_eyes_direction(EyeDirection.HIDDEN)
 
 func get_eyes_states() -> Array[StringName]:
 	return sprite_frames.get_animation_names()
@@ -89,7 +89,7 @@ func make_eyes_look_at(point: Vector3) -> void:
 		var point_offset_len_sq := position.distance_squared_to(point_offset)
 		var deadzone_sq = deadzone * deadzone
 		if point_offset_len_sq < deadzone_sq:
-			set_eyes_direction(EyeDirection.Centered)
+			set_eyes_direction(EyeDirection.CENTERED)
 			return
 	var rot := atan2(point_offset.z, point_offset.x)
 	set_eyes_rotation(rot)
@@ -97,18 +97,18 @@ func make_eyes_look_at(point: Vector3) -> void:
 static func get_direction_from_rotaion(rot: float) -> EyeDirection:
 	var deg := rad_to_deg(rot)
 	if deg > -22.5 and deg <= 22.5:
-		return EyeDirection.East
+		return EyeDirection.EAST
 	elif deg > 22.5 and deg <= 67.5:
-		return EyeDirection.SouthEast
+		return EyeDirection.SOUTH_EAST
 	elif deg > 67.5 and deg <= 112.5:
-		return EyeDirection.South
+		return EyeDirection.SOUTH
 	elif deg > 112.5 and deg <= 157.5:
-		return EyeDirection.SouthWest
+		return EyeDirection.SOUTH_WEST
 	elif deg > 157.5 or deg <= -157.5:
-		return EyeDirection.West
+		return EyeDirection.WEST
 	elif deg > -157.5 and deg <= -112.5:
-		return EyeDirection.NorthWest
+		return EyeDirection.NORTH_WEST
 	elif deg > -112.5 and deg <= -67.5:
-		return EyeDirection.North
+		return EyeDirection.NORTH
 	else:
-		return EyeDirection.NorthEast
+		return EyeDirection.NORTH_EAST

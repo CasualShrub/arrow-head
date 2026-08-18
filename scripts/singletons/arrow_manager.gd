@@ -5,6 +5,24 @@ extends Node
 var _pooled := 0
 var _pool: Dictionary[PackedScene, Array] = {}
 
+func make_arrow(
+	scene: PackedScene,
+	at: Vector3,
+	velocity: Vector3,
+	target_mask: int
+) -> Arrow:
+	var consumed = _consume_pool(scene)
+	if consumed: return consumed
+	var arrow := scene.instantiate() as Arrow
+	if not arrow:
+		push_error("Instantiated invalid scene ${0}.".format(scene))
+	arrow.deactivated.connect(pool.bind(arrow))
+	arrow.activate(at, velocity, target_mask)
+	return arrow
+
+func _destroy_arrow(arrow: Arrow) -> void:
+	arrow.queue_free()
+
 func _consume_pool(scene: PackedScene) -> Variant:
 	var scene_pool = _pool[scene]
 	if not scene_pool: return null
@@ -23,10 +41,5 @@ func pool(arrow: Arrow) -> void:
 			if curr_len > largest_len:
 				largest = _pool[scene]
 				largest_len = curr_len
-		largest.pop_back()
+		_destroy_arrow(largest.pop_back())
 		_pooled -= 1
-
-func make_arrow(scene: PackedScene) -> Arrow:
-	var consumed = _consume_pool(scene)
-	if consumed: return consumed
-	return scene.instantiate()

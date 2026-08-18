@@ -1,19 +1,19 @@
 extends Node
 class_name HealthComponent
 
-@export var current := 0:
-	set(value):
+@export var value := 0:
+	set(v):
 		if not is_vulnerable(): return
-		value = clamp(value, 0, max_value)
-		if current == value: return
-		current = value
-		if current == 0:
+		v = clamp(value, 0, max_value)
+		if value == v: return
+		value = v
+		if value == 0:
 			die()
 		changed.emit(value)
 @export var max_value := 100:
-	set(value):
-		if current > value:
-			current = value
+	set(v):
+		if value > v:
+			value = v
 		max_value = value
 
 signal changed(current: int)
@@ -26,12 +26,15 @@ signal revived()
 var _vuln := true
 var _dead := false
 
+func _ready() -> void:
+	value = max_value
+
 func take_damage(amount: int) -> void:
-	current -= amount
+	value -= amount
 	damaged.emit(amount)
 
 func heal(amount: int) -> void:
-	current += amount
+	value += amount
 	healed.emit(amount)
 
 func is_vulnerable() -> bool:
@@ -52,7 +55,7 @@ func is_dead() -> bool:
 
 func die() -> void:
 	if is_dead() or not is_vulnerable(): return
-	if current > 0: current = 0
+	value = 0
 	_dead = true
 	died.emit()
 

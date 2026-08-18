@@ -1,9 +1,9 @@
 [gd_scene format=3 uid="uid://dhg4gbfiiobuo"]
 
 [ext_resource type="PackedScene" uid="uid://b8rs35o7f45v0" path="res://scenes/enemies/enemy.tscn" id="1_u24cr"]
-[ext_resource type="SpriteFrames" uid="uid://dm8flmwcygw4c" path="res://sprite_frames/dragonfruit_frames.tres" id="2_b3sqf"]
-[ext_resource type="Script" uid="uid://d04k7pxjd2u24" path="res://scripts/arrow_pattern.gd" id="2_cghyj"]
-[ext_resource type="Script" uid="uid://r4qbgt6it8lb" path="res://scripts/firing_instance.gd" id="3_kt87t"]
+[ext_resource type="SpriteFrames" uid="uid://dm8flmwcygw4c" path="res://sprite_frames/enemies/dragonfruit_frames.tres" id="2_b3sqf"]
+[ext_resource type="Script" uid="uid://d04k7pxjd2u24" path="res://scripts/arrow/firing_data/arrow_pattern.gd" id="2_cghyj"]
+[ext_resource type="Script" uid="uid://r4qbgt6it8lb" path="res://scripts/arrow/firing_data/firing_instance.gd" id="3_kt87t"]
 [ext_resource type="PackedScene" uid="uid://dibxktof00en3" path="res://scenes/arrows/arrow_weak.tscn" id="4_3hhx2"]
 [ext_resource type="PackedScene" uid="uid://byh737vkctruq" path="res://scenes/arrows/arrow_fire.tscn" id="5_3hhx2"]
 [ext_resource type="PackedScene" uid="uid://5ljerioubp6c" path="res://scenes/arrows/arrow_frost.tscn" id="6_e5ay6"]
