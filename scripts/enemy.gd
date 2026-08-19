@@ -4,6 +4,12 @@ class_name Enemy
 
 @export var health: HealthComponent
 @export var sus: SusComponent
+@export var patrol: PatrolComponent
+@export var patrol_path: PatrolPath:
+	set(value):
+		patrol.path = value
+	get:
+		return patrol.path
 @export var player: Player
 
 @export var has_intro := false
@@ -26,8 +32,7 @@ class_name Enemy
 		hurt_radius = value
 @export_group("patrol")
 @export var patrol_speed := 1.0
-@export var patrol_is_closed_loop := false
-@export var alwayds_alert := false
+@export var always_alert := false
 @export_group("combat")
 @export var combat_speed := 1.0
 @export var combat_strafe_radius := 4.0
@@ -52,7 +57,6 @@ signal fired(arrow: Arrow, dir: Vector3)
 @onready var _collider: CollisionShape3D = %Collider
 @onready var _recovery: Timer = %Recovery
 @onready var _inst_timers: Node = %InstanceTimers
-@onready var _patrol_points: Node3D = %PatrolPoints
 @onready var _ray_left: RayCast3D = %RayLeft
 @onready var _ray_right: RayCast3D = %RayRight
 @onready var _ray_forward: RayCast3D = %RayForward
@@ -69,12 +73,6 @@ func _physics_process(delta: float) -> void:
 func _ready() -> void:
 	if Engine.is_editor_hint(): return
 	_patrol_len = 0.0
-	var last: Node3D = null
-	for p in _patrol_points.get_children():
-		_patrol_world_points.append(p.global_position)
-		if last != null:
-			_patrol_len += last.global_position.distance_to(p.global_position)
-		last = p
 	if has_intro and not CusteneManager.played:
 		CusteneManager.played = true
 		sus._vision.hide()
@@ -90,7 +88,7 @@ func _ready() -> void:
 		_sprite.animation = "default"
 		%CameraPivot.unfocus()
 		sus._vision.show()
-	if alwayds_alert:
+	if always_alert:
 		sus.baka(1.1)
 
 func get_hit() -> void:
@@ -243,32 +241,6 @@ func _select_pattern() -> ArrowPattern:
 		if c >= roll:
 			return p
 	return patterns[0]
-
-func _get_patrol_pos() -> Vector3:
-	if _patrol_len == 0.0:
-		return global_position
-
-	var target_dist := _patrol_progress * _patrol_len
-	var curr_dist := 0.0
-
-	for i in range(1, len(_patrol_world_points)):
-		var last_pos := _patrol_world_points[i - 1]
-		var p_pos: Vector3 = _patrol_world_points[i]
-		var dist := last_pos.distance_to(p_pos)
-
-		if curr_dist + dist >= target_dist:
-			var offset := target_dist - curr_dist
-			var new_pos := last_pos.lerp(p_pos, offset / dist)
-			new_pos.y = global_position.y
-			return new_pos
-
-		curr_dist += dist
-
-	var final_pos: Vector3 = _patrol_points.get_child(
-		_patrol_points.get_child_count() - 1
-	).global_position
-	final_pos.y = global_position.y
-	return final_pos
 
 func _patrol(dt: float) -> void:
 	if _patrol_len == 0.0 or len(_patrol_world_points) == 1:

@@ -60,7 +60,12 @@ func remove() -> void:
 
 func _ensure_display_number() -> void:
 	_label = Label3D.new()
-	
+	_label.name = "__PointLabel"
+	_label.transparency = 0.2
+	_label.billboard = BaseMaterial3D.BILLBOARD_ENABLED
+	_label.pixel_size = 0.002
+	_label.double_sided = false
+	add_child(_label)
 	_label.owner = null
 
 func set_display_text(txt: String) -> void:

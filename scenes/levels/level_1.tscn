@@ -6,6 +6,8 @@
 [ext_resource type="Texture2D" uid="uid://duy7x13uwce0v" path="res://assets/textures/brickwall.png" id="4_6761a"]
 [ext_resource type="Material" uid="uid://cwoodgate0tut" path="res://materials/wood_gate_material.tres" id="4_x42e6"]
 [ext_resource type="PackedScene" uid="uid://x1mhd7mlveia" path="res://scenes/ui/game_win.tscn" id="6_sk5k4"]
+[ext_resource type="Script" uid="uid://ddqa4b5f55rf7" path="res://scripts/patrol_path.gd" id="7_oc4kc"]
+[ext_resource type="Script" uid="uid://bnldh5myte2me" path="res://scripts/patrol_point.gd" id="8_s8va5"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_6761a"]
 render_priority = 0
@@ -45,12 +47,18 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.5872107, 0, -7.6167316)
 
 [node name="PatrolPath" parent="SubViewportContainer/SubViewport/World/Enemies/Enemy3" index="10" unique_id=1517201]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.5043008, 0, -1.190836)
+script = ExtResource("7_oc4kc")
+metadata/_custom_type_script = "uid://ddqa4b5f55rf7"
 
 [node name="Enemy" parent="SubViewportContainer/SubViewport/World/Enemies" parent_id_path=PackedInt32Array(1185931971) index="1" unique_id=1884042655 instance=ExtResource("2_1c042")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11.097258, -9.536743e-07, -7.350415)
 
 [node name="Marker3D2" type="Marker3D" parent="SubViewportContainer/SubViewport/World/Enemies/Enemy/PatrolPoints" parent_id_path=PackedInt32Array(1884042655, 1646478367) index="1" unique_id=460779801]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.9890556, 0, 0)
+
+[node name="PatrolPath" parent="SubViewportContainer/SubViewport/World/Enemies/Enemy" index="10" unique_id=1517201]
+script = ExtResource("7_oc4kc")
+metadata/_custom_type_script = "uid://ddqa4b5f55rf7"
 
 [node name="fences" type="CSGBox3D" parent="SubViewportContainer/SubViewport/World" parent_id_path=PackedInt32Array(1589957074) index="6" unique_id=733931657]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.5066247, 0.27922904, -3.92213)
@@ -142,6 +150,24 @@ size = Vector3(8.714607, 2.4925537, 33.00226)
 material = SubResource("ShaderMaterial_oc4kc")
 
 [node name="GameWin" parent="." index="5" unique_id=1577397124 instance=ExtResource("6_sk5k4")]
+
+[node name="PatrolPath" type="Node3D" parent="LevelTimer/TimeLabel" parent_id_path=PackedInt32Array(151884919) index="0" unique_id=1077335168]
+script = ExtResource("7_oc4kc")
+metadata/_custom_type_script = "uid://ddqa4b5f55rf7"
+
+[node name="Point2" type="Marker3D" parent="LevelTimer/TimeLabel/PatrolPath" index="0" unique_id=555452122]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.36896813, 0, -0.5764787)
+gizmo_extents = 0.2
+script = ExtResource("8_s8va5")
+
+[node name="Point" type="Marker3D" parent="LevelTimer/TimeLabel/PatrolPath" index="1" unique_id=1184229568]
+gizmo_extents = 0.2
+script = ExtResource("8_s8va5")
+
+[node name="Point3" type="Marker3D" parent="LevelTimer/TimeLabel/PatrolPath" index="2" unique_id=183991624]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.46180427, 0, -2)
+gizmo_extents = 0.2
+script = ExtResource("8_s8va5")
 
 [connection signal="cleared" from="." to="GameWin" method="_on_encounter_cleared"]
 
