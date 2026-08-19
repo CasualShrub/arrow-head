@@ -1,9 +1,9 @@
 [gd_scene format=3 uid="uid://bnsr22owo5uq4"]
 
 [ext_resource type="PackedScene" uid="uid://b6c1h2si8ob6l" path="res://scenes/levels/encounter.tscn" id="1_h14sk"]
-[ext_resource type="PackedScene" uid="uid://db0ry36fopb12" path="res://scenes/enemies/enemy_bananarotten.tscn" id="3_3p04p"]
-[ext_resource type="PackedScene" uid="uid://kwovebw0p15w" path="res://scenes/enemies/enemy_bananaunripe.tscn" id="4_qsp8v"]
-[ext_resource type="PackedScene" uid="uid://tmhabgv3ovyb" path="res://scenes/enemies/enemy_archer.tscn" id="5_l37oo"]
+[ext_resource type="PackedScene" uid="uid://db0ry36fopb12" path="res://scenes/enemies/enemy_banana_rotten.tscn" id="3_3p04p"]
+[ext_resource type="PackedScene" uid="uid://kwovebw0p15w" path="res://scenes/enemies/enemy_banana_unripe.tscn" id="4_qsp8v"]
+[ext_resource type="PackedScene" uid="uid://tmhabgv3ovyb" path="res://scenes/enemies/enemy_bannana.tscn" id="5_l37oo"]
 [ext_resource type="Material" uid="uid://6w5rlqbtx4yb" path="res://materials/crate_material.tres" id="6_rock"]
 [ext_resource type="Material" uid="uid://bspie6d5acqw8" path="res://materials/stone_floor_material.tres" id="8_floor"]
 [ext_resource type="PackedScene" uid="uid://b7xvltf5sfgso" path="res://scenes/enemies/enemy_peacock.tscn" id="9_3p04p"]

@@ -9,7 +9,7 @@ func make_arrow(
 	scene: PackedScene,
 	at: Vector3,
 	velocity: Vector3,
-	target_mask: int
+	target_mask: int = 1 << 0 & 1 << 3
 ) -> Arrow:
 	var consumed = _consume_pool(scene)
 	if consumed: return consumed

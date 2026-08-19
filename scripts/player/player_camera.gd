@@ -21,11 +21,13 @@ signal shaken(amount: float)
 var current_offset := Vector3.ZERO
 var last_move_direction := Vector3.FORWARD
 
-var _has_base := false
-var _base_pos := Vector3.ZERO
+var _last_pos := Vector3.ZERO
 
 var _trauma := 0.0
 
+
+func _ready() -> void:
+	_last_pos = global_position
 
 func _physics_process(delta: float) -> void:
 	var mouse_pos := get_mouse_position()
@@ -44,17 +46,15 @@ func _physics_process(delta: float) -> void:
 	var height_offset := height * Vector3.UP
 
 	var target := global_position + lookahead_offset + height_offset# + movement_offset
-	if not _has_base:
-		_base_pos = global_position
-		_has_base = true
-	_base_pos = _base_pos.lerp(target, follow_speed * delta)
+	global_position = _last_pos.lerp(target, follow_speed * delta)
 
-	var shake := 0.0
-	if _trauma > 0.0:
-		_trauma = maxf(_trauma - trauma_decay * delta, 0.0)
-		shake = _trauma * _trauma   # quadratic falloff feels punchier
-	var jitter := Vector3(randf_range(-1.0, 1.0), 0.0, randf_range(-1.0, 1.0))
-	global_position = _base_pos + jitter * shake * max_shake_offset
+	#var shake := 0.0
+	#if _trauma > 0.0:
+		#_trauma = maxf(_trauma - trauma_decay * delta, 0.0)
+		#shake = _trauma * _trauma   # quadratic falloff feels punchier
+	#var jitter := Vector3(randf_range(-1.0, 1.0), 0.0, randf_range(-1.0, 1.0))
+	#global_position = _base_pos + jitter * shake * max_shake_offset
+	_last_pos = global_position
 
 func add_shake(amount: float) -> void:
 	_trauma = minf(_trauma + amount, 1.0)

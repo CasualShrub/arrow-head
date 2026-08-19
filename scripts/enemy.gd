@@ -2,8 +2,6 @@
 extends CharacterBody3D
 class_name Enemy
 
-const _ENEMY_TEAM = Arrow.Team.ENEMY
-
 @export var health: HealthComponent
 @export var sus: SusComponent
 @export var player: Player
@@ -49,7 +47,6 @@ var _reposition_timer := 0.0
 var _reposition_interval := 2.0
 
 signal fired(arrow: Arrow, dir: Vector3)
-signal died
 
 @onready var _sprite: AnimatedSprite3D = %Sprite
 @onready var _collider: CollisionShape3D = %Collider
@@ -60,12 +57,44 @@ signal died
 @onready var _ray_right: RayCast3D = %RayRight
 @onready var _ray_forward: RayCast3D = %RayForward
 
-var _dead := false
 var _movement_pattern: Dictionary[float, Vector3] = {}
 var _movement_pattern_start: float
 
+func _physics_process(delta: float) -> void:
+	if Engine.is_editor_hint(): return
+	if health.is_dead(): return
+	_select_behaviour(delta)
+	global_position.y = 0
+
+func _ready() -> void:
+	if Engine.is_editor_hint(): return
+	_patrol_len = 0.0
+	var last: Node3D = null
+	for p in _patrol_points.get_children():
+		_patrol_world_points.append(p.global_position)
+		if last != null:
+			_patrol_len += last.global_position.distance_to(p.global_position)
+		last = p
+	if has_intro and not CusteneManager.played:
+		CusteneManager.played = true
+		sus._vision.hide()
+		%CameraPivot.focus(global_position)
+		_sprite.play("intro")
+		_sprite.process_mode = Node.PROCESS_MODE_ALWAYS
+		%CameraPivot.process_mode = Node.PROCESS_MODE_ALWAYS
+		get_tree().set_deferred("paused", true)
+		await _sprite.animation_finished
+		get_tree().paused = false
+		_sprite.process_mode = Node.PROCESS_MODE_INHERIT
+		%CameraPivot.process_mode = Node.PROCESS_MODE_INHERIT
+		_sprite.animation = "default"
+		%CameraPivot.unfocus()
+		sus._vision.show()
+	if alwayds_alert:
+		sus.baka(1.1)
+
 func get_hit() -> void:
-	if is_dead():
+	if health.is_dead():
 		return
 	await _show_hit()
 	health.take_damage(1)
@@ -104,10 +133,6 @@ func _get_arrow_angle(offset: float, spread: float, count: int, i: int) -> float
 func _get_arrow_dir(angle: float) -> Vector3:
 	return -global_basis.z.rotated(Vector3.UP, angle)
 
-func _make_arrow(scene: PackedScene) -> Arrow:
-	var arrow: Arrow = scene.instantiate()
-	return arrow
-
 func _get_rand(min_val: Variant, max_val: Variant) -> Variant:
 	if min_val >= max_val:
 		return min_val
@@ -119,9 +144,14 @@ func _get_rand(min_val: Variant, max_val: Variant) -> Variant:
 func _execute_instance(instance: FiringInstance, offset: float, spread: float, count: int, i: int) -> void:
 	if instance.individual_offset:
 		offset = _get_rand(instance.offset, instance.max_offset)
-	var arrow := _make_arrow(arrow_scene if arrow_scene else instance.type)
 	var angle := _get_arrow_angle(offset, spread, count, i)
 	var dir := _get_arrow_dir(angle)
+	var arrow := ArrowManager.make_arrow(
+		arrow_scene if arrow_scene else instance.type,
+		global_position,
+		dir
+	)
+	
 	fire(arrow, dir)
 
 func _on_instance_timer_timeout(timer: Timer,
@@ -191,7 +221,7 @@ func fire(arrow: Arrow, dir: Vector3) -> void:
 	var new_v := _on_fire(arrow, dir)
 	if new_v: dir = new_v
 	get_tree().current_scene.add_child(arrow)
-	arrow.activate(global_position, dir, _ENEMY_TEAM)
+	#arrow.activate(global_position, dir, _ENEMY_TEAM)
 	SoundManager.play("arrow_woosh")
 	fired.emit(arrow, dir)
 
@@ -340,14 +370,9 @@ func _select_behaviour(dt: float) -> void:
 			sus.SusStage.HI:
 				_high_sus(dt)
 
-func is_dead() -> bool:
-	return _dead
-
-func die() -> void:
-	_dead = true
+func _on_died() -> void:
 	SoundManager.play("banana_death")
 	_sprite.play("death")
-	died.emit()
 
 func _on_sus_alerted() -> void:
 	_recovery.start()
@@ -356,27 +381,22 @@ func _on_sus_alerted() -> void:
 		if e.global_position.distance_to(global_position) < 10.0 and not e.sus.is_alert(): 
 			e.sus.baka(1.1)
 
-func _on_health_changed() -> void:
-	if not _dead and health.current <= 0:
-		die()
-
 func _on_recovery_timeout() -> void:
-	if _dead: return
+	if health.is_dead(): return
 	var pattern := _select_pattern()
 	if pattern.uses_windup and _sprite.sprite_frames.has_animation("windup"):
 		_sprite.play("windup")
 	else:
 		_sprite.play("fire")
 	await _await_fire_release()
-	if _dead: return
 	perform(pattern)
 
 func _await_fire_release() -> void:
-	while not _dead and _sprite.animation == "fire" and _sprite.frame < fire_release_frame:
+	while not health.is_dead() and _sprite.animation == "fire" and _sprite.frame < fire_release_frame:
 		await _sprite.frame_changed
 
 func highlight_on(c: Color) -> void:
-	if is_dead(): return
+	if health.is_dead(): return
 	_sprite.modulate = c
 
 func highlight_off() -> void:
@@ -389,36 +409,3 @@ func _show_hit() -> void:
 	await get_tree().create_timer(hit_flash_time, true, false, true).timeout
 	get_tree().paused = false
 	_sprite.modulate = Color(1.0, 1.0, 1.0, 1.0)
-
-func _physics_process(delta: float) -> void:
-	if Engine.is_editor_hint(): return
-	if is_dead(): return
-	_select_behaviour(delta)
-	global_position.y = 0
-
-func _ready() -> void:
-	if Engine.is_editor_hint(): return
-	_patrol_len = 0.0
-	var last: Node3D = null
-	for p in _patrol_points.get_children():
-		_patrol_world_points.append(p.global_position)
-		if last != null:
-			_patrol_len += last.global_position.distance_to(p.global_position)
-		last = p
-	if has_intro and not CusteneManager.played:
-		CusteneManager.played = true
-		sus._vision.hide()
-		%CameraPivot.focus(global_position)
-		_sprite.play("intro")
-		_sprite.process_mode = Node.PROCESS_MODE_ALWAYS
-		%CameraPivot.process_mode = Node.PROCESS_MODE_ALWAYS
-		get_tree().set_deferred("paused", true)
-		await _sprite.animation_finished
-		get_tree().paused = false
-		_sprite.process_mode = Node.PROCESS_MODE_INHERIT
-		%CameraPivot.process_mode = Node.PROCESS_MODE_INHERIT
-		_sprite.animation = "default"
-		%CameraPivot.unfocus()
-		sus._vision.show()
-	if alwayds_alert:
-		sus.baka(1.1)

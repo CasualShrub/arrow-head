@@ -70,3 +70,7 @@ func _duplicate_sprite() -> Sprite3D:
 	elif affecting is Sprite3D:
 		sprite = affecting.duplicate()
 	return sprite
+
+func clear() -> void:
+	for s in _active:
+		s.queue_free()

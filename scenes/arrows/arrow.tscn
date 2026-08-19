@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://bxgfy1nvmlb7v"]
 
-[ext_resource type="Script" uid="uid://b2gqyiev2ibwo" path="res://scripts/arrow/new_arrow.gd" id="1_l3dt7"]
+[ext_resource type="Script" uid="uid://b2gqyiev2ibwo" path="res://scripts/arrow/arrow.gd" id="1_l3dt7"]
 [ext_resource type="Texture2D" uid="uid://buqutmlha3vbg" path="res://assets/art/arrow/normal_arrow.png" id="2_d85th"]
 [ext_resource type="Shader" uid="uid://4cl7l7a1abfv" path="res://shaders/outline_3d.gdshader" id="3_outline"]
 [ext_resource type="Script" uid="uid://8dq0q4f6fvkc" path="res://scripts/arrow/colliders/arrow_collider_damageable.gd" id="4_1p348"]
