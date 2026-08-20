@@ -51,7 +51,7 @@ class_name Player
 @onready var _dash_preview: DashPreview = %DashPreview
 @onready var _mouse_pivot: Node3D = %MousePivot
 @onready var _sectors: Sectors = %Sectors
-@onready var _chunks: GPUParticles3D = %AppleChunks
+@onready var _chunks: CPUParticles3D = %AppleChunks
 
 func _ready() -> void:
 	if Engine.is_editor_hint():
@@ -64,6 +64,7 @@ func _process(_delta: float) -> void:
 	if Engine.is_editor_hint():
 		return
 	
+	face(_camera.get_mouse_position())
 	if health.is_dead(): return
 	if _dash_preview.is_enabled():
 		var mouse_pos := get_mouse_world_position()
@@ -84,7 +85,8 @@ func _physics_process(delta: float) -> void:
 		time.resume()
 	
 	if fire_input.consume_pressed():
-		dash.enable()
+		if time.is_slowed() and arrows.has_fireable():
+			dash.enable()
 	
 	if fire_input.consume_released():
 		dash.try_activate(global_position, _camera.get_mouse_position())
@@ -161,9 +163,10 @@ func get_mouse_world_position() -> Vector3:
 
 	return pos
 
-func face(direction: Vector3) -> void:
-	_mouse_pivot.look_at(direction)
-	_eyes.make_eyes_look_at(direction)
+func face(target: Vector3) -> void:
+	target.y = global_position.y
+	_mouse_pivot.look_at(target)
+	_eyes.make_eyes_look_at(target)
 
 func _move(dir: Vector2, _dt: float) -> void:
 	var v = dir * speed

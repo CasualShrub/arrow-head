@@ -9,7 +9,10 @@ func _init(campaign_data: CampaignData) -> void:
 
 func get_current_level() -> PackedScene:
 	var loaded := load(data.levels[current_level_index])
-	assert(loaded is PackedScene, "attempted to load invalid level")
+	assert(
+		loaded is PackedScene,
+		"Attempted to load invalid level %s." % loaded.resource_path
+	)
 	return loaded
 
 func get_level_count() -> int:

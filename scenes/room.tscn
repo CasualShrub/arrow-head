@@ -2,7 +2,6 @@
 
 [ext_resource type="Script" uid="uid://cm3vh4qq01y8d" path="res://scripts/room.gd" id="1_ybpoa"]
 [ext_resource type="PackedScene" uid="uid://boryk37cbh1nx" path="res://scenes/player/player.tscn" id="2_qtoah"]
-[ext_resource type="Script" uid="uid://doms8x46cr1tt" path="res://scripts/player/player_camera.gd" id="3_eom3m"]
 [ext_resource type="Script" uid="uid://eu00f1h8cit6" path="res://scripts/floor.gd" id="4_tk5fv"]
 [ext_resource type="Shader" uid="uid://dnw37cynwb7od" path="res://shaders/screen_effect.gdshader" id="5_w68ji"]
 [ext_resource type="PackedScene" uid="uid://bg4meover1ui0" path="res://scenes/ui/game_over.tscn" id="6_23wr2"]
@@ -41,13 +40,6 @@ render_target_update_mode = 4
 unique_name_in_owner = true
 
 [node name="Enemies" type="Node3D" parent="SubViewportContainer/SubViewport/World" unique_id=1185931971]
-unique_name_in_owner = true
-
-[node name="CameraPivot" type="Node3D" parent="SubViewportContainer/SubViewport/World" unique_id=1563753267]
-transform = Transform3D(1, 0, 0, 0, -4.371139e-08, 1, 0, -1, -4.371139e-08, 0, 3.7000048, 0)
-script = ExtResource("3_eom3m")
-
-[node name="Camera" type="Camera3D" parent="SubViewportContainer/SubViewport/World/CameraPivot" unique_id=349876092]
 unique_name_in_owner = true
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="SubViewportContainer/SubViewport/World" unique_id=1158397434]

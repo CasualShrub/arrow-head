@@ -62,11 +62,11 @@ func get_collision_collider(i: int) -> ArrowCollider:
 	return collided[i][0] as ArrowCollider
 
 func get_collision_normal(i: int) -> Vector3:
-	assert(i < get_collision_count(), "Collision ${0} not found.".format([i]))
+	assert(i < get_collision_count(), "Collision %d not found." % i)
 	return collided[i][1] as Vector3
 
 func get_collision_point(i: int) -> Vector3:
-	assert(i < get_collision_count(), "Collision ${0} not found.".format([i]))
+	assert(i < get_collision_count(), "Collision %d not found." % i)
 	return collided[i][2] as Vector3
 
 func clear_collisions() -> void:

@@ -4,13 +4,13 @@ class_name TimeComponent
 @export_category("bar")
 @export var bar: BarComponent
 @export var activation_cost := 0.0
-@export var tick_regen := 0.05
-@export var tick_consumption := 0.1
+@export var tick_regen := 0.005
+@export var tick_consumption := 0.01
 
 @export_category("slow")
 @export var slow_scale := 0.2
 @export var normal_scale := 1.0
-@export var transition_speed := 1.0
+@export var transition_speed := 5.0
 
 signal slowed()
 signal resumed()

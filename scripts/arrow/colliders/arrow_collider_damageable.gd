@@ -10,8 +10,8 @@ class_name ArrowColliderDamageable
 		value.died.connect(_on_died)
 		health = value
 
-func _init() -> void:
-	assert(health, "ArrowColliderDamageable needs HealthComponent.")
+func _ready() -> void:
+	assert(health, "%s needs HealthComponent." % get_path())
 
 func collide(arrow: Arrow, normal: Vector3, point: Vector3) -> void:
 	health.take_damage(1)

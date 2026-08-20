@@ -58,6 +58,7 @@ func _update_occupied_mask() -> void:
 	mat.set_shader_parameter("occupied_mask", mask)
 
 func _update_centering(toggle: bool = centered) -> void:
+	if not _display: return
 	if toggle:
 		_display.rotation.y = (PI + get_sector_size()) / 2
 	else:

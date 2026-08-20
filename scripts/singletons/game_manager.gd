@@ -29,8 +29,9 @@ func load_level(
 	scene: PackedScene = current_campaign.get_current_level()
 ) -> void:
 	var level := scene.instantiate()
+	assert(level is Level, "Invalid level loaded %s." % scene.resource_path)
 	level.ended.connect(_on_level_ended)
-	assert(level is Level, "Invalid level loaded.")
+	current_level = level
 	level_loaded.emit(level)
 	level.start()
 

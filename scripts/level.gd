@@ -1,8 +1,7 @@
 extends Node3D
 class_name Level
 
-@export var music: AudioStream
-@export_file("*.tscn", "*.scn") var rooms: Array[String] = []
+var _data: LevelData
 
 signal started()
 signal ending()
@@ -11,19 +10,23 @@ signal room_loaded(room: Room)
 signal room_unloading(room: Room)
 
 var current_room: Room
-var current_room_index := -1
+var current_room_index := 0
 var player: Player:
 	get():
 		return current_room.get_player() if current_room else null
 
-func _init() -> void:
-	assert(get_room_count() > 0, "Level must have at least 1 Room.")
+func _init(level_data: LevelData) -> void:
+	assert(
+		level_data.get_room_count() > 0,
+		"Attempted to load data with no rooms %s." % level_data.resource_path
+	)
+	_data = level_data
 
-func get_room_count() -> int:
-	return rooms.size()
+func get_data() -> LevelData:
+	return _data
 
 func has_next_room() -> bool:
-	return current_room_index < get_room_count() - 1
+	return current_room_index < _data.get_room_count() - 1
 
 func start() -> void:
 	load_room(0)
@@ -42,19 +45,24 @@ func advance_room() -> void:
 	if not has_next_room():
 		end()
 		return
-	current_room_index += 1
-	load_room(current_room_index)
+	load_room(current_room_index + 1)
 
-func load_room(idx: int) -> void:
+func load_room(index: int) -> void:
 	if current_room:
 		_unload_room()
-	assert(idx > 0 and idx < get_room_count(), "Tried to load invalid Room.")
-	current_room_index = idx
-	var scene := load(rooms[idx]) as PackedScene
-	assert(scene is PackedScene, "Tried to insantiate invalid Room.")
+	assert(
+		index >= 0 and index < _data.get_room_count(),
+		"Tried to load invalid Room at index %d." % index
+	)
+	var scene := _data.get_room(index)
 	var room := scene.instantiate() as Room
-	assert(room is Room, "Tried to insantiate invalid Room.")
+	assert(
+		room is Room,
+		"Tried to insantiate invalid Room %s." % scene.resource_path
+	)
 	room.ended.connect(_on_room_ended)
+	current_room_index = index
+	current_room = room
 	room_loaded.emit(room)
 
 func _unload_room() -> void:
@@ -65,9 +73,8 @@ func _unload_room() -> void:
 
 func reload_room() -> void:
 	if not current_room: return
-	var idx := current_room_index
 	_unload_room()
-	load_room(idx)
+	load_room(current_room_index)
 
 func _get_scene_type(scene: PackedScene) -> String:
 	var state = scene.get_state()

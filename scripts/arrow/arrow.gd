@@ -20,7 +20,7 @@ func _ready() -> void:
 	var collision_shapes := find_children("*", "ShapeCast3D", true, false)
 	assert(
 		collision_shapes.size() == 1,
-		"Arrow must have exactly 1 ShapeCast3D."
+		"%s must have exactly 1 ShapeCast3D." % get_path()
 	)
 	_shape_cast = collision_shapes[0]
 	

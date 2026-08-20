@@ -9,8 +9,8 @@ signal released()
 var _press_chached := false
 var _release_cached := false
 
-func _init() -> void:
-	assert(action_name, "InputComponent must have ActionName.")
+func _ready() -> void:
+	assert(action_name, "%s must have ActionName." % get_path())
 
 func _input(_event: InputEvent) -> void:
 	if is_just_pressed():

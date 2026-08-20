@@ -56,9 +56,9 @@ func has_state(state: StringName) -> bool:
 func get_eyes_state() -> StringName:
 	return animation
 
-func set_eyes_state(state: StringName):
+func set_eyes_state(state: StringName) -> void:
 	if animation == state: return
-	assert(has_state(state), "Eyes do not have state {state}")
+	assert(has_state(state), "%s does not have state %s." % [get_path(), state])
 	animation = state
 	state_changed.emit(state)
 
@@ -80,21 +80,23 @@ func set_eyes_direction(dir: EyeDirection) -> void:
 	direction_changed.emit(dir)
 
 func set_eyes_rotation(rot: float) -> void:
-	var rot_direction := get_direction_from_rotaion(rot)
+	var rot_direction := get_direction_from_rotation(rot)
 	set_eyes_direction(rot_direction)
 
-func make_eyes_look_at(point: Vector3) -> void:
-	var point_offset := to_local(point)
+func make_eyes_look_at(target: Vector3) -> void:
+	var target_offset := target - global_position
+	target_offset.y = 0
 	if deadzone > 0.0:
-		var point_offset_len_sq := position.distance_squared_to(point_offset)
+		var target_offset_len_sq := position.distance_squared_to(target_offset)
 		var deadzone_sq = deadzone * deadzone
-		if point_offset_len_sq < deadzone_sq:
+		if target_offset_len_sq < deadzone_sq:
 			set_eyes_direction(EyeDirection.CENTERED)
 			return
-	var rot := atan2(point_offset.z, point_offset.x)
+	var rot := atan2(target_offset.z, target_offset.x)
+	
 	set_eyes_rotation(rot)
 
-static func get_direction_from_rotaion(rot: float) -> EyeDirection:
+static func get_direction_from_rotation(rot: float) -> EyeDirection:
 	var deg := rad_to_deg(rot)
 	if deg > -22.5 and deg <= 22.5:
 		return EyeDirection.EAST

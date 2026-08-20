@@ -26,7 +26,7 @@ var _dash_enabled := false
 
 func _ready() -> void:
 	var p := get_parent()
-	assert(p is Node3D, "DashComponent must be the child of a Node3D")
+	assert(p is Node3D, "%s must be the child of a Node3D" % get_path())
 	_parent = p
 	
 	_update_shape(radius)

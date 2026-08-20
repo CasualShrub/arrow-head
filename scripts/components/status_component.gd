@@ -8,8 +8,18 @@ signal statusExpired(Status)
 ## Contains script -> instance.
 var _active: Dictionary[Status, Status] = {}
 
-func _get_key(status: Status) -> Variant:
-	return status.get_script()
+func _ready():
+	assert(
+		get_parent() is Player,
+		"StatusComponent must be the child of a Player" % get_path()
+	)
+
+func _physics_process(delta: float) -> void:
+	for status: Status in _active.values():
+		status.tick(delta)
+		if status.wantsExpire():
+			remove_status(status)
+			statusExpired.emit(status)
 
 func has_status(status: Status) -> bool:
 	return _active.has(_get_key(status))
@@ -27,12 +37,5 @@ func remove_status(status: Status) -> void:
 	status.remove()
 	statusRemoved.emit(status)
 
-func _physics_process(delta: float) -> void:
-	for status: Status in _active.values():
-		status.tick(delta)
-		if status.wantsExpire():
-			remove_status(status)
-			statusExpired.emit(status)
-
-func _init():
-	assert(get_parent() is Player, "StatusComponent must be the child of a Player")
+func _get_key(status: Status) -> Variant:
+	return status.get_script()

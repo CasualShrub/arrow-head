@@ -10,14 +10,19 @@ signal changed(vec: Vector2)
 
 var _vec := Vector2.ZERO
 
-func _init() -> void:
-	assert(left_action, "VectorInputComponent must have LeftAction.")
-	assert(right_action, "VectorInputComponent must have RightAction.")
-	assert(up_action, "VectorInputComponent must have UpAction.")
-	assert(down_action, "VectorInputComponent must have DownAction.")
+func _ready() -> void:
+	assert(left_action, "%s must have LeftAction." % get_path())
+	assert(right_action, "%s must have RightAction." % get_path())
+	assert(up_action, "%s must have UpAction." % get_path())
+	assert(down_action, "%s must have DownAction." % get_path())
 
 func _input(_event: InputEvent) -> void:
-	var curr_vec := Input.get_vector(left_action, right_action, up_action, down_action)
+	var curr_vec := Input.get_vector(
+		left_action,
+		right_action,
+		up_action,
+		down_action
+	)
 	if curr_vec == _vec: return
 	_vec = curr_vec
 	changed.emit(curr_vec)

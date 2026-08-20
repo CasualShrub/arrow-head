@@ -7,7 +7,7 @@ class_name PatrolComponent
 var _dist := 0.0
 
 func _init() -> void:
-	assert(path, "PatrolComponent needs PatrolPath.")
+	assert(path, "%s needs PatrolPath." % get_path())
 
 func get_patrol_position() -> Vector3:
 	return path.get_position_at_distance_along(_dist)

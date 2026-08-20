@@ -47,7 +47,7 @@ func get_player() -> Player:
 
 func add_player(p: Player):
 	player = p
-	p.died.connect(_on_player_died.bind())
+	p.health.died.connect(_on_player_died)
 
 func get_enemies() -> Array[Enemy]:
 	var enemies: Array[Enemy] = []

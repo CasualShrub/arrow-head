@@ -4,6 +4,7 @@ class_name AfterimageComponent
 @export var affecting: SpriteBase3D
 @export var container: Node3D
 
+@export var is_enabled := true
 @export var frame_rate := 1.0:
 	set(value):
 		_frame_step = 1.0 / frame_rate
@@ -17,28 +18,24 @@ signal afterimage_destroying(sprite: Sprite3D)
 
 var _active: Array[Sprite3D] = []
 
-var _is_enabled := false
 var _frame_step := 0.0
 var _to_next := 0.0
 
 func _process(delta: float) -> void:
-	if not is_enabled() or not affecting or not container: return
+	if not is_enabled or not affecting or not container: return
 	_to_next += delta * _frame_step
 	if _to_next >= 1.0:
 		create_afterimage()
 		_to_next -= 1.0
 
-func is_enabled() -> bool:
-	return _is_enabled
-
 func enable() -> void:
-	if is_enabled(): return
-	_is_enabled = true
+	if is_enabled: return
+	is_enabled = true
 	enabled.emit()
 
 func disable() -> void:
-	if not is_enabled(): return
-	_is_enabled = false
+	if not is_enabled: return
+	is_enabled = false
 	disabled.emit()
 
 func create_afterimage() -> Sprite3D:

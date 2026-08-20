@@ -43,10 +43,11 @@ func _physics_process(delta: float) -> void:
 
 	var lookahead_offset := mouse_offset.normalized() * strength * mouse_lookahead_distance
 	#var movement_offset := player.velocity.normalized() * movement_lookahead_distance
-	var height_offset := height * Vector3.UP
 
-	var target := global_position + lookahead_offset + height_offset# + movement_offset
-	global_position = _last_pos.lerp(target, follow_speed * delta)
+	var target := global_position + lookahead_offset #+ movement_offset
+	var new_pos := _last_pos.lerp(target, follow_speed * delta)
+	new_pos.y = height
+	global_position = new_pos
 
 	#var shake := 0.0
 	#if _trauma > 0.0:
@@ -65,20 +66,32 @@ func _on_player_hit(_arrow: Arrow, _sector: int) -> void:
 func shake() -> void:
 	shaken.emit()
 
-func get_mouse_position(collision_mask: int = 1 << 4) -> Vector3:
-	var mouse = get_viewport().get_mouse_position()
+#func get_mouse_position(collision_mask: int = 1 << 4) -> Vector3:
+	#var mouse = get_viewport().get_mouse_position()
+#
+	#var origin = project_ray_origin(mouse)
+	#var dir = project_ray_normal(mouse)
+#
+	#var query = PhysicsRayQueryParameters3D.new()
+	#query.from = origin
+	#query.to = origin + dir * 2000.0
+	#query.collision_mask = collision_mask
+#
+	#var result = get_world_3d().direct_space_state.intersect_ray(query)
+#
+	#if result.is_empty():
+		#return Vector3.ZERO
+#
+	#return result.position as Vector3
 
-	var origin = project_ray_origin(mouse)
-	var dir = project_ray_normal(mouse)
+# less general
+func get_mouse_position() -> Vector3:
+	var mouse := get_viewport().get_mouse_position()
+	var origin := project_ray_origin(mouse)
+	var dir := project_ray_normal(mouse)
 
-	var query = PhysicsRayQueryParameters3D.new()
-	query.from = origin
-	query.to = origin + dir * 2000.0
-	query.collision_mask = collision_mask
-
-	var result = get_world_3d().direct_space_state.intersect_ray(query)
-
-	if result.is_empty():
+	if abs(dir.y) < 0.001:
 		return Vector3.ZERO
 
-	return result.position as Vector3
+	var distance := -origin.y / dir.y
+	return origin + dir * distance
