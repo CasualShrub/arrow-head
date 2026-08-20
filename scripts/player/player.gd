@@ -18,6 +18,14 @@ class_name Player
 	set(value):
 		movement_input = value
 		update_configuration_warnings()
+@export var aim_input: VectorInputComponent:
+	set(value):
+		aim_input = value
+		update_configuration_warnings()
+@export var input_mode: InputModeComponent:
+	set(value):
+		input_mode = value
+		update_configuration_warnings()
 @export var arrows: SectorArrowsComponent:
 	set(value):
 		arrows = value
@@ -64,11 +72,12 @@ func _process(_delta: float) -> void:
 	if Engine.is_editor_hint():
 		return
 	
-	face(_camera.get_mouse_position())
+	var aim_target := _get_aim_target()
+	face(aim_target)
+	
 	if health.is_dead(): return
 	if _dash_preview.is_enabled():
-		var mouse_pos := get_mouse_world_position()
-		var dash_dest := dash.get_dash_destination(global_position, mouse_pos)
+		var dash_dest := dash.get_dash_destination(global_position, aim_target)
 		var dash_targets := dash.get_dash_targets(global_position, dash_dest)
 		_dash_preview.set_preview_position(dash_dest)
 		_dash_preview.set_preview_targets(dash_targets)
@@ -106,6 +115,8 @@ func _get_configuration_warnings() -> PackedStringArray:
 		_get_component_warning(fire_input, "FireInput"),
 		_get_component_warning(slow_input, "SlowInput"),
 		_get_component_warning(movement_input, "MovementInput"),
+		_get_component_warning(aim_input, "AimInput"),
+		_get_component_warning(input_mode, "InputMode"),
 		_get_component_warning(arrows, "ArrowsComponent"),
 		_get_component_warning(time, "TimeComponent"),
 		_get_component_warning(dash, "DashComponent"),
@@ -141,27 +152,13 @@ func get_hit(arrow: Arrow) -> void:
 	#_eyes_hit.start()
 	_eyes.set_eyes_state("hit")
 
-func get_mouse_world_position() -> Vector3:
-	if not _camera: return Vector3.ZERO
-	var mouse = get_viewport().get_mouse_position()
-
-	var origin = _camera.project_ray_origin(mouse)
-	var dir = _camera.project_ray_normal(mouse)
-
-	var query = PhysicsRayQueryParameters3D.new()
-	query.from = origin
-	query.to = origin + dir * 2000.0
-	query.collision_mask = 1 << 4
-
-	var result = get_world_3d().direct_space_state.intersect_ray(query)
-
-	if result.is_empty():
-		return Vector3.ZERO
-
-	var pos: Vector3 = result.position
-	pos.y = global_position.y
-
-	return pos
+func _get_aim_target() -> Vector3:
+	if input_mode.is_keyboard_mouse():
+		return _camera.get_mouse_position()
+	elif input_mode.is_controller():
+		var aim_vec := aim_input.get_vector()
+		return global_position + Vector3(aim_vec.x, 0, aim_vec.y)
+	return Vector3.ZERO
 
 func face(target: Vector3) -> void:
 	target.y = global_position.y

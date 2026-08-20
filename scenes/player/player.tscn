@@ -5,6 +5,7 @@
 [ext_resource type="Script" uid="uid://cq7vk7ukbmts4" path="res://scripts/components/health_component.gd" id="3_kvlxm"]
 [ext_resource type="Script" uid="uid://bw22qrc8y4p5b" path="res://scripts/components/input_component.gd" id="4_uf5tr"]
 [ext_resource type="Script" uid="uid://dah5jq04qfdtm" path="res://scripts/components/time_component.gd" id="5_lgqa7"]
+[ext_resource type="Script" uid="uid://81p2tscmwan4" path="res://scripts/components/input_mode_component.gd" id="6_3j4b4"]
 [ext_resource type="Script" uid="uid://dn5uch0ibf7dr" path="res://scripts/components/dash_component.gd" id="6_8ydkj"]
 [ext_resource type="PackedScene" uid="uid://bqcvh8djsf5bj" path="res://scenes/player/dash_preview.tscn" id="7_3j4b4"]
 [ext_resource type="Script" uid="uid://b2h82wpoguve8" path="res://scripts/components/bar_component.gd" id="7_lgqa7"]
@@ -45,7 +46,7 @@ animations = [{
 "speed": 5.0
 }]
 
-[node name="Player" type="CharacterBody3D" unique_id=775136311 node_paths=PackedStringArray("health", "fire_input", "slow_input", "movement_input", "arrows", "time", "dash")]
+[node name="Player" type="CharacterBody3D" unique_id=775136311 node_paths=PackedStringArray("health", "fire_input", "slow_input", "movement_input", "aim_input", "input_mode", "arrows", "time", "dash")]
 collision_mask = 4
 motion_mode = 1
 script = ExtResource("1_fcs02")
@@ -53,6 +54,8 @@ health = NodePath("HealthComponent")
 fire_input = NodePath("FireInput")
 slow_input = NodePath("SlowInput")
 movement_input = NodePath("MovementInput")
+aim_input = NodePath("AimInput")
+input_mode = NodePath("InputModeComponent")
 arrows = NodePath("ArrowsComponent")
 time = NodePath("TimeComponent")
 dash = NodePath("DashComponent")
@@ -92,6 +95,18 @@ right_action = &"move_right"
 up_action = &"move_up"
 down_action = &"move_down"
 metadata/_custom_type_script = "uid://qahpn0qappgp"
+
+[node name="AimInput" type="Node" parent="." unique_id=386375644]
+script = ExtResource("18_uf5tr")
+left_action = &"aim_left"
+right_action = &"aim_right"
+up_action = &"aim_up"
+down_action = &"aim_down"
+metadata/_custom_type_script = "uid://qahpn0qappgp"
+
+[node name="InputModeComponent" type="Node" parent="." unique_id=1924426623]
+script = ExtResource("6_3j4b4")
+metadata/_custom_type_script = "uid://81p2tscmwan4"
 
 [node name="TimeComponent" type="Node" parent="." unique_id=1620176038 node_paths=PackedStringArray("bar")]
 script = ExtResource("5_lgqa7")

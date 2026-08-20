@@ -93,7 +93,6 @@ func make_eyes_look_at(target: Vector3) -> void:
 			set_eyes_direction(EyeDirection.CENTERED)
 			return
 	var rot := atan2(target_offset.z, target_offset.x)
-	
 	set_eyes_rotation(rot)
 
 static func get_direction_from_rotation(rot: float) -> EyeDirection:
