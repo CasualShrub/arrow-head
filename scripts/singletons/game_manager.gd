@@ -22,7 +22,8 @@ func start_campaign(data: CampaignData) -> void:
 	load_level()
 
 func end_campaign() -> void:
-	campaign_ended.emit()
+	campaign_ended.emit(current_campaign)
+	current_campaign = null
 
 func load_level(
 	scene: PackedScene = current_campaign.get_current_level()
@@ -37,6 +38,7 @@ func unload_level() -> void:
 	if not current_level: return
 	level_unloading.emit(current_level)
 	current_level.queue_free()
+	current_level = null
 
 func _on_level_ended() -> void:
 	unload_level()

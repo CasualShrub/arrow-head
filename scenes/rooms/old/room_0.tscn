@@ -1,35 +1,34 @@
 [gd_scene format=3 uid="uid://dw33fnyacoglt"]
 
-[ext_resource type="PackedScene" uid="uid://b6c1h2si8ob6l" path="res://scenes/room.tscn" id="1_rnyxf"]
-[ext_resource type="PackedScene" uid="uid://tmhabgv3ovyb" path="res://scenes/enemies/enemy_bannana.tscn" id="2_1r3rq"]
-[ext_resource type="Shader" uid="uid://br4t4iofbd1o1" path="res://shaders/textured_fade.gdshader" id="3_fade"]
-[ext_resource type="Texture2D" uid="uid://duy7x13uwce0v" path="res://assets/textures/brickwall.png" id="4_bricktex"]
-[ext_resource type="Material" uid="uid://cwoodgate0tut" path="res://materials/wood_gate_material.tres" id="5_woodgate"]
-[ext_resource type="PackedScene" uid="uid://x1mhd7mlveia" path="res://scenes/ui/game_win.tscn" id="7_iig34"]
-[ext_resource type="Script" uid="uid://qin0bqvhnte3" path="res://scripts/ui/tutorial_prompt.gd" id="8_tutprompt"]
-[ext_resource type="FontFile" uid="uid://dg3navvnlkmpw" path="res://assets/fonts/Puffy-gxW55.otf" id="9_tutpuffy"]
+[ext_resource type="PackedScene" uid="uid://b6c1h2si8ob6l" path="res://scenes/room.tscn" id="1_5pc1f"]
+[ext_resource type="PackedScene" uid="uid://tmhabgv3ovyb" path="res://scenes/enemies/enemy_bannana.tscn" id="2_opk6u"]
+[ext_resource type="Shader" uid="uid://br4t4iofbd1o1" path="res://shaders/textured_fade.gdshader" id="3_iww7l"]
+[ext_resource type="Texture2D" uid="uid://duy7x13uwce0v" path="res://assets/textures/brickwall.png" id="4_6c320"]
+[ext_resource type="Material" uid="uid://cwoodgate0tut" path="res://materials/wood_gate_material.tres" id="5_imiik"]
+[ext_resource type="PackedScene" uid="uid://x1mhd7mlveia" path="res://scenes/ui/game_win.tscn" id="6_8wurf"]
+[ext_resource type="Script" uid="uid://qin0bqvhnte3" path="res://scripts/ui/tutorial_prompt.gd" id="7_t6as3"]
+[ext_resource type="FontFile" uid="uid://dg3navvnlkmpw" path="res://assets/fonts/Puffy-gxW55.otf" id="8_iefc4"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_brickfade"]
 render_priority = 0
-shader = ExtResource("3_fade")
-shader_parameter/tex = ExtResource("4_bricktex")
+shader = ExtResource("3_iww7l")
+shader_parameter/tex = ExtResource("4_6c320")
 shader_parameter/tex_scale = 0.5
 shader_parameter/wall_height = 0.51
 shader_parameter/fade_start = -0.04
 
-[node name="Encounter" unique_id=571267862 instance=ExtResource("1_rnyxf")]
+[node name="Encounter" unique_id=571267862 instance=ExtResource("1_5pc1f")]
 
 [node name="Player" parent="SubViewportContainer/SubViewport/World" parent_id_path=PackedInt32Array(1589957074) index="0" unique_id=508579643]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 17.42201, 0, 25.777952)
-burn_drift_speed = 240.0
 
-[node name="Enemy" parent="SubViewportContainer/SubViewport/World/Enemies" parent_id_path=PackedInt32Array(1185931971) index="0" unique_id=71488470 instance=ExtResource("2_1r3rq")]
+[node name="Enemy" parent="SubViewportContainer/SubViewport/World/Enemies" parent_id_path=PackedInt32Array(1185931971) index="0" unique_id=71488470 instance=ExtResource("2_opk6u")]
 transform = Transform3D(-0.054078814, 0, -0.99853665, 0, 1, 0, 0.99853665, 0, -0.054078814, 13.417198, 0.1, 25.724058)
 combat_speed = 0.0
 combat_strafe_radius = 2.0
 combat_strafe_speed = 0.0
 
-[node name="Enemy2" parent="SubViewportContainer/SubViewport/World/Enemies" parent_id_path=PackedInt32Array(1185931971) index="1" unique_id=1941047971 instance=ExtResource("2_1r3rq")]
+[node name="Enemy2" parent="SubViewportContainer/SubViewport/World/Enemies" parent_id_path=PackedInt32Array(1185931971) index="1" unique_id=1941047971 instance=ExtResource("2_opk6u")]
 transform = Transform3D(0.012966464, 0, 0.99991596, 0, 1, 0, -0.99991596, 0, 0.012966464, 20.877361, 0.1, 25.901152)
 combat_speed = 0.0
 combat_strafe_speed = 0.0
@@ -66,7 +65,7 @@ use_collision = true
 collision_layer = 4
 collision_mask = 9
 size = Vector3(3.659051, 1.6159363, 0.51174927)
-material = ExtResource("5_woodgate")
+material = ExtResource("5_imiik")
 
 [node name="Borders (trees)" type="Node3D" parent="." index="2" unique_id=2065437945]
 
@@ -102,10 +101,10 @@ collision_mask = 9
 size = Vector3(12.452363, 2.4925537, 33.00226)
 material = SubResource("ShaderMaterial_brickfade")
 
-[node name="GameWin" parent="." index="4" unique_id=1577397124 instance=ExtResource("7_iig34")]
+[node name="GameWin" parent="." index="4" unique_id=1577397124 instance=ExtResource("6_8wurf")]
 
 [node name="TutorialPrompt" type="CanvasLayer" parent="." index="7" unique_id=151884930]
-script = ExtResource("8_tutprompt")
+script = ExtResource("7_t6as3")
 
 [node name="PromptLabel" type="Label" parent="TutorialPrompt" index="0" unique_id=151884931]
 unique_name_in_owner = true
@@ -117,13 +116,11 @@ grow_horizontal = 2
 theme_override_colors/font_color = Color(1, 1, 1, 1)
 theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
 theme_override_constants/outline_size = 10
-theme_override_fonts/font = ExtResource("9_tutpuffy")
+theme_override_fonts/font = ExtResource("8_iefc4")
 theme_override_font_sizes/font_size = 48
 text = "Catch an arrow in all four sectors to charge up your dash!"
 horizontal_alignment = 1
 vertical_alignment = 1
 autowrap_mode = 2
 
-[connection signal="cleared" from="." to="GameWin" method="_on_encounter_cleared"]
-[connection signal="cleared" from="." to="TutorialPrompt" method="dismiss"]
 [connection signal="ended" from="." to="TutorialPrompt" method="dismiss"]

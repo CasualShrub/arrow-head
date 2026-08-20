@@ -19,9 +19,6 @@ shader_parameter/dither_strength = 0.25
 
 [node name="Room" type="Node3D" unique_id=571267862]
 script = ExtResource("1_ybpoa")
-is_boss_level = null
-music_track = null
-next_level_path = null
 
 [node name="SubViewportContainer" type="SubViewportContainer" parent="." unique_id=506783396]
 anchors_preset = 15
@@ -102,6 +99,5 @@ text = "00:00.00"
 horizontal_alignment = 2
 vertical_alignment = 2
 
-[connection signal="cleared" from="." to="LevelTimer" method="stop"]
 [connection signal="ended" from="." to="GameOver" method="_on_encounter_ended"]
 [connection signal="ended" from="." to="LevelTimer" method="stop"]

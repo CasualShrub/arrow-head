@@ -65,8 +65,9 @@ func _unload_room() -> void:
 
 func reload_room() -> void:
 	if not current_room: return
+	var idx := current_room_index
 	_unload_room()
-	load_room(current_room_index)
+	load_room(idx)
 
 func _get_scene_type(scene: PackedScene) -> String:
 	var state = scene.get_state()

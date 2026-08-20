@@ -1,13 +1,10 @@
 extends Node3D
 class_name Room
 
-@export var player: Player
-@export var is_boss_level := false
-@export var music_track := "Lvl_1"
-
 signal started()
 signal ended(won: bool)
 
+var player: Player
 var _ongoing := false
 
 @onready var _enemies := %Enemies
@@ -34,7 +31,6 @@ func is_ongoing() -> bool:
 func start() -> void:
 	if is_ongoing(): return
 	Engine.time_scale = 1.0
-	SoundManager.play_music(music_track)
 	_ongoing = true
 	
 	started.emit()
@@ -46,12 +42,12 @@ func end(won: bool) -> void:
 	
 	ended.emit(won)
 
+func get_player() -> Player:
+	return player
+
 func add_player(p: Player):
 	player = p
 	p.died.connect(_on_player_died.bind())
-
-func get_player() -> Player:
-	return player
 
 func get_enemies() -> Array[Enemy]:
 	var enemies: Array[Enemy] = []
