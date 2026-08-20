@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://dw33fnyacoglt"]
 
-[ext_resource type="PackedScene" uid="uid://b6c1h2si8ob6l" path="res://scenes/levels/encounter.tscn" id="1_rnyxf"]
+[ext_resource type="PackedScene" uid="uid://b6c1h2si8ob6l" path="res://scenes/room.tscn" id="1_rnyxf"]
 [ext_resource type="PackedScene" uid="uid://tmhabgv3ovyb" path="res://scenes/enemies/enemy_bannana.tscn" id="2_1r3rq"]
 [ext_resource type="Shader" uid="uid://br4t4iofbd1o1" path="res://shaders/textured_fade.gdshader" id="3_fade"]
 [ext_resource type="Texture2D" uid="uid://duy7x13uwce0v" path="res://assets/textures/brickwall.png" id="4_bricktex"]

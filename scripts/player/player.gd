@@ -34,13 +34,13 @@ class_name Player
 @export var speed := 6.0
 ## how far arrows dig into apples skin
 @export var arrow_dig_depth := 0.15
-## burst of apple bits spawned where an arrow embeds
 @export_group("hurt")
 @export var hurt_radius := 0.4:
 	set(value):
 		if value < 0: value = 0
-		_update_collider(_collider, value)
 		hurt_radius = value
+		_update_collider()
+		
 @export var hurt_reaction_duration := 0.35
 
 @onready var _collider: CollisionShape3D = %Collider
@@ -58,7 +58,7 @@ func _ready() -> void:
 		update_configuration_warnings()
 	
 	_sectors._update_occupied_mask()
-	_update_collider(_collider, hurt_radius)
+	_update_collider()
 
 func _process(_delta: float) -> void:
 	if Engine.is_editor_hint():
@@ -109,14 +109,14 @@ func _get_configuration_warnings() -> PackedStringArray:
 		_get_component_warning(dash, "DashComponent"),
 	].filter(func(element): return element != null)
 
-func _update_collider(c: CollisionShape3D, r: float) -> void:
-	if not c: return
-	if c.shape and c.shape is SphereShape3D:
-		c.shape.radius = r
+func _update_collider() -> void:
+	if not _collider: return
+	if _collider.shape and _collider.shape is SphereShape3D:
+		_collider.shape.radius = hurt_radius
 	else:
 		var s := SphereShape3D.new()
-		s.radius = r
-		c.shape = s
+		s.radius = hurt_radius
+		_collider.shape = s
 
 func get_hit(arrow: Arrow) -> void:
 	if health.is_dead():

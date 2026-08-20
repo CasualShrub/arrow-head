@@ -6,10 +6,7 @@ class_name Arrow
 @export var max_bounces := -1
 ## Time after sticking into a wall the arrow is cleaned up.
 @export var wall_stick_decay_time := -1.0
-@export var free_on_deactivate := true
-
-# TODO: this or function?
-#enum Occupy { HIT, OPPOSITE, LEFT, RIGHT }
+@export var free_on_deactivate := false
 
 signal activated()
 signal deactivated()
@@ -23,7 +20,7 @@ func _ready() -> void:
 	var collision_shapes := find_children("*", "ShapeCast3D", true, false)
 	assert(
 		collision_shapes.size() == 1,
-		"Arrow must have exactly 1 ShapeCast3D"
+		"Arrow must have exactly 1 ShapeCast3D."
 	)
 	_shape_cast = collision_shapes[0]
 	
@@ -50,7 +47,12 @@ func activate(
 	simulation.lifetime_remaining = INF if max_lifetime < 0.0 else max_lifetime
 	
 	show()
+	
+	_on_activated()
 	activated.emit()
+
+func _on_activated() -> void:
+	SoundManager.play("arrow_woosh")
 	
 func deactivate() -> void:
 	if not is_active(): return
@@ -58,10 +60,14 @@ func deactivate() -> void:
 	simulation = null
 	
 	hide()
-	deactivated.emit()
 	
+	_on_deactivated()
+	deactivated.emit()
 	if free_on_deactivate:
 		queue_free()
+
+func _on_deactivated() -> void:
+	pass
 
 func create_simulation() -> ArrowSimulation:
 	if simulation:
@@ -135,6 +141,9 @@ func _on_collision_simulated(
 	_collider: ArrowCollider
 ) -> void:
 	pass
+
+func change_direction(dir: Vector3) -> void:
+	simulation.change_direction(dir)
 
 func _project_onto_axis(from: Vector3, dir: Vector3, point: Vector3) -> Vector3:
 	var to_point := point - from

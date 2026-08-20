@@ -1,0 +1,8 @@
+[gd_resource type="Resource" script_class="CampaignData" format=3 uid="uid://lseyvxmqjacu"]
+
+[ext_resource type="Script" uid="uid://dq3x6bxvuaeyx" path="res://scripts/campaign_data.gd" id="1_vakto"]
+
+[resource]
+script = ExtResource("1_vakto")
+levels = Array[String](["uid://bxnckofd1y1sl"])
+metadata/_custom_type_script = "uid://dq3x6bxvuaeyx"

@@ -4,8 +4,16 @@ class_name PatrolComponent
 @export var path: PatrolPath
 @export var speed := 5.0
 
+var _dist := 0.0
+
 func _init() -> void:
 	assert(path, "PatrolComponent needs PatrolPath.")
 
+func get_patrol_position() -> Vector3:
+	return path.get_position_at_distance_along(_dist)
+
 func progress(distance: float) -> void:
-	pass
+	_dist += distance
+
+func tick(delta: float) -> void:
+	progress(speed * delta)

@@ -3,36 +3,28 @@ extends CharacterBody3D
 class_name Enemy
 
 @export var health: HealthComponent
-@export var sus: SusComponent
+@export var suspicion: SuspicionComponent
 @export var patrol: PatrolComponent
 @export var patrol_path: PatrolPath:
 	set(value):
+		if not patrol: return
 		patrol.path = value
 	get:
-		return patrol.path
-@export var player: Player
+		return patrol.path if patrol else null
 
 @export var has_intro := false
 @export_group("firing")
-@export var patrol_route: Array[Vector3] = []
 @export var patterns: Array[ArrowPattern] = []
-# when set, overrides every pattern's arrow type — the fire/frost variants use this
-@export var arrow_scene: PackedScene = null
-@export var aim_time := 0.4
-@export var release_time := 0.12
 @export var fire_release_frame := 3
 
 @export_group("hit")
-@export var hit_flash_time := 0.15
+@export var hit_flash_time := 0.1
 @export var hurt_radius := 0.4:
 	set(value):
 		if value < 0: value = 0
 		if _collider:
 			_update_collider(_collider, value)
 		hurt_radius = value
-@export_group("patrol")
-@export var patrol_speed := 1.0
-@export var always_alert := false
 @export_group("combat")
 @export var combat_speed := 1.0
 @export var combat_strafe_radius := 4.0
@@ -41,11 +33,6 @@ class_name Enemy
 
 enum CombatState { STRAFE, CHARGE, RETREAT, STOP }
 var _combat_state := CombatState.STRAFE
-
-var _patrol_world_points: Array[Vector3] = []
-var _patrol_len: float
-var _patrol_progress := 0.0
-var _patrol_dir := 1.0
 
 var _strafe_dir := 1.0
 var _reposition_timer := 0.0
@@ -72,10 +59,8 @@ func _physics_process(delta: float) -> void:
 
 func _ready() -> void:
 	if Engine.is_editor_hint(): return
-	_patrol_len = 0.0
 	if has_intro and not CusteneManager.played:
 		CusteneManager.played = true
-		sus._vision.hide()
 		%CameraPivot.focus(global_position)
 		_sprite.play("intro")
 		_sprite.process_mode = Node.PROCESS_MODE_ALWAYS
@@ -87,9 +72,6 @@ func _ready() -> void:
 		%CameraPivot.process_mode = Node.PROCESS_MODE_INHERIT
 		_sprite.animation = "default"
 		%CameraPivot.unfocus()
-		sus._vision.show()
-	if always_alert:
-		sus.baka(1.1)
 
 func get_hit() -> void:
 	if health.is_dead():
@@ -103,9 +85,6 @@ func _update_collider(c: CollisionShape3D, r: float) -> void:
 	var s := SphereShape3D.new()
 	s.radius = r
 	c.shape = s
-
-func _on_fire(_arrow: Arrow, dir: Vector3) -> Vector3:
-	return dir
 
 func _parse_movement_pattern(pattern: Dictionary[float, Vector2]) -> Dictionary[float, Vector3]:
 	var parsed := {}
@@ -144,19 +123,15 @@ func _execute_instance(instance: FiringInstance, offset: float, spread: float, c
 		offset = _get_rand(instance.offset, instance.max_offset)
 	var angle := _get_arrow_angle(offset, spread, count, i)
 	var dir := _get_arrow_dir(angle)
-	var arrow := ArrowManager.make_arrow(
-		arrow_scene if arrow_scene else instance.type,
-		global_position,
-		dir
-	)
 	
-	fire(arrow, dir)
+	fire(instance.type, dir)
 
 func _on_instance_timer_timeout(timer: Timer,
 	instance: FiringInstance,
 	offset: float,
 	spread: float,
-	count: int) -> void:
+	count: int
+) -> void:
 		var nfired = timer.get_meta("fired")
 		if nfired >= count:
 			return
@@ -193,15 +168,18 @@ func perform(pattern: ArrowPattern) -> void:
 		_start_movement_pattern(pattern.movement_pattern)
 	var max_startup := 0.0
 	for instance in pattern.instances:
-		var startup: int = _get_rand(instance.starting_delay, instance.starting_delay)
+		var startup: int = _get_rand(
+			instance.starting_delay,
+			instance.max_starting_delay
+		)
 		
 		if startup == 0.0:
 			_execute_volley(instance)
 		else:
 			max_startup = max(startup, max_startup)
-			get_tree().create_timer(startup).timeout.connect(_execute_volley.bind(
-				instance
-			))
+			get_tree().create_timer(startup).timeout.connect(
+				_execute_volley.bind(instance)
+			)
 	
 	if max_startup > 0.0:
 		await get_tree().create_timer(max_startup).timeout
@@ -215,18 +193,27 @@ func perform(pattern: ArrowPattern) -> void:
 
 	_recovery.start()
 
-func fire(arrow: Arrow, dir: Vector3) -> void:
-	var new_v := _on_fire(arrow, dir)
-	if new_v: dir = new_v
-	get_tree().current_scene.add_child(arrow)
-	#arrow.activate(global_position, dir, _ENEMY_TEAM)
-	SoundManager.play("arrow_woosh")
+func fire(scene: PackedScene, dir: Vector3) -> void:
+	var arrow := ArrowManager.make_arrow(scene, global_position, dir)
+	if not arrow:
+		push_error("Tried to fire invalid arrow.")
+	
+	var mod_dir := _modify_firing_direction(arrow, dir)
+	arrow.change_direction(mod_dir)
+	
+	_on_fire(arrow, dir)
 	fired.emit(arrow, dir)
 
+func _on_fire(_arrow: Arrow, _dir: Vector3) -> void:
+	pass
+
+func _modify_firing_direction(_arrow: Arrow, dir: Vector3) -> Vector3:
+	return dir
+
 func _look_at_player() -> void:
-	if not player:
+	if not GameManager.player:
 		return
-	look_at(player.global_position)
+	look_at(GameManager.player.global_position)
 
 func _select_pattern() -> ArrowPattern:
 	if len(patterns) == 0:
@@ -242,20 +229,12 @@ func _select_pattern() -> ArrowPattern:
 			return p
 	return patterns[0]
 
-func _patrol(dt: float) -> void:
-	if _patrol_len == 0.0 or len(_patrol_world_points) == 1:
-		return
-	var new_pos := _get_patrol_pos()
-	if new_pos != global_position:
-		look_at(new_pos)
-	global_position = new_pos
-	_patrol_progress += dt * patrol_speed / _patrol_len * _patrol_dir
-	if _patrol_progress > 1.0:
-		_patrol_progress = 1 - (_patrol_progress - 1)
-		_patrol_dir = -1.0
-	elif _patrol_progress < 0.0:
-		_patrol_progress *= -1.0
-		_patrol_dir = 1.0
+func _patrol(delta: float) -> void:
+	patrol.tick(delta)
+	var patrol_pos := patrol.get_patrol_position()
+	if patrol_pos != global_position:
+		look_at(patrol_pos)
+	global_position = patrol_pos
 
 func _med_sus(_dt: float) -> void:
 	_look_at_player()
@@ -264,10 +243,10 @@ func _high_sus(_dt: float) -> void:
 	_look_at_player()
 
 func _alert(dt: float) -> void:
-	if not player:
+	if not GameManager.player:
 		return
 
-	var to_player := (player.global_position - global_position)
+	var to_player := (GameManager.player.global_position - global_position)
 	to_player.y = 0.0
 	var dist := to_player.length()
 	var forward := to_player.normalized()
@@ -305,7 +284,7 @@ func _alert(dt: float) -> void:
 		velocity = move.normalized() * combat_speed
 		move_and_slide()
 	
-	look_at(player.global_position)
+	look_at(GameManager.player.global_position)
 
 func _pick_combat_state(dist: float) -> void:
 	_strafe_dir = 1.0 if randf() > 0.5 else -1.0
@@ -331,15 +310,15 @@ func _pick_combat_state(dist: float) -> void:
 		_reposition_interval = randf_range(0.5, 1.2)
 
 func _select_behaviour(dt: float) -> void:
-	if sus.is_alert():
+	if suspicion.is_alert():
 		_alert(dt)
 	else:
-		match sus.get_stage():
-			sus.SusStage.LW:
+		match suspicion.state:
+			suspicion.SuspicionState.LOW:
 				_patrol(dt)
-			sus.SusStage.MD:
+			suspicion.SuspicionState.MEDIUM:
 				_med_sus(dt)
-			sus.SusStage.HI:
+			suspicion.SuspicionState.HIGH:
 				_high_sus(dt)
 
 func _on_died() -> void:

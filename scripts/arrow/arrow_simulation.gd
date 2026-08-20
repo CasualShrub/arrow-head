@@ -21,6 +21,20 @@ var state: Dictionary[StringName, Variant] = {}
 func _init(arrow: Arrow) -> void:
 	simulating = arrow
 
+func change_direction(dir: Vector3) -> void:
+	if dir.length_squared() < 0.001:
+		return
+	dir = dir.normalized()
+	var speed := velocity.length()
+	velocity = dir * speed
+
+func change_speed(speed: float) -> void:
+	if velocity.length_squared() < 0.001:
+		velocity = Vector3.FORWARD
+	else:
+		velocity = velocity.normalized()
+	velocity *= speed
+
 func kill() -> void:
 	disable()
 	alive = false

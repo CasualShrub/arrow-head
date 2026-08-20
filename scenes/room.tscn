@@ -1,24 +1,27 @@
 [gd_scene format=3 uid="uid://b6c1h2si8ob6l"]
 
-[ext_resource type="Script" uid="uid://cm3vh4qq01y8d" path="res://scripts/encounter.gd" id="1_jhehw"]
-[ext_resource type="PackedScene" uid="uid://boryk37cbh1nx" path="res://scenes/player/player.tscn" id="2_br6g5"]
-[ext_resource type="Script" uid="uid://doms8x46cr1tt" path="res://scripts/player/player_camera.gd" id="6_02f36"]
-[ext_resource type="Shader" uid="uid://dnw37cynwb7od" path="res://shaders/screen_effect.gdshader" id="8_2xc7y"]
-[ext_resource type="Script" uid="uid://eu00f1h8cit6" path="res://scripts/floor.gd" id="9_floor"]
-[ext_resource type="PackedScene" uid="uid://bg4meover1ui0" path="res://scenes/ui/game_over.tscn" id="10_gameover"]
-[ext_resource type="PackedScene" uid="uid://dgwhmtq7epmrm" path="res://scenes/ui/pause.tscn" id="11_pause"]
-[ext_resource type="Script" uid="uid://5fadtmicpyjp" path="res://scripts/ui/level_timer.gd" id="12_timer"]
-[ext_resource type="FontFile" uid="uid://dg3navvnlkmpw" path="res://assets/fonts/Puffy-gxW55.otf" id="13_puffy"]
+[ext_resource type="Script" uid="uid://cm3vh4qq01y8d" path="res://scripts/room.gd" id="1_ybpoa"]
+[ext_resource type="PackedScene" uid="uid://boryk37cbh1nx" path="res://scenes/player/player.tscn" id="2_qtoah"]
+[ext_resource type="Script" uid="uid://doms8x46cr1tt" path="res://scripts/player/player_camera.gd" id="3_eom3m"]
+[ext_resource type="Script" uid="uid://eu00f1h8cit6" path="res://scripts/floor.gd" id="4_tk5fv"]
+[ext_resource type="Shader" uid="uid://dnw37cynwb7od" path="res://shaders/screen_effect.gdshader" id="5_w68ji"]
+[ext_resource type="PackedScene" uid="uid://bg4meover1ui0" path="res://scenes/ui/game_over.tscn" id="6_23wr2"]
+[ext_resource type="PackedScene" uid="uid://dgwhmtq7epmrm" path="res://scenes/ui/pause.tscn" id="7_3j2fx"]
+[ext_resource type="Script" uid="uid://5fadtmicpyjp" path="res://scripts/ui/level_timer.gd" id="8_dynfe"]
+[ext_resource type="FontFile" uid="uid://dg3navvnlkmpw" path="res://assets/fonts/Puffy-gxW55.otf" id="9_vfrn5"]
 
 [sub_resource type="Environment" id="Environment_ub6uw"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_tuyoq"]
-shader = ExtResource("8_2xc7y")
+shader = ExtResource("5_w68ji")
 shader_parameter/color_steps = 12.0
 shader_parameter/dither_strength = 0.25
 
-[node name="Encounter" type="Node3D" unique_id=571267862]
-script = ExtResource("1_jhehw")
+[node name="Room" type="Node3D" unique_id=571267862]
+script = ExtResource("1_ybpoa")
+is_boss_level = null
+music_track = null
+next_level_path = null
 
 [node name="SubViewportContainer" type="SubViewportContainer" parent="." unique_id=506783396]
 anchors_preset = 15
@@ -37,16 +40,15 @@ render_target_update_mode = 4
 
 [node name="World" type="Node3D" parent="SubViewportContainer/SubViewport" unique_id=1589957074]
 
-[node name="Player" parent="SubViewportContainer/SubViewport/World" unique_id=508579643 instance=ExtResource("2_br6g5")]
+[node name="Player" parent="SubViewportContainer/SubViewport/World" unique_id=508579643 instance=ExtResource("2_qtoah")]
 unique_name_in_owner = true
 
 [node name="Enemies" type="Node3D" parent="SubViewportContainer/SubViewport/World" unique_id=1185931971]
 unique_name_in_owner = true
 
-[node name="CameraPivot" type="Node3D" parent="SubViewportContainer/SubViewport/World" unique_id=1563753267 node_paths=PackedStringArray("player")]
+[node name="CameraPivot" type="Node3D" parent="SubViewportContainer/SubViewport/World" unique_id=1563753267]
 transform = Transform3D(1, 0, 0, 0, -4.371139e-08, 1, 0, -1, -4.371139e-08, 0, 3.7000048, 0)
-script = ExtResource("6_02f36")
-player = NodePath("../Player")
+script = ExtResource("3_eom3m")
 
 [node name="Camera" type="Camera3D" parent="SubViewportContainer/SubViewport/World/CameraPivot" unique_id=349876092]
 unique_name_in_owner = true
@@ -63,7 +65,7 @@ use_collision = true
 collision_layer = 16
 collision_mask = 0
 size = Vector3(100, 1, 100)
-script = ExtResource("9_floor")
+script = ExtResource("4_tk5fv")
 
 [node name="ColorRect" type="ColorRect" parent="." unique_id=1172579494]
 material = SubResource("ShaderMaterial_tuyoq")
@@ -73,12 +75,12 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="GameOver" parent="." unique_id=1065161674 instance=ExtResource("10_gameover")]
+[node name="GameOver" parent="." unique_id=1065161674 instance=ExtResource("6_23wr2")]
 
-[node name="Pause" parent="." unique_id=151884917 instance=ExtResource("11_pause")]
+[node name="Pause" parent="." unique_id=151884917 instance=ExtResource("7_3j2fx")]
 
 [node name="LevelTimer" type="CanvasLayer" parent="." unique_id=151884918]
-script = ExtResource("12_timer")
+script = ExtResource("8_dynfe")
 
 [node name="TimeLabel" type="Label" parent="LevelTimer" unique_id=151884919]
 unique_name_in_owner = true
@@ -94,7 +96,7 @@ offset_bottom = -24.0
 grow_horizontal = 0
 grow_vertical = 0
 theme_override_colors/font_color = Color(1, 1, 1, 1)
-theme_override_fonts/font = ExtResource("13_puffy")
+theme_override_fonts/font = ExtResource("9_vfrn5")
 theme_override_font_sizes/font_size = 44
 text = "00:00.00"
 horizontal_alignment = 2
