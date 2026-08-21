@@ -7,3 +7,4 @@ render_priority = 0
 shader = ExtResource("1_oatpf")
 shader_parameter/tint = Color(1, 1, 1, 1)
 shader_parameter/strength = 0.5
+shader_parameter/opacity = 0.1

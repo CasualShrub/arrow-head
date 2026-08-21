@@ -3,6 +3,7 @@
 [ext_resource type="Script" uid="uid://cm3vh4qq01y8d" path="res://scripts/room.gd" id="1_ybpoa"]
 [ext_resource type="PackedScene" uid="uid://boryk37cbh1nx" path="res://scenes/player/player.tscn" id="2_qtoah"]
 [ext_resource type="Script" uid="uid://eu00f1h8cit6" path="res://scripts/floor.gd" id="4_tk5fv"]
+[ext_resource type="Shader" uid="uid://nejcjbetx08r" path="res://shaders/darken_exclude.gdshader" id="4_ybpoa"]
 [ext_resource type="Shader" uid="uid://dnw37cynwb7od" path="res://shaders/screen_effect.gdshader" id="5_w68ji"]
 [ext_resource type="PackedScene" uid="uid://bg4meover1ui0" path="res://scenes/ui/game_over.tscn" id="6_23wr2"]
 [ext_resource type="PackedScene" uid="uid://dgwhmtq7epmrm" path="res://scenes/ui/pause.tscn" id="7_3j2fx"]
@@ -14,6 +15,11 @@
 [sub_resource type="QuadMesh" id="QuadMesh_8wtow"]
 size = Vector2(100, 100)
 orientation = 1
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_7dqbv"]
+shader = ExtResource("4_ybpoa")
+shader_parameter/darken_color = Color(0, 0, 0, 1)
+shader_parameter/darken_amount = 0.800000038
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_tuyoq"]
 shader = ExtResource("5_w68ji")
@@ -43,6 +49,9 @@ render_target_update_mode = 4
 [node name="Player" parent="SubViewportContainer/SubViewport/World" unique_id=508579643 instance=ExtResource("2_qtoah")]
 unique_name_in_owner = true
 
+[node name="Projectiles" type="Node3D" parent="SubViewportContainer/SubViewport/World" unique_id=343234902]
+unique_name_in_owner = true
+
 [node name="Enemies" type="Node3D" parent="SubViewportContainer/SubViewport/World" unique_id=1185931971]
 unique_name_in_owner = true
 
@@ -57,7 +66,23 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.2, 0)
 mesh = SubResource("QuadMesh_8wtow")
 script = ExtResource("4_tk5fv")
 
-[node name="ColorRect" type="ColorRect" parent="." unique_id=1172579494]
+[node name="Darken" type="CanvasLayer" parent="SubViewportContainer/SubViewport/World" unique_id=1976756876]
+layer = 10
+
+[node name="DarkenOverlay" type="ColorRect" parent="SubViewportContainer/SubViewport/World/Darken" unique_id=1971922858]
+unique_name_in_owner = true
+visible = false
+material = SubResource("ShaderMaterial_7dqbv")
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 6
+size_flags_vertical = 6
+color = Color(0, 0, 0, 0.8392157)
+
+[node name="Pixellate" type="ColorRect" parent="." unique_id=1172579494]
 material = SubResource("ShaderMaterial_tuyoq")
 anchors_preset = 15
 anchor_right = 1.0
@@ -66,10 +91,13 @@ grow_horizontal = 2
 grow_vertical = 2
 
 [node name="GameOver" parent="." unique_id=1065161674 instance=ExtResource("6_23wr2")]
+visible = false
 
 [node name="Pause" parent="." unique_id=151884917 instance=ExtResource("7_3j2fx")]
+visible = false
 
 [node name="LevelTimer" type="CanvasLayer" parent="." unique_id=151884918]
+layer = 80
 script = ExtResource("8_dynfe")
 
 [node name="TimeLabel" type="Label" parent="LevelTimer" unique_id=151884919]

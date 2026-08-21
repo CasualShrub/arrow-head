@@ -2,6 +2,7 @@ extends Node3D
 class_name Room
 
 const JUICE_BAR_HUD := preload("res://scenes/ui/juice_bar_hud.tscn")
+const HIGHLIGHT_LAYER := 20
 
 signal started()
 signal cleared()
@@ -15,28 +16,36 @@ var _exit_area: ExitArea
 @onready var _enemies := %Enemies
 
 func _ready() -> void:
-	var players := find_children("*", "Player", true)
-	assert(players.size() == 1, "Room must have exactly one Player.")
-	add_player(players[0])
-
+	_setup_player()
+	_setup_enemies()
 	_setup_juice_bar()
+	_setup_exit()
 	
-	var enemies := find_children("*", "Enemy", true)
-	for e in enemies:
-		add_enemy(e)
+	DarkenManager.register_overlay(%DarkenOverlay)
 	
-
-	var exits := find_children("*", "Exit_Area", true)
-	if not exits.is_empty():
-		_exit_area = exits[0]
-		_exit_area.player_entered.connect(_on_exit_entered)
-
 	start()
 
 func _input(event: InputEvent) -> void:
 	if not _ongoing: return   # end screens handle their own keys
 	if event is InputEventKey and event.pressed and not event.echo and event.keycode == KEY_R:
 		get_tree().reload_current_scene()
+
+func _setup_player() -> void:
+	var players := find_children("*", "Player", true)
+	assert(players.size() == 1, "Room must have exactly one Player.")
+	add_player(players[0])
+
+func _setup_enemies() -> void:
+	var enemies := find_children("*", "Enemy", true)
+	for e in enemies:
+		add_enemy(e)
+
+func _setup_exit() -> void:
+	var exits := find_children("*", "Exit_Area", true)
+	if not exits.is_empty():
+		_exit_area = exits[0]
+		_exit_area.player_entered.connect(_on_exit_entered)
+
 
 func _setup_juice_bar() -> void:
 	if not player or not player.time or not player.time.bar:

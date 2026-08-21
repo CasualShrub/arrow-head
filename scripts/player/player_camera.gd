@@ -19,6 +19,9 @@ signal shaken(strength: float)
 var _current_lookahead := Vector3.ZERO
 var _target_lookahead := Vector3.ZERO
 
+func _ready() -> void:
+	DarkenManager.register_camera(self)
+
 func _process(delta: float) -> void:
 	_current_lookahead = _current_lookahead.lerp(
 		_target_lookahead,

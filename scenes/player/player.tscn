@@ -47,7 +47,7 @@ animations = [{
 "speed": 5.0
 }]
 
-[node name="Player" type="CharacterBody3D" unique_id=775136311 node_paths=PackedStringArray("health", "fire_input", "slow_input", "movement_input", "aim_input", "input_mode", "arrows", "time", "afterimage", "dash")]
+[node name="Player" type="CharacterBody3D" unique_id=775136311 node_paths=PackedStringArray("health", "fire_input", "slow_input", "movement_input", "aim_input", "input_mode", "arrows", "time", "afterimage", "dash") groups=["player"]]
 collision_mask = 4
 motion_mode = 1
 script = ExtResource("1_fcs02")
@@ -67,11 +67,13 @@ metadata/_custom_type_script = "uid://djbaojmlgp0lu"
 unique_name_in_owner = true
 shape = SubResource("SphereShape3D_oprun")
 
-[node name="Camera" type="Camera3D" parent="." unique_id=1534654778]
+[node name="Camera" type="Camera3D" parent="." unique_id=1534654778 groups=["main_camera"]]
 unique_name_in_owner = true
-transform = Transform3D(1, 0, 0, 0, -4.371139e-08, 1, 0, -1, -4.371139e-08, 0, 1, 0)
+transform = Transform3D(1, 0, 0, 0, -4.371139e-08, 1, 0, -1, -4.371139e-08, 0, 10, 0)
 current = true
+fov = 45.0
 script = ExtResource("16_myrg7")
+height = 10.0
 metadata/_custom_type_script = "uid://doms8x46cr1tt"
 
 [node name="HealthComponent" type="Node" parent="." unique_id=827183956]
@@ -164,6 +166,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.0034347773, 0)
 [node name="Eyes" type="AnimatedSprite3D" parent="." unique_id=284666599]
 unique_name_in_owner = true
 transform = Transform3D(0.75, 0, 0, 0, -3.278354e-08, 0.75, 0, -0.75, -3.278354e-08, 0, 0.0045996904, 0)
+layers = 524289
 double_sided = false
 sprite_frames = ExtResource("12_6cv16")
 script = ExtResource("12_kvlxm")
@@ -173,6 +176,7 @@ metadata/_custom_type_script = "uid://d05r0wt3n7g6i"
 [node name="Sprite" type="AnimatedSprite3D" parent="." unique_id=1733920157]
 unique_name_in_owner = true
 transform = Transform3D(0.74, 0, 0, 0, -3.2346428e-08, 0.74, 0, -0.74, -3.2346428e-08, 0, 0, 0)
+layers = 524289
 double_sided = false
 sprite_frames = ExtResource("8_yj68g")
 
@@ -180,6 +184,7 @@ sprite_frames = ExtResource("8_yj68g")
 unique_name_in_owner = true
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -3.3581575e-11, 0.0007682565)
 visible = false
+layers = 524289
 sprite_frames = SubResource("SpriteFrames_jej6c")
 animation = &"fire"
 

@@ -67,6 +67,7 @@ class_name Player
 
 func _ready() -> void:
 	if Engine.is_editor_hint(): update_configuration_warnings()
+	DarkenManager.process_priority = 100
 	_update_collider()
 
 func _process(_delta: float) -> void:
@@ -138,6 +139,9 @@ func _update_collider() -> void:
 		var s := SphereShape3D.new()
 		s.radius = hurt_radius
 		_collider.shape = s
+
+func get_camera() -> PlayerCamera:
+	return _camera
 
 func get_hit(arrow: Arrow) -> void:
 	if health.is_dead():

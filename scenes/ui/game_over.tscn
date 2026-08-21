@@ -7,7 +7,7 @@
 
 [node name="GameOver" type="CanvasLayer" unique_id=1577397124]
 process_mode = 3
-layer = 10
+layer = 100
 script = ExtResource("1_s")
 
 [node name="Root" type="Control" parent="." unique_id=973900867]
@@ -90,10 +90,26 @@ custom_minimum_size = Vector2(280, 56)
 layout_mode = 2
 size_flags_horizontal = 4
 focus_mode = 0
-disabled = true
 theme_override_fonts/font = ExtResource("3_puffy")
 theme_override_font_sizes/font_size = 24
+disabled = true
 text = "Continue"
+
+[node name="Badge" type="Label" parent="Root/Center/Continue" unique_id=1618386804]
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = 14.0
+offset_top = -14.0
+offset_right = 100.0
+offset_bottom = 14.0
+grow_vertical = 2
+theme_override_colors/font_color = Color(0.6, 0.6, 0.6, 1)
+theme_override_fonts/font = ExtResource("3_puffy")
+theme_override_font_sizes/font_size = 18
+text = "space"
+vertical_alignment = 1
 
 [node name="Restart" type="Button" parent="Root/Center" unique_id=1213127399]
 unique_name_in_owner = true
@@ -104,6 +120,22 @@ focus_mode = 0
 theme_override_fonts/font = ExtResource("3_puffy")
 theme_override_font_sizes/font_size = 24
 text = "Restart"
+
+[node name="Badge" type="Label" parent="Root/Center/Restart" unique_id=2113142895]
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = 14.0
+offset_top = -14.0
+offset_right = 100.0
+offset_bottom = 14.0
+grow_vertical = 2
+theme_override_colors/font_color = Color(0.95, 0.85, 0.4, 1)
+theme_override_fonts/font = ExtResource("3_puffy")
+theme_override_font_sizes/font_size = 18
+text = "r"
+vertical_alignment = 1
 
 [node name="MainMenu" type="Button" parent="Root/Center" unique_id=1213127398]
 unique_name_in_owner = true
@@ -116,14 +148,14 @@ theme_override_font_sizes/font_size = 24
 text = "Main Menu"
 script = ExtResource("9_hold")
 
-[node name="Sweep" type="ColorRect" parent="Root/Center/MainMenu"]
+[node name="Sweep" type="ColorRect" parent="Root/Center/MainMenu" unique_id=1676519711]
 layout_mode = 1
+anchors_preset = 9
 anchor_bottom = 1.0
-offset_right = 0.0
 mouse_filter = 2
 color = Color(1, 1, 1, 0.32)
 
-[node name="Badge" type="Label" parent="Root/Center/MainMenu"]
+[node name="Badge" type="Label" parent="Root/Center/MainMenu" unique_id=14197194]
 layout_mode = 1
 anchors_preset = 4
 anchor_top = 0.5
@@ -132,50 +164,9 @@ offset_left = 14.0
 offset_top = -14.0
 offset_right = 100.0
 offset_bottom = 14.0
-grow_horizontal = 1
 grow_vertical = 2
-mouse_filter = 2
 theme_override_colors/font_color = Color(0.95, 0.85, 0.4, 1)
 theme_override_fonts/font = ExtResource("3_puffy")
 theme_override_font_sizes/font_size = 18
 text = "tab"
-horizontal_alignment = 0
-vertical_alignment = 1
-
-[node name="Badge" type="Label" parent="Root/Center/Continue"]
-layout_mode = 1
-anchors_preset = 4
-anchor_top = 0.5
-anchor_bottom = 0.5
-offset_left = 14.0
-offset_top = -14.0
-offset_right = 100.0
-offset_bottom = 14.0
-grow_horizontal = 1
-grow_vertical = 2
-mouse_filter = 2
-theme_override_colors/font_color = Color(0.6, 0.6, 0.6, 1)
-theme_override_fonts/font = ExtResource("3_puffy")
-theme_override_font_sizes/font_size = 18
-text = "space"
-horizontal_alignment = 0
-vertical_alignment = 1
-
-[node name="Badge" type="Label" parent="Root/Center/Restart"]
-layout_mode = 1
-anchors_preset = 4
-anchor_top = 0.5
-anchor_bottom = 0.5
-offset_left = 14.0
-offset_top = -14.0
-offset_right = 100.0
-offset_bottom = 14.0
-grow_horizontal = 1
-grow_vertical = 2
-mouse_filter = 2
-theme_override_colors/font_color = Color(0.95, 0.85, 0.4, 1)
-theme_override_fonts/font = ExtResource("3_puffy")
-theme_override_font_sizes/font_size = 18
-text = "r"
-horizontal_alignment = 0
 vertical_alignment = 1

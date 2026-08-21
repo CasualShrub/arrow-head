@@ -23,7 +23,6 @@ var _to_next := 0.0
 func _process(delta: float) -> void:
 	if not is_enabled or not affecting or not container: return
 	_to_next += delta * frame_rate
-	print(_to_next)
 	if _to_next >= 1.0:
 		create_afterimages()
 		_to_next -= 1.0

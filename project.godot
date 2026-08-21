@@ -17,15 +17,23 @@ config/icon="res://icon.svg"
 
 [autoload]
 
+GameManager="*uid://bgq8eao47q3p6"
 Settings="*res://scripts/ui/settings.gd"
 SoundManager="*res://scripts/singletons/sound_manager.gd"
 CusteneManager="*uid://b4y6wals7vj5q"
 ArrowManager="*uid://bk7ogpk8resli"
-GameManager="*uid://bgq8eao47q3p6"
+DarkenManager="*uid://32eh6c8miqqw"
 
 [display]
 
 window/stretch/mode="canvas_items"
+
+[global_group]
+
+enemies=""
+player=""
+main_camera=""
+projectiles=""
 
 [input]
 

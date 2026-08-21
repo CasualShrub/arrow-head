@@ -10,6 +10,12 @@ const FLOOR_TILES: Array[Texture2D] = [
 	preload("res://tiles/grass6.png"),
 ]
 
+@export_tool_button("Reload", "Reload")
+var reload_button := func():
+	_preview_material = null
+	_preview_texture = null
+	_apply_preview()
+
 @export var cells := 8
 @export var cell_px := 192
 @export var uv_scale := 0.06
@@ -33,7 +39,6 @@ func _exit_tree() -> void:
 		material_override = null
 		_preview_material = null
 		_preview_texture = null
-
 
 func _apply_preview() -> void:
 	if not is_inside_tree():
