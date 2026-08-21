@@ -203,6 +203,8 @@ func _on_dash_activated(destination: Vector3, targets: Array) -> void:
 	for target in targets:
 		if target is Enemy:
 			target.get_hit()
+	if time.is_slowed():
+		time.resume()
 
 func _on_slot_occupied(slot: int, _arrow: Arrow) -> void:
 	_sectors.highlight_sector(slot)
