@@ -21,6 +21,7 @@
 [ext_resource type="PackedScene" uid="uid://cl12r2to8hcdp" path="res://scenes/player/sectors.tscn" id="13_gx1jg"]
 [ext_resource type="Script" uid="uid://doms8x46cr1tt" path="res://scripts/player/player_camera.gd" id="16_myrg7"]
 [ext_resource type="Script" uid="uid://qahpn0qappgp" path="res://scripts/components/vector_input_component.gd" id="18_uf5tr"]
+[ext_resource type="Script" uid="uid://buoj7rr88dblc" path="res://scripts/arrow/colliders/arrow_collider.gd" id="19_arwct"]
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_oprun"]
 radius = 0.4
@@ -76,6 +77,14 @@ script = ExtResource("16_myrg7")
 height = 10.0
 metadata/_custom_type_script = "uid://doms8x46cr1tt"
 
+[node name="ArrowCatcher" type="Area3D" parent="." unique_id=1401584449]
+collision_layer = 32
+collision_mask = 0
+script = ExtResource("19_arwct")
+
+[node name="Collider" type="CollisionShape3D" parent="ArrowCatcher" unique_id=1401584450]
+shape = SubResource("SphereShape3D_oprun")
+
 [node name="HealthComponent" type="Node" parent="." unique_id=827183956]
 script = ExtResource("3_kvlxm")
 value = 1
@@ -115,7 +124,7 @@ metadata/_custom_type_script = "uid://81p2tscmwan4"
 [node name="TimeComponent" type="Node" parent="." unique_id=1620176038 node_paths=PackedStringArray("bar")]
 script = ExtResource("5_lgqa7")
 bar = NodePath("../TimeBar")
-tick_consumption = 0.0
+tick_consumption = 0.1
 metadata/_custom_type_script = "uid://dah5jq04qfdtm"
 
 [node name="TimeBar" type="Node" parent="." unique_id=2124484905]
@@ -140,8 +149,9 @@ metadata/_custom_type_script = "uid://dn5uch0ibf7dr"
 script = ExtResource("7_ugbui")
 metadata/_custom_type_script = "uid://dcfpc1boe1bn7"
 
-[node name="ArrowsComponent" type="Node" parent="." unique_id=1757650454]
+[node name="ArrowsComponent" type="Node" parent="." unique_id=1757650454 node_paths=PackedStringArray("container")]
 script = ExtResource("8_fcs02")
+container = NodePath("../MousePivot/ArrowsContainer")
 metadata/_custom_type_script = "uid://360h68v2nvph"
 
 [node name="DashPreview" parent="." unique_id=1586639351 instance=ExtResource("7_3j4b4")]
@@ -192,6 +202,7 @@ animation = &"fire"
 unique_name_in_owner = true
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.023803711, 0)
 
+[connection signal="collided" from="ArrowCatcher" to="." method="get_hit"]
 [connection signal="died" from="HealthComponent" to="." method="_on_died"]
 [connection signal="resumed" from="TimeComponent" to="." method="_on_time_resumed"]
 [connection signal="slowed" from="TimeComponent" to="." method="_on_time_slowed"]
