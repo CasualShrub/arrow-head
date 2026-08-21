@@ -1,0 +1,13 @@
+[gd_resource type="ShaderMaterial" format=3 uid="uid://cwbrik8fade01"]
+
+[ext_resource type="Shader" uid="uid://br4t4iofbd1o1" path="res://shaders/textured_fade.gdshader" id="1_shader"]
+[ext_resource type="Texture2D" uid="uid://duy7x13uwce0v" path="res://assets/textures/brickwall.png" id="2_tex"]
+
+[resource]
+resource_name = "BrickFadeMaterial"
+render_priority = 0
+shader = ExtResource("1_shader")
+shader_parameter/tex = ExtResource("2_tex")
+shader_parameter/tex_scale = 0.5
+shader_parameter/wall_height = 0.51
+shader_parameter/fade_start = -0.04

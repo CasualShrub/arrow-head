@@ -1,18 +1,10 @@
-[gd_scene format=3]
+[gd_scene format=3 uid="uid://cwall3d8prfb0"]
 
-[ext_resource type="Texture2D" uid="uid://dvyerojv1okry" path="res://assets/art/deco/wall.png" id="1_tex"]
+[ext_resource type="Material" uid="uid://cwbrik8fade01" path="res://materials/brick_fade_material.tres" id="1_ofvls"]
 
-[sub_resource type="RectangleShape2D" id="rect"]
-size = Vector2(390, 371)
-
-[node name="Wall" type="StaticBody2D"]
-scale = Vector2(0.3, 0.3)
+[node name="Wall" type="CSGBox3D" unique_id=659255651]
+use_collision = true
 collision_layer = 4
-collision_mask = 0
-
-[node name="Sprite" type="Sprite2D" parent="."]
-texture = ExtResource("1_tex")
-
-[node name="Collider" type="CollisionShape2D" parent="."]
-position = Vector2(-25, 16)
-shape = SubResource("rect")
+collision_mask = 9
+size = Vector3(4, 2.5, 1)
+material = ExtResource("1_ofvls")
