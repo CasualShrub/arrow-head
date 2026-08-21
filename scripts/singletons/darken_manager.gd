@@ -10,8 +10,10 @@ var _main_cam: Camera3D
 var _darken_tween: Tween
 
 func _ready():
+	process_mode = Node.PROCESS_MODE_ALWAYS
 	mask_vp = SubViewport.new()
 	mask_vp.transparent_bg = true
+	mask_vp.render_target_update_mode = SubViewport.UPDATE_ALWAYS
 	add_child(mask_vp)
 
 	mask_cam = Camera3D.new()

@@ -32,6 +32,8 @@ func _ready() -> void:
 func take_damage(amount: int) -> void:
 	value -= amount
 	damaged.emit(amount)
+	if value == 0:
+		die()
 
 func heal(amount: int) -> void:
 	value += amount

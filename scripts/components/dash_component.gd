@@ -4,7 +4,7 @@ class_name DashComponent
 @export var max_distance := 10.0
 @export var cooldown := 0.1
 
-@export_category("collision")
+@export_group("collision")
 @export var radius := 0.4:
 	set(value):
 		_update_shape(value)
@@ -43,6 +43,8 @@ func try_activate(origin: Vector3, target: Vector3) -> bool:
 func activate(origin: Vector3, wish_pos: Vector3) -> void:
 	var dest := get_dash_destination(origin, wish_pos)
 	var targets := get_dash_targets(origin, dest)
+	for t in targets:
+		t.mark_hit()
 	start_cooldown()
 	activated.emit(dest, targets)
 
@@ -64,12 +66,12 @@ func disable() -> void:
 
 func is_on_cooldown() -> bool:
 	if _dash_available < 0.0:
-		return true
+		return false
 	elif Time.get_ticks_msec() >= _dash_available:
 		# reset for quicker checks in future
 		_dash_available = -1.0
-		return true
-	return false
+		return false
+	return true
 
 func start_cooldown(cd: float = cooldown) -> void:
 	_dash_available = Time.get_ticks_msec() + cd * 1000
@@ -80,14 +82,15 @@ func reset_cooldown() -> void:
 	cooldown_reset.emit()
 
 func get_dash_destination(origin: Vector3, target: Vector3) -> Vector3:
-	target = target.limit_length(max_distance)
 	var motion = target - origin
+	motion = motion.limit_length(max_distance)
 	
 	var query := PhysicsShapeQueryParameters3D.new()
 	query.shape = _dash_shape
 	query.transform = Transform3D(Basis.IDENTITY, origin)
-	query.collision_mask = collision_mask
 	query.motion = motion
+	query.collision_mask = collision_mask
+	query.exclude = [_parent.get_rid()]
 	
 	var state_space := _parent.get_world_3d().direct_space_state
 	
@@ -98,17 +101,34 @@ func get_dash_destination(origin: Vector3, target: Vector3) -> Vector3:
 	
 	return target
 
-func get_dash_targets(origin: Vector3, target: Vector3) -> Array:
-	var motion = target - origin
+func get_dash_targets(origin: Vector3, dest: Vector3) -> Array[TargetArea]:
+	var targets: Array[TargetArea] = []
 	
-	var query := PhysicsShapeQueryParameters3D.new()
-	query.shape = _dash_shape
-	query.transform = Transform3D(Basis.IDENTITY, origin)
-	query.motion = motion
-	query.collision_mask = targeting_mask
+	var full_motion := dest - origin
+	var dist := full_motion.length()
+	if dist < 0.001:
+		dist = 0.0
 	
-	query.exclude = [_parent.get_rid()]
+	var step := maxf(radius, 0.01)
+	var steps := int(ceil(dist / step)) + 1
 	
 	var space_state := _parent.get_world_3d().direct_space_state
 	
-	return space_state.intersect_shape(query)
+	for i in range(steps + 1):
+		var t := float(i) / float(steps) if steps > 0 else 0.0
+		var sample_pos := origin + full_motion * t
+		
+		var query := PhysicsShapeQueryParameters3D.new()
+		query.shape = _dash_shape
+		query.transform = Transform3D(Basis.IDENTITY, sample_pos)
+		query.collision_mask = targeting_mask
+		query.collide_with_areas = true
+		query.collide_with_bodies = false
+		query.exclude = [_parent.get_rid()]
+		
+		var intersected := space_state.intersect_shape(query)
+		for c in intersected:
+			if c.collider is TargetArea and c.collider not in targets:
+				targets.append(c.collider)
+	
+	return targets

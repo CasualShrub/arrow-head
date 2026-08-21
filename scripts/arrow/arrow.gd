@@ -103,7 +103,6 @@ func apply_simulation(sim: ArrowSimulation = simulation) -> void:
 		var collider := sim.get_collision_collider(i)
 		if not collider:
 			continue
-		print("collided with ", collider)
 		var normal := sim.get_collision_normal(i)
 		var point := sim.get_collision_point(i)
 		collider.collide(self, normal, point)

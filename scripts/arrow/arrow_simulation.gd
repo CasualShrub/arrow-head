@@ -4,10 +4,7 @@ class_name ArrowSimulation
 var simulating: Arrow
 
 var position := Vector3.ZERO
-var velocity := Vector3.ZERO:
-	set(value):
-		velocity = value
-		print("velocity changed ", value)
+var velocity := Vector3.ZERO
 
 var enabled := true
 var alive := true

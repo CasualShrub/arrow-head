@@ -13,11 +13,12 @@ class_name DashPreview
 signal enabled()
 signal disabled()
 signal position_changed(new_pos: Vector3)
-signal target_added(target: HighlightComponent)
-signal target_removed(target: HighlightComponent)
+signal target_added(target: TargetArea)
+signal target_removed(target: TargetArea)
 
-var _enabled := false
 var _targets := Set.new()
+
+@onready var _enabled := visible
 
 func _ready() -> void:
 	if body_texture:
@@ -26,13 +27,6 @@ func _ready() -> void:
 		_eyes_sprite.texture = eyes_texture
 	_sprite.modulate = color
 	_line.material_override.albedo_color = color
-
-func _notification(what: int) -> void:
-	if what == NOTIFICATION_VISIBILITY_CHANGED:
-		# stop showing/hiding outside enable
-		if visible != _enabled:
-			if visible: hide()
-			else: show()
 
 func is_enabled() -> bool:
 	return _enabled
@@ -56,10 +50,8 @@ func _draw_line(start: Vector3, end: Vector3) -> void:
 	var mesh := _line.mesh as PlaneMesh
 	mesh.size.y = start.distance_to(end)
 
-func _position_sprite(pos: Vector3) -> void:
-	_sprite.position = pos
-	var dir = global_position.direction_to(pos)
-	_sprite.look_at(pos + dir)
+func _position_sprite(at: Vector3) -> void:
+	_sprite.global_position = at
 
 func set_preview_position(target: Vector3) -> void:
 	if not is_enabled(): return
@@ -67,25 +59,25 @@ func set_preview_position(target: Vector3) -> void:
 	_position_sprite(target)
 	position_changed.emit(target)
 
-func is_targeting(target: HighlightComponent) -> bool:
+func is_targeting(target: TargetArea) -> bool:
 	return _targets.has(target)
 
-func add_target(target: HighlightComponent) -> bool:
+func add_target(target: TargetArea) -> bool:
 	if is_targeting(target): return false
-	target.enable(highlight_color)
+	target.mark_targeted()
 	_targets.add(target)
 	target_added.emit(target)
 	return true
 
-func remove_target(target: HighlightComponent) -> bool:
+func remove_target(target: TargetArea) -> bool:
 	if not is_targeting(target): return false
 	_targets.remove(target)
-	target.disable()
+	target.mark_untargeted()
 	target_removed.emit(target)
 	return true
 
-func set_preview_targets(newTargets: Array[HighlightComponent]) -> void:
-	for t in _targets:
+func set_preview_targets(newTargets: Array[TargetArea]) -> void:
+	for t in _targets.to_array():
 		remove_target(t)
 	
 	for t in newTargets:

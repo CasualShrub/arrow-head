@@ -18,7 +18,7 @@ class_name Enemy
 @export var fire_release_frame := 3
 
 @export_group("hit")
-@export var hit_flash_time := 0.1
+@export var hit_flash_time := 0.5
 @export var hurt_radius := 0.4:
 	set(value):
 		if value < 0: value = 0
@@ -51,6 +51,7 @@ var _facing := Vector3.FORWARD
 @onready var _ray_left: RayCast3D = %RayLeft
 @onready var _ray_right: RayCast3D = %RayRight
 @onready var _ray_forward: RayCast3D = %RayForward
+@onready var _dash_target: TargetArea = %DashTarget
 
 @onready var _init_flip := _sprite.flip_v
 
@@ -86,12 +87,7 @@ func _ready() -> void:
 
 func is_dead() -> bool:
 	return health.is_dead()
-
-func get_hit() -> void:
-	if health.is_dead():
-		return
-	await _show_hit()
-	health.take_damage(1)
+	
 
 func _update_collider(c: CollisionShape3D, r: float) -> void:
 	if not c:
@@ -371,6 +367,7 @@ func _select_behaviour(dt: float) -> void:
 				_high_sus(dt)
 
 func _on_died() -> void:
+	print("died")
 	SoundManager.play("banana_death")
 	_sprite.play("death")
 
@@ -390,6 +387,17 @@ func _on_recovery_timeout() -> void:
 		_sprite.play("fire")
 	await _await_fire_release()
 	perform(pattern)
+
+func _on_dash_targeted() -> void:
+	_sprite.set_layer_mask_value(20, true)
+
+func _on_dash_untargeted() -> void:
+	_sprite.set_layer_mask_value(20, false)
+
+func _on_dash_hit() -> void:
+	if health.is_dead(): return
+	await _show_hit()
+	health.take_damage(1)
 
 func _await_fire_release() -> void:
 	while not health.is_dead() and _sprite.animation == "fire" and _sprite.frame < fire_release_frame:
