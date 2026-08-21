@@ -126,7 +126,6 @@ metadata/_custom_type_script = "uid://81p2tscmwan4"
 [node name="TimeComponent" type="Node" parent="." unique_id=1620176038 node_paths=PackedStringArray("bar")]
 script = ExtResource("5_lgqa7")
 bar = NodePath("../TimeBar")
-tick_consumption = 0.1
 metadata/_custom_type_script = "uid://dah5jq04qfdtm"
 
 [node name="TimeBar" type="Node" parent="." unique_id=2124484905]

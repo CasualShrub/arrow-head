@@ -70,7 +70,7 @@ func _get_frame_from_direction(dir: EyeDirection) -> int:
 
 func set_eyes_direction(dir: EyeDirection) -> void:
 	var target_frame :=_get_frame_from_direction(dir)
-	if target_frame == frame: return
+	if dir == _dir: return
 	_dir = dir
 	if target_frame == -1:
 		if visible: hide()
