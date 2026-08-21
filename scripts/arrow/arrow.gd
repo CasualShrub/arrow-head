@@ -14,6 +14,8 @@ signal collided(with: ArrowCollider, normal: Vector3, point: Vector3)
 
 var _shape_cast: ShapeCast3D
 
+var scene: PackedScene
+
 var simulation: ArrowSimulation
 
 func _ready() -> void:

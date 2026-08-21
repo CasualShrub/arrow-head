@@ -9,15 +9,19 @@ func make_arrow(
 	scene: PackedScene,
 	at: Vector3,
 	velocity: Vector3,
-	target_mask: int = 1 << 0 & 1 << 3
+	target_mask: int = (1 << 2) | (1 << 5)
 ) -> Arrow:
-	var consumed = _consume_pool(scene)
-	if consumed: return consumed
+	var consumed := _consume_pool(scene) as Arrow
+	if consumed:
+		consumed.activate(at, velocity, target_mask)
+		return consumed
 	var arrow := scene.instantiate() as Arrow
 	assert(
 		arrow is Arrow,
 		"Instantiated invalid scene %s." % scene.resource_path
 	)
+	arrow.scene = scene
+	add_child(arrow)
 	arrow.deactivated.connect(pool.bind(arrow))
 	arrow.activate(at, velocity, target_mask)
 	return arrow
