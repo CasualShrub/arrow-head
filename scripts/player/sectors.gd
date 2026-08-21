@@ -31,8 +31,6 @@ var _highlighted := -1:
 		mat.set_shader_parameter("aimed_sector", value)
 		_highlighted = value
 
-var _stored := []
-
 func get_sector_size() -> float:
 	return TAU / sector_count
 
@@ -49,13 +47,13 @@ func unhighlight_sector(sector: int) -> void:
 	_highlighted -= 1 << sector
 	sector_unhighlighted.emit(sector)
 
-func _update_occupied_mask() -> void:
-	if not mat: return
-	var mask := 0
-	for i in range(sector_count):
-		if _stored[i]:
-			mask += 1 << i
-	mat.set_shader_parameter("occupied_mask", mask)
+#func _update_occupied_mask() -> void:
+	#if not mat: return
+	#var mask := 0
+	#for i in range(sector_count):
+		#if _stored[i]:
+			#mask += 1 << i
+	#mat.set_shader_parameter("occupied_mask", mask)
 
 func _update_centering(toggle: bool = centered) -> void:
 	if not _display: return
@@ -64,18 +62,8 @@ func _update_centering(toggle: bool = centered) -> void:
 	else:
 		_display.rotation.y = PI / 2
 
-func _setup_stored() -> void:
-	_stored = []
-	_stored.resize(sector_count)
-	for i in range(sector_count):
-		_stored[i] = null
-
-func _on_changed() -> void:
-	_update_occupied_mask()
-
 func _ready() -> void:
-	if not Engine.is_editor_hint():
-		_setup_stored()
-		show()
 	_update_centering()
 	radius = radius
+	if Engine.is_editor_hint(): return
+	show()

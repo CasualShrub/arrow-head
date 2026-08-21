@@ -52,7 +52,7 @@ environment = SubResource("Environment_ub6uw")
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="SubViewportContainer/SubViewport/World" unique_id=492064517]
 transform = Transform3D(0.8239569, 7.3667486e-08, 0.5666525, -0.29468933, 0.8541341, 0.4285011, -0.4839972, -0.52005285, 0.7037697, 18.038643, 15.709363, 15.527812)
 
-[node name="Floor3" type="MeshInstance3D" parent="SubViewportContainer/SubViewport/World" unique_id=1301804466]
+[node name="Floor" type="MeshInstance3D" parent="SubViewportContainer/SubViewport/World" unique_id=1301804466]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.2, 0)
 mesh = SubResource("QuadMesh_8wtow")
 script = ExtResource("4_tk5fv")
