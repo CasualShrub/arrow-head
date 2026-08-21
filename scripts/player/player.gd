@@ -177,6 +177,7 @@ func _get_aim_target() -> Vector3:
 func face(target: Vector3) -> void:
 	target.y = global_position.y
 	_mouse_pivot.look_at(target)
+	if health.is_dead(): return
 	_eyes.make_eyes_look_at(target)
 
 func _move(dir: Vector2, _dt: float) -> void:
