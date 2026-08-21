@@ -75,7 +75,7 @@ var WEIRD_OFFSET = 45.0 #don't ask me why at some point during refactor somehow 
 func _get_slot_from_angle(angle: float) -> int:
 	var slot_size := _get_slot_size()
 	angle = fposmod(-angle + deg_to_rad(WEIRD_OFFSET), TAU)
-	return int(floor(-angle / slot_size))
+	return int(floor(angle / slot_size))
 
 func _get_slot_from_offset(dir: Vector3) -> int:
 	dir.y = 0.0
