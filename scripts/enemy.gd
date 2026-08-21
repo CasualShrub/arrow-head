@@ -73,6 +73,9 @@ func _ready() -> void:
 		_sprite.animation = "default"
 		%CameraPivot.unfocus()
 
+func is_dead() -> bool:
+	return health.is_dead()
+
 func get_hit() -> void:
 	if health.is_dead():
 		return
@@ -210,10 +213,17 @@ func _on_fire(_arrow: Arrow, _dir: Vector3) -> void:
 func _modify_firing_direction(_arrow: Arrow, dir: Vector3) -> Vector3:
 	return dir
 
+func _get_player() -> Player:
+	if GameManager.player:
+		return GameManager.player
+	var players := get_tree().current_scene.find_children("*", "Player", true, false)
+	return players[0] if not players.is_empty() else null
+
 func _look_at_player() -> void:
-	if not GameManager.player:
+	var player := _get_player()
+	if not player:
 		return
-	look_at(GameManager.player.global_position)
+	look_at(player.global_position)
 
 func _select_pattern() -> ArrowPattern:
 	if len(patterns) == 0:
@@ -244,10 +254,11 @@ func _high_sus(_dt: float) -> void:
 	_look_at_player()
 
 func _alert(dt: float) -> void:
-	if not GameManager.player:
+	var player := _get_player()
+	if not player:
 		return
 
-	var to_player := (GameManager.player.global_position - global_position)
+	var to_player := (player.global_position - global_position)
 	to_player.y = 0.0
 	var dist := to_player.length()
 	var forward := to_player.normalized()
@@ -284,8 +295,8 @@ func _alert(dt: float) -> void:
 	if move.length() > 0.001:
 		velocity = move.normalized() * combat_speed
 		move_and_slide()
-	
-	look_at(GameManager.player.global_position)
+
+	look_at(player.global_position)
 
 func _pick_combat_state(dist: float) -> void:
 	_strafe_dir = 1.0 if randf() > 0.5 else -1.0

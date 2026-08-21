@@ -99,7 +99,7 @@ func _physics_process(delta: float) -> void:
 			time.resume()
 	
 	if fire_input.consume_pressed():
-		if arrows.has_fireable():
+		if arrows.is_full():
 			if not time.is_slowed():
 				time.slow()
 			dash.enable()
@@ -186,6 +186,7 @@ func _move(dir: Vector2, _dt: float) -> void:
 
 func _on_died() -> void:
 	arrows.clear_arrows()
+	_sectors.clear()
 	time.resume()
 	
 	SoundManager.play("apple_death")
@@ -201,6 +202,8 @@ func _on_dash_activated(destination: Vector3, targets: Array) -> void:
 	for target in targets:
 		if target is Enemy:
 			target.get_hit()
+	if time.is_slowed():
+		time.resume()
 
 func _on_slot_occupied(slot: int, _arrow: Arrow) -> void:
 	_sectors.highlight_sector(slot)
@@ -213,7 +216,7 @@ func _on_firing_enabled(_arrow: Arrow) -> void:
 		dash.enable()
 
 func _on_firing_disabled(_arrow: Arrow) -> void:
-	if not arrows.has_fireable():
+	if not arrows.is_full():
 		dash.disable()
 
 func _on_time_slowed() -> void:

@@ -71,10 +71,10 @@ func fully_enable_firing() -> void:
 func _get_slot_size() -> float:
 	return TAU / slot_count
 
+var WEIRD_OFFSET = 45.0 #don't ask me why at some point during refactor somehow the quadrants got offset
 func _get_slot_from_angle(angle: float) -> int:
 	var slot_size := _get_slot_size()
-
-	angle = fposmod(angle, TAU)
+	angle = fposmod(-angle + deg_to_rad(WEIRD_OFFSET), TAU)
 	return int(floor(angle / slot_size))
 
 func _get_slot_from_offset(dir: Vector3) -> int:
@@ -101,7 +101,7 @@ func has_arrow(arrow: Arrow) -> bool:
 	return _fireable.has(arrow)
 
 func _get_slots_to_occupy(arrow: Arrow) -> Array[int]:
-	var offset := container.to_local(arrow.global_position)
+	var offset := arrow.global_position - container.global_position
 	var collided_slot := _get_slot_from_offset(offset)
 	return arrow.get_occupied_slots(collided_slot)
 

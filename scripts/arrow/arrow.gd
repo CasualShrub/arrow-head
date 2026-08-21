@@ -14,6 +14,8 @@ signal collided(with: ArrowCollider, normal: Vector3, point: Vector3)
 
 var _shape_cast: ShapeCast3D
 
+var scene: PackedScene
+
 var simulation: ArrowSimulation
 
 func _ready() -> void:
@@ -42,7 +44,7 @@ func activate(
 	simulation = create_simulation()
 	
 	simulation.position = at
-	simulation.velocity = velocity
+	simulation.velocity = velocity.normalized() * speed if velocity.length_squared() > 0.0 else Vector3.ZERO
 	simulation.collision_mask = target_mask
 	simulation.lifetime_remaining = INF if max_lifetime < 0.0 else max_lifetime
 	
@@ -89,10 +91,12 @@ func apply_simulation(sim: ArrowSimulation = simulation) -> void:
 		look_dir = Vector3.FORWARD
 	else:
 		look_dir = look_dir.normalized()
-	look_at(look_dir)
+	look_at(global_position + look_dir)
 	
 	for i in range(sim.get_collision_count()):
 		var collider := sim.get_collision_collider(i)
+		if not collider:
+			continue
 		var normal := sim.get_collision_normal(i)
 		var point := sim.get_collision_point(i)
 		collider.collide(self, normal, point)
@@ -114,37 +118,45 @@ func simulate(
 	_shape_cast.global_position = sim.position
 	_shape_cast.target_position = _shape_cast.to_local(target_pos)
 	_shape_cast.collision_mask = sim.collision_mask
-	if _shape_cast.is_colliding():
-		for i in range(_shape_cast.get_collision_count()):
-			var collider := _shape_cast.get_collider(i) as CollisionObject3D
-			var normal := _shape_cast.get_collision_normal(i)
-			var point := _shape_cast.get_collision_point(i)
-			if collider is not ArrowCollider:
-				ArrowCollider.default_bounce(sim, normal, point)
+	if not _shape_cast.is_colliding():
+		sim.position = target_pos
+		return
+	for i in range(_shape_cast.get_collision_count()):
+		var collider := _shape_cast.get_collider(i) as CollisionObject3D
+		var normal := _shape_cast.get_collision_normal(i)
+		var point := _shape_cast.get_collision_point(i)
+		if collider is not ArrowCollider:
+			ArrowCollider.default_bounce(sim, normal, point)
+		else:
+			collider.simulate_collision(sim, normal, point)
+		sim.collided.append([collider, normal, point])
+		_on_collision_simulated(sim, collider)
+		if sim.bounces >= max_bounces:
+			if wall_stick_decay_time > 0.0:
+				sim.disable()
+				sim.position = _project_onto_axis(
+					sim.position,
+					sim.velocity,
+					point
+				)
 			else:
-				collider.simulate_collision(sim, normal, point)
-			sim.collided.append([collider, normal, point])
-			_on_collision_simulated(sim, collider)
-			if sim.bounces >= max_bounces:
-				if wall_stick_decay_time > 0.0:
-					sim.disable()
-					sim.position = _project_onto_axis(
-						sim.position,
-						sim.velocity,
-						point
-					)
-				else:
-					sim.kill()
-			if not sim.enabled: break
+				sim.kill()
+		if not sim.enabled: break
 
 func _on_collision_simulated(
 	_sim: ArrowSimulation,
-	_collider: ArrowCollider
+	_collider: CollisionObject3D
 ) -> void:
 	pass
 
 func change_direction(dir: Vector3) -> void:
 	simulation.change_direction(dir)
+
+func embed(dig := 0.0) -> void:
+	if not simulation: return
+	if dig > 0.0:
+		global_position += (-global_basis.z) * dig
+	simulation.disable()
 
 func _project_onto_axis(from: Vector3, dir: Vector3, point: Vector3) -> Vector3:
 	var to_point := point - from
