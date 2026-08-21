@@ -116,7 +116,6 @@ func _on_arrow_added(arrow: Arrow) -> void:
 		_embedded[slot] = arrow
 		disable_firing(arrow)
 		slot_occupied.emit(slot, arrow)
-		slot_occupied.emit(slot)
 
 func _on_arrow_removed(arrow: Arrow) -> void:
 	for i in range(slot_count):
