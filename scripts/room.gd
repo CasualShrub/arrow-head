@@ -14,6 +14,7 @@ var _cleared := false
 var _exit_area: ExitArea
 
 @onready var _enemies := %Enemies
+@onready var _juice_bar := %JuiceBar
 
 func _ready() -> void:
 	_setup_player()
@@ -48,11 +49,7 @@ func _setup_exit() -> void:
 
 
 func _setup_juice_bar() -> void:
-	if not player or not player.time or not player.time.bar:
-		return
-	var hud: JuiceBarHud = JUICE_BAR_HUD.instantiate()
-	add_child(hud)
-	hud.bind(player.time.bar)
+	_juice_bar.bind(player.time.bar)
 
 func is_ongoing() -> bool:
 	return _ongoing
