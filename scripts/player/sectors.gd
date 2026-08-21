@@ -25,10 +25,10 @@ signal sector_unhighlighted(sector: int)
 #@onready var _pointer := $Pointer
 @onready var mat: ShaderMaterial = _display.material_override
 
-var _highlighted := -1:
+var _highlighted := 0:
 	set(value):
 		if not mat: return
-		mat.set_shader_parameter("aimed_sector", value)
+		mat.set_shader_parameter("occupied_mask", value) #occupied_mask
 		_highlighted = value
 
 func get_sector_size() -> float:
@@ -39,13 +39,16 @@ func is_sector_highlighted(sector: int) -> bool:
 
 func highlight_sector(sector: int) -> void:
 	if is_sector_highlighted(sector): return
-	_highlighted += 1 << sector
+	_highlighted |= 1 << sector
 	sector_highlighted.emit(sector)
 
 func unhighlight_sector(sector: int) -> void:
 	if not is_sector_highlighted(sector): return
-	_highlighted -= 1 << sector
+	_highlighted &= ~(1 << sector)
 	sector_unhighlighted.emit(sector)
+
+func clear() -> void:
+	_highlighted = 0
 
 #func _update_occupied_mask() -> void:
 	#if not mat: return
@@ -66,4 +69,5 @@ func _ready() -> void:
 	_update_centering()
 	radius = radius
 	if Engine.is_editor_hint(): return
+	_highlighted = 0
 	show()
