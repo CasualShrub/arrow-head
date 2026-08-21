@@ -3,10 +3,6 @@
 [ext_resource type="Script" uid="uid://b2gqyiev2ibwo" path="res://scripts/arrow/arrow.gd" id="1_l3dt7"]
 [ext_resource type="Texture2D" uid="uid://buqutmlha3vbg" path="res://assets/art/arrow/normal_arrow.png" id="2_d85th"]
 [ext_resource type="Shader" uid="uid://4cl7l7a1abfv" path="res://shaders/outline_3d.gdshader" id="3_outline"]
-[ext_resource type="Script" uid="uid://8dq0q4f6fvkc" path="res://scripts/arrow/colliders/arrow_collider_damageable.gd" id="4_1p348"]
-[ext_resource type="Script" uid="uid://hu4idntlvbtq" path="res://scripts/arrow/collision_effects/arrow_collision_effect.gd" id="5_dthx8"]
-[ext_resource type="Script" uid="uid://ct7873d8de6fv" path="res://scripts/arrow/collision_effects/arrow_bounce_effect.gd" id="5_rc14o"]
-[ext_resource type="Script" uid="uid://buoj7rr88dblc" path="res://scripts/arrow/colliders/arrow_collider.gd" id="6_3rls1"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_outline"]
 resource_local_to_scene = true
@@ -20,10 +16,6 @@ shader_parameter/tex_pixel_size = Vector2(0.005, 0.005)
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_l3dt7"]
 radius = 0.05
 height = 0.6
-
-[sub_resource type="Resource" id="Resource_rc14o"]
-script = ExtResource("5_rc14o")
-metadata/_custom_type_script = "uid://ct7873d8de6fv"
 
 [node name="Arrow" type="Node3D" unique_id=1571711993]
 script = ExtResource("1_l3dt7")
@@ -39,12 +31,3 @@ texture = ExtResource("2_d85th")
 transform = Transform3D(1, 0, 0, 0, -4.371139e-08, 1, 0, -1, -4.371139e-08, 0, 0, 0)
 shape = SubResource("CapsuleShape3D_l3dt7")
 target_position = Vector3(0, 0, 0)
-
-[node name="ArrowColliderDamageable" type="Area3D" parent="." unique_id=1840238267]
-script = ExtResource("4_1p348")
-collision_effects = Array[ExtResource("5_dthx8")]([SubResource("Resource_rc14o")])
-metadata/_custom_type_script = "uid://8dq0q4f6fvkc"
-
-[node name="ArrowCollider" type="Area3D" parent="." unique_id=923701211]
-script = ExtResource("6_3rls1")
-metadata/_custom_type_script = "uid://buoj7rr88dblc"
