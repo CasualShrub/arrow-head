@@ -63,8 +63,6 @@ class_name Player
 
 func _ready() -> void:
 	if Engine.is_editor_hint(): update_configuration_warnings()
-	
-	_sectors._update_occupied_mask()
 	_update_collider()
 
 func _process(_delta: float) -> void:
