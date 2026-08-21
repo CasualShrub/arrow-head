@@ -125,8 +125,9 @@ script = ExtResource("9_3j4b4")
 affecting = [NodePath("../Sprite"), NodePath("../Eyes")]
 container = NodePath("../Afterimages")
 is_enabled = false
-frame_rate = 10.0
-color = Color(1, 1, 1, 1)
+frame_rate = 30.0
+color = Color(4.813075e-08, 0.65855676, 0.49459207, 0.8)
+duration = 0.1
 metadata/_custom_type_script = "uid://bocqfysv2edvs"
 
 [node name="DashComponent" type="Node" parent="." unique_id=1199737807]

@@ -217,7 +217,7 @@ func _on_time_slowed() -> void:
 
 func _on_time_resumed() -> void:
 	afterimage.disable()
-	afterimage.clear()
+	#afterimage.clear()
 	dash.disable()
 
 func _on_dash_enabled() -> void:

@@ -1,0 +1,9 @@
+[gd_resource type="ShaderMaterial" format=3 uid="uid://ci4t8wav8kte5"]
+
+[ext_resource type="Shader" uid="uid://cy4u35x3om2q4" path="res://shaders/mix.gdshader" id="1_oatpf"]
+
+[resource]
+render_priority = 0
+shader = ExtResource("1_oatpf")
+shader_parameter/tint = Color(1, 1, 1, 1)
+shader_parameter/strength = 0.5
