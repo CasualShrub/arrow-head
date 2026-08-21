@@ -5,6 +5,7 @@
 [ext_resource type="PackedScene" uid="uid://b0566e6bt2wnb" path="res://scenes/enemies/enemy_bananaunripe_spray.tscn" id="3_fi56y"]
 [ext_resource type="Shader" uid="uid://br4t4iofbd1o1" path="res://shaders/textured_fade.gdshader" id="5_hldbq"]
 [ext_resource type="PackedScene" uid="uid://b15vpncjfa5df" path="res://scenes/enemies/enemy_blueberry.tscn" id="5_mxx4w"]
+[ext_resource type="Material" uid="uid://bspie6d5acqw8" path="res://materials/stone_floor_material.tres" id="5_vvoq0"]
 [ext_resource type="Texture2D" uid="uid://w5firgaw1fbf" path="res://assets/textures/obsidian.png" id="6_fsnos"]
 [ext_resource type="PackedScene" uid="uid://x1mhd7mlveia" path="res://scenes/ui/game_win.tscn" id="6_hldbq"]
 
@@ -29,57 +30,61 @@ music_track = "Lvl_4_5"
 next_level_path = "res://scenes/levels/level_boss.tscn"
 
 [node name="Player" parent="SubViewportContainer/SubViewport/World" parent_id_path=PackedInt32Array(1589957074) index="0" unique_id=508579643]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 25.441023, 0, 35.128433)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 25.441023, 0, 32.3901)
 burn_spin_speed = 0.2
 
 [node name="Enemy" parent="SubViewportContainer/SubViewport/World/Enemies" parent_id_path=PackedInt32Array(1185931971) index="0" unique_id=71488470 instance=ExtResource("2_laj7o")]
-transform = Transform3D(0.0074137524, 0, -0.9999725, 0, 1, 0, 0.9999725, 0, 0.0074137524, 20.222813, 0, 0.5231265)
+transform = Transform3D(-0.61668396, 0, -0.7872108, 0, 1, 0, 0.7872108, 0, -0.61668396, 20.909111, 0, 8.045683)
 combat_speed = 0.0
 combat_strafe_speed = 0.0
 
 [node name="Enemy3" parent="SubViewportContainer/SubViewport/World/Enemies" parent_id_path=PackedInt32Array(1185931971) index="1" unique_id=794098500 instance=ExtResource("3_fi56y")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 30.01908, 0, 27.298553)
+transform = Transform3D(-0.089348614, 0, -0.99600047, 0, 1, 0, 0.99600047, 0, -0.089348614, 21.311745, 0, 26.626348)
 combat_speed = 0.0
 combat_strafe_speed = 0.0
 
 [node name="Enemy2" parent="SubViewportContainer/SubViewport/World/Enemies" parent_id_path=PackedInt32Array(1185931971) index="2" unique_id=155070861 instance=ExtResource("5_mxx4w")]
-transform = Transform3D(0.008146271, 0, -0.9999668, 0, 1, 0, 0.9999668, 0, 0.008146271, 20.158249, -0.16999876, 18.300423)
+transform = Transform3D(-0.5874591, 0, 0.80925405, 0, 1, 0, -0.80925405, 0, -0.5874591, 29.594685, -0.16999876, 22.646479)
 
 [node name="Enemy4" parent="SubViewportContainer/SubViewport/World/Enemies" parent_id_path=PackedInt32Array(1185931971) index="3" unique_id=1597411391 instance=ExtResource("5_mxx4w")]
-transform = Transform3D(-0.007921776, 0, 0.99996865, 0, 1, 0, -0.99996865, 0, -0.007921776, 29.802181, -0.16999876, 9.343262)
+transform = Transform3D(-0.69975644, 0, 0.7143815, 0, 1, 0, -0.7143815, 0, -0.69975644, 29.083138, -0.16999876, 7.702976)
 
 [node name="CameraPivot" parent="SubViewportContainer/SubViewport/World" parent_id_path=PackedInt32Array(1589957074) index="2" unique_id=1563753267]
 transform = Transform3D(1, 0, 0, 0, -4.371139e-08, 1, 0, -1, -4.371139e-08, 25.441023, 3.7000048, 35.128433)
+
+[node name="Floor" parent="SubViewportContainer/SubViewport/World" parent_id_path=PackedInt32Array(1589957074) index="5" unique_id=1674034061]
+material_override = ExtResource("5_vvoq0")
+script = null
 
 [node name="some hallway" type="Node3D" parent="." index="2" unique_id=1966035763]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.838967, 0, 6.49942)
 
 [node name="SubViewportContainer_SubViewport_World_Walls#CSGBox3D7" type="CSGBox3D" parent="some hallway" index="0" unique_id=410809193]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 27.182518, 2.3838491, -13.91399)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 27.182518, 2.3838491, -10.464016)
 use_collision = true
 collision_layer = 4
-size = Vector3(54.994644, 5.801819, 4.246002)
+size = Vector3(54.994644, 5.801819, 11.14595)
 material = SubResource("ShaderMaterial_mxx4w")
 
 [node name="SubViewportContainer_SubViewport_World_Walls#CSGBox3D8" type="CSGBox3D" parent="some hallway" index="1" unique_id=926636609]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 27.182518, 2.421523, 33.83718)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 27.182518, 2.421523, 32.63128)
 use_collision = true
 collision_layer = 4
-size = Vector3(54.994644, 5.8771667, 8.408813)
+size = Vector3(54.994644, 5.8771667, 10.820618)
 material = SubResource("ShaderMaterial_mxx4w")
 
 [node name="SubViewportContainer_SubViewport_World_Walls#CSGBox3D9" type="CSGBox3D" parent="some hallway" index="2" unique_id=1401563776]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 17.08504, 2.4157095, 11.222664)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 19.038284, 2.4157095, 11.222664)
 use_collision = true
 collision_layer = 4
-size = Vector3(8.714607, 5.8655396, 53.637848)
+size = Vector3(12.621098, 5.8655396, 53.637848)
 material = SubResource("ShaderMaterial_mxx4w")
 
 [node name="SubViewportContainer_SubViewport_World_Walls#CSGBox3D10" type="CSGBox3D" parent="some hallway" index="3" unique_id=812518232]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 44.258682, 2.385314, 11.345711)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 42.64427, 2.385314, 11.345711)
 use_collision = true
 collision_layer = 4
-size = Vector3(9.330448, 5.8047485, 53.391754)
+size = Vector3(12.559267, 5.8047485, 53.391754)
 material = SubResource("ShaderMaterial_mxx4w")
 
 [node name="pillars" type="Node3D" parent="." index="3" unique_id=526948520]
@@ -134,7 +139,7 @@ size = Vector3(2.0293388, 5.8047485, 1.9053011)
 material = SubResource("ShaderMaterial_vvoq0")
 
 [node name="SubViewportContainer_SubViewport_World_Walls#CSGBox3D16" type="CSGBox3D" parent="pillars" index="7" unique_id=1776976625]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 29.84719, 2.385314, 28.669191)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 29.26603, 2.385314, 28.669191)
 use_collision = true
 collision_layer = 4
 size = Vector3(2.0293388, 5.8047485, 1.9053011)

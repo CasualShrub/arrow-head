@@ -107,11 +107,11 @@ size = Vector3(3.5338845, 2.5149536, 0.2885177)
 material = ExtResource("9_pimnq")
 
 [node name="CSGBox3D21" type="CSGBox3D" parent="SubViewportContainer/SubViewport/World/book shelves" index="2" unique_id=1568084848]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9.465781, 0.29042912, 34.90118)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9.465781, 0.29042912, 33.280506)
 use_collision = true
 collision_layer = 4
 collision_mask = 9
-size = Vector3(0.34006238, 2.5149536, 2.771212)
+size = Vector3(0.34006238, 2.5149536, 6.012559)
 material = ExtResource("9_pimnq")
 
 [node name="CSGBox3D18" type="CSGBox3D" parent="SubViewportContainer/SubViewport/World/book shelves" index="3" unique_id=558494723]
@@ -165,11 +165,11 @@ size = Vector3(8.232353, 5.5875854, 0.8135452)
 material = SubResource("ShaderMaterial_n6eey")
 
 [node name="SubViewportContainer_SubViewport_World_Walls#CSGBox3D7" type="CSGBox3D" parent="SubViewportContainer/SubViewport/World/book shelves/brick walls" index="4" unique_id=1397215573]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 15.688688, 2.2767324, 33.7084)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12.851688, 2.2767324, 33.7084)
 use_collision = true
 collision_layer = 4
 collision_mask = 9
-size = Vector3(0.9604149, 5.5875854, 6.239602)
+size = Vector3(6.6344137, 5.5875854, 6.239602)
 material = SubResource("ShaderMaterial_n6eey")
 
 [node name="GameWin" parent="." index="4" unique_id=1577397124 instance=ExtResource("10_2bnyt")]

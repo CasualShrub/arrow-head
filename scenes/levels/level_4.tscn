@@ -32,7 +32,7 @@ combat_strafe_speed = 0.0
 transform = Transform3D(0.2215712, 0, 0.9751442, 0, 1, 0, -0.9751442, 0, 0.2215712, 32.39117, 0, 30.13918)
 
 [node name="Enemy2" parent="SubViewportContainer/SubViewport/World/Enemies" parent_id_path=PackedInt32Array(1185931971) index="2" unique_id=966886719 instance=ExtResource("5_anwe6")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 19.412868, 0, 11.099)
+transform = Transform3D(-0.04035871, 0, 0.99918526, 0, 1, 0, -0.99918526, 0, -0.04035871, 20.957354, 0, 7.4319696)
 
 [node name="Enemy4" parent="SubViewportContainer/SubViewport/World/Enemies" parent_id_path=PackedInt32Array(1185931971) index="3" unique_id=1863580929 instance=ExtResource("5_anwe6")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 16.35093, 0, 27.914917)
@@ -154,7 +154,7 @@ size = Vector3(9.699258, 5.72464, 2.1855555)
 material = SubResource("ShaderMaterial_ogj6a")
 
 [node name="prop box" type="CSGBox3D" parent="SubViewportContainer/SubViewport/World" parent_id_path=PackedInt32Array(1589957074) index="8" unique_id=1771178583]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 19.874437, -0.14624703, 30.444988)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 19.874437, -0.14624703, 32.114883)
 use_collision = true
 collision_layer = 4
 size = Vector3(1.3069792, 1.6416016, 0.59852505)
