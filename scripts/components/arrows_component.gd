@@ -6,24 +6,21 @@ signal arrow_removed(arrow: Arrow)
 
 @export var container: Node3D
 
-var _arrows := ArrowSet.new()
-
-func is_empty() -> bool:
-	return _arrows.is_empty()
+var _arrows: Dictionary[Arrow, bool] = {}
 
 func is_full() -> bool:
 	return false
 
 func has_arrow(arrow: Arrow) -> bool:
-	return _arrows.has(arrow)
+	return _arrows[arrow]
 
 func get_arrow_count() -> int:
-	return _arrows.size()
+	return _arrows.keys().size()
 
 func add_arrow(arrow: Arrow) -> bool:
 	if has_arrow(arrow) or is_full() or not _can_add_arrow(arrow):
 		return false
-	_arrows.add(arrow)
+	_arrows.set(arrow, true)
 	arrow.reparent(container)
 	_on_arrow_added(arrow)
 	arrow_added.emit(arrow)
@@ -33,14 +30,14 @@ func add_arrow(arrow: Arrow) -> bool:
 ## Returns whether or not arrow was destroyed.
 func remove_arrow(arrow: Arrow) -> bool:
 	if not has_arrow(arrow): return false
-	_arrows.remove(arrow)
+	_arrows.erase(arrow)
 	_on_arrow_removed(arrow)
 	arrow_removed.emit(arrow)
 	arrow.queue_free()
 	return true
 
 func clear_arrows() -> void:
-	for arrow in _arrows.to_array():
+	for arrow in _arrows.keys():
 		remove_arrow(arrow)
 
 func _can_add_arrow(_arrow: Arrow) -> bool:

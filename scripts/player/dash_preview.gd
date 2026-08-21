@@ -10,6 +10,9 @@ class_name DashPreview
 @onready var _eyes_sprite: Sprite3D = $PreviewSprite/PreviewEyes
 @onready var _line: MeshInstance3D = $PreviewLine
 
+
+var _targets: Array[HighlightComponent] = []
+
 signal enabled()
 signal disabled()
 signal position_changed(new_pos: Vector3)
@@ -17,8 +20,6 @@ signal target_added(target: HighlightComponent)
 signal target_removed(target: HighlightComponent)
 
 var _enabled := false
-var _targets := Set.new()
-
 func _ready() -> void:
 	if body_texture:
 		_sprite.texture = body_texture
@@ -73,13 +74,13 @@ func is_targeting(target: HighlightComponent) -> bool:
 func add_target(target: HighlightComponent) -> bool:
 	if is_targeting(target): return false
 	target.enable(highlight_color)
-	_targets.add(target)
+	_targets.append(target)
 	target_added.emit(target)
 	return true
 
 func remove_target(target: HighlightComponent) -> bool:
 	if not is_targeting(target): return false
-	_targets.remove(target)
+	_targets.erase(target)
 	target.disable()
 	target_removed.emit(target)
 	return true
