@@ -21,6 +21,8 @@ var _preview_texture: ImageTexture
 func _ready() -> void:
 	if Engine.is_editor_hint():
 		call_deferred("_apply_preview")
+	else:
+		_apply_preview()
 
 func _validate_property(property: Dictionary) -> void:
 	if property.name == "material_override":

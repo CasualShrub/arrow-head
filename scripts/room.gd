@@ -8,7 +8,7 @@ signal ended(won: bool)
 var player: Player
 var _ongoing := false
 var _cleared := false
-var _door: Door
+var _exit_area: ExitArea
 
 @onready var _enemies := %Enemies
 
@@ -22,10 +22,10 @@ func _ready() -> void:
 		add_enemy(e)
 	
 
-	var doors := find_children("*", "Door", true)
-	if doors.size() > 0:
-		_door = doors[0] as Door
-		_door.player_entered.connect(_on_door_entered)
+	var exits := find_children("*", "Exit_Area", true)
+	if not exits.is_empty():
+		_exit_area = exits[0]
+		_exit_area.player_entered.connect(_on_exit_entered)
 
 	start()
 
@@ -90,10 +90,10 @@ func _clear() -> void:
 		return
 	_cleared = true
 	cleared.emit()
-	if _door:
-		_door.unlock()
+	if _exit_area:
+		_exit_area.unlock()
 
-func _on_door_entered() -> void:
+func _on_exit_entered() -> void:
 	end(true)
 
 func _on_player_died() -> void:

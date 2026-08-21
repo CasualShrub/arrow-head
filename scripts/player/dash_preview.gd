@@ -25,7 +25,7 @@ func _ready() -> void:
 	if eyes_texture:
 		_eyes_sprite.texture = eyes_texture
 	_sprite.modulate = color
-	_line.material_override.color = color
+	_line.material_override.albedo_color = color
 
 func _notification(what: int) -> void:
 	if what == NOTIFICATION_VISIBILITY_CHANGED:

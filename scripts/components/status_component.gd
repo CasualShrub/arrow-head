@@ -11,7 +11,7 @@ var _active: Dictionary[Status, Status] = {}
 func _ready():
 	assert(
 		get_parent() is Player,
-		"StatusComponent must be the child of a Player" % get_path()
+		"StatusComponent must be the child of a Player"
 	)
 
 func _physics_process(delta: float) -> void:

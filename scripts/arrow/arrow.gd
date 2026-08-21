@@ -10,7 +10,7 @@ class_name Arrow
 
 signal activated()
 signal deactivated()
-signal collided(with: ArrowCollider)
+signal collided(with: ArrowCollider, normal: Vector3, point: Vector3)
 
 var _shape_cast: ShapeCast3D
 
@@ -96,6 +96,7 @@ func apply_simulation(sim: ArrowSimulation = simulation) -> void:
 		var normal := sim.get_collision_normal(i)
 		var point := sim.get_collision_point(i)
 		collider.collide(self, normal, point)
+		collided.emit(collider, normal, point)
 	sim.clear_collisions()
 
 func _on_collided(_sim: ArrowSimulation, _collider: ArrowCollider) -> void:

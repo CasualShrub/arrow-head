@@ -22,7 +22,7 @@ signal sector_highlighted(sector: int)
 signal sector_unhighlighted(sector: int)
 
 @onready var _display := $Display
-@onready var _pointer := $Pointer
+#@onready var _pointer := $Pointer
 @onready var mat: ShaderMaterial = _display.material_override
 
 var _highlighted := -1:

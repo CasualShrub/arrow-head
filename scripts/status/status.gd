@@ -20,5 +20,5 @@ func remove() -> void:
 func wants_expire() -> bool:
 	return lifetime >= 0.0 and Time.get_ticks_msec() >= _expires_at
 	
-func tick(delta: float) -> void:
+func tick(_delta: float) -> void:
 	pass
