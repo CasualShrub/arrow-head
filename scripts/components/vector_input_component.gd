@@ -27,5 +27,6 @@ func _input(_event: InputEvent) -> void:
 	_vec = curr_vec
 	changed.emit(curr_vec)
 
+## Returns Vector2 with max length of 1.0.
 func get_vector() -> Vector2:
 	return _vec

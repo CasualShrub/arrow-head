@@ -62,15 +62,13 @@ class_name Player
 @onready var _chunks: CPUParticles3D = %AppleChunks
 
 func _ready() -> void:
-	if Engine.is_editor_hint():
-		update_configuration_warnings()
+	if Engine.is_editor_hint(): update_configuration_warnings()
 	
 	_sectors._update_occupied_mask()
 	_update_collider()
 
 func _process(_delta: float) -> void:
-	if Engine.is_editor_hint():
-		return
+	if Engine.is_editor_hint(): return
 	
 	var aim_target := _get_aim_target()
 	face(aim_target)

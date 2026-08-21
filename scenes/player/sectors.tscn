@@ -13,6 +13,8 @@ shader_parameter/line_color = Color(0.9490196, 0.4509804, 0.2509804, 1)
 shader_parameter/line_width = 0.11
 
 [sub_resource type="QuadMesh" id="QuadMesh_6ne85"]
+size = Vector2(0.3, 0.1)
+orientation = 1
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_o8r0j"]
 render_priority = 0
@@ -29,6 +31,7 @@ shader_parameter/edge_width = 0.03
 shader_parameter/outer_ring_width = 0.03
 
 [sub_resource type="QuadMesh" id="QuadMesh_k3x5r"]
+orientation = 1
 
 [node name="Sectors" type="Node3D" unique_id=179679829]
 script = ExtResource("2_div16")
@@ -36,13 +39,13 @@ centered = false
 metadata/_custom_type_script = "uid://bdywsusg7sgug"
 
 [node name="Pointer" type="MeshInstance3D" parent="." unique_id=1839492618]
-transform = Transform3D(4.196294e-08, 0.16800003, -4.3711385e-08, 1.222839e-15, 7.3435142e-09, 0.99999994, 0.32000008, -2.2030543e-08, 1.9106853e-15, -0.589, 0.014999974, 2.5746008e-08)
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, -0.589, 0.014999974, 2.5746008e-08)
 material_override = SubResource("ShaderMaterial_3qflg")
 cast_shadow = 0
 mesh = SubResource("QuadMesh_6ne85")
 
 [node name="Display" type="MeshInstance3D" parent="." unique_id=190219631]
-transform = Transform3D(-4.371139e-08, -1, -4.371139e-08, 0, -4.371139e-08, 1, -1, 4.371139e-08, 1.9106855e-15, 0, 0, 0)
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 0, 0, 0)
 material_override = SubResource("ShaderMaterial_o8r0j")
 cast_shadow = 0
 mesh = SubResource("QuadMesh_k3x5r")

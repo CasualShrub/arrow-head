@@ -62,6 +62,7 @@ script = ExtResource("3_fcftc")
 metadata/_custom_type_script = "uid://dn8jqcy1eo7y7"
 
 [node name="SuspicionDisplay" parent="." unique_id=488316298 instance=ExtResource("7_n7575")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.9502109, 0.108018935, 0)
 
 [node name="Recovery" type="Timer" parent="." unique_id=1708563758]
 unique_name_in_owner = true

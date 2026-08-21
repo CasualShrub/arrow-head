@@ -1,6 +1,6 @@
 shader_type spatial;
 
-render_mode unshaded, blend_mix, cull_disabled;
+render_mode unshaded, blend_mix, cull_back;
 
 uniform int sector_count = 8;
 uniform int aimed_sector = -1;

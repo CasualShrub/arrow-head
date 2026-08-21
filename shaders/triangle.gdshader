@@ -1,6 +1,6 @@
 shader_type spatial;
 
-render_mode unshaded, blend_mix, cull_disabled;
+render_mode unshaded, blend_mix, cull_back;
 
 uniform float concavity : hint_range(0.0, 0.5) = 0.25;
 uniform vec4 fill_color : source_color =
