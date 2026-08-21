@@ -101,7 +101,7 @@ func has_arrow(arrow: Arrow) -> bool:
 	return _fireable.has(arrow)
 
 func _get_slots_to_occupy(arrow: Arrow) -> Array[int]:
-	var offset := container.to_local(arrow.global_position)
+	var offset := arrow.global_position - container.global_position
 	var collided_slot := _get_slot_from_offset(offset)
 	return arrow.get_occupied_slots(collided_slot)
 
