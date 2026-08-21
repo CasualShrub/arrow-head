@@ -3,7 +3,7 @@ class_name JuiceBarHud
 
 @export var lerp_speed := 10.0
 
-const FILL_EMPTY := 0.1
+const FILL_EMPTY := 0.07
 const FILL_FULL := 0.825
 
 @onready var _juice: TextureProgressBar = %Juice
