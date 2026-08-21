@@ -149,6 +149,7 @@ func get_hit(arrow: Arrow) -> void:
 		return
 	_chunks.emitting = true
 	if arrows.add_arrow(arrow):
+		arrow.embed(arrow_dig_depth)
 		var slots := arrows.get_slots_of(arrow)
 		var sector := slots[0] if slots.size() > 0 else 0
 		SoundManager.play("Q%d_fill" % clampi(sector + 1, 1, 4))
