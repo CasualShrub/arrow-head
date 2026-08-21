@@ -100,7 +100,7 @@ func _physics_process(delta: float) -> void:
 			time.resume()
 	
 	if fire_input.consume_pressed():
-		if arrows.has_fireable():
+		if arrows.is_full():
 			if not time.is_slowed():
 				time.slow()
 			dash.enable()
@@ -214,7 +214,7 @@ func _on_firing_enabled(_arrow: Arrow) -> void:
 		dash.enable()
 
 func _on_firing_disabled(_arrow: Arrow) -> void:
-	if not arrows.has_fireable():
+	if not arrows.is_full():
 		dash.disable()
 
 func _on_time_slowed() -> void:
