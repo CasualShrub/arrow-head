@@ -2,10 +2,13 @@ extends Node3D
 class_name Room
 
 signal started()
+signal cleared()
 signal ended(won: bool)
 
 var player: Player
 var _ongoing := false
+var _cleared := false
+var _door: Door
 
 @onready var _enemies := %Enemies
 
@@ -18,6 +21,12 @@ func _ready() -> void:
 	for e in enemies:
 		add_enemy(e)
 	
+
+	var doors := find_children("*", "Door", true)
+	if doors.size() > 0:
+		_door = doors[0] as Door
+		_door.player_entered.connect(_on_door_entered)
+
 	start()
 
 func _input(event: InputEvent) -> void:
@@ -74,7 +83,18 @@ func any_enemy_alive() -> bool:
 
 func _on_enemy_died(_enemy: Enemy) -> void:
 	if not any_enemy_alive():
-		end(true)
+		_clear()
+
+func _clear() -> void:
+	if _cleared:
+		return
+	_cleared = true
+	cleared.emit()
+	if _door:
+		_door.unlock()
+
+func _on_door_entered() -> void:
+	end(true)
 
 func _on_player_died() -> void:
 	end(false)
