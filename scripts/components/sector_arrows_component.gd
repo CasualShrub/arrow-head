@@ -21,10 +21,10 @@ func is_full() -> bool:
 	return true
 
 func get_slots_of(arrow: Arrow) -> Array[int]:
-	var slots := []
+	var slots: Array[int] = []
 	for i in range(slot_count):
 		if _embedded[i] == arrow:
-			slots.append(arrow)
+			slots.append(i)
 	return slots
 
 func get_occupied() -> Array[bool]:
