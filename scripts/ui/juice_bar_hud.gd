@@ -14,7 +14,6 @@ var _source: BarComponent
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
 
-
 func _process(delta: float) -> void:
 	if not is_instance_valid(_source):
 		return
@@ -24,8 +23,9 @@ func _process(delta: float) -> void:
 		FILL_FULL,
 		_source.get_percentage()
 	)
-
-	var weight := 1.0 - exp(-lerp_speed * delta)
+	
+	var real_delta := delta / Engine.time_scale
+	var weight := 1.0 - exp(-lerp_speed * real_delta)
 	_juice.value = lerpf(_juice.value, target, weight)
 
 
