@@ -87,8 +87,7 @@ func add_enemy(enemy: Enemy) -> void:
 	if p and p != _enemies:
 		p.remove_child(enemy)
 	
-	enemy.player = player
-	enemy.died.connect(_on_enemy_died.bind(enemy))
+	enemy.health.died.connect(_on_enemy_died.bind(enemy))
 	if not enemy.get_parent():
 		_enemies.add_child(enemy)
 
