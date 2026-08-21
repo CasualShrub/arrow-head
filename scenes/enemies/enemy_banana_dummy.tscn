@@ -1,0 +1,16 @@
+[gd_scene format=3 uid="uid://cpxiel5uqal0m"]
+
+[ext_resource type="PackedScene" uid="uid://b8rs35o7f45v0" path="res://scenes/enemies/enemy.tscn" id="1_xnfny"]
+[ext_resource type="SpriteFrames" uid="uid://0u4g146c4us5" path="res://sprite_frames/enemies/banana_dummy_frames.tres" id="2_hvclp"]
+
+[node name="Enemy" unique_id=520769260 instance=ExtResource("1_xnfny")]
+
+[node name="SuspicionDisplay" parent="." index="4" unique_id=488316298]
+visible = false
+
+[node name="Sprite" parent="." index="7" unique_id=1091610106]
+flip_h = true
+sprite_frames = ExtResource("2_hvclp")
+animation = &"fire"
+frame = 3
+frame_progress = 1.0

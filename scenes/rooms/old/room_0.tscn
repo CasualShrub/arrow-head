@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://dw33fnyacoglt"]
 
 [ext_resource type="PackedScene" uid="uid://b6c1h2si8ob6l" path="res://scenes/room.tscn" id="1_5pc1f"]
-[ext_resource type="PackedScene" uid="uid://tmhabgv3ovyb" path="res://scenes/enemies/enemy_bannana.tscn" id="2_opk6u"]
+[ext_resource type="PackedScene" uid="uid://tmhabgv3ovyb" path="res://scenes/enemies/enemy_banana.tscn" id="2_opk6u"]
 [ext_resource type="Shader" uid="uid://br4t4iofbd1o1" path="res://shaders/textured_fade.gdshader" id="3_iww7l"]
 [ext_resource type="Texture2D" uid="uid://duy7x13uwce0v" path="res://assets/textures/brickwall.png" id="4_6c320"]
 [ext_resource type="Material" uid="uid://cwoodgate0tut" path="res://materials/wood_gate_material.tres" id="5_imiik"]
