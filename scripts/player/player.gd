@@ -158,11 +158,13 @@ func get_hit(arrow: Arrow) -> void:
 		arrow.queue_free()
 		health.die()
 	health.make_vulnerable()
+	_eyes.set_eyes_state("hit")
 	get_tree().create_timer(0.25).timeout.connect(
-		func(): health.make_vulnerable()
+		func():
+			_eyes.set_eyes_state("default")
+			health.make_vulnerable()
 	)
 	#_eyes_hit.start()
-	_eyes.set_eyes_state("hit")
 
 func _get_aim_target() -> Vector3:
 	if input_mode.is_keyboard_mouse():

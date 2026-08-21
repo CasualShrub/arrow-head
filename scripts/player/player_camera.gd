@@ -23,9 +23,10 @@ func _ready() -> void:
 	DarkenManager.register_camera(self)
 
 func _process(delta: float) -> void:
+	var real_delta := delta / Engine.time_scale
 	_current_lookahead = _current_lookahead.lerp(
 		_target_lookahead,
-		1.0 - exp(-lookahead_smoothing * delta)
+		1.0 - exp(-lookahead_smoothing * real_delta)
 	)
 	
 	position = Vector3(
