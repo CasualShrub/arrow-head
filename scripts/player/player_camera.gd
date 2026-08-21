@@ -3,70 +3,61 @@ class_name PlayerCamera
 
 @export var height := 5.0:
 	set(value):
-		position = position + Vector3(0, height, 0)
 		height = value
+		position.y = height
 @export_group("lookahead")
+@export var max_lookahead_offset := 5.0
+@export var lookahead_strength := 0.25
 @export var lookahead_smoothing := 6.0
-@export var mouse_lookahead_distance := 0.25
-@export var movement_lookahead_distance := 0.5
-@export var max_mouse_distance := 5.0
-@export var follow_speed := 10.0
 @export_group("shake")
 @export var sector_hit_trauma := 0.4
 @export var trauma_decay := 1.5   
 @export var max_shake_offset := 0.30
 
-signal shaken(amount: float)
+signal shaken(strength: float)
 
-var current_offset := Vector3.ZERO
-var last_move_direction := Vector3.FORWARD
+var _current_lookahead := Vector3.ZERO
+var _target_lookahead := Vector3.ZERO
 
-var _last_pos := Vector3.ZERO
-
-var _trauma := 0.0
-
-
-func _ready() -> void:
-	_last_pos = global_position
-
-func _physics_process(delta: float) -> void:
-	var mouse_pos := get_mouse_position()
-	mouse_pos.y = 0
-	
-	var p := get_parent_node_3d()
-	var mouse_offset := p.to_local(global_position)
-
-	var strength := clampf(
-		mouse_offset.length() / max_mouse_distance, 0.0, 1.0
+func _process(delta: float) -> void:
+	_current_lookahead = _current_lookahead.lerp(
+		_target_lookahead,
+		1.0 - exp(-lookahead_smoothing * delta)
 	)
-	strength *= strength
-
-	var lookahead_offset := mouse_offset.normalized() * strength * mouse_lookahead_distance
-	#var movement_offset := player.velocity.normalized() * movement_lookahead_distance
-
-	var target := global_position + lookahead_offset #+ movement_offset
-	var new_pos := _last_pos.lerp(target, follow_speed * delta)
-	new_pos.y = height
-	global_position = new_pos
-
+	
+	position = Vector3(
+		_current_lookahead.x,
+		height,
+		_current_lookahead.z
+	)
 	#var shake := 0.0
 	#if _trauma > 0.0:
 		#_trauma = maxf(_trauma - trauma_decay * delta, 0.0)
 		#shake = _trauma * _trauma   # quadratic falloff feels punchier
 	#var jitter := Vector3(randf_range(-1.0, 1.0), 0.0, randf_range(-1.0, 1.0))
 	#global_position = _base_pos + jitter * shake * max_shake_offset
-	_last_pos = global_position
 
-func add_shake(amount: float) -> void:
-	_trauma = minf(_trauma + amount, 1.0)
-
-func _on_player_hit(_arrow: Arrow, _sector: int) -> void:
-	add_shake(sector_hit_trauma)
+func set_lookahead(offset: Vector3) -> void:
+	offset.y = 0.0
+	if offset.length_squared() > max_lookahead_offset * max_lookahead_offset:
+		offset = offset.normalized() * max_lookahead_offset
+	_target_lookahead = offset
 
 func shake() -> void:
 	shaken.emit()
 
-#func get_mouse_position(collision_mask: int = 1 << 4) -> Vector3:
+func get_mouse_position() -> Vector3:
+	var mouse := get_viewport().get_mouse_position()
+	var origin := project_ray_origin(mouse)
+	var dir := project_ray_normal(mouse)
+
+	if abs(dir.y) < 0.001:
+		return Vector3.ZERO
+
+	var distance := -origin.y / dir.y
+	return origin + dir * distance
+	
+	# more general
 	#var mouse = get_viewport().get_mouse_position()
 #
 	#var origin = project_ray_origin(mouse)
@@ -83,15 +74,4 @@ func shake() -> void:
 		#return Vector3.ZERO
 #
 	#return result.position as Vector3
-
-# less general
-func get_mouse_position() -> Vector3:
-	var mouse := get_viewport().get_mouse_position()
-	var origin := project_ray_origin(mouse)
-	var dir := project_ray_normal(mouse)
-
-	if abs(dir.y) < 0.001:
-		return Vector3.ZERO
-
-	var distance := -origin.y / dir.y
-	return origin + dir * distance
+	

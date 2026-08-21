@@ -74,6 +74,7 @@ func _process(_delta: float) -> void:
 	
 	var aim_target := _get_aim_target()
 	face(aim_target)
+	_camera.set_lookahead(aim_target - global_position)
 	
 	if health.is_dead(): return
 	if _dash_preview.is_enabled():
@@ -83,18 +84,19 @@ func _process(_delta: float) -> void:
 		_dash_preview.set_preview_targets(dash_targets)
 
 func _physics_process(delta: float) -> void:
-	if Engine.is_editor_hint():
-		return
-	
-	if health.is_dead(): return
+	if Engine.is_editor_hint() or health.is_dead(): return
 	
 	if slow_input.consume_pressed():
-		time.slow()
+		if not time.is_slowed():
+			time.slow()
 	if slow_input.consume_released():
-		time.resume()
+		if time.is_slowed():
+			time.resume()
 	
 	if fire_input.consume_pressed():
-		if time.is_slowed() and arrows.has_fireable():
+		if arrows.has_fireable():
+			if not time.is_slowed():
+				time.slow()
 			dash.enable()
 	
 	if fire_input.consume_released():
@@ -106,7 +108,7 @@ func _physics_process(delta: float) -> void:
 	global_position.y = 0
 
 func _get_component_warning(comp: Variant, comp_name: StringName) -> Variant:
-	if not comp: return "Player has no {0}.".format([comp_name])
+	if not comp: return "Player has no %s." % comp_name
 	return null
 
 func _get_configuration_warnings() -> PackedStringArray:
@@ -205,8 +207,6 @@ func _on_firing_disabled(_arrow: Arrow) -> void:
 		dash.disable()
 
 func _on_time_slowed() -> void:
-	#if arrows.has_fireable():
-	#	dash.enable()
 	pass
 
 func _on_time_resumed() -> void:

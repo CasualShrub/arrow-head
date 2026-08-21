@@ -14,8 +14,10 @@ func make_arrow(
 	var consumed = _consume_pool(scene)
 	if consumed: return consumed
 	var arrow := scene.instantiate() as Arrow
-	if not arrow:
-		push_error("Instantiated invalid scene ${0}.".format(scene))
+	assert(
+		arrow is Arrow,
+		"Instantiated invalid scene %s." % scene.resource_path
+	)
 	arrow.deactivated.connect(pool.bind(arrow))
 	arrow.activate(at, velocity, target_mask)
 	return arrow
