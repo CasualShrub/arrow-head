@@ -73,6 +73,9 @@ func _ready() -> void:
 		_sprite.animation = "default"
 		%CameraPivot.unfocus()
 
+func is_dead() -> bool:
+	return health.is_dead()
+
 func get_hit() -> void:
 	if health.is_dead():
 		return
