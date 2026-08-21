@@ -1,12 +1,12 @@
 [gd_resource type="SpriteFrames" format=3 uid="uid://c7kn4in7r1h6v"]
 
 [ext_resource type="Texture2D" uid="uid://njnx1nn4geyt" path="res://assets/art/enemy/bannana/rotten/rot1.png" id="1_uvdac"]
-[ext_resource type="Texture2D" uid="uid://ggshslbq5wd8" path="res://assets/art/enemy/bannana/rotten/rotdeath1.png" id="2_nysk5"]
-[ext_resource type="Texture2D" uid="uid://bf6r05eolcuh6" path="res://assets/art/enemy/bannana/rotten/rotdeath2.png" id="3_hclwh"]
-[ext_resource type="Texture2D" uid="uid://cxrdlyf0tbwm0" path="res://assets/art/enemy/bannana/rotten/rotdeath3.png" id="4_jdwv6"]
-[ext_resource type="Texture2D" uid="uid://dq7ysyvwd1f0a" path="res://assets/art/enemy/bannana/rotten/rot2.png" id="5_lkvws"]
-[ext_resource type="Texture2D" uid="uid://yeq2r0b5os32" path="res://assets/art/enemy/bannana/rotten/rot3.png" id="6_410qg"]
-[ext_resource type="Texture2D" uid="uid://bdqkawark2m11" path="res://assets/art/enemy/bannana/rotten/rot4.png" id="7_0b7ng"]
+[ext_resource type="Texture2D" uid="uid://ggshslbq5wd8" path="res://assets/art/enemy/bannana/rotten/animations/death/rotdeath1.png" id="2_nysk5"]
+[ext_resource type="Texture2D" uid="uid://bf6r05eolcuh6" path="res://assets/art/enemy/bannana/rotten/animations/death/rotdeath2.png" id="3_hclwh"]
+[ext_resource type="Texture2D" uid="uid://cxrdlyf0tbwm0" path="res://assets/art/enemy/bannana/rotten/animations/death/rotdeath3.png" id="4_jdwv6"]
+[ext_resource type="Texture2D" uid="uid://dq7ysyvwd1f0a" path="res://assets/art/enemy/bannana/rotten/animations/fire/rot2.png" id="5_lkvws"]
+[ext_resource type="Texture2D" uid="uid://yeq2r0b5os32" path="res://assets/art/enemy/bannana/rotten/animations/fire/rot3.png" id="6_410qg"]
+[ext_resource type="Texture2D" uid="uid://bdqkawark2m11" path="res://assets/art/enemy/bannana/rotten/animations/fire/rot4.png" id="7_0b7ng"]
 
 [resource]
 animations = [{
