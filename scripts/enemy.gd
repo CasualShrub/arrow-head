@@ -122,7 +122,7 @@ func _get_arrow_angle(offset: float, spread: float, count: int, i: int) -> float
 	return i_spread + offset
 
 func _get_arrow_dir(angle: float) -> Vector3:
-	return -global_basis.z.rotated(Vector3.UP, angle)
+	return _facing.rotated(Vector3.UP, angle)
 
 func _get_rand(min_val: Variant, max_val: Variant) -> Variant:
 	if min_val >= max_val:
@@ -135,6 +135,7 @@ func _get_rand(min_val: Variant, max_val: Variant) -> Variant:
 func _execute_instance(instance: FiringInstance, offset: float, spread: float, count: int, i: int) -> void:
 	if instance.individual_offset:
 		offset = _get_rand(instance.offset, instance.max_offset)
+	
 	var angle := _get_arrow_angle(offset, spread, count, i)
 	var dir := _get_arrow_dir(angle)
 	

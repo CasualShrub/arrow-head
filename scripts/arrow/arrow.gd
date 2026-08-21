@@ -44,7 +44,8 @@ func activate(
 	simulation = create_simulation()
 	
 	simulation.position = at
-	simulation.velocity = velocity.normalized() * speed if velocity.length_squared() > 0.0 else Vector3.ZERO
+	velocity.y = 0
+	simulation.velocity = velocity * speed
 	simulation.collision_mask = target_mask
 	simulation.lifetime_remaining = INF if max_lifetime < 0.0 else max_lifetime
 
@@ -102,6 +103,7 @@ func apply_simulation(sim: ArrowSimulation = simulation) -> void:
 		var collider := sim.get_collision_collider(i)
 		if not collider:
 			continue
+		print("collided with ", collider)
 		var normal := sim.get_collision_normal(i)
 		var point := sim.get_collision_point(i)
 		collider.collide(self, normal, point)
@@ -123,6 +125,7 @@ func simulate(
 	_shape_cast.global_position = sim.position
 	_shape_cast.target_position = _shape_cast.to_local(target_pos)
 	_shape_cast.collision_mask = sim.collision_mask
+	_shape_cast.force_shapecast_update()
 	if not _shape_cast.is_colliding():
 		sim.position = target_pos
 		return
