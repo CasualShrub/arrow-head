@@ -89,7 +89,7 @@ func apply_simulation(sim: ArrowSimulation = simulation) -> void:
 		look_dir = Vector3.FORWARD
 	else:
 		look_dir = look_dir.normalized()
-	look_at(look_dir)
+	look_at(global_position + look_dir)
 	
 	for i in range(sim.get_collision_count()):
 		var collider := sim.get_collision_collider(i)
