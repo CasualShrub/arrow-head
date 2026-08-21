@@ -42,7 +42,7 @@ func activate(
 	simulation = create_simulation()
 	
 	simulation.position = at
-	simulation.velocity = velocity
+	simulation.velocity = velocity.normalized() * speed if velocity.length_squared() > 0.0 else Vector3.ZERO
 	simulation.collision_mask = target_mask
 	simulation.lifetime_remaining = INF if max_lifetime < 0.0 else max_lifetime
 	
