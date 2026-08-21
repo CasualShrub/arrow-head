@@ -54,9 +54,10 @@ var _movement_pattern_start: float
 func _physics_process(delta: float) -> void:
 	if Engine.is_editor_hint(): return
 	
-	# REVERT THIS when suspicion is fixed
+	# REVERT BELOW THIS when suspicion is fixed
 	suspicion.state = suspicion.SuspicionState.HIGH
-	_recovery.start()
+	#REVERT ABOVE
+	
 	if health.is_dead(): return
 	_select_behaviour(delta)
 	global_position.y = 0
