@@ -1,6 +1,8 @@
 extends Node3D
 class_name Room
 
+const JUICE_BAR_HUD := preload("res://scenes/ui/juice_bar_hud.tscn")
+
 signal started()
 signal cleared()
 signal ended(won: bool)
@@ -16,6 +18,8 @@ func _ready() -> void:
 	var players := find_children("*", "Player", true)
 	assert(players.size() == 1, "Room must have exactly one Player.")
 	add_player(players[0])
+
+	_setup_juice_bar()
 	
 	var enemies := find_children("*", "Enemy", true)
 	for e in enemies:
@@ -33,6 +37,13 @@ func _input(event: InputEvent) -> void:
 	if not _ongoing: return   # end screens handle their own keys
 	if event is InputEventKey and event.pressed and not event.echo and event.keycode == KEY_R:
 		get_tree().reload_current_scene()
+
+func _setup_juice_bar() -> void:
+	if not player or not player.time or not player.time.bar:
+		return
+	var hud: JuiceBarHud = JUICE_BAR_HUD.instantiate()
+	add_child(hud)
+	hud.bind(player.time.bar)
 
 func is_ongoing() -> bool:
 	return _ongoing

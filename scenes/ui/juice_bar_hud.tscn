@@ -1,0 +1,43 @@
+[gd_scene format=3 uid="uid://ctc58r8jhuyu5"]
+
+[ext_resource type="Script" uid="uid://dfxwab6jirwjb" path="res://scripts/ui/juice_bar_hud.gd" id="1_ehud"]
+[ext_resource type="Texture2D" uid="uid://c0aec1q3hxrky" path="res://assets/art/ui/in_game_hud/apple_back.png" id="2_back"]
+[ext_resource type="Texture2D" uid="uid://4x1st6yuhy38" path="res://assets/art/ui/in_game_hud/apple_front.png" id="3_front"]
+
+[node name="JuiceBar" type="CanvasLayer" unique_id=1003639711]
+script = ExtResource("1_ehud")
+
+[node name="Back" type="TextureRect" parent="." unique_id=1928984848]
+texture_filter = 4
+offset_left = -16.000004
+offset_top = -4.000001
+offset_right = 1448.0
+offset_bottom = 2896.0
+scale = Vector2(0.09, 0.09)
+mouse_filter = 2
+texture = ExtResource("2_back")
+
+[node name="Juice" type="TextureProgressBar" parent="." unique_id=31547875]
+unique_name_in_owner = true
+texture_filter = 4
+offset_left = -16.000004
+offset_top = -4.000001
+offset_right = 1448.0
+offset_bottom = 2896.0
+scale = Vector2(0.09, 0.09)
+mouse_filter = 2
+max_value = 1.0
+step = 0.0
+fill_mode = 3
+texture_progress = ExtResource("2_back")
+tint_progress = Color(0.95, 0.68, 0.22, 0.9)
+
+[node name="Front" type="TextureRect" parent="." unique_id=1028206743]
+texture_filter = 4
+offset_left = -16.000004
+offset_top = -4.000001
+offset_right = 1448.0
+offset_bottom = 2896.0
+scale = Vector2(0.09, 0.09)
+mouse_filter = 2
+texture = ExtResource("3_front")
