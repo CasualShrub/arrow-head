@@ -53,17 +53,17 @@ var _movement_pattern_start: float
 
 func _physics_process(delta: float) -> void:
 	if Engine.is_editor_hint(): return
-	
-	# REVERT BELOW THIS when suspicion is fixed
-	suspicion.state = suspicion.SuspicionState.HIGH
-	#REVERT ABOVE
-	
+
 	if health.is_dead(): return
 	_select_behaviour(delta)
 	global_position.y = 0
 
 func _ready() -> void:
 	if Engine.is_editor_hint(): return
+	
+	suspicion.state = suspicion.SuspicionState.HIGH
+	_recovery.start()
+	
 	if has_intro and not CusteneManager.played:
 		CusteneManager.played = true
 		%CameraPivot.focus(global_position)
