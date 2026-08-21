@@ -18,7 +18,7 @@ metadata/_custom_type_script = "uid://bu3vaok14sdhq"
 
 [node name="SusOutline" type="AnimatedSprite3D" parent="." unique_id=846483027]
 unique_name_in_owner = true
-transform = Transform3D(-1.45558925e-08, -0.333, -1.45558925e-08, 0, -1.45558925e-08, 0.333, -0.333, 1.45558925e-08, 6.362583e-16, 0, 0, 0)
+transform = Transform3D(0.333, 0, 0, 0, -1.45558925e-08, 0.333, 0, -0.333, -1.45558925e-08, 0, 0, 0)
 double_sided = false
 sprite_frames = ExtResource("2_1dqwv")
 

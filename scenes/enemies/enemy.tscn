@@ -35,7 +35,7 @@ metadata/_custom_type_script = "uid://d04k7pxjd2u24"
 
 [node name="Enemy" type="CharacterBody3D" unique_id=520769260 node_paths=PackedStringArray("health", "suspicion", "patrol")]
 collision_layer = 8
-collision_mask = 13
+collision_mask = 12
 motion_mode = 1
 script = ExtResource("1_7p1mj")
 health = NodePath("HealthComponent")
@@ -62,8 +62,7 @@ script = ExtResource("3_fcftc")
 metadata/_custom_type_script = "uid://dn8jqcy1eo7y7"
 
 [node name="SuspicionDisplay" parent="." unique_id=488316298 instance=ExtResource("7_n7575")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.9502109, 0.108018935, 0)
-visible = false
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.108, 0, -0.95)
 
 [node name="Recovery" type="Timer" parent="." unique_id=1708563758]
 unique_name_in_owner = true
@@ -73,24 +72,27 @@ one_shot = true
 [node name="InstanceTimers" type="Node" parent="." unique_id=160238136]
 unique_name_in_owner = true
 
-[node name="Sprite" type="AnimatedSprite3D" parent="." unique_id=1091610106]
+[node name="VisualRoot" type="Node3D" parent="." unique_id=2109639598]
 unique_name_in_owner = true
-transform = Transform3D(-4.283716e-08, -0.98, -4.283716e-08, 0, -4.283716e-08, 0.98, -0.98, 4.283716e-08, 1.8724718e-15, 0, 0, 0)
+
+[node name="Sprite" type="AnimatedSprite3D" parent="VisualRoot" unique_id=1091610106]
+unique_name_in_owner = true
+transform = Transform3D(-4.2837165e-08, -0.98, -4.283717e-08, -1.5218817e-22, -4.283717e-08, 0.98, -0.98, 4.2837165e-08, 1.8724722e-15, 0, 0, 0)
 double_sided = false
 sprite_frames = ExtResource("7_jt03m")
 frame_progress = 1.0
 
-[node name="RayLeft" type="RayCast3D" parent="." unique_id=927545949]
+[node name="RayLeft" type="RayCast3D" parent="VisualRoot" unique_id=927545949]
 unique_name_in_owner = true
 target_position = Vector3(-1.5, 0, 0)
 collision_mask = 4
 
-[node name="RayRight" type="RayCast3D" parent="." unique_id=1168947804]
+[node name="RayRight" type="RayCast3D" parent="VisualRoot" unique_id=1168947804]
 unique_name_in_owner = true
 target_position = Vector3(1.5, 0, 0)
 collision_mask = 4
 
-[node name="RayForward" type="RayCast3D" parent="." unique_id=1067955882]
+[node name="RayForward" type="RayCast3D" parent="VisualRoot" unique_id=1067955882]
 unique_name_in_owner = true
 target_position = Vector3(0, 0, -1.5)
 collision_mask = 4

@@ -32,14 +32,18 @@ class_name Enemy
 @export var combat_reposition_chance := 0.3
 
 enum CombatState { STRAFE, CHARGE, RETREAT, STOP }
+
+signal fired(arrow: Arrow, dir: Vector3)
+
 var _combat_state := CombatState.STRAFE
 
 var _strafe_dir := 1.0
 var _reposition_timer := 0.0
 var _reposition_interval := 2.0
 
-signal fired(arrow: Arrow, dir: Vector3)
+var _facing := Vector3.FORWARD
 
+@onready var _visual_root: Node3D = %VisualRoot
 @onready var _sprite: AnimatedSprite3D = %Sprite
 @onready var _collider: CollisionShape3D = %Collider
 @onready var _recovery: Timer = %Recovery
@@ -47,6 +51,8 @@ signal fired(arrow: Arrow, dir: Vector3)
 @onready var _ray_left: RayCast3D = %RayLeft
 @onready var _ray_right: RayCast3D = %RayRight
 @onready var _ray_forward: RayCast3D = %RayForward
+
+@onready var _init_flip := _sprite.flip_v
 
 var _movement_pattern: Dictionary[float, Vector3] = {}
 var _movement_pattern_start: float
@@ -221,14 +227,39 @@ func _modify_firing_direction(_arrow: Arrow, dir: Vector3) -> Vector3:
 func _get_player() -> Player:
 	if GameManager.player:
 		return GameManager.player
-	var players := get_tree().current_scene.find_children("*", "Player", true, false)
-	return players[0] if not players.is_empty() else null
+	
+	var players := get_tree().get_nodes_in_group("player")
+	if not players.is_empty():
+		return players[0]
+	
+	return null
 
-func _look_at_player() -> void:
+func _face_player() -> void:
 	var player := _get_player()
 	if not player:
 		return
-	look_at(player.global_position)
+	face(player.global_position)
+
+func get_facing() -> Vector3:
+	return _facing
+
+func face(target: Vector3) -> void:
+	target.y = global_position.y
+	var direction := target - global_position
+	direction.y = 0
+	if direction.length_squared() < 0.001:
+		direction = Vector3.FORWARD
+	else:
+		direction = direction.normalized()
+	if _facing == direction:
+		return
+	
+	_facing = direction
+	_visual_root.look_at(target)
+	if direction.x < 0:
+		_sprite.flip_v = not _init_flip
+	else:
+		_sprite.flip_v = _init_flip
 
 func _select_pattern() -> ArrowPattern:
 	if len(patterns) == 0:
@@ -249,14 +280,14 @@ func _patrol(delta: float) -> void:
 	patrol.tick(delta)
 	var patrol_pos := patrol.get_patrol_position()
 	if patrol_pos != global_position:
-		look_at(patrol_pos)
+		face(patrol_pos)
 	global_position = patrol_pos
 
 func _med_sus(_dt: float) -> void:
-	_look_at_player()
+	_face_player()
 	
 func _high_sus(_dt: float) -> void:
-	_look_at_player()
+	_face_player()
 
 func _alert(dt: float) -> void:
 	var player := _get_player()
@@ -301,7 +332,7 @@ func _alert(dt: float) -> void:
 		velocity = move.normalized() * combat_speed
 		move_and_slide()
 
-	look_at(player.global_position)
+	_face_player()
 
 func _pick_combat_state(dist: float) -> void:
 	_strafe_dir = 1.0 if randf() > 0.5 else -1.0

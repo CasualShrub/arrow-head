@@ -8,12 +8,15 @@
 
 [node name="Enemy" parent="Enemies" parent_id_path=PackedInt32Array(1185931971) index="0" unique_id=71488470 instance=ExtResource("2_noxfi")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.8099909, 0, -11.151326)
+collision_mask = 13
 
 [node name="Enemy2" parent="Enemies" parent_id_path=PackedInt32Array(1185931971) index="1" unique_id=214592253 instance=ExtResource("2_noxfi")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 14.729659, 0, -2.967864)
+collision_mask = 13
 
 [node name="Enemy3" parent="Enemies" parent_id_path=PackedInt32Array(1185931971) index="2" unique_id=936315977 instance=ExtResource("2_noxfi")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 31.87125, 0, -2.967864)
+collision_mask = 13
 
 [node name="Wall" parent="." index="11" unique_id=659255651 instance=ExtResource("3_6myun")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.6183822, 0, -4.1764994)
