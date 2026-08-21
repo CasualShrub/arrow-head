@@ -1,7 +1,7 @@
 extends Camera3D
 class_name PlayerCamera
 
-@export var height := 5.0:
+@export var height := 10.0:
 	set(value):
 		height = value
 		position.y = height
@@ -33,6 +33,7 @@ func _process(delta: float) -> void:
 		height,
 		_current_lookahead.z
 	)
+	DarkenManager.sync_mask_camera(self)
 	#var shake := 0.0
 	#if _trauma > 0.0:
 		#_trauma = maxf(_trauma - trauma_decay * delta, 0.0)

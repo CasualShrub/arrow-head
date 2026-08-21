@@ -59,6 +59,7 @@ func _duplicate_sprite(base: SpriteBase3D) -> Node3D:
 	sprite.render_priority = base.render_priority - 1
 	sprite.global_transform = base.global_transform
 	sprite.visible = base.visible
+	sprite.set_layer_mask_value(20, true)
 	
 	var mat := ShaderMaterial.new()
 	mat.render_priority = base.render_priority - 1

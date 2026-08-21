@@ -7,6 +7,8 @@ var mask_cam: Camera3D
 var _darken_rect: ColorRect
 var _main_cam: Camera3D
 
+var _darken_tween: Tween
+
 func _ready():
 	mask_vp = SubViewport.new()
 	mask_vp.transparent_bg = true
@@ -21,16 +23,16 @@ func _ready():
 	_on_resize()
 
 func _process(_delta):
-	if _main_cam and mask_cam:
-		mask_cam.global_transform = _main_cam.global_transform
-		mask_cam.fov = _main_cam.fov
-		mask_cam.near = _main_cam.near
-		mask_cam.far = _main_cam.far
-		mask_cam.keep_aspect = _main_cam.keep_aspect
+	pass
+	#if _darken_tween and _darken_tween.is_running():
+	#	_darken_tween.set_ignore_time_scale()
+	#update_camera()
 
 func _on_resize():
 	if _main_cam:
 		mask_vp.size = _main_cam.get_viewport().size
+	else:
+		mask_vp.size = get_viewport().size
 
 func register_overlay(rect: ColorRect) -> void:
 	_darken_rect = rect
@@ -40,6 +42,14 @@ func register_overlay(rect: ColorRect) -> void:
 func register_camera(cam: Camera3D) -> void:
 	_main_cam = cam
 	mask_vp.world_3d = cam.get_world_3d()
+	_on_resize()
+
+func sync_mask_camera(cam: Camera3D) -> void:
+	mask_cam.global_transform = cam.global_transform
+	mask_cam.fov = cam.fov
+	mask_cam.near = cam.near
+	mask_cam.far = cam.far
+	mask_cam.keep_aspect = cam.keep_aspect
 
 func set_darken(amount: float, duration: float = 0.0) -> void:
 	if not _darken_rect: return
@@ -47,7 +57,11 @@ func set_darken(amount: float, duration: float = 0.0) -> void:
 	if duration <= 0.0:
 		mat.set_shader_parameter("darken_amount", amount)
 	else:
-		create_tween().tween_property(
+		if _darken_tween:
+			_darken_tween.kill()
+		_darken_tween = create_tween()
+		_darken_tween.set_ignore_time_scale(true)
+		_darken_tween.tween_property(
 			mat,
 			"shader_parameter/darken_amount",
 			amount,

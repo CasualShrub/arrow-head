@@ -67,7 +67,6 @@ class_name Player
 
 func _ready() -> void:
 	if Engine.is_editor_hint(): update_configuration_warnings()
-	DarkenManager.process_priority = 100
 	_update_collider()
 
 func _process(_delta: float) -> void:
