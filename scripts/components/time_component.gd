@@ -47,6 +47,7 @@ func slow() -> bool:
 	): return false
 	_active = true
 	_target_scale = slow_scale
+	DarkenManager.set_darken(0.8, 1.0 / transition_speed)
 	slowed.emit()
 	return true
 
@@ -54,5 +55,6 @@ func resume() -> bool:
 	if not is_slowed(): return false
 	_active = false
 	_target_scale = normal_scale
+	DarkenManager.set_darken(0.0, 1.0 / transition_speed)
 	resumed.emit()
 	return true
