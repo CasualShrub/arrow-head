@@ -8,7 +8,7 @@ class_name TimeComponent
 @export var tick_consumption := 0.1
 
 @export_category("slow")
-@export var slow_scale := 0.2
+@export var slow_scale := 0.1
 @export var normal_scale := 1.0
 @export var transition_speed := 5.0
 

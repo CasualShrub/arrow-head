@@ -12,6 +12,7 @@
 [ext_resource type="Script" uid="uid://dcfpc1boe1bn7" path="res://scripts/components/status_component.gd" id="7_ugbui"]
 [ext_resource type="Script" uid="uid://360h68v2nvph" path="res://scripts/components/sector_arrows_component.gd" id="8_fcs02"]
 [ext_resource type="SpriteFrames" uid="uid://cmjbdroql258f" path="res://sprite_frames/player/player_frames.tres" id="8_yj68g"]
+[ext_resource type="Script" uid="uid://bocqfysv2edvs" path="res://scripts/components/afterimage_component.gd" id="9_3j4b4"]
 [ext_resource type="Texture2D" uid="uid://dxs2lnb7aysuj" path="res://assets/art/player/status/fire_frame1.png" id="9_ioxgp"]
 [ext_resource type="Texture2D" uid="uid://clnx5whue0a7g" path="res://assets/art/player/status/fire_frame2.png" id="10_cnsyf"]
 [ext_resource type="Texture2D" uid="uid://d4flnp6puxus3" path="res://assets/art/player/status/ice.png" id="11_007i1"]
@@ -46,7 +47,7 @@ animations = [{
 "speed": 5.0
 }]
 
-[node name="Player" type="CharacterBody3D" unique_id=775136311 node_paths=PackedStringArray("health", "fire_input", "slow_input", "movement_input", "aim_input", "input_mode", "arrows", "time", "dash")]
+[node name="Player" type="CharacterBody3D" unique_id=775136311 node_paths=PackedStringArray("health", "fire_input", "slow_input", "movement_input", "aim_input", "input_mode", "arrows", "time", "afterimage", "dash")]
 collision_mask = 4
 motion_mode = 1
 script = ExtResource("1_fcs02")
@@ -58,6 +59,7 @@ aim_input = NodePath("AimInput")
 input_mode = NodePath("InputModeComponent")
 arrows = NodePath("ArrowsComponent")
 time = NodePath("TimeComponent")
+afterimage = NodePath("AfterimageComponent")
 dash = NodePath("DashComponent")
 metadata/_custom_type_script = "uid://djbaojmlgp0lu"
 
@@ -111,12 +113,20 @@ metadata/_custom_type_script = "uid://81p2tscmwan4"
 [node name="TimeComponent" type="Node" parent="." unique_id=1620176038 node_paths=PackedStringArray("bar")]
 script = ExtResource("5_lgqa7")
 bar = NodePath("../TimeBar")
-slow_scale = 0.1
+tick_consumption = 0.0
 metadata/_custom_type_script = "uid://dah5jq04qfdtm"
 
 [node name="TimeBar" type="Node" parent="." unique_id=2124484905]
 script = ExtResource("7_lgqa7")
 metadata/_custom_type_script = "uid://b2h82wpoguve8"
+
+[node name="AfterimageComponent" type="Node" parent="." unique_id=574490356 node_paths=PackedStringArray("affecting", "container")]
+script = ExtResource("9_3j4b4")
+affecting = NodePath("../Sprite")
+container = NodePath("../Afterimages")
+is_enabled = false
+frame_rate = 10.0
+metadata/_custom_type_script = "uid://bocqfysv2edvs"
 
 [node name="DashComponent" type="Node" parent="." unique_id=1199737807]
 script = ExtResource("6_8ydkj")
@@ -133,6 +143,9 @@ metadata/_custom_type_script = "uid://360h68v2nvph"
 [node name="DashPreview" parent="." unique_id=1586639351 instance=ExtResource("7_3j4b4")]
 unique_name_in_owner = true
 visible = false
+
+[node name="Afterimages" type="Node3D" parent="." unique_id=1018408441]
+top_level = true
 
 [node name="MousePivot" type="Node3D" parent="." unique_id=1177089586]
 unique_name_in_owner = true

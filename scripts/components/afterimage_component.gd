@@ -5,9 +5,7 @@ class_name AfterimageComponent
 @export var container: Node3D
 
 @export var is_enabled := true
-@export var frame_rate := 1.0:
-	set(value):
-		_frame_step = 1.0 / frame_rate
+@export var frame_rate := 1.0
 @export var color: Color
 @export var duration := 1.0
 
@@ -18,12 +16,12 @@ signal afterimage_destroying(sprite: Sprite3D)
 
 var _active: Array[Sprite3D] = []
 
-var _frame_step := 0.0
 var _to_next := 0.0
 
 func _process(delta: float) -> void:
 	if not is_enabled or not affecting or not container: return
-	_to_next += delta * _frame_step
+	_to_next += delta * frame_rate
+	print(_to_next)
 	if _to_next >= 1.0:
 		create_afterimage()
 		_to_next -= 1.0
@@ -41,12 +39,12 @@ func disable() -> void:
 func create_afterimage() -> Sprite3D:
 	var sprite := _duplicate_sprite()
 	sprite.modulate = color
-	sprite.reparent(container)
+	container.add_child(sprite)
 	_active.append(sprite)
 	afterimage_created.emit(sprite)
 	get_tree().create_timer(duration).timeout.connect(
 		func():
-			if not sprite: return
+			if not is_instance_valid(sprite): return
 			afterimage_destroying.emit(sprite)
 			_active.erase(sprite)
 			sprite.queue_free()
@@ -62,7 +60,7 @@ func _duplicate_sprite() -> Sprite3D:
 		var frame := ani.frame
 		var tex := ani.sprite_frames.get_frame_texture(animation, frame)
 		sprite.texture = tex
-		sprite.transform = affecting.transform
+		sprite.global_transform = affecting.global_transform
 		sprite.pixel_size = affecting.pixel_size
 	elif affecting is Sprite3D:
 		sprite = affecting.duplicate()
@@ -70,4 +68,5 @@ func _duplicate_sprite() -> Sprite3D:
 
 func clear() -> void:
 	for s in _active:
-		s.queue_free()
+		if is_instance_valid(s): s.queue_free()
+	_active = []

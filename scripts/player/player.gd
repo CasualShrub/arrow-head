@@ -34,6 +34,10 @@ class_name Player
 	set(value):
 		time = value
 		update_configuration_warnings()
+@export var afterimage: AfterimageComponent:
+	set(value):
+		afterimage = value
+		update_configuration_warnings()
 @export var dash: DashComponent:
 	set(value):
 		dash = value
@@ -122,6 +126,7 @@ func _get_configuration_warnings() -> PackedStringArray:
 		_get_component_warning(input_mode, "InputMode"),
 		_get_component_warning(arrows, "ArrowsComponent"),
 		_get_component_warning(time, "TimeComponent"),
+		_get_component_warning(afterimage, "AfterimageComponent"),
 		_get_component_warning(dash, "DashComponent"),
 	].filter(func(element): return element != null)
 
@@ -208,9 +213,11 @@ func _on_firing_disabled(_arrow: Arrow) -> void:
 		dash.disable()
 
 func _on_time_slowed() -> void:
-	pass
+	afterimage.enable()
 
 func _on_time_resumed() -> void:
+	afterimage.disable()
+	afterimage.clear()
 	dash.disable()
 
 func _on_dash_enabled() -> void:
