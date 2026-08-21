@@ -230,6 +230,7 @@ func _select_pattern() -> ArrowPattern:
 	return patterns[0]
 
 func _patrol(delta: float) -> void:
+	if not patrol.has_path(): return
 	patrol.tick(delta)
 	var patrol_pos := patrol.get_patrol_position()
 	if patrol_pos != global_position:

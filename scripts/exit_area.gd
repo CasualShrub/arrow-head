@@ -1,5 +1,5 @@
 extends Area3D
-class_name Door
+class_name ExitArea
 
 signal player_entered()
 signal locked_changed(is_locked: bool)
