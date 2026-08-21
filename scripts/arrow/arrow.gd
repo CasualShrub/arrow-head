@@ -152,6 +152,12 @@ func _on_collision_simulated(
 func change_direction(dir: Vector3) -> void:
 	simulation.change_direction(dir)
 
+func embed(dig := 0.0) -> void:
+	if not simulation: return
+	if dig > 0.0:
+		global_position += (-global_basis.z) * dig
+	simulation.disable()
+
 func _project_onto_axis(from: Vector3, dir: Vector3, point: Vector3) -> Vector3:
 	var to_point := point - from
 	var t := to_point.dot(dir.normalized())
