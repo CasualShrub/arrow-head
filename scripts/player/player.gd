@@ -74,7 +74,12 @@ func _process(_delta: float) -> void:
 	
 	var aim_target := _get_aim_target()
 	face(aim_target)
-	_camera.set_lookahead(aim_target - global_position)
+	var lookahead_offset := Vector2.ZERO
+	if input_mode.is_keyboard_mouse():
+		lookahead_offset = _camera.get_mouse_screen_offset()
+	elif input_mode.is_controller():
+		lookahead_offset = aim_input.get_vector()
+	_camera.set_lookahead(lookahead_offset)
 	
 	if health.is_dead(): return
 	if _dash_preview.is_enabled():

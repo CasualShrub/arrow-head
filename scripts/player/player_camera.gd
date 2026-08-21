@@ -37,11 +37,23 @@ func _process(delta: float) -> void:
 	#var jitter := Vector3(randf_range(-1.0, 1.0), 0.0, randf_range(-1.0, 1.0))
 	#global_position = _base_pos + jitter * shake * max_shake_offset
 
-func set_lookahead(offset: Vector3) -> void:
-	offset.y = 0.0
-	if offset.length_squared() > max_lookahead_offset * max_lookahead_offset:
-		offset = offset.normalized() * max_lookahead_offset
-	_target_lookahead = offset
+## Takes normalized input.
+func set_lookahead(input: Vector2) -> void:
+	input = input.limit_length(1.0)
+	
+	var right := global_transform.basis.x
+	right.y = 0.0
+	right = right.normalized()
+	
+	var forward := -global_transform.basis.z
+	forward.y = 0.0
+	forward = forward.normalized()
+
+	_target_lookahead = (
+		right * input.x +
+		forward * input.y
+	) * lookahead_strength
+
 
 func shake() -> void:
 	shaken.emit()
@@ -74,4 +86,20 @@ func get_mouse_position() -> Vector3:
 		#return Vector3.ZERO
 #
 	#return result.position as Vector3
-	
+
+## Returns a normalized Vector2.
+func get_mouse_screen_offset() -> Vector2:
+	var viewport := get_viewport()
+	var mouse := viewport.get_mouse_position()
+	var viewport_size := viewport.get_visible_rect().size
+	var center := viewport_size * 0.5
+
+	var screen_offset := mouse - center
+
+	var normalized := Vector2(
+		screen_offset.x / (viewport_size.x * 0.5),
+		screen_offset.y / (viewport_size.y * 0.5)
+	)
+
+	normalized = normalized.limit_length(1.0)
+	return normalized

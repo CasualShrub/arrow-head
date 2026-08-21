@@ -80,10 +80,7 @@ func reset_cooldown() -> void:
 	cooldown_reset.emit()
 
 func get_dash_destination(origin: Vector3, target: Vector3) -> Vector3:
-	var dir := origin.direction_to(target)
-	var dist_sq := origin.distance_squared_to(target)
-	if dist_sq >= max_distance * max_distance:
-		target = dir * max_distance
+	target = target.limit_length(max_distance)
 	var motion = target - origin
 	
 	var query := PhysicsShapeQueryParameters3D.new()
