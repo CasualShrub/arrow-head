@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://5ljerioubp6c"]
 
 [ext_resource type="PackedScene" uid="uid://bxgfy1nvmlb7v" path="res://scenes/arrows/arrow.tscn" id="1_e8mw0"]
-[ext_resource type="Texture2D" uid="uid://bew7tupubd1im" path="res://assets/art/arrow/ice_arrow.png" id="2_rd36j"]
+[ext_resource type="Texture2D" uid="uid://bew7tupubd1im" path="res://assets/art/arrow/arrow_ice.png" id="2_rd36j"]
 
 [node name="Arrow" unique_id=1647363000 instance=ExtResource("1_e8mw0")]
 kind = 2

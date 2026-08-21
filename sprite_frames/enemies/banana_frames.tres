@@ -1,12 +1,12 @@
 [gd_resource type="SpriteFrames" format=3 uid="uid://bk8ta6kcnevxn"]
 
-[ext_resource type="Texture2D" uid="uid://b0afwlyjydm7h" path="res://assets/art/enemy/bannana/normal/frame1.png" id="1_sq03r"]
-[ext_resource type="Texture2D" uid="uid://bh6pj83dm5i84" path="res://assets/art/enemy/bannana/normal/animations/death/death1_frame.PNG" id="2_4ycfj"]
-[ext_resource type="Texture2D" uid="uid://c22so75ub13ou" path="res://assets/art/enemy/bannana/normal/animations/death/death2_frame.PNG" id="3_gjynf"]
-[ext_resource type="Texture2D" uid="uid://cdmjg1osh8iqw" path="res://assets/art/enemy/bannana/normal/animations/death/death3_frame.PNG" id="4_1gvq3"]
-[ext_resource type="Texture2D" uid="uid://bmqcjg05r8j1e" path="res://assets/art/enemy/bannana/normal/animations/fire/frame2.png" id="5_33pt7"]
-[ext_resource type="Texture2D" uid="uid://6w7p3hufm0km" path="res://assets/art/enemy/bannana/normal/animations/fire/frame3.png" id="6_6xu1n"]
-[ext_resource type="Texture2D" uid="uid://ccs6nyr8bd0ba" path="res://assets/art/enemy/bannana/normal/animations/fire/frame4.png" id="7_wpnjo"]
+[ext_resource type="Texture2D" uid="uid://b0afwlyjydm7h" path="res://assets/art/enemy/banana/normal/banana_idle.png" id="1_sq03r"]
+[ext_resource type="Texture2D" uid="uid://bh6pj83dm5i84" path="res://assets/art/enemy/banana/normal/animations/death/banana_death_1.png" id="2_4ycfj"]
+[ext_resource type="Texture2D" uid="uid://c22so75ub13ou" path="res://assets/art/enemy/banana/normal/animations/death/banana_death_2.png" id="3_gjynf"]
+[ext_resource type="Texture2D" uid="uid://cdmjg1osh8iqw" path="res://assets/art/enemy/banana/normal/animations/death/banana_death_3.png" id="4_1gvq3"]
+[ext_resource type="Texture2D" uid="uid://bmqcjg05r8j1e" path="res://assets/art/enemy/banana/normal/animations/fire/banana_fire_1.png" id="5_33pt7"]
+[ext_resource type="Texture2D" uid="uid://6w7p3hufm0km" path="res://assets/art/enemy/banana/normal/animations/fire/banana_fire_2.png" id="6_6xu1n"]
+[ext_resource type="Texture2D" uid="uid://ccs6nyr8bd0ba" path="res://assets/art/enemy/banana/normal/animations/fire/banana_fire_3.png" id="7_wpnjo"]
 
 [resource]
 animations = [{

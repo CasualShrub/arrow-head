@@ -1,12 +1,12 @@
 [gd_resource type="SpriteFrames" format=3 uid="uid://dq7pl0h6fmit4"]
 
-[ext_resource type="Texture2D" uid="uid://7mg0rd4y6wkr" path="res://assets/art/enemy/bannana/unripe/unripe1.png" id="1_r7ywt"]
-[ext_resource type="Texture2D" uid="uid://103ijpqle637" path="res://assets/art/enemy/bannana/unripe/animations/death/unripedeath1.PNG" id="2_mumix"]
-[ext_resource type="Texture2D" uid="uid://021ggwnr6hln" path="res://assets/art/enemy/bannana/unripe/animations/death/unripedeath2.PNG" id="3_n4tur"]
-[ext_resource type="Texture2D" uid="uid://b77hbds6dujuh" path="res://assets/art/enemy/bannana/unripe/animations/death/unripedeath3.PNG" id="4_hmt6q"]
-[ext_resource type="Texture2D" uid="uid://dosov6fd6j4dm" path="res://assets/art/enemy/bannana/unripe/animations/fire/unripe2.png" id="5_hges8"]
-[ext_resource type="Texture2D" uid="uid://vohr8f28cjgv" path="res://assets/art/enemy/bannana/unripe/animations/fire/unripe3.png" id="6_dixpy"]
-[ext_resource type="Texture2D" uid="uid://cg345clype61m" path="res://assets/art/enemy/bannana/unripe/animations/fire/unripe4.png" id="7_ibilq"]
+[ext_resource type="Texture2D" uid="uid://7mg0rd4y6wkr" path="res://assets/art/enemy/banana/unripe/banana_unripe_idle.png" id="1_r7ywt"]
+[ext_resource type="Texture2D" uid="uid://103ijpqle637" path="res://assets/art/enemy/banana/unripe/animations/death/banana_unripe_death_1.png" id="2_mumix"]
+[ext_resource type="Texture2D" uid="uid://021ggwnr6hln" path="res://assets/art/enemy/banana/unripe/animations/death/banana_unripe_death_2.png" id="3_n4tur"]
+[ext_resource type="Texture2D" uid="uid://b77hbds6dujuh" path="res://assets/art/enemy/banana/unripe/animations/death/banana_unripe_death_3.png" id="4_hmt6q"]
+[ext_resource type="Texture2D" uid="uid://dosov6fd6j4dm" path="res://assets/art/enemy/banana/unripe/animations/fire/banana_unripe_fire_1.png" id="5_hges8"]
+[ext_resource type="Texture2D" uid="uid://vohr8f28cjgv" path="res://assets/art/enemy/banana/unripe/animations/fire/banana_unripe_fire_2.png" id="6_dixpy"]
+[ext_resource type="Texture2D" uid="uid://cg345clype61m" path="res://assets/art/enemy/banana/unripe/animations/fire/banana_unripe_fire_3.png" id="7_ibilq"]
 
 [resource]
 animations = [{

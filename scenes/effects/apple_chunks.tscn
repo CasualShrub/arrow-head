@@ -1,8 +1,8 @@
 [gd_scene format=3 uid="uid://dsgml1im16fvw"]
 
-[ext_resource type="Texture2D" uid="uid://om3gxsvgiry7" path="res://assets/art/vfx/apple_chunks/apple chunk1.PNG" id="1_hknf6"]
-[ext_resource type="Texture2D" uid="uid://bdfcwgb4jamsv" path="res://assets/art/vfx/apple_chunks/apple chunk2.PNG" id="2_5ntgu"]
-[ext_resource type="Texture2D" uid="uid://p7vdd3xclix" path="res://assets/art/vfx/apple_chunks/apple crumb3.PNG" id="3_s5i42"]
+[ext_resource type="Texture2D" uid="uid://om3gxsvgiry7" path="res://assets/art/vfx/apple_chunks/apple_chunks_small.PNG" id="1_hknf6"]
+[ext_resource type="Texture2D" uid="uid://bdfcwgb4jamsv" path="res://assets/art/vfx/apple_chunks/apple_chunks_medium.PNG" id="2_5ntgu"]
+[ext_resource type="Texture2D" uid="uid://p7vdd3xclix" path="res://assets/art/vfx/apple_chunks/apple_chunks_large.PNG" id="3_s5i42"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_20k3k"]
 transparency = 1

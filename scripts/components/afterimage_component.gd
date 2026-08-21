@@ -1,7 +1,7 @@
 extends Node
 class_name AfterimageComponent
 
-@export var affecting: SpriteBase3D
+@export var affecting: Array[SpriteBase3D]
 @export var container: Node3D
 
 @export var is_enabled := true
@@ -23,7 +23,7 @@ func _process(delta: float) -> void:
 	_to_next += delta * frame_rate
 	print(_to_next)
 	if _to_next >= 1.0:
-		create_afterimage()
+		create_afterimages()
 		_to_next -= 1.0
 
 func enable() -> void:
@@ -36,8 +36,14 @@ func disable() -> void:
 	is_enabled = false
 	disabled.emit()
 
-func create_afterimage() -> Sprite3D:
-	var sprite := _duplicate_sprite()
+func create_afterimages() -> Array[Sprite3D]:
+	var afterimages: Array[Sprite3D] = []
+	for s in affecting:
+		afterimages.append(create_afterimage(s))
+	return afterimages
+
+func create_afterimage(base: SpriteBase3D) -> Sprite3D:
+	var sprite := _duplicate_sprite(base)
 	sprite.modulate = color
 	container.add_child(sprite)
 	_active.append(sprite)
@@ -51,19 +57,22 @@ func create_afterimage() -> Sprite3D:
 	)
 	return sprite
 
-func _duplicate_sprite() -> Sprite3D:
-	var sprite: Sprite3D
-	if affecting is AnimatedSprite3D:
-		var ani := affecting as AnimatedSprite3D
-		sprite = Sprite3D.new()
+func _duplicate_sprite(base: SpriteBase3D) -> Sprite3D:
+	var sprite := Sprite3D.new()
+	sprite.global_transform = base.global_transform
+	sprite.pixel_size = base.pixel_size
+	sprite.visible = base.visible
+	sprite.render_priority = base.render_priority - 1
+	
+	if base is AnimatedSprite3D:
+		var ani := base as AnimatedSprite3D
 		var animation := ani.animation
 		var frame := ani.frame
 		var tex := ani.sprite_frames.get_frame_texture(animation, frame)
 		sprite.texture = tex
-		sprite.global_transform = affecting.global_transform
-		sprite.pixel_size = affecting.pixel_size
-	elif affecting is Sprite3D:
-		sprite = affecting.duplicate()
+	elif base is Sprite3D:
+		sprite.texture = base.texture
+	
 	return sprite
 
 func clear() -> void:

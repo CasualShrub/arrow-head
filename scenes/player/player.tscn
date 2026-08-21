@@ -13,9 +13,9 @@
 [ext_resource type="Script" uid="uid://360h68v2nvph" path="res://scripts/components/sector_arrows_component.gd" id="8_fcs02"]
 [ext_resource type="SpriteFrames" uid="uid://cmjbdroql258f" path="res://sprite_frames/player/player_frames.tres" id="8_yj68g"]
 [ext_resource type="Script" uid="uid://bocqfysv2edvs" path="res://scripts/components/afterimage_component.gd" id="9_3j4b4"]
-[ext_resource type="Texture2D" uid="uid://dxs2lnb7aysuj" path="res://assets/art/player/status/fire_frame1.png" id="9_ioxgp"]
-[ext_resource type="Texture2D" uid="uid://clnx5whue0a7g" path="res://assets/art/player/status/fire_frame2.png" id="10_cnsyf"]
-[ext_resource type="Texture2D" uid="uid://d4flnp6puxus3" path="res://assets/art/player/status/ice.png" id="11_007i1"]
+[ext_resource type="Texture2D" uid="uid://dxs2lnb7aysuj" path="res://assets/art/player/status/satus_fire_frame1.png" id="9_ioxgp"]
+[ext_resource type="Texture2D" uid="uid://clnx5whue0a7g" path="res://assets/art/player/status/status_fire_frame2.png" id="10_cnsyf"]
+[ext_resource type="Texture2D" uid="uid://d4flnp6puxus3" path="res://assets/art/player/status/status_ice.png" id="11_007i1"]
 [ext_resource type="SpriteFrames" uid="uid://dcj3tcewuhc6p" path="res://sprite_frames/player/player_eyes_frames.tres" id="12_6cv16"]
 [ext_resource type="Script" uid="uid://d05r0wt3n7g6i" path="res://scripts/player/player_eyes.gd" id="12_kvlxm"]
 [ext_resource type="PackedScene" uid="uid://cl12r2to8hcdp" path="res://scenes/player/sectors.tscn" id="13_gx1jg"]
@@ -122,10 +122,11 @@ metadata/_custom_type_script = "uid://b2h82wpoguve8"
 
 [node name="AfterimageComponent" type="Node" parent="." unique_id=574490356 node_paths=PackedStringArray("affecting", "container")]
 script = ExtResource("9_3j4b4")
-affecting = NodePath("../Sprite")
+affecting = [NodePath("../Sprite"), NodePath("../Eyes")]
 container = NodePath("../Afterimages")
 is_enabled = false
 frame_rate = 10.0
+color = Color(1, 1, 1, 1)
 metadata/_custom_type_script = "uid://bocqfysv2edvs"
 
 [node name="DashComponent" type="Node" parent="." unique_id=1199737807]

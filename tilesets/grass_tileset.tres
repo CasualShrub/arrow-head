@@ -5,7 +5,7 @@
 [ext_resource type="Texture2D" uid="uid://d36keilc5ipfc" path="res://tiles/grass3.PNG" id="3_g3"]
 [ext_resource type="Texture2D" uid="uid://hfeerd7gji65" path="res://tiles/grass4.png" id="4_g4"]
 [ext_resource type="Texture2D" uid="uid://cr22c85ft1ad2" path="res://tiles/grass5.png" id="5_g5"]
-[ext_resource type="Texture2D" uid="uid://dmkbg56vsyjnc" path="res://tiles/grass6(1).png" id="6_g6"]
+[ext_resource type="Texture2D" uid="uid://dmkbg56vsyjnc" path="res://tiles/grass6.png" id="6_g6"]
 
 [sub_resource type="TileSetAtlasSource" id="atlas_g1"]
 texture = ExtResource("1_g1")
