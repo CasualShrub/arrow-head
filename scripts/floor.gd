@@ -7,7 +7,7 @@ const FLOOR_TILES: Array[Texture2D] = [
 	preload("res://tiles/grass2.PNG"),
 	preload("res://tiles/grass3.PNG"),
 	preload("res://tiles/grass4.png"),
-	preload("res://tiles/grass6(1).png"),
+	preload("res://tiles/grass6.png"),
 ]
 
 @export var cells := 8
