@@ -187,6 +187,7 @@ func _move(dir: Vector2, _dt: float) -> void:
 
 func _on_died() -> void:
 	arrows.clear_arrows()
+	_sectors.clear()
 	time.resume()
 	
 	SoundManager.play("apple_death")
