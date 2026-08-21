@@ -12,11 +12,11 @@ transparency = 1
 shading_mode = 0
 albedo_color = Color(0.2, 0.8, 1, 0.5)
 
-[sub_resource type="PlaneMesh" id="PlaneMesh_f03aa"]
+[sub_resource type="QuadMesh" id="QuadMesh_7dqbv"]
 size = Vector2(0.06, 2.3)
+orientation = 1
 
 [node name="DashPreview" type="Node3D" unique_id=609039478]
-transform = Transform3D(1, 0, 0, 0, -4.371139e-08, 1, 0, -1, -4.371139e-08, 0, 0, 0)
 script = ExtResource("1_miij3")
 body_texture = ExtResource("2_x6rtf")
 eyes_texture = ExtResource("3_i17dr")
@@ -24,19 +24,19 @@ metadata/_custom_type_script = "uid://8jd6wlvsiper"
 
 [node name="PreviewSprite" type="Sprite3D" parent="." unique_id=2125678008]
 unique_name_in_owner = true
-transform = Transform3D(0.6, 5.7320594e-16, -2.664535e-15, -5.7320594e-16, 0.6, -3.5527137e-15, 2.664535e-15, 3.5527137e-15, 0.6, -1.7586947e-14, 2.2019837, -0.025005914)
+transform = Transform3D(0.6, 0, 0, 0, -2.6226834e-08, 0.6, 0, -0.6, -2.6226834e-08, 0, 0, -2.202)
 modulate = Color(0.2, 0.8, 1, 0.5019608)
 double_sided = false
 texture = SubResource("CompressedTexture2D_iutdw")
 
 [node name="PreviewEyes" type="Sprite3D" parent="PreviewSprite" unique_id=397188224]
-transform = Transform3D(0.99999994, 0, 4.2351647e-22, -2.524355e-29, 0.99999994, 0, -4.2351647e-22, 0, 0.99999994, 8.359199e-17, 0, 0.018823493)
+transform = Transform3D(0.99999994, 0, 0, 0, 0.99999994, 0, 0, 0, 0.99999994, 0, 0, 0.019)
 modulate = Color(0.2, 0.8, 1, 0.5019608)
 double_sided = false
 texture = ExtResource("3_i17dr")
 
 [node name="PreviewLine" type="MeshInstance3D" parent="." unique_id=282548725]
-transform = Transform3D(1, -4.440891e-15, 1.941175e-22, 0, -4.371139e-08, -1, 4.440891e-15, 1, -4.371139e-08, -1.4279812e-14, 1.0578076, -0.108490616)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.02, -1.05)
 material_override = SubResource("StandardMaterial3D_pc74m")
 gi_mode = 0
-mesh = SubResource("PlaneMesh_f03aa")
+mesh = SubResource("QuadMesh_7dqbv")
