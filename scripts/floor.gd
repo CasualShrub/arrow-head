@@ -34,11 +34,11 @@ func _validate_property(property: Dictionary) -> void:
 	if property.name == "material_override":
 		property.usage = property.usage & ~PROPERTY_USAGE_STORAGE
 
-func _exit_tree() -> void:
-	if Engine.is_editor_hint():
-		material_override = null
-		_preview_material = null
-		_preview_texture = null
+#func _exit_tree() -> void:
+	#if Engine.is_editor_hint():
+		#material_override = null
+		#_preview_material = null
+		#_preview_texture = null
 
 func _apply_preview() -> void:
 	if not is_inside_tree():

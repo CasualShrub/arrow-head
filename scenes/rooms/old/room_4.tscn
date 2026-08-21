@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://mbd5ptfln4jo"]
 
-[ext_resource type="PackedScene" uid="uid://b6c1h2si8ob6l" path="res://scenes/room.tscn" id="1_3qrbd"]
+[ext_resource type="PackedScene" uid="uid://b6c1h2si8ob6l" path="res://scenes/rooms/room.tscn" id="1_3qrbd"]
 [ext_resource type="PackedScene" uid="uid://tmhabgv3ovyb" path="res://scenes/enemies/enemy_banana.tscn" id="2_7w5g8"]
 [ext_resource type="Material" uid="uid://crockmat0lvl2" path="res://materials/rock_material.tres" id="3_0hs51"]
 [ext_resource type="PackedScene" uid="uid://b15vpncjfa5df" path="res://scenes/enemies/enemy_blueberry.tscn" id="3_bsra7"]

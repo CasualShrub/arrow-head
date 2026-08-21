@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://cqjltbuc12tmr"]
 
-[ext_resource type="PackedScene" uid="uid://b6c1h2si8ob6l" path="res://scenes/room.tscn" id="1_3qrbd"]
+[ext_resource type="PackedScene" uid="uid://b6c1h2si8ob6l" path="res://scenes/rooms/room.tscn" id="1_3qrbd"]
 [ext_resource type="PackedScene" uid="uid://dhg4gbfiiobuo" path="res://scenes/enemies/enemy_dragonfruit.tscn" id="2_xiw6i"]
 [ext_resource type="Material" uid="uid://crockmat0lvl2" path="res://materials/rock_material.tres" id="3_0hs51"]
 [ext_resource type="Shader" uid="uid://br4t4iofbd1o1" path="res://shaders/textured_fade.gdshader" id="3_ix073"]

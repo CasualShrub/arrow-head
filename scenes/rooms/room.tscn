@@ -21,8 +21,9 @@ shader = ExtResource("4_ybpoa")
 shader_parameter/darken_color = Color(0, 0, 0, 1)
 shader_parameter/darken_amount = 0.0
 
-[node name="Room" type="Node3D" unique_id=571267862]
+[node name="Room" type="Node3D" unique_id=84024719]
 script = ExtResource("1_ybpoa")
+metadata/_custom_type_script = "uid://cm3vh4qq01y8d"
 
 [node name="Player" parent="." unique_id=508579643 instance=ExtResource("2_qtoah")]
 unique_name_in_owner = true
@@ -93,5 +94,5 @@ visible = false
 [node name="GameOver" parent="." unique_id=1065161674 instance=ExtResource("6_23wr2")]
 visible = false
 
-[connection signal="ended" from="." to="GameOver" method="_on_encounter_ended"]
 [connection signal="ended" from="." to="LevelTimer" method="stop"]
+[connection signal="ended" from="." to="GameOver" method="_on_encounter_ended"]
