@@ -26,12 +26,12 @@ func _destroy_arrow(arrow: Arrow) -> void:
 	arrow.queue_free()
 
 func _consume_pool(scene: PackedScene) -> Variant:
-	var scene_pool = _pool[scene]
+	var scene_pool = _pool.get(scene)
 	if not scene_pool: return null
 	return scene_pool.pop_front()
 
 func pool(arrow: Arrow) -> void:
-	if not _pool[arrow.scene]:
+	if not _pool.get(arrow.scene):
 		_pool[arrow.scene] = []
 	_pool[arrow.scene].append(arrow)
 	_pooled += 1
