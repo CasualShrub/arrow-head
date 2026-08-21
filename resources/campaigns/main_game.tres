@@ -4,5 +4,5 @@
 
 [resource]
 script = ExtResource("1_vakto")
-levels = Array[String](["uid://bxnckofd1y1sl"])
+levels = Array[String](["uid://cbfa80ccg46cc"])
 metadata/_custom_type_script = "uid://dq3x6bxvuaeyx"
