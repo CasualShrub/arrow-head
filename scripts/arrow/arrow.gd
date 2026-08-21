@@ -47,9 +47,14 @@ func activate(
 	simulation.velocity = velocity.normalized() * speed if velocity.length_squared() > 0.0 else Vector3.ZERO
 	simulation.collision_mask = target_mask
 	simulation.lifetime_remaining = INF if max_lifetime < 0.0 else max_lifetime
-	
+
+	global_position = simulation.position
+	var look_dir := simulation.velocity
+	look_dir = look_dir.normalized()
+	look_at(global_position + look_dir)
+
 	show()
-	
+
 	_on_activated()
 	activated.emit()
 
