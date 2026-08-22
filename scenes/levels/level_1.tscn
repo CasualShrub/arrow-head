@@ -77,11 +77,11 @@ size = Vector3(5.3484993, 7.053894, 7.7557926)
 material = SubResource("ShaderMaterial_sk5k4")
 
 [node name="cobblestone gate side3" type="CSGBox3D" parent="SubViewportContainer/SubViewport/World" parent_id_path=PackedInt32Array(1589957074) index="9" unique_id=1572208280]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 13.34233, 3.0098867, -13.596214)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 13.34233, 2.7468405, -14.569641)
 use_collision = true
 collision_layer = 4
 collision_mask = 9
-size = Vector3(12.885309, 7.053894, 7.2478914)
+size = Vector3(12.885309, 6.5278015, 9.194746)
 material = SubResource("ShaderMaterial_sk5k4")
 
 [node name="cobblestone gate side2" type="CSGBox3D" parent="SubViewportContainer/SubViewport/World" parent_id_path=PackedInt32Array(1589957074) index="10" unique_id=738032806]
@@ -111,11 +111,11 @@ material = ExtResource("4_x42e6")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -12.31846, 0, -26.302246)
 
 [node name="SubViewportContainer_SubViewport_World_Walls#CSGBox3D3" type="CSGBox3D" parent="Borders (trees)" index="0" unique_id=1476371726]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 27.182518, 0.7292166, 2.8772335)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 27.182518, 0.7292166, 3.7044735)
 use_collision = true
 collision_layer = 4
 collision_mask = 9
-size = Vector3(54.994644, 2.4925537, 8.408813)
+size = Vector3(54.994644, 2.4925537, 10.063293)
 material = SubResource("ShaderMaterial_oc4kc")
 
 [node name="SubViewportContainer_SubViewport_World_Walls#CSGBox3D4" type="CSGBox3D" parent="Borders (trees)" index="1" unique_id=1990485876]
