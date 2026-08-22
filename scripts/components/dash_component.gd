@@ -114,6 +114,8 @@ func get_dash_targets(origin: Vector3, dest: Vector3) -> Array[TargetArea]:
 	
 	var space_state := _parent.get_world_3d().direct_space_state
 	
+	var exclude := [_parent.get_rid()]
+	
 	for i in range(steps + 1):
 		var t := float(i) / float(steps) if steps > 0 else 0.0
 		var sample_pos := origin + full_motion * t
@@ -124,11 +126,14 @@ func get_dash_targets(origin: Vector3, dest: Vector3) -> Array[TargetArea]:
 		query.collision_mask = targeting_mask
 		query.collide_with_areas = true
 		query.collide_with_bodies = false
-		query.exclude = [_parent.get_rid()]
+		query.exclude = exclude
 		
 		var intersected := space_state.intersect_shape(query)
 		for c in intersected:
-			if c.collider is TargetArea and c.collider not in targets:
-				targets.append(c.collider)
+			var coll := c.collider as CollisionObject3D
+			if not coll or coll is not TargetArea: continue
+			if not coll.is_vulnerable or coll in targets: continue
+			targets.append(c.collider)
+			exclude.append(c.collider.get_rid())
 	
 	return targets

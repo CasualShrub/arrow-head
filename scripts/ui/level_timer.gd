@@ -9,7 +9,8 @@ var _running := true
 func _process(delta: float) -> void:
 	if not _running:
 		return
-	_elapsed += delta
+	var real_delta := delta / Engine.time_scale
+	_elapsed += real_delta
 	_label.text = format_time(_elapsed)
 
 func stop(_a = null, _b = null, _c = null) -> void:

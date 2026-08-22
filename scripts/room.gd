@@ -1,6 +1,9 @@
 extends Node3D
 class_name Room
 
+@export var entrance: Marker3D
+@export var exit: ExitArea
+
 const JUICE_BAR_HUD := preload("res://scenes/ui/juice_bar_hud.tscn")
 const HIGHLIGHT_LAYER := 20
 
@@ -11,7 +14,6 @@ signal ended(won: bool)
 var player: Player
 var _ongoing := false
 var _cleared := false
-var _exit_area: ExitArea
 
 @onready var _enemies := %Enemies
 @onready var _juice_bar := %JuiceBar
@@ -35,6 +37,8 @@ func _setup_player() -> void:
 	var players := find_children("*", "Player", true)
 	assert(players.size() == 1, "Room must have exactly one Player.")
 	add_player(players[0])
+	if entrance:
+		player.global_position = entrance.global_position
 
 func _setup_enemies() -> void:
 	var enemies := find_children("*", "Enemy", true)
@@ -42,10 +46,13 @@ func _setup_enemies() -> void:
 		add_enemy(e)
 
 func _setup_exit() -> void:
-	var exits := find_children("*", "Exit_Area", true)
-	if not exits.is_empty():
-		_exit_area = exits[0]
-		_exit_area.player_entered.connect(_on_exit_entered)
+	if not exit:
+		var exits := find_children("*", "Exit_Area", true)
+		if not exits.is_empty():
+			exit = exits[0]
+		else:
+			return
+	exit.player_entered.connect(_on_exit_entered)
 
 
 func _setup_juice_bar() -> void:
@@ -106,8 +113,8 @@ func _clear() -> void:
 		return
 	_cleared = true
 	cleared.emit()
-	if _exit_area:
-		_exit_area.unlock()
+	if exit:
+		exit.unlock()
 
 func _on_exit_entered() -> void:
 	end(true)

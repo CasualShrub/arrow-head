@@ -4,6 +4,9 @@ class_name TargetArea
 signal targeted()
 signal untargeted()
 signal hit()
+signal vulerability_changed(vulnerable: bool)
+
+@export var is_vulnerable := true
 
 var _targeted := false
 
@@ -22,3 +25,19 @@ func mark_untargeted() -> void:
 
 func mark_hit() -> void:
 	hit.emit()
+
+func make_vulnerable() -> void:
+	if is_vulnerable: return
+	is_vulnerable = true
+	monitoring = true
+	monitorable = true
+	vulerability_changed.emit(true)
+
+func make_invulnerable() -> void:
+	if not is_vulnerable: return
+	is_vulnerable = false
+	monitoring = false
+	monitorable = false
+	mark_untargeted()
+	print("make invulnerable ", monitoring)
+	vulerability_changed.emit(false)

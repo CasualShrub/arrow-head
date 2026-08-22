@@ -369,6 +369,7 @@ func _select_behaviour(dt: float) -> void:
 func _on_died() -> void:
 	print("died")
 	SoundManager.play("banana_death")
+	_dash_target.make_invulnerable()
 	_sprite.play("death")
 
 func _on_sus_alerted() -> void:

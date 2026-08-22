@@ -67,7 +67,7 @@ script = ExtResource("3_fcftc")
 metadata/_custom_type_script = "uid://dn8jqcy1eo7y7"
 
 [node name="SuspicionDisplay" parent="." unique_id=488316298 instance=ExtResource("7_n7575")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.108, 0, -0.95)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.108, -0.95)
 
 [node name="DashTarget" type="Area3D" parent="." unique_id=2018651992]
 unique_name_in_owner = true
