@@ -1,0 +1,72 @@
+[gd_scene format=3 uid="uid://dfwtack6wno5k"]
+
+[ext_resource type="PackedScene" uid="uid://b6c1h2si8ob6l" path="res://scenes/room.tscn" id="1_rjb1n"]
+[ext_resource type="PackedScene" uid="uid://cwall3d8prfb0" path="res://scenes/deco/wall.tscn" id="2_jayp1"]
+[ext_resource type="PackedScene" uid="uid://tmhabgv3ovyb" path="res://scenes/enemies/enemy_banana.tscn" id="2_nkhmk"]
+
+[node name="Room" unique_id=571267862 instance=ExtResource("1_rjb1n")]
+
+[node name="Enemy" parent="Enemies" parent_id_path=PackedInt32Array(1185931971) index="0" unique_id=71488470 instance=ExtResource("2_nkhmk")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.8099909, 0, -11.151326)
+
+[node name="Enemy2" parent="Enemies" parent_id_path=PackedInt32Array(1185931971) index="1" unique_id=96547157 instance=ExtResource("2_nkhmk")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 14.729659, 0, -2.967864)
+
+[node name="Enemy3" parent="Enemies" parent_id_path=PackedInt32Array(1185931971) index="2" unique_id=847506144 instance=ExtResource("2_nkhmk")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 31.87125, 0, -2.967864)
+
+[node name="Wall" parent="." index="11" unique_id=659255651 instance=ExtResource("2_jayp1")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.6183822, 0, -4.1764994)
+size = Vector3(1.246582, 2.5, 21.33754)
+
+[node name="Wall2" parent="." index="12" unique_id=375315184 instance=ExtResource("2_jayp1")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.8902848, 0, 2.681735)
+size = Vector3(10.263916, 2.5, 0.99331665)
+
+[node name="Wall9" parent="." index="13" unique_id=1567808445 instance=ExtResource("2_jayp1")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 14.6228895, 0, -0.13159037)
+size = Vector3(16.91565, 2.5, 0.99331665)
+
+[node name="Wall3" parent="." index="14" unique_id=466643600 instance=ExtResource("2_jayp1")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10.526912, 0, -14.589649)
+size = Vector3(27.53717, 2.5, 0.99331665)
+
+[node name="Wall5" parent="." index="15" unique_id=1202797623 instance=ExtResource("2_jayp1")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 29.043093, 0, -12.028864)
+size = Vector3(11.913513, 2.5, 0.99331665)
+
+[node name="Wall13" parent="." index="16" unique_id=1505430693 instance=ExtResource("2_jayp1")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 29.043093, 0, 7.210932)
+size = Vector3(11.913513, 2.5, 0.99331665)
+
+[node name="Wall4" parent="." index="17" unique_id=601005632 instance=ExtResource("2_jayp1")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 23.319914, 0, -10.539995)
+size = Vector3(1.3491821, 2.5, 8.474686)
+
+[node name="Wall12" parent="." index="18" unique_id=1448587572 instance=ExtResource("2_jayp1")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 23.319914, 0, 3.7428703)
+size = Vector3(1.3491821, 2.5, 8.474686)
+
+[node name="Wall7" parent="." index="19" unique_id=730992882 instance=ExtResource("2_jayp1")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.500082, 0, -0.37774563)
+size = Vector3(1.3491821, 2.5, 8.474686)
+
+[node name="Wall10" parent="." index="20" unique_id=1276696501 instance=ExtResource("2_jayp1")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.6932898, 0, -4.2454667)
+size = Vector3(1.3491821, 2.5, 8.474686)
+
+[node name="Wall11" parent="." index="21" unique_id=399575793 instance=ExtResource("2_jayp1")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 16.10558, 0, -10.413664)
+size = Vector3(1.3491821, 2.5, 8.474686)
+
+[node name="Wall8" parent="." index="22" unique_id=1211880335 instance=ExtResource("2_jayp1")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.8827877, 0, -3.9370909)
+size = Vector3(4.5837708, 2.5, 1.3559952)
+
+[node name="Wall6" parent="." index="23" unique_id=752286837 instance=ExtResource("2_jayp1")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 34.670826, 0, -6.4981313)
+size = Vector3(1.3491821, 2.5, 12.075734)
+
+[node name="Wall14" parent="." index="24" unique_id=904090949 instance=ExtResource("2_jayp1")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 34.670826, 0, 5.7266884)
+size = Vector3(1.3491821, 2.5, 3.4122224)
