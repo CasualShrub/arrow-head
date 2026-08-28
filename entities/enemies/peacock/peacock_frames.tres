@@ -1,0 +1,70 @@
+[gd_resource type="SpriteFrames" format=3 uid="uid://b75cdbwepha66"]
+
+[ext_resource type="Texture2D" uid="uid://clh7p4bvd87yg" path="res://entities/enemies/peacock/animations/death/peacock_death_1.PNG" id="1_r6gcn"]
+[ext_resource type="Texture2D" uid="uid://dnyq3e6ww1cyp" path="res://entities/enemies/peacock/animations/death/peacock_death_2.PNG" id="2_op6fk"]
+[ext_resource type="Texture2D" uid="uid://b1nvv3ipe0c70" path="res://entities/enemies/peacock/animations/death/peacock_death_3.PNG" id="3_383r6"]
+[ext_resource type="Texture2D" uid="uid://btqnc8iutkajc" path="res://entities/enemies/peacock/peacock_idle.PNG" id="4_2tddq"]
+[ext_resource type="Texture2D" uid="uid://cr3etnu6ho4dp" path="res://entities/enemies/peacock/animations/fire/peacock_fire_1.PNG" id="5_383r6"]
+[ext_resource type="Texture2D" uid="uid://tixr558ucdah" path="res://entities/enemies/peacock/animations/fire/peacock_fire_2.PNG" id="6_2tddq"]
+
+[resource]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("4_2tddq")
+}, {
+"duration": 1.0,
+"texture": ExtResource("1_r6gcn")
+}, {
+"duration": 1.0,
+"texture": ExtResource("2_op6fk")
+}, {
+"duration": 1.0,
+"texture": ExtResource("3_383r6")
+}],
+"loop": 0,
+"name": &"death",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("4_2tddq")
+}],
+"loop": 1,
+"name": &"default",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("4_2tddq")
+}, {
+"duration": 1.0,
+"texture": ExtResource("5_383r6")
+}, {
+"duration": 1.0,
+"texture": ExtResource("6_2tddq")
+}, {
+"duration": 1.0,
+"texture": ExtResource("5_383r6")
+}, {
+"duration": 1.0,
+"texture": ExtResource("6_2tddq")
+}, {
+"duration": 1.0,
+"texture": ExtResource("5_383r6")
+}, {
+"duration": 1.0,
+"texture": ExtResource("6_2tddq")
+}],
+"loop": 0,
+"name": &"fire",
+"speed": 8.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("5_383r6")
+}],
+"loop": 1,
+"name": &"hit",
+"speed": 5.0
+}]

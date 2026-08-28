@@ -1,0 +1,11 @@
+[gd_scene format=3 uid="uid://54tybj2c4g22"]
+
+[ext_resource type="PackedScene" uid="uid://b8rs35o7f45v0" path="res://entities/enemies/enemy.tscn" id="1_e5b04"]
+[ext_resource type="SpriteFrames" uid="uid://b75cdbwepha66" path="res://entities/enemies/peacock/peacock_frames.tres" id="2_gintu"]
+
+[node name="Enemy" unique_id=520769260 instance=ExtResource("1_e5b04")]
+
+[node name="Sprite" parent="VisualRoot" parent_id_path=PackedInt32Array(2109639598) index="0" unique_id=1091610106]
+transform = Transform3D(-3.1038542e-08, -0.710079, -4.283717e-08, -1.1027104e-22, -3.1038542e-08, 0.98, -0.710079, 3.1038542e-08, 1.8724722e-15, 0, 0, 0)
+flip_h = true
+sprite_frames = ExtResource("2_gintu")
