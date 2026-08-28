@@ -1,6 +1,6 @@
 extends Control
 
-const TUTORIAL_SCENE := "res://scenes/levels/tutorial.tscn"
+const GAME_SCENE := "res://scenes/game.tscn"
 
 @export var scenes_to_warm: Array[String] = []
 
@@ -37,7 +37,7 @@ func _set_main_buttons(shown: bool) -> void:
 	$Quit.visible = shown
 
 func _on_play_pressed() -> void:
-	get_tree().change_scene_to_file(TUTORIAL_SCENE)
+	get_tree().change_scene_to_file(GAME_SCENE)
 
 func _on_levels_pressed() -> void:
 	if _level_select:
@@ -45,7 +45,11 @@ func _on_levels_pressed() -> void:
 		_level_select.show()
 
 func _load_level(path: String) -> void:
-	get_tree().change_scene_to_file(path)
+	if ResourceLoader.exists(path):
+		get_tree().change_scene_to_file(path)
+	# just a fallback incase resource isn't valid
+	else:
+		get_tree().change_scene_to_file(GAME_SCENE)
 
 func _close_levels() -> void:
 	if _level_select:

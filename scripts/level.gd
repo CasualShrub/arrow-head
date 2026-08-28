@@ -63,6 +63,7 @@ func load_room(index: int) -> void:
 	room.ended.connect(_on_room_ended)
 	current_room_index = index
 	current_room = room
+	add_child(room)
 	room_loaded.emit(room)
 
 func _unload_room() -> void:
@@ -89,5 +90,7 @@ func _get_scene_type(scene: PackedScene) -> String:
 	
 	return state.get_node_type(0)
 
-func _on_room_ended() -> void:
+func _on_room_ended(won: bool) -> void:
+	if not won:
+		return #do the death thing
 	advance_room()

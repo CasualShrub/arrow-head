@@ -31,7 +31,10 @@ func _ready() -> void:
 func _input(event: InputEvent) -> void:
 	if not _ongoing: return   # end screens handle their own keys
 	if event is InputEventKey and event.pressed and not event.echo and event.keycode == KEY_R:
-		get_tree().reload_current_scene()
+		if GameManager.current_level:
+			GameManager.restart_room()
+		else:
+			get_tree().reload_current_scene()
 
 func _setup_player() -> void:
 	var players := find_children("*", "Player", true)

@@ -1,8 +1,10 @@
 [gd_resource type="Resource" script_class="CampaignData" format=3 uid="uid://lseyvxmqjacu"]
 
+[ext_resource type="Script" uid="uid://bxgdem1c8rvxa" path="res://scripts/level_data.gd" id="1_pakn1"]
 [ext_resource type="Script" uid="uid://dq3x6bxvuaeyx" path="res://scripts/campaign_data.gd" id="1_vakto"]
+[ext_resource type="Resource" uid="uid://cbfa80ccg46cc" path="res://resources/levels/level_1.tres" id="2_lvl1"]
 
 [resource]
 script = ExtResource("1_vakto")
-levels = Array[String](["uid://cbfa80ccg46cc"])
+levels = Array[ExtResource("1_pakn1")]([ExtResource("2_lvl1")])
 metadata/_custom_type_script = "uid://dq3x6bxvuaeyx"
