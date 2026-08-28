@@ -3,11 +3,11 @@ extends GeometryInstance3D
 class_name GrassFloor
 
 const FLOOR_TILES: Array[Texture2D] = [
-	preload("res://tiles/grass1.PNG"),
-	preload("res://tiles/grass2.PNG"),
-	preload("res://tiles/grass3.PNG"),
-	preload("res://tiles/grass4.png"),
-	preload("res://tiles/grass6.png"),
+	preload("uid://5hy638fvyevd"),
+	preload("uid://0lmw4s7jhkqt"),
+	preload("uid://d36keilc5ipfc"),
+	preload("uid://hfeerd7gji65"),
+	preload("uid://dmkbg56vsyjnc"),
 ]
 
 @export_tool_button("Reload", "Reload")

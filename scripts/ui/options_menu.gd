@@ -29,7 +29,7 @@ func _ready() -> void:
 	vb.add_child(fs)
 
 	var back := UiStyle.button("Back")
-	back.pressed.connect(func(): get_tree().change_scene_to_file("res://scenes/ui/main_menu.tscn"))
+	back.pressed.connect(func(): get_tree().change_scene_to_file("uid://dq024rj3sseom"))
 	vb.add_child(back)
 	back.grab_focus()
 

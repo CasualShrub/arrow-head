@@ -172,7 +172,7 @@ func _restart() -> void:
 
 func _to_menu() -> void:
 	get_tree().paused = false
-	get_tree().change_scene_to_file("res://scenes/ui/main_menu.tscn")
+	get_tree().change_scene_to_file("uid://dq024rj3sseom")
 
 func _next() -> void:
 	get_tree().paused = false

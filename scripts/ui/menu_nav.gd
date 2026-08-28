@@ -4,7 +4,7 @@ class_name MenuNav
 # Scene changes made from the pause and end screens. Each one lifts the pause
 # first, otherwise the next scene loads frozen.
 
-const MAIN_MENU := "res://scenes/ui/main_menu.tscn"
+const MAIN_MENU := "uid://dq024rj3sseom"
 
 static func restart(tree: SceneTree) -> void:
 	tree.paused = false

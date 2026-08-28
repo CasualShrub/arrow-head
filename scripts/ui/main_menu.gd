@@ -1,6 +1,6 @@
 extends Control
 
-const GAME_SCENE := "res://scenes/game.tscn"
+const GAME_SCENE := "uid://c8ghost4gme01"
 
 @export var scenes_to_warm: Array[String] = []
 

@@ -1,7 +1,7 @@
 extends Node
 
-const MAIN_GAME = preload("res://resources/campaigns/main_game.tres")
-const MAIN_MENU := "res://scenes/ui/main_menu.tscn"
+const MAIN_GAME = preload("uid://lseyvxmqjacu")
+const MAIN_MENU := "uid://dq024rj3sseom"
 
 signal campaign_started(campaign: CampaignState)
 signal campaign_ended(campaign: CampaignState)

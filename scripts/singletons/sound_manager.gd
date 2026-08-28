@@ -14,29 +14,29 @@ const _MUSIC_BUS := "Music"
 const DEFAULT_MUSIC := "TITLE_SCREEN"
 
 const MUSIC := {
-	"TITLE_SCREEN": preload("res://assets/audio/music/TITLE_SCREEN.wav"),
-	"Lvl_1": preload("res://assets/audio/music/Lvl_1.wav"),
-	"Lvl_2_3": preload("res://assets/audio/music/Lvl_2&3.wav"),
-	"Lvl_4_5": preload("res://assets/audio/music/Lvl_4&5.wav"),
-	"Lvl_6_7": preload("res://assets/audio/music/Lvl_6&7.wav"),
+	"TITLE_SCREEN": preload("uid://dmd00wsbb5p48"),
+	"Lvl_1": preload("uid://bhbv3bkkngiks"),
+	"Lvl_2_3": preload("uid://d0guesfdkuk1p"),
+	"Lvl_4_5": preload("uid://cix6q1uma8oa5"),
+	"Lvl_6_7": preload("uid://xn16eqr3x2e1"),
 }
 
 # event key -> stream. keys are the .wav basenames.
 const SOUNDS := {
-	"Q1_fill": preload("res://assets/audio/sfx/Q1_fill.wav"),
-	"Q2_fill": preload("res://assets/audio/sfx/Q2_fill.wav"),
-	"Q3_fill": preload("res://assets/audio/sfx/Q3_fill.wav"),
-	"Q4_fill": preload("res://assets/audio/sfx/Q4_fill.wav"),
-	"apple_damage1": preload("res://assets/audio/sfx/apple_damage1.wav"),
-	"apple_damage2": preload("res://assets/audio/sfx/apple_damage2.wav"),
-	"apple_death": preload("res://assets/audio/sfx/apple_death.wav"),
-	"apple_shooting": preload("res://assets/audio/sfx/apple_shooting.wav"),
-	"arrow_bounce": preload("res://assets/audio/sfx/arrow_bounce.wav"),
-	"arrow_woosh": preload("res://assets/audio/sfx/arrow_woosh.wav"),
-	"banana_death": preload("res://assets/audio/sfx/banana_death.wav"),
-	"banana_shooting": preload("res://assets/audio/sfx/banana_shooting.wav"),
-	"big_win_kill_boss_jingle": preload("res://assets/audio/sfx/big_win_kill_boss_jingle.wav"),
-	"enemy_death_small_win_jingle": preload("res://assets/audio/sfx/enemy_death_small_win_jingle.wav"),
+	"Q1_fill": preload("uid://clog8tbgd6gae"),
+	"Q2_fill": preload("uid://j3ux3fl1d15c"),
+	"Q3_fill": preload("uid://ouemhdrfcc6a"),
+	"Q4_fill": preload("uid://dxxeuw0o67st0"),
+	"apple_damage1": preload("uid://dmoa0bbs1iv23"),
+	"apple_damage2": preload("uid://cppwp26lcuxys"),
+	"apple_death": preload("uid://b5n4p0rmh6pq1"),
+	"apple_shooting": preload("uid://cbwyo1u8w1gko"),
+	"arrow_bounce": preload("uid://b8kjd82cjlhg7"),
+	"arrow_woosh": preload("uid://bm1djgjmjw1nr"),
+	"banana_death": preload("uid://qsda75tto65v"),
+	"banana_shooting": preload("uid://clhwj7ds06on6"),
+	"big_win_kill_boss_jingle": preload("uid://ce55ed6pdob1c"),
+	"enemy_death_small_win_jingle": preload("uid://dustcpx3l8mok"),
 }
 
 # per-asset base level in dB — balance the individual effects against each other

@@ -4,7 +4,6 @@ class_name Room
 @export var entrance: Marker3D
 @export var exit: ExitArea
 
-const JUICE_BAR_HUD := preload("res://scenes/ui/juice_bar_hud.tscn")
 const HIGHLIGHT_LAYER := 20
 
 signal started()

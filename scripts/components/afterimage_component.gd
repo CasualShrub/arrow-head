@@ -1,7 +1,7 @@
 extends Node
 class_name AfterimageComponent
 
-const MIX_SHADER = preload("res://shaders/mix.gdshader")
+const MIX_SHADER = preload("uid://cy4u35x3om2q4")
 
 @export var affecting: Array[SpriteBase3D]
 @export var container: Node3D
