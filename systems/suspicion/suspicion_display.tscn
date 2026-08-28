@@ -1,0 +1,28 @@
+[gd_scene format=3 uid="uid://ggx7t3se45en"]
+
+[ext_resource type="Script" uid="uid://bu3vaok14sdhq" path="res://systems/suspicion/suspicion_display.gd" id="1_whhco"]
+[ext_resource type="SpriteFrames" uid="uid://cmoc4g43xckv2" path="res://systems/suspicion/sus_outline.tres" id="2_1dqwv"]
+[ext_resource type="Shader" uid="uid://cs8xbkept5f7h" path="res://shaders/meter.gdshader" id="3_e3omm"]
+[ext_resource type="Texture2D" uid="uid://b6bq57ggincn8" path="res://systems/suspicion/question_fill.png" id="4_5lrmw"]
+[ext_resource type="SpriteFrames" uid="uid://prgjo2tsn6yw" path="res://systems/suspicion/sus_fill.tres" id="5_p64wr"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_xmqe1"]
+render_priority = 0
+shader = ExtResource("3_e3omm")
+shader_parameter/sprite_texture = ExtResource("4_5lrmw")
+shader_parameter/fade_height = 0.64800003078
+
+[node name="SuspicionDisplay" type="Node3D" unique_id=488316298]
+script = ExtResource("1_whhco")
+metadata/_custom_type_script = "uid://bu3vaok14sdhq"
+
+[node name="SusOutline" type="AnimatedSprite3D" parent="." unique_id=846483027]
+unique_name_in_owner = true
+transform = Transform3D(0.333, 0, 0, 0, -1.45558925e-08, 0.333, 0, -0.333, -1.45558925e-08, 0, 0, 0)
+double_sided = false
+sprite_frames = ExtResource("2_1dqwv")
+
+[node name="Fill" type="AnimatedSprite3D" parent="SusOutline" unique_id=701197451]
+unique_name_in_owner = true
+material_override = SubResource("ShaderMaterial_xmqe1")
+sprite_frames = ExtResource("5_p64wr")

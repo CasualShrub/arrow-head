@@ -1,0 +1,181 @@
+[gd_scene format=3 uid="uid://dq024rj3sseom"]
+
+[ext_resource type="Script" uid="uid://bugssx86lrsmi" path="res://menus/main_menu/main_menu.gd" id="1_oic2i"]
+[ext_resource type="Texture2D" uid="uid://b6nig8e2qectk" path="res://menus/main_menu/main_menu_portrait.png" id="2_er5qh"]
+[ext_resource type="Texture2D" uid="uid://xtwlpdcb73i7" path="res://menus/main_menu/main_menu_background.png" id="3_f7ts8"]
+[ext_resource type="Texture2D" uid="uid://cyme6stdtt8qw" path="res://menus/main_menu/main_menu_title.png" id="4_81su3"]
+[ext_resource type="FontFile" uid="uid://dg3navvnlkmpw" path="res://shared/fonts/Puffy-gxW55.otf" id="5_t7kvd"]
+
+[node name="MainMenu" type="Control" unique_id=583947652]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_oic2i")
+scenes_to_warm = Array[String](["res://scenes/enemies/enemy.tscn", "res://scenes/player/player.tscn"])
+
+[node name="Apple" type="TextureRect" parent="." unique_id=482219649]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("2_er5qh")
+
+[node name="Background" type="TextureRect" parent="." unique_id=2044523840]
+z_index = -1
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("3_f7ts8")
+
+[node name="Title" type="TextureRect" parent="." unique_id=601157004]
+z_index = 1
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -14.0
+offset_bottom = 62.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("4_81su3")
+
+[node name="Play" type="Button" parent="." unique_id=179610114]
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = -2.0
+offset_top = -31.0
+offset_right = 243.0
+offset_bottom = 46.0
+grow_vertical = 2
+theme_override_fonts/font = ExtResource("5_t7kvd")
+theme_override_font_sizes/font_size = 34
+text = " Play"
+alignment = 0
+
+[node name="Levels" type="Button" parent="." unique_id=1322853751]
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = -2.0
+offset_top = 59.0
+offset_right = 216.0
+offset_bottom = 124.0
+grow_vertical = 2
+theme_override_fonts/font = ExtResource("5_t7kvd")
+theme_override_font_sizes/font_size = 30
+text = " Levels"
+alignment = 0
+
+[node name="Quit" type="Button" parent="." unique_id=2069726673]
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = -2.0
+offset_top = 135.0
+offset_right = 158.0
+offset_bottom = 188.0
+grow_vertical = 2
+theme_override_fonts/font = ExtResource("5_t7kvd")
+theme_override_font_sizes/font_size = 24
+text = "  Quit"
+alignment = 0
+
+[node name="LevelSelect" type="Control" parent="." unique_id=804275844]
+unique_name_in_owner = true
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Buttons" type="VBoxContainer" parent="LevelSelect" unique_id=735805230]
+layout_mode = 1
+offset_left = 177.0
+offset_top = 228.175
+offset_right = 517.0
+offset_bottom = 860.175
+scale = Vector2(0.64, 0.64)
+theme_override_constants/separation = 10
+
+[node name="Tutorial" type="Button" parent="LevelSelect/Buttons" unique_id=1585556067]
+custom_minimum_size = Vector2(340, 64)
+layout_mode = 2
+theme_override_fonts/font = ExtResource("5_t7kvd")
+theme_override_font_sizes/font_size = 42
+text = "Tutorial"
+
+[node name="Level1" type="Button" parent="LevelSelect/Buttons" unique_id=771563180]
+custom_minimum_size = Vector2(340, 64)
+layout_mode = 2
+theme_override_fonts/font = ExtResource("5_t7kvd")
+theme_override_font_sizes/font_size = 42
+text = "Level 1"
+
+[node name="Level2" type="Button" parent="LevelSelect/Buttons" unique_id=719703129]
+custom_minimum_size = Vector2(340, 64)
+layout_mode = 2
+theme_override_fonts/font = ExtResource("5_t7kvd")
+theme_override_font_sizes/font_size = 42
+text = "Level 2"
+
+[node name="Level3" type="Button" parent="LevelSelect/Buttons" unique_id=917836742]
+custom_minimum_size = Vector2(340, 64)
+layout_mode = 2
+theme_override_fonts/font = ExtResource("5_t7kvd")
+theme_override_font_sizes/font_size = 42
+text = "Level 3"
+
+[node name="Level4" type="Button" parent="LevelSelect/Buttons" unique_id=1646546205]
+custom_minimum_size = Vector2(340, 64)
+layout_mode = 2
+theme_override_fonts/font = ExtResource("5_t7kvd")
+theme_override_font_sizes/font_size = 42
+text = "Level 4"
+
+[node name="Level5" type="Button" parent="LevelSelect/Buttons" unique_id=1166170549]
+custom_minimum_size = Vector2(340, 64)
+layout_mode = 2
+theme_override_fonts/font = ExtResource("5_t7kvd")
+theme_override_font_sizes/font_size = 42
+text = "Level 5"
+
+[node name="Boss" type="Button" parent="LevelSelect/Buttons" unique_id=1780378946]
+custom_minimum_size = Vector2(340, 64)
+layout_mode = 2
+theme_override_fonts/font = ExtResource("5_t7kvd")
+theme_override_font_sizes/font_size = 42
+text = "Boss"
+
+[node name="Spacer" type="Control" parent="LevelSelect/Buttons" unique_id=1308263388]
+custom_minimum_size = Vector2(0, 40)
+layout_mode = 2
+
+[node name="Back" type="Button" parent="LevelSelect/Buttons" unique_id=2026175752]
+custom_minimum_size = Vector2(340, 64)
+layout_mode = 2
+theme_override_fonts/font = ExtResource("5_t7kvd")
+theme_override_font_sizes/font_size = 42
+text = "Back"
+
+[connection signal="pressed" from="LevelSelect/Buttons/Tutorial" to="." method="_load_level" binds= ["res://scenes/levels/tutorial.tscn"]]
+[connection signal="pressed" from="LevelSelect/Buttons/Level1" to="." method="_load_level" binds= ["res://scenes/levels/level_1.tscn"]]
+[connection signal="pressed" from="LevelSelect/Buttons/Level2" to="." method="_load_level" binds= ["res://scenes/levels/level_2.tscn"]]
+[connection signal="pressed" from="LevelSelect/Buttons/Level3" to="." method="_load_level" binds= ["res://scenes/levels/level_3.tscn"]]
+[connection signal="pressed" from="LevelSelect/Buttons/Level4" to="." method="_load_level" binds= ["res://scenes/levels/level_4.tscn"]]
+[connection signal="pressed" from="LevelSelect/Buttons/Level5" to="." method="_load_level" binds= ["res://scenes/levels/level_5.tscn"]]
+[connection signal="pressed" from="LevelSelect/Buttons/Boss" to="." method="_load_level" binds= ["res://scenes/levels/level_boss.tscn"]]
+[connection signal="pressed" from="LevelSelect/Buttons/Back" to="." method="_close_levels"]

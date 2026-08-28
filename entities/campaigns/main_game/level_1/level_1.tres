@@ -1,0 +1,8 @@
+[gd_resource type="Resource" script_class="LevelData" format=3 uid="uid://cbfa80ccg46cc"]
+
+[ext_resource type="Script" uid="uid://bxgdem1c8rvxa" path="res://systems/level/level_data.gd" id="1_6ditx"]
+
+[resource]
+script = ExtResource("1_6ditx")
+rooms = Array[String](["uid://dfwtack6wno5k", ""])
+metadata/_custom_type_script = "uid://bxgdem1c8rvxa"

@@ -1,0 +1,18 @@
+[gd_resource type="SpriteFrames" format=3 uid="uid://prgjo2tsn6yw"]
+
+[ext_resource type="Texture2D" uid="uid://b6bq57ggincn8" path="res://systems/suspicion/question_fill.png" id="1_mctns"]
+[ext_resource type="Texture2D" uid="uid://dvv3dvweu62sx" path="res://systems/suspicion/alert_fill.png" id="2_w1fdf"]
+
+[resource]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("1_mctns")
+}, {
+"duration": 1.0,
+"texture": ExtResource("2_w1fdf")
+}],
+"loop": 1,
+"name": &"default",
+"speed": 5.0
+}]
