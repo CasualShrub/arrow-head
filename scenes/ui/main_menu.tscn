@@ -14,7 +14,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_mm")
-scenes_to_warm = ["res://scenes/enemies/enemy.tscn", "res://scenes/player.tscn"]
+scenes_to_warm = Array[String](["res://scenes/enemies/enemy.tscn", "res://scenes/player/player.tscn"])
 
 [node name="Apple" type="TextureRect" parent="." unique_id=482219649]
 layout_mode = 1
