@@ -60,6 +60,9 @@ func set_eyes_state(state: StringName) -> void:
 	if animation == state: return
 	assert(has_state(state), "%s does not have state %s." % [get_path(), state])
 	animation = state
+	var target_frame := _get_frame_from_direction(_dir)
+	if target_frame != -1:
+		frame = target_frame
 	state_changed.emit(state)
 
 func get_eyes_direction() -> EyeDirection:
