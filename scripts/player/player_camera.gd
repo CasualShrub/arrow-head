@@ -18,6 +18,7 @@ signal shaken(strength: float)
 
 var _current_lookahead := Vector3.ZERO
 var _target_lookahead := Vector3.ZERO
+var _trauma := 0.0
 
 func _ready() -> void:
 	DarkenManager.register_camera(self)
@@ -34,13 +35,14 @@ func _process(delta: float) -> void:
 		height,
 		_current_lookahead.z
 	)
+
+	if _trauma > 0.0:
+		_trauma = maxf(_trauma - trauma_decay * real_delta, 0.0)
+		var shake := _trauma * _trauma
+		var jitter := Vector3(randf_range(-1.0, 1.0), 0.0, randf_range(-1.0, 1.0))
+		position += jitter * shake * max_shake_offset
+
 	DarkenManager.sync_mask_camera(self)
-	#var shake := 0.0
-	#if _trauma > 0.0:
-		#_trauma = maxf(_trauma - trauma_decay * delta, 0.0)
-		#shake = _trauma * _trauma   # quadratic falloff feels punchier
-	#var jitter := Vector3(randf_range(-1.0, 1.0), 0.0, randf_range(-1.0, 1.0))
-	#global_position = _base_pos + jitter * shake * max_shake_offset
 
 ## Takes normalized input.
 func set_lookahead(input: Vector2) -> void:
@@ -60,7 +62,12 @@ func set_lookahead(input: Vector2) -> void:
 	) * lookahead_strength
 
 
+func add_shake(amount: float) -> void:
+	_trauma = minf(_trauma + amount, 1.0)
+	shaken.emit(amount)
+
 func shake() -> void:
+	add_shake(sector_hit_trauma)
 	shaken.emit()
 
 func get_mouse_position() -> Vector3:

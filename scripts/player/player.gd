@@ -147,6 +147,7 @@ func get_hit(arrow: Arrow) -> void:
 		arrow.deactivate()
 		return
 	_chunks.emitting = true
+	_camera.shake()
 	if arrows.add_arrow(arrow):
 		arrow.embed(arrow_dig_depth)
 		var slots := arrows.get_slots_of(arrow)
