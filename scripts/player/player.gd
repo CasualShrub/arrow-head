@@ -44,6 +44,7 @@ class_name Player
 		update_configuration_warnings()
 
 @export var speed := 6.0
+@export var dash_juice_cost := 0.25
 ## how far arrows dig into apples skin
 @export var arrow_dig_depth := 0.15
 @export_group("hurt")
@@ -80,7 +81,7 @@ func _process(_delta: float) -> void:
 	elif input_mode.is_controller():
 		lookahead_offset = aim_input.get_vector()
 	_camera.set_lookahead(lookahead_offset)
-	
+
 	if health.is_dead(): return
 	if _dash_preview.is_enabled():
 		var dash_dest := dash.get_dash_destination(global_position, aim_target)
@@ -208,6 +209,7 @@ func _on_dash_activated(destination: Vector3, targets: Array) -> void:
 	for target in targets:
 		if target is Enemy:
 			target.get_hit()
+	time.bar.consume(dash_juice_cost * time.bar.max_value)
 	if time.is_slowed():
 		time.resume()
 
