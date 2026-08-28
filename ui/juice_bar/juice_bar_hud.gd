@@ -23,10 +23,12 @@ var _freeze_timer := 0.0
 var _shake := 0.0
 var _drain_timer := 0.0
 var _drain_phase := 0.0
-
+var _base_pos: Vector2
 
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
+	_base_pos = position
+	pivot_offset = drain_shiver_pivot
 
 func _process(delta: float) -> void:
 	if not is_instance_valid(_source):
@@ -57,10 +59,8 @@ func _process(delta: float) -> void:
 		angle = sin(_drain_phase) * drain_shiver_angle
 		_drain_timer -= real_delta
 
-	var t := Transform2D(angle, Vector2.ZERO)
-	t.origin = drain_shiver_pivot - t.basis_xform(drain_shiver_pivot) + shake_offset
-	transform = t
-
+	rotation = angle
+	position = _base_pos + shake_offset
 
 func bind(bar: BarComponent) -> void:
 	_source = bar
