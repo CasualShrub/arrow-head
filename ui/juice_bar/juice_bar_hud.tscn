@@ -6,7 +6,10 @@
 
 [node name="JuiceBar" type="Control" unique_id=885258817]
 layout_mode = 3
-anchors_preset = 0
+anchor_right = 0.1
+anchor_bottom = 0.41500002
+offset_right = -192.0
+offset_bottom = -448.2
 script = ExtResource("1_ehud")
 
 [node name="Back" type="TextureRect" parent="." unique_id=1928984848]
@@ -23,6 +26,7 @@ texture = ExtResource("2_back")
 [node name="GhostBar" type="TextureProgressBar" parent="." unique_id=31547876]
 unique_name_in_owner = true
 texture_filter = 4
+layout_mode = 0
 offset_left = -16.000004
 offset_top = -4.000001
 offset_right = 1448.0

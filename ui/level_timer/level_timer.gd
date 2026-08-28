@@ -4,7 +4,7 @@ class_name LevelTimer
 
 ## Whether the timer will be affected by Engine.time_scale.
 @export var scaled := true
-@export var font_scale := 0.5:
+@export var font_scale := 0.34:
 	set(value):
 		font_scale = value
 		_update_scale()
