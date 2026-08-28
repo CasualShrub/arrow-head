@@ -1,6 +1,6 @@
 [gd_resource type="StandardMaterial3D" format=3 uid="uid://bspie6d5acqw8"]
 
-[ext_resource type="Texture2D" uid="uid://ctqs15p7rmyhp" path="res://assets/textures/Asset 11.png" id="1_tex"]
+[ext_resource type="Texture2D" uid="uid://ctqs15p7rmyhp" path="res://shared/textures/Asset 11.png" id="1_tex"]
 
 [resource]
 resource_name = "Level2FloorMaterial"

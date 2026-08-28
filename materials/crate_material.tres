@@ -1,6 +1,6 @@
 [gd_resource type="StandardMaterial3D" format=3 uid="uid://6w5rlqbtx4yb"]
 
-[ext_resource type="Texture2D" uid="uid://b3dyiocrdt6rm" path="res://assets/textures/crate.png" id="1_tex"]
+[ext_resource type="Texture2D" uid="uid://b3dyiocrdt6rm" path="res://shared/textures/crate.png" id="1_tex"]
 
 [resource]
 resource_name = "CrateMaterial"

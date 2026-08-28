@@ -1,0 +1,27 @@
+[gd_scene format=3 uid="uid://kwovebw0p15w"]
+
+[ext_resource type="PackedScene" uid="uid://b8rs35o7f45v0" path="res://entities/enemies/enemy.tscn" id="1_7ifjg"]
+[ext_resource type="Script" uid="uid://d04k7pxjd2u24" path="res://systems/arrow/firing_data/arrow_pattern.gd" id="2_1j3h3"]
+[ext_resource type="SpriteFrames" uid="uid://dq7pl0h6fmit4" path="res://entities/enemies/banana_unripe/banana_unripe_frames.tres" id="2_o72bl"]
+[ext_resource type="Script" uid="uid://r4qbgt6it8lb" path="res://systems/arrow/firing_data/firing_instance.gd" id="3_77x10"]
+[ext_resource type="PackedScene" uid="uid://5ljerioubp6c" path="res://entities/arrows/ice/arrow_frost.tscn" id="4_8hwpc"]
+
+[sub_resource type="Resource" id="Resource_3bk7b"]
+script = ExtResource("3_77x10")
+type = ExtResource("4_8hwpc")
+starting_delay = 0.1
+instance_delay = 0.1
+metadata/_custom_type_script = "uid://r4qbgt6it8lb"
+
+[sub_resource type="Resource" id="Resource_ej4yd"]
+script = ExtResource("2_1j3h3")
+recovery = 2.0
+instances = Array[ExtResource("3_77x10")]([SubResource("Resource_3bk7b")])
+metadata/_custom_type_script = "uid://d04k7pxjd2u24"
+
+[node name="Enemy" unique_id=71488470 instance=ExtResource("1_7ifjg")]
+patterns = Array[ExtResource("2_1j3h3")]([SubResource("Resource_ej4yd")])
+alwayds_alert = false
+
+[node name="Sprite" parent="." index="5" unique_id=1091610106]
+sprite_frames = ExtResource("2_o72bl")

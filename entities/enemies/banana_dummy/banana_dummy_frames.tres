@@ -1,0 +1,33 @@
+[gd_resource type="SpriteFrames" format=3 uid="uid://0u4g146c4us5"]
+
+[ext_resource type="Texture2D" uid="uid://bnd3lnk0ojj6c" path="res://entities/enemies/banana_dummy/banana_dummy_idle.png" id="1_hgprd"]
+[ext_resource type="Texture2D" uid="uid://bbad0ct6lfngj" path="res://entities/enemies/banana_dummy/animations/fire/banana_dummy_fire_1.png" id="2_673rc"]
+[ext_resource type="Texture2D" uid="uid://bgufnaqn7e80d" path="res://entities/enemies/banana_dummy/animations/fire/banana_dummy_fire_2.png" id="3_6bqcj"]
+
+[resource]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("1_hgprd")
+}],
+"loop": 1,
+"name": &"default",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("1_hgprd")
+}, {
+"duration": 2.0,
+"texture": ExtResource("2_673rc")
+}, {
+"duration": 1.0,
+"texture": ExtResource("3_6bqcj")
+}, {
+"duration": 2.0,
+"texture": ExtResource("1_hgprd")
+}],
+"loop": 0,
+"name": &"fire",
+"speed": 8.0
+}]
