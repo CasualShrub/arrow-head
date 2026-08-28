@@ -24,7 +24,7 @@
 [ext_resource type="Script" uid="uid://buoj7rr88dblc" path="res://systems/arrow/colliders/arrow_collider.gd" id="19_arwct"]
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_oprun"]
-radius = 0.4
+radius = 0.3
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_jej6c"]
 animations = [{

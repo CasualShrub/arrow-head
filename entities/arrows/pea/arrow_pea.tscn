@@ -1,0 +1,28 @@
+[gd_scene format=3 uid="uid://c7svet2brpv4j"]
+
+[ext_resource type="PackedScene" uid="uid://bxgfy1nvmlb7v" path="res://entities/arrows/arrow.tscn" id="1_2sdfy"]
+[ext_resource type="Shader" uid="uid://4cl7l7a1abfv" path="res://shaders/outline_3d.gdshader" id="2_gq1gh"]
+[ext_resource type="Texture2D" uid="uid://c8r5phlgt4yy0" path="res://entities/arrows/pea/arrow_pea.png" id="4_gq1gh"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_gq1gh"]
+resource_local_to_scene = true
+render_priority = 0
+shader = ExtResource("2_gq1gh")
+shader_parameter/tex = ExtResource("4_gq1gh")
+shader_parameter/line_color = Color(0.05, 0.05, 0.05, 1)
+shader_parameter/line_thickness = 2.3130001098675
+shader_parameter/tex_pixel_size = Vector2(0.005, 0.005)
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_2sdfy"]
+radius = 0.2
+
+[node name="Arrow" unique_id=935612140 instance=ExtResource("1_2sdfy")]
+
+[node name="Sprite3D" parent="." index="0" unique_id=1125079801]
+transform = Transform3D(-0.385, 3.365777e-08, 1.4712277e-15, 0, -1.6828885e-08, 0.385, 3.365777e-08, 0.385, 1.6828885e-08, -0.012599438, 0, -0.013614029)
+material_override = SubResource("ShaderMaterial_gq1gh")
+texture = ExtResource("4_gq1gh")
+
+[node name="ShapeCast3D" parent="." index="1" unique_id=1469456788]
+transform = Transform3D(1, 0, 0, 0, -4.371139e-08, 1, 0, -1, -4.371139e-08, 0, 0, 0)
+shape = SubResource("SphereShape3D_2sdfy")
