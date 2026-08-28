@@ -37,6 +37,10 @@ func get_occupied() -> Array[bool]:
 func is_slot_occupied(slot: int) -> bool:
 	return _embedded[slot] != null
 
+func get_facing_slot() -> int:
+	var forward := -container.global_transform.basis.z
+	return _get_slot_from_offset(forward)
+
 func get_embedded_in(slot: int) -> Arrow:
 	return _embedded[slot]
 

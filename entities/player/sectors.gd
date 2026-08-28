@@ -25,11 +25,19 @@ signal sector_unhighlighted(sector: int)
 #@onready var _pointer := $Pointer
 @onready var mat: ShaderMaterial = _display.material_override
 
+#highlighted means an arrow is occupying the slot
 var _highlighted := 0:
 	set(value):
 		if not mat: return
 		mat.set_shader_parameter("occupied_mask", value) #occupied_mask
 		_highlighted = value
+
+#primed means this arrow is ready to be consumed on the next dash
+var _primed := -1:
+	set(value):
+		if not mat: return
+		mat.set_shader_parameter("aimed_sector", value)
+		_primed = value
 
 func get_sector_size() -> float:
 	return TAU / sector_count
@@ -47,8 +55,15 @@ func unhighlight_sector(sector: int) -> void:
 	_highlighted &= ~(1 << sector)
 	sector_unhighlighted.emit(sector)
 
+func set_primed(sector: int) -> void:
+	_primed = sector
+
+func clear_primed() -> void:
+	_primed = -1
+
 func clear() -> void:
 	_highlighted = 0
+	_primed = -1
 
 #func _update_occupied_mask() -> void:
 	#if not mat: return
@@ -70,4 +85,5 @@ func _ready() -> void:
 	radius = radius
 	if Engine.is_editor_hint(): return
 	_highlighted = 0
+	_primed = -1
 	show()

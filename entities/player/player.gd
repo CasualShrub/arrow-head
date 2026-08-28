@@ -66,6 +66,9 @@ class_name Player
 @onready var _sectors: Sectors = %Sectors
 @onready var _chunks: CPUParticles3D = %AppleChunks
 
+var _dash_charges := 0
+var _dash_arrows: Array[Arrow] = []
+
 func _ready() -> void:
 	if Engine.is_editor_hint(): update_configuration_warnings()
 	_update_collider()
@@ -89,6 +92,12 @@ func _process(_delta: float) -> void:
 		_dash_preview.set_preview_position(dash_dest)
 		_dash_preview.set_preview_targets(dash_targets)
 
+	var target_slot := _get_target_slot()
+	if _dash_charges > 0 and target_slot >= 0:
+		_sectors.set_primed(target_slot)
+	else:
+		_sectors.clear_primed()
+
 func _physics_process(delta: float) -> void:
 	if Engine.is_editor_hint() or health.is_dead(): return
 	
@@ -100,7 +109,7 @@ func _physics_process(delta: float) -> void:
 			time.resume()
 	
 	if fire_input.consume_pressed():
-		if arrows.is_full():
+		if _dash_charges > 0:
 			if not time.is_slowed():
 				time.slow()
 			dash.enable()
@@ -190,6 +199,8 @@ func _move(dir: Vector2, _dt: float) -> void:
 	move_and_slide()
 
 func _on_died() -> void:
+	_dash_charges = 0
+	_dash_arrows.clear()
 	arrows.clear_arrows()
 	_sectors.clear()
 	time.resume()
@@ -201,6 +212,15 @@ func _on_died() -> void:
 	_status_sprite.hide()
 	_sectors.hide()
 
+func _get_target_slot() -> int:
+	var start := arrows.get_facing_slot()
+	for i in range(arrows.slot_count):
+		var slot := (start + i) % arrows.slot_count
+		var arrow := arrows.get_embedded_in(slot)
+		if arrow and arrow in _dash_arrows:
+			return slot
+	return -1
+
 func _on_dash_activated(destination: Vector3, targets: Array) -> void:
 	_dash_preview.disable()
 	var from := global_position
@@ -209,12 +229,26 @@ func _on_dash_activated(destination: Vector3, targets: Array) -> void:
 	for target in targets:
 		if target is Enemy:
 			target.get_hit()
+	var consumed_slot := _get_target_slot()
+	if consumed_slot >= 0:
+		var consumed_arrow := arrows.get_embedded_in(consumed_slot)
+		if consumed_arrow:
+			_dash_arrows.erase(consumed_arrow)
+			arrows.remove_arrow(consumed_arrow)
+			_dash_charges = maxi(_dash_charges - 1, 0)
 	time.bar.consume(dash_juice_cost * time.bar.max_value)
 	if time.is_slowed():
 		time.resume()
 
 func _on_slot_occupied(slot: int, _arrow: Arrow) -> void:
 	_sectors.highlight_sector(slot)
+	if _dash_charges == 0 and arrows.is_full():
+		_dash_charges = arrows.slot_count
+		_dash_arrows.clear()
+		for i in range(arrows.slot_count):
+			var a := arrows.get_embedded_in(i)
+			if a:
+				_dash_arrows.append(a)
 
 func _on_slot_cleared(slot: int) -> void:
 	_sectors.unhighlight_sector(slot)
