@@ -10,6 +10,7 @@ const MIX_SHADER = preload("res://shaders/mix.gdshader")
 @export var frame_rate := 1.0
 @export var color := Color(1.0, 0.2, 0.2, 0.5)
 @export var duration := 1.0
+@export var depth_offset := 0.01 #just a little offset to spawn afterimages below apple
 
 signal enabled()
 signal disabled()
@@ -57,7 +58,9 @@ func _duplicate_sprite(base: SpriteBase3D) -> Node3D:
 	sprite.pixel_size = base.pixel_size
 	sprite.texture = texture
 	sprite.render_priority = base.render_priority - 1
-	sprite.global_transform = base.global_transform
+	var xform := base.global_transform
+	xform.origin.y -= depth_offset
+	sprite.global_transform = xform
 	sprite.visible = base.visible
 	sprite.set_layer_mask_value(20, true)
 	
