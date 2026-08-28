@@ -21,9 +21,15 @@ layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
+offset_left = 314.0
+offset_top = -82.0
+offset_right = 314.0
+offset_bottom = -82.0
 grow_horizontal = 2
 grow_vertical = 2
+scale = Vector2(1.085, 1.085)
 texture = ExtResource("2_er5qh")
+stretch_mode = 4
 
 [node name="Background" type="TextureRect" parent="." unique_id=2044523840]
 z_index = -1
