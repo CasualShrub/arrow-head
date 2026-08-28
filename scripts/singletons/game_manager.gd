@@ -19,7 +19,7 @@ func start(host: Node) -> void:
 	start_campaign(MAIN_GAME, host)
 
 func start_campaign(data: CampaignData, host: Node) -> void:
-	_game_parent = host
+	game_parent = host
 	current_campaign = CampaignState.new(data)
 	campaign_started.emit(current_campaign)
 	load_level()
@@ -28,19 +28,19 @@ func end_campaign() -> void:
 	campaign_ended.emit(current_campaign)
 	current_campaign = null
 	current_level = null
-	_parent = null
+	game_parent = null
 	get_tree().change_scene_to_file(MAIN_MENU)
 
 func abort() -> void:
 	current_campaign = null
 	current_level = null
-	_game_parent = null
+	game_parent = null
 
 func load_level(data: LevelData = current_campaign.get_current_level()) -> void:
 	var level := Level.new(data)
 	level.ended.connect(_on_level_ended)
 	current_level = level
-	_game_parent.add_child(level)
+	game_parent.add_child(level)
 	level_loaded.emit(level)
 	level.start()
 
