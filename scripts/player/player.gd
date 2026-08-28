@@ -202,7 +202,9 @@ func _on_died() -> void:
 
 func _on_dash_activated(destination: Vector3, targets: Array) -> void:
 	_dash_preview.disable()
+	var from := global_position
 	global_position = destination
+	_camera.ease_after_teleport(from, destination)
 	for target in targets:
 		if target is Enemy:
 			target.get_hit()

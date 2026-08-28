@@ -11,32 +11,44 @@ class_name PlayerCamera
 @export var lookahead_smoothing := 6.0
 @export_group("shake")
 @export var sector_hit_trauma := 0.4
-@export var trauma_decay := 1.5   
+@export var trauma_decay := 1.5
 @export var max_shake_offset := 0.30
+@export_group("dash")
+@export var dash_catchup_smoothing := 14.0
 
 signal shaken(strength: float)
 
 var _current_lookahead := Vector3.ZERO
 var _target_lookahead := Vector3.ZERO
+var _follow_offset := Vector3.ZERO
 var _trauma := 0.0
 
 func _ready() -> void:
+	process_mode = Node.PROCESS_MODE_ALWAYS
 	DarkenManager.register_camera(self)
 
 func _process(delta: float) -> void:
 	var real_delta := delta / Engine.time_scale
-	_current_lookahead = _current_lookahead.lerp(
-		_target_lookahead,
-		1.0 - exp(-lookahead_smoothing * real_delta)
-	)
-	
-	position = Vector3(
-		_current_lookahead.x,
-		height,
-		_current_lookahead.z
+	var running := not get_tree().paused
+
+	if running:
+		_current_lookahead = _current_lookahead.lerp(
+			_target_lookahead,
+			1.0 - exp(-lookahead_smoothing * real_delta)
+		)
+
+	_follow_offset = _follow_offset.lerp(
+		Vector3.ZERO,
+		1.0 - exp(-dash_catchup_smoothing * real_delta)
 	)
 
-	if _trauma > 0.0:
+	position = Vector3(
+		_current_lookahead.x + _follow_offset.x,
+		height,
+		_current_lookahead.z + _follow_offset.z
+	)
+
+	if running and _trauma > 0.0:
 		_trauma = maxf(_trauma - trauma_decay * real_delta, 0.0)
 		var shake := _trauma * _trauma
 		var jitter := Vector3(randf_range(-1.0, 1.0), 0.0, randf_range(-1.0, 1.0))
@@ -61,6 +73,9 @@ func set_lookahead(input: Vector2) -> void:
 		forward * input.y
 	) * lookahead_strength
 
+
+func ease_after_teleport(from: Vector3, to: Vector3) -> void:
+	_follow_offset += from - to
 
 func add_shake(amount: float) -> void:
 	_trauma = minf(_trauma + amount, 1.0)
