@@ -4,7 +4,15 @@ class_name ArrowSimulation
 var simulating: Arrow
 
 var position := Vector3.ZERO
-var velocity := Vector3.ZERO
+var velocity := Vector3.ZERO:
+	set(value):
+		velocity = value
+		facing = value
+var facing := Vector3.FORWARD:
+	set(value):
+		if value.length_squared() < 0.001:
+			value = Vector3.FORWARD
+		facing = value.normalized()
 
 var enabled := true
 var alive := true

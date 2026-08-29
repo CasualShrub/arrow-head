@@ -1,6 +1,7 @@
 extends Node
 class_name BarComponent
 
+@export var init_value := 0.0
 @export var max_value := 1.0
 @export var tick_regen := 1.0
 
@@ -8,7 +9,7 @@ signal changed(current: float)
 signal consumed(amount: float)
 signal regenerated(amount: float)
 
-var value := 0.0:
+@onready var value := init_value:
 	set(val):
 		val = clampf(val, 0.0, max_value)
 		if val == value: return

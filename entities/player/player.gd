@@ -44,7 +44,7 @@ class_name Player
 		update_configuration_warnings()
 
 @export var speed := 6.0
-@export var dash_juice_cost := 0.25
+@export var dash_cost := 0.0
 ## how far arrows dig into apples skin
 @export var arrow_dig_depth := 0.15
 @export_group("hurt")
@@ -142,12 +142,12 @@ func _get_configuration_warnings() -> PackedStringArray:
 
 func _update_collider() -> void:
 	if not _collider: return
-	if _collider.shape and _collider.shape is SphereShape3D:
-		_collider.shape.radius = hurt_radius
-	else:
-		var s := SphereShape3D.new()
-		s.radius = hurt_radius
-		_collider.shape = s
+	#if _collider.shape and _collider.shape is SphereShape3D:
+		#_collider.shape.radius = hurt_radius
+	#else:
+		#var s := SphereShape3D.new()
+		#s.radius = hurt_radius
+		#_collider.shape = s
 
 func get_camera() -> PlayerCamera:
 	return _camera
@@ -229,6 +229,7 @@ func _on_dash_activated(destination: Vector3, targets: Array) -> void:
 	for target in targets:
 		if target is Enemy:
 			target.get_hit()
+	time.bar.consume(dash_cost * time.bar.max_value)
 	var consumed_slot := _get_target_slot()
 	if consumed_slot >= 0:
 		var consumed_arrow := arrows.get_embedded_in(consumed_slot)

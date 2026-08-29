@@ -32,6 +32,7 @@ func _ready() -> void:
 	_update_shape(radius)
 
 func _update_shape(new_radius: float) -> void:
+	if not _dash_shape: return
 	_dash_shape.radius = new_radius
 
 func try_activate(origin: Vector3, target: Vector3) -> bool:

@@ -32,7 +32,7 @@ func _on_collision_simulated(
 static func default_bounce(
 	sim: ArrowSimulation,
 	normal,
-	_point: Vector3
+	point: Vector3
 ) -> void:
 	sim.velocity = sim.velocity.bounce(normal)
 	sim.bounces += 1

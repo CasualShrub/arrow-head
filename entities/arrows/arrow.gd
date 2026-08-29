@@ -13,6 +13,7 @@ signal deactivated()
 signal collided(with: ArrowCollider, normal: Vector3, point: Vector3)
 
 var _shape_cast: ShapeCast3D
+var _shape_cast_offset: Vector3
 
 var scene: PackedScene
 
@@ -25,6 +26,7 @@ func _ready() -> void:
 		"%s must have exactly 1 ShapeCast3D." % get_path()
 	)
 	_shape_cast = collision_shapes[0]
+	_shape_cast_offset = _shape_cast.position
 	
 	deactivate()
 
@@ -50,9 +52,9 @@ func activate(
 	simulation.lifetime_remaining = INF if max_lifetime < 0.0 else max_lifetime
 
 	global_position = simulation.position
-	var look_dir := simulation.velocity
-	look_dir = look_dir.normalized()
-	look_at(global_position + look_dir)
+	#var look_dir := simulation.velocity
+	#look_dir = look_dir.normalized()
+	look_at(global_position + simulation.facing)
 
 	show()
 
@@ -92,12 +94,7 @@ func apply_simulation(sim: ArrowSimulation = simulation) -> void:
 	if not sim.enabled:
 		return
 	global_position = sim.position
-	var look_dir := sim.velocity
-	if look_dir.length_squared() < 0.001:
-		look_dir = Vector3.FORWARD
-	else:
-		look_dir = look_dir.normalized()
-	look_at(global_position + look_dir)
+	look_at(global_position + sim.facing)
 	
 	for i in range(sim.get_collision_count()):
 		var collider := sim.get_collision_collider(i)
@@ -119,19 +116,39 @@ func simulate(
 ) -> void:
 	if not sim.enabled: return
 	sim.increment_lifetime(delta)
+	
+	var angle := Vector3.FORWARD.signed_angle_to(
+	sim.facing,
+	Vector3.UP
+	)
+	var offset := _shape_cast_offset.rotated(
+	Vector3.UP,
+	angle
+	)
+	
 	var motion := sim.velocity * delta
 	var target_pos := sim.position + motion
-	_shape_cast.global_position = sim.position
-	_shape_cast.target_position = _shape_cast.to_local(target_pos)
+	
+	var cast_start := sim.position + offset
+	var cast_end := target_pos + offset
+	
+	_shape_cast.global_position = cast_start
+	_shape_cast.target_position = _shape_cast.to_local(cast_end)
+	
 	_shape_cast.collision_mask = sim.collision_mask
+	
 	_shape_cast.force_shapecast_update()
 	if not _shape_cast.is_colliding():
 		sim.position = target_pos
 		return
+	var found: Dictionary[CollisionObject3D, bool] = {}
 	for i in range(_shape_cast.get_collision_count()):
 		var collider := _shape_cast.get_collider(i) as CollisionObject3D
+		if found.get(collider): continue
+		found.set(collider, true)
 		var normal := _shape_cast.get_collision_normal(i)
 		var point := _shape_cast.get_collision_point(i)
+		sim.position = point + normal * 0.01 - offset
 		if collider is not ArrowCollider:
 			ArrowCollider.default_bounce(sim, normal, point)
 		else:
