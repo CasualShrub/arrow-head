@@ -88,14 +88,13 @@ func create_simulation() -> ArrowSimulation:
 func apply_simulation(sim: ArrowSimulation = simulation) -> void:
 	simulation = sim
 	var max_bounces_reached := max_bounces >= 0 and sim.bounces > max_bounces
+	global_position = sim.position
+	look_at(global_position + sim.facing)
 	if not sim.alive or max_bounces_reached or sim.is_lifetime_over():
 		deactivate()
 		return
 	if not sim.enabled:
 		return
-	global_position = sim.position
-	look_at(global_position + sim.facing)
-	
 	for i in range(sim.get_collision_count()):
 		var collider := sim.get_collision_collider(i)
 		if not collider:
@@ -148,13 +147,11 @@ func simulate(
 		found.set(collider, true)
 		var normal := _shape_cast.get_collision_normal(i)
 		var point := _shape_cast.get_collision_point(i)
-		sim.position = point + normal * 0.01 - offset
+		sim.position = point - offset
 		if collider is not ArrowCollider:
 			ArrowCollider.default_bounce(sim, normal, point)
 		else:
 			collider.simulate_collision(sim, normal, point)
-		sim.collided.append([collider, normal, point])
-		_on_collision_simulated(sim, collider)
 		if sim.bounces >= max_bounces:
 			if wall_stick_decay_time > 0.0:
 				sim.disable()
@@ -165,6 +162,8 @@ func simulate(
 				)
 			else:
 				sim.kill()
+		_on_collision_simulated(sim, collider)
+		sim.collided.append([collider, normal, point])
 		if not sim.enabled: break
 
 func _on_collision_simulated(

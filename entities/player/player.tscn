@@ -77,10 +77,11 @@ fov = 45.0
 script = ExtResource("16_myrg7")
 metadata/_custom_type_script = "uid://doms8x46cr1tt"
 
-[node name="ArrowCatcher" type="Area3D" parent="." unique_id=1401584449]
+[node name="ArrowCatcher" type="Area3D" parent="." unique_id=1281273496]
 collision_layer = 32
 collision_mask = 0
 script = ExtResource("19_arwct")
+metadata/_custom_type_script = "uid://buoj7rr88dblc"
 
 [node name="Collider" type="CollisionShape3D" parent="ArrowCatcher" unique_id=1401584450]
 shape = SubResource("SphereShape3D_oprun")

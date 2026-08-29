@@ -4,7 +4,7 @@
 [ext_resource type="Shader" uid="uid://4cl7l7a1abfv" path="res://shaders/outline_3d.gdshader" id="2_m328s"]
 [ext_resource type="Texture2D" uid="uid://buqutmlha3vbg" path="res://entities/arrows/default/arrow_normal.png" id="3_5hy8x"]
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_bv0m2"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_ilg34"]
 resource_local_to_scene = true
 render_priority = 0
 shader = ExtResource("2_m328s")
@@ -16,4 +16,4 @@ shader_parameter/tex_pixel_size = Vector2(0.005, 0.005)
 [node name="Arrow" unique_id=935612140 instance=ExtResource("1_ilg34")]
 
 [node name="Sprite3D" parent="." index="0" unique_id=1125079801]
-material_override = SubResource("ShaderMaterial_bv0m2")
+material_override = SubResource("ShaderMaterial_ilg34")

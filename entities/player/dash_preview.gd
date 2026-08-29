@@ -3,12 +3,17 @@ class_name DashPreview
 
 @export var color := Color(0.2, 0.8, 1.0, 0.502)
 @export var highlight_color := Color(1.0, 0.2, 0.2, 1.0)
+@export var max_range := 5.0:
+	set(value):
+		max_range = value
+		_update_max_range()
 @export var body_texture: Texture
 @export var eyes_texture: Texture
 
-@onready var _sprite: Sprite3D = $PreviewSprite
-@onready var _eyes_sprite: Sprite3D = $PreviewSprite/PreviewEyes
-@onready var _line: MeshInstance3D = $PreviewLine
+@onready var _sprite: Sprite3D = %PreviewSprite
+@onready var _eyes_sprite: Sprite3D = %PreviewEyes
+@onready var _line: MeshInstance3D = %PreviewLine
+@onready var _range: MeshInstance3D = %Range
 
 signal enabled()
 signal disabled()
@@ -27,6 +32,7 @@ func _ready() -> void:
 		_eyes_sprite.texture = eyes_texture
 	_sprite.modulate = color
 	_line.material_override.albedo_color = color
+	_update_max_range()
 
 func is_enabled() -> bool:
 	return _enabled
@@ -82,3 +88,7 @@ func set_preview_targets(newTargets: Array[TargetArea]) -> void:
 	
 	for t in newTargets:
 		add_target(t)
+
+func _update_max_range() -> void:
+	if not _range: return
+	_range.scale = Vector3(max_range, 1, max_range)

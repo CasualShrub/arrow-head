@@ -34,8 +34,6 @@ metadata/_custom_type_script = "uid://d04k7pxjd2u24"
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_ensgf"]
 
-[sub_resource type="SphereShape3D" id="SphereShape3D_ub6uw"]
-
 [node name="Enemy" type="CharacterBody3D" unique_id=520769260 node_paths=PackedStringArray("health", "suspicion", "patrol")]
 collision_layer = 8
 collision_mask = 12
@@ -77,7 +75,8 @@ script = ExtResource("9_y5th1")
 metadata/_custom_type_script = "uid://dyq24r4i3yppj"
 
 [node name="DashCollider" type="CollisionShape3D" parent="DashTarget" unique_id=1530635530]
-shape = SubResource("SphereShape3D_ub6uw")
+shape = SubResource("SphereShape3D_ensgf")
+debug_color = Color(0, 0.6, 0.7019608, 0.41960785)
 
 [node name="Recovery" type="Timer" parent="." unique_id=1708563758]
 unique_name_in_owner = true

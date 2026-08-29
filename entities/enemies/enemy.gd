@@ -18,13 +18,7 @@ class_name Enemy
 @export var fire_release_frame := 3
 
 @export_group("hit")
-@export var hit_flash_time := 0.5
-@export var hurt_radius := 0.4:
-	set(value):
-		if value < 0: value = 0
-		if _collider:
-			_update_collider(_collider, value)
-		hurt_radius = value
+@export var hit_flash_time := 0.2
 @export_group("combat")
 @export var combat_speed := 1.0
 @export var combat_strafe_radius := 4.0
@@ -45,7 +39,6 @@ var _facing := Vector3.FORWARD
 
 @onready var _visual_root: Node3D = %VisualRoot
 @onready var _sprite: AnimatedSprite3D = %Sprite
-@onready var _collider: CollisionShape3D = %Collider
 @onready var _recovery: Timer = %Recovery
 @onready var _inst_timers: Node = %InstanceTimers
 @onready var _ray_left: RayCast3D = %RayLeft
@@ -87,14 +80,6 @@ func _ready() -> void:
 
 func is_dead() -> bool:
 	return health.is_dead()
-	
-
-func _update_collider(c: CollisionShape3D, r: float) -> void:
-	if not c:
-		return
-	var s := SphereShape3D.new()
-	s.radius = r
-	c.shape = s
 
 func _parse_movement_pattern(pattern: Dictionary[float, Vector2]) -> Dictionary[float, Vector3]:
 	var parsed := {}
@@ -367,7 +352,6 @@ func _select_behaviour(dt: float) -> void:
 				_high_sus(dt)
 
 func _on_died() -> void:
-	print("died")
 	SoundManager.play("banana_death")
 	_dash_target.make_invulnerable()
 	_sprite.play("death")

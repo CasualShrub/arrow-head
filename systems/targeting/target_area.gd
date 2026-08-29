@@ -39,5 +39,4 @@ func make_invulnerable() -> void:
 	monitoring = false
 	monitorable = false
 	mark_untargeted()
-	print("make invulnerable ", monitoring)
 	vulerability_changed.emit(false)

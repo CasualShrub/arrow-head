@@ -229,7 +229,6 @@ func _on_dash_activated(destination: Vector3, targets: Array) -> void:
 	for target in targets:
 		if target is Enemy:
 			target.get_hit()
-	time.bar.consume(dash_cost * time.bar.max_value)
 	var consumed_slot := _get_target_slot()
 	if consumed_slot >= 0:
 		var consumed_arrow := arrows.get_embedded_in(consumed_slot)
@@ -237,7 +236,7 @@ func _on_dash_activated(destination: Vector3, targets: Array) -> void:
 			_dash_arrows.erase(consumed_arrow)
 			arrows.remove_arrow(consumed_arrow)
 			_dash_charges = maxi(_dash_charges - 1, 0)
-	time.bar.consume(dash_juice_cost * time.bar.max_value)
+	time.bar.consume(dash_cost * time.bar.max_value)
 	if time.is_slowed():
 		time.resume()
 
