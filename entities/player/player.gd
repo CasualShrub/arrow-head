@@ -1,4 +1,5 @@
 @tool
+@icon("res://addons/at-icons/used/node3d/apple.svg")
 extends CharacterBody3D
 class_name Player
 
@@ -158,7 +159,7 @@ func get_hit(arrow: Arrow) -> void:
 		return
 	_chunks.emitting = true
 	_camera.shake()
-	if arrows.add_arrow(arrow):
+	if arrows.try_add_arrow(arrow):
 		arrow.embed(arrow_dig_depth)
 		var slots := arrows.get_slots_of(arrow)
 		var sector := slots[0] if slots.size() > 0 else 0
@@ -270,6 +271,7 @@ func _on_time_resumed() -> void:
 	dash.disable()
 
 func _on_dash_enabled() -> void:
+	_dash_preview.max_range = dash.max_distance
 	_dash_preview.enable()
 
 func _on_dash_disabled() -> void:

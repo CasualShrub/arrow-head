@@ -1,0 +1,4199 @@
+[gd_scene format=3 uid="uid://clsh0ewyewss4"]
+
+[sub_resource type="GDScript" id="GDScript_54k6s"]
+resource_name = "IconGrid"
+script/source = "@tool
+extends HFlowContainer
+
+## Browses the icon library and lets you copy an icon's @icon declaration,
+## or \"use\" it, which copies just that SVG into USED_DIRECTORY. Only icons
+## in USED_DIRECTORY are ever imported by Godot, so a huge library doesn't
+## slow down editor startup/import.
+
+const ICON_PREVIEW_WIDTH := 28
+const ICON_PREVIEW_HEIGHT := 28
+const ICON_SIZE := Vector2(16, 16)
+
+const PREVIEW_CHECK_SIZE := Vector2(8, 8)
+const PREVIEW_CHECK_MARGIN := 1.0
+
+# Change this if your library lives somewhere else.
+const LIBRARY_DIRECTORY := \"res://addons/at-icons/library/\"
+const USED_DIRECTORY := \"res://addons/at-icons/used/\"
+
+const COLORS: Dictionary[String, Dictionary] = {
+	\"Preview\": {\"dark\": Color(\"292929\"), \"light\": Color(\"e5e5e5\")},
+	\"Node\": {\"dark\": Color(\"e0e0e0\"), \"light\": Color(\"5a5a5a\")},
+	\"Node2D\": {\"dark\": Color(\"8da5f3\"), \"light\": Color(\"3d64dd\")},
+	\"Node3D\": {\"dark\": Color(\"fc7f7f\"), \"light\": Color(\"cd3838\")},
+	\"Control\": {\"dark\": Color(\"8eef97\"), \"light\": Color(\"2fa139\")},
+	\"Animation\": {\"dark\": Color(\"c38ef1\"), \"light\": Color(\"a85de9\")},
+	\"Mesh\": {\"dark\": Color(\"ffca5f\"), \"light\": Color(\"fea900\")},
+}
+
+const SETTING_NAME_COLOR := \"@icons/icon_color\"
+const SETTING_NAME_LANG := \"@icons/declaration_language\"
+const SETTING_NAME_SCALE := \"@icons/double_scale\"
+const SETTING_NAME_USED_ONLY := \"@icons/used_only\"
+
+var editor_scale := 1.0
+var icon_scale := 1.0
+var color_mode := \"dark\"
+
+var icon_paths: Array[String] = []
+var icon_cache: Dictionary = {} # path -> Texture2D, so SVGs are only rasterized once.
+
+var used_only := false
+
+var icon_material_light := ShaderMaterial.new()
+var icon_material_dark := ShaderMaterial.new()
+
+@export var icon_shader: Shader
+
+@export_tool_button(\"Update Icon List\")
+var _update_icons_tool := update_icon_list
+
+@export_tool_button(\"Delete All Buttons\")
+var _remove_buttons_tool := _remove_all_children
+
+@export_tool_button(\"Recreate Buttons\")
+var _init_nodes_tool := _initialize_nodes
+
+@onready var icon_type_button: OptionButton = %TypePickerButton
+@onready var declaration_type_button: OptionButton = %DeclarationPickerButton
+@onready var scale_toggle: Button = %ScaleToggle
+@onready var used_toggle: Button = %UsedOnlyToggle
+@onready var search_bar: LineEdit = %SearchBar
+@onready var json_holder: Node = %JSON
+
+
+var selected_type: String:
+	get:
+		if not icon_type_button:
+			return \"Node3D\"
+		return icon_type_button.get_item_text(icon_type_button.get_selected_id())
+
+
+var selected_lang: String:
+	get:
+		if not declaration_type_button:
+			return \"GDScript\"
+		return declaration_type_button.get_item_text(
+			declaration_type_button.get_selected_id()
+		)
+
+
+func _ready() -> void:
+	if Engine.is_editor_hint():
+		editor_scale = EditorInterface.get_editor_scale()
+
+	icon_material_light.shader = icon_shader
+	icon_material_dark.shader = icon_shader
+
+	_connect_signals()
+	_register_editor_settings()
+	get_editor_theme()
+
+	# Only discovers file paths on disk; does NOT load/import them as
+	# Godot resources, which is what keeps this cheap with a big library.
+	update_icon_list()
+
+	_initialize_nodes()
+
+	_update_from_editor_settings.call_deferred()
+
+
+# ============================================================
+# INITIALIZATION
+# ============================================================
+
+func _connect_signals() -> void:
+	if icon_type_button:
+		if not icon_type_button.item_selected.is_connected(_on_icon_type_changed):
+			icon_type_button.item_selected.connect(_on_icon_type_changed.unbind(1))
+		if not icon_type_button.item_selected.is_connected(_update_editor_settings):
+			icon_type_button.item_selected.connect(_update_editor_settings.unbind(1))
+
+	if declaration_type_button:
+		if not declaration_type_button.item_selected.is_connected(_update_editor_settings):
+			declaration_type_button.item_selected.connect(_update_editor_settings.unbind(1))
+
+	if scale_toggle:
+		if not scale_toggle.toggled.is_connected(update_icon_scale):
+			scale_toggle.toggled.connect(update_icon_scale.unbind(1))
+		if not scale_toggle.toggled.is_connected(_update_editor_settings):
+			scale_toggle.toggled.connect(_update_editor_settings.unbind(1))
+
+	if used_toggle:
+		if not used_toggle.toggled.is_connected(update_used_only):
+			used_toggle.toggled.connect(update_used_only.unbind(1))
+		if not used_toggle.toggled.is_connected(_update_editor_settings):
+			used_toggle.toggled.connect(_update_editor_settings.unbind(1))
+
+	if search_bar:
+		if not search_bar.text_changed.is_connected(search):
+			search_bar.text_changed.connect(search)
+
+
+func _notification(what: int) -> void:
+	if what == NOTIFICATION_THEME_CHANGED and is_node_ready():
+		get_editor_theme()
+
+
+# ============================================================
+# ICON DISCOVERY
+# ============================================================
+
+func update_icon_list() -> void:
+	icon_paths.clear()
+
+	# We only read filenames here, never load() — the whole library is
+	# ignored by Godot's importer on purpose.
+	_scan_directory(LIBRARY_DIRECTORY + selected_type.to_lower() + \"/\")
+
+	icon_paths.sort()
+
+
+func _scan_directory(directory: String) -> void:
+	var dir := DirAccess.open(directory)
+
+	if not dir:
+		push_error(\"Could not access icon library directory: \" + directory)
+		return
+
+	dir.list_dir_begin()
+
+	while true:
+		var file_name := dir.get_next()
+
+		if file_name.is_empty():
+			break
+		if dir.current_is_dir():
+			continue
+		if not file_name.ends_with(\".svg\"):
+			continue
+
+		icon_paths.append(directory + file_name)
+
+	dir.list_dir_end()
+
+
+# ============================================================
+# ICON PREVIEW
+# ============================================================
+
+func _get_icon_name(path: String) -> String:
+	return path.get_file().get_basename()
+
+
+func _get_icon_texture(path: String) -> Texture2D:
+	if icon_cache.has(path):
+		return icon_cache[path]
+
+	var file := FileAccess.open(path, FileAccess.READ)
+
+	if not file:
+		push_error(\"Could not open icon: \" + path)
+		return null
+
+	var image := Image.new()
+	var error := image.load_svg_from_buffer(file.get_buffer(file.get_length()), 2.0)
+
+	if error != OK:
+		push_error(\"Could not load SVG: \" + path)
+		return null
+
+	var texture := ImageTexture.create_from_image(image)
+	icon_cache[path] = texture
+
+	return texture
+
+
+# ============================================================
+# UI CREATION
+# ============================================================
+
+func _initialize_nodes() -> void:
+	_remove_all_children()
+
+	for path in icon_paths:
+		var button := _create_icon_button(path)
+		add_child(button)
+		_update_button_visual(button, path)
+
+	_apply_filter()
+
+
+func _create_icon_button(path: String) -> Button:
+	var button := Button.new()
+
+	var real_scale := editor_scale * icon_scale
+
+	button.custom_minimum_size = (
+		Vector2(ICON_PREVIEW_WIDTH, ICON_PREVIEW_HEIGHT) * real_scale
+	)
+	button.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
+	button.focus_mode = Control.FOCUS_NONE
+
+	var icon_name := _get_icon_name(path)
+	button.set_meta(\"icon\", icon_name)
+	button.set_meta(\"library_path\", path)
+
+	var texture := _get_icon_texture(path)
+
+	if texture:
+		var texture_rect := TextureRect.new()
+
+		texture_rect.texture = texture
+		texture_rect.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+		texture_rect.material = icon_material_dark
+		texture_rect.custom_minimum_size = ICON_SIZE
+		texture_rect.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		texture_rect.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
+		texture_rect.size_flags_vertical = Control.SIZE_SHRINK_CENTER
+
+		button.add_child(texture_rect)
+
+		texture_rect.anchor_left = 0.5
+		texture_rect.anchor_top = 0.5
+		texture_rect.anchor_right = 0.5
+		texture_rect.anchor_bottom = 0.5
+
+		_update_texture_rect_size(texture_rect)
+	
+	var used_check := TextureRect.new()
+
+	used_check.name = \"UsedCheck\"
+	used_check.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	used_check.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	used_check.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+
+	button.add_child(used_check)
+
+	_update_used_check(button)
+
+
+	button.gui_input.connect(
+		func(event: InputEvent): _handle_icon_input(event, button, path)
+	)
+
+	_update_button_visual(button, path)
+
+	return button
+
+
+func _remove_all_children() -> void:
+	for child in get_children():
+		child.queue_free()
+
+
+# ============================================================
+# MOUSE INPUT
+# ============================================================
+
+func _handle_icon_input(
+	event: InputEvent,
+	button: Button,
+	path: String
+) -> void:
+	if not event is InputEventMouseButton:
+		return
+
+	var mouse_event := event as InputEventMouseButton
+
+	if not mouse_event.pressed:
+		return
+
+	if mouse_event.button_index == MOUSE_BUTTON_RIGHT:
+		_show_remove_confirmation(path)
+		get_viewport().set_input_as_handled()
+		return
+
+	if mouse_event.button_index != MOUSE_BUTTON_LEFT:
+		return
+
+	if mouse_event.double_click:
+		_use_icon(path) # Double-click = use.
+		get_viewport().set_input_as_handled()
+		return
+
+	_copy_declaration_for_icon(path) # Single click = copy declaration.
+	get_viewport().set_input_as_handled()
+
+func _on_icon_type_changed() -> void:
+	update_icon_list()
+	_initialize_nodes()
+	update_preview_colors()
+	_update_editor_settings()
+
+# ============================================================
+# USE ICON
+# ============================================================
+
+func _use_icon(source_path: String) -> void:
+	var icon_name := _get_icon_name(source_path)
+	var destination_directory := USED_DIRECTORY + selected_type.to_lower() + \"/\"
+
+	_ensure_directory(destination_directory)
+
+	var destination := destination_directory + icon_name + \".svg\"
+
+	if FileAccess.file_exists(destination):
+		_copy_declaration_for_icon(source_path)
+		_show_toast(\"Icon is already in use.\")
+		return
+
+	if not _copy_file(source_path, destination):
+		return
+	
+	_copy_import_settings(source_path, destination)
+
+	_copy_declaration_for_icon(source_path)
+	_scan_used_directory(destination)
+	_update_used_state_for_path(source_path)
+	_show_toast(\"Icon added to project.\")
+
+
+func _copy_file(source: String, destination: String) -> bool:
+	var source_file := FileAccess.open(source, FileAccess.READ)
+
+	if not source_file:
+		push_error(\"Could not open source icon: \" + source)
+		return false
+
+	var data := source_file.get_buffer(source_file.get_length())
+	var destination_file := FileAccess.open(destination, FileAccess.WRITE)
+
+	if not destination_file:
+		push_error(\"Could not create destination icon: \" + destination)
+		return false
+
+	destination_file.store_buffer(data)
+	destination_file.close()
+
+	return true
+
+func _copy_import_settings(
+	source_path: String,
+	destination_path: String
+) -> void:
+	var source_import := source_path + \".import\"
+	var destination_import := destination_path + \".import\"
+
+	if not FileAccess.file_exists(source_import):
+		return
+
+	var file := FileAccess.open(source_import, FileAccess.READ)
+	if not file:
+		return
+
+	var text := file.get_as_text()
+	file.close()
+
+	var params_pos := text.find(\"[params]\")
+
+	if params_pos == -1:
+		return
+
+	var params := text.substr(params_pos)
+
+	var output := \"[remap]\\n\\n\"
+	output += \"importer=\\\"texture\\\"\\n\"
+	output += \"type=\\\"CompressedTexture2D\\\"\\n\\n\"
+	output += params
+
+	var output_file := FileAccess.open(destination_import, FileAccess.WRITE)
+
+	if not output_file:
+		push_error(\"Could not create import settings: \" + destination_import)
+		return
+
+	output_file.store_string(output)
+	output_file.close()
+
+func _ensure_directory(path: String) -> void:
+	DirAccess.make_dir_recursive_absolute(ProjectSettings.globalize_path(path))
+
+
+func _scan_used_directory(path: String) -> void:
+	if not Engine.is_editor_hint():
+		return
+
+	var filesystem := EditorInterface.get_resource_filesystem()
+
+	filesystem.update_file(path)
+	filesystem.scan()
+
+	# Update just the file that changed, instead of scan_sources() rescanning
+	# the whole project — the entire point of this addon is to avoid that
+	# cost when the library is large.
+	#EditorInterface.get_resource_filesystem().update_file(path)
+
+
+# ============================================================
+# REMOVE ICON
+# ============================================================
+
+func _show_remove_confirmation(source_path: String) -> void:
+	if not _is_icon_used(source_path):
+		_show_toast(\"Icon is not currently used.\")
+		return
+
+	var dialog := ConfirmationDialog.new()
+	var icon_name := _get_icon_name(source_path)
+
+	dialog.title = \"Remove Icon?\"
+	dialog.ok_button_text = \"Remove\"
+	dialog.cancel_button_text = \"Cancel\"
+	dialog.dialog_text = \"Remove \\\"%s\\\" from the project?\" % icon_name
+	dialog.min_size = Vector2i(420, 280)
+
+	var remove_from_code := CheckBox.new()
+	remove_from_code.text = \"Remove icon references from scripts\"
+	remove_from_code.button_pressed = true
+	remove_from_code.tooltip_text = (
+		\"Search GDScript and C# files and remove references to this icon.\"
+	)
+	dialog.add_child(remove_from_code)
+
+	dialog.confirmed.connect(
+		func():
+			_remove_icon(source_path, remove_from_code.button_pressed)
+			dialog.queue_free()
+	)
+	dialog.canceled.connect(func(): dialog.queue_free())
+
+	add_child(dialog)
+	dialog.popup_centered()
+
+
+func _remove_icon(source_path: String, remove_from_code: bool) -> void:
+	var used_path := _get_used_path(source_path)
+
+	if not FileAccess.file_exists(used_path):
+		return
+
+	var error := DirAccess.remove_absolute(
+		ProjectSettings.globalize_path(used_path)
+	)
+
+	if error != OK:
+		push_error(\"Could not remove icon: \" + used_path)
+		return
+
+	if remove_from_code:
+		_remove_icon_from_all_scripts(used_path)
+
+	_scan_used_directory(used_path)
+	_update_used_state_for_path(source_path)
+	_apply_filter()
+	_show_toast(\"Icon removed from project.\")
+
+
+# ============================================================
+# REMOVE REFERENCES FROM SCRIPTS
+# ============================================================
+
+func _remove_icon_from_all_scripts(icon_path: String) -> void:
+	_scan_scripts_recursive(
+		ProjectSettings.globalize_path(\"res://\"),
+		icon_path
+	)
+
+func _scan_scripts_recursive(
+	absolute_directory: String,
+	icon_path: String
+) -> void:
+	var dir := DirAccess.open(absolute_directory)
+
+	if not dir:
+		return
+
+	dir.list_dir_begin()
+
+	while true:
+		var file_name := dir.get_next()
+
+		if file_name.is_empty():
+			break
+
+		var full_path := absolute_directory.path_join(file_name)
+
+		if dir.current_is_dir():
+			if file_name == \".godot\":
+				continue
+			_scan_scripts_recursive(full_path, icon_path)
+			continue
+
+		if file_name.ends_with(\".gd\"):
+			_remove_icon_from_script(full_path, icon_path, false)
+		elif file_name.ends_with(\".cs\"):
+			_remove_icon_from_script(full_path, icon_path, true)
+
+	dir.list_dir_end()
+
+
+func _remove_icon_from_script(
+	absolute_path: String, icon_path: String, is_csharp: bool
+) -> void:
+	var file := FileAccess.open(absolute_path, FileAccess.READ)
+
+	if not file:
+		return
+
+	var text := file.get_as_text()
+	file.close()
+
+	var new_text := (
+		_remove_csharp_icon_reference(text, icon_path) if is_csharp
+		else _remove_gdscript_icon_reference(text, icon_path)
+	)
+
+	if new_text != text:
+		_write_script(absolute_path, new_text)
+
+
+func _remove_gdscript_icon_reference(text: String, icon_path: String) -> String:
+	# Handles: @icon(\"res://addons/at-icons/used/node3d/Camera3D.svg\")
+	# Removes the whole line.
+	var output: PackedStringArray
+	var changed := false
+
+	for line in text.split(\"\\n\"):
+		if line.contains(\"@icon(\") and line.contains(icon_path):
+			changed = true
+			continue
+		output.append(line)
+
+	return \"\\n\".join(output) if changed else text
+
+
+func _remove_csharp_icon_reference(text: String, icon_path: String) -> String:
+	# Handles: [GlobalClass, Icon(\"res://...\")]
+	# Removes only the Icon(\"...\") portion, keeping the rest of the line.
+	var output: PackedStringArray
+	var changed := false
+
+	for line in text.split(\"\\n\"):
+		if line.contains(\"Icon(\") and line.contains(icon_path):
+			output.append(_remove_csharp_icon_from_line(line, icon_path))
+			changed = true
+		else:
+			output.append(line)
+
+	return \"\\n\".join(output) if changed else text
+
+
+func _remove_csharp_icon_from_line(line: String, icon_path: String) -> String:
+	var escaped_path := icon_path.replace(\"\\\\\", \"\\\\\\\\\")
+	var patterns := ['Icon(\"%s\")' % icon_path, 'Icon(\"%s\")' % escaped_path]
+
+	for pattern in patterns:
+		if line.contains(pattern):
+			line = line.replace(\", \" + pattern, \"\")
+			line = line.replace(pattern + \", \", \"\")
+			line = line.replace(pattern, \"\")
+			break
+
+	return line
+
+
+func _write_script(absolute_path: String, text: String) -> void:
+	var file := FileAccess.open(absolute_path, FileAccess.WRITE)
+
+	if not file:
+		push_error(\"Could not write script: \" + absolute_path)
+		return
+
+	file.store_string(text)
+	file.close()
+
+
+# ============================================================
+# USED STATE
+# ============================================================
+
+func _get_used_path(source_path: String) -> String:
+	var icon_name := _get_icon_name(source_path)
+	return USED_DIRECTORY.path_join(
+		selected_type.to_lower()
+	).path_join(icon_name + \".svg\")
+
+
+func _is_icon_used(source_path: String) -> bool:
+	return FileAccess.file_exists(_get_used_path(source_path))
+
+
+func _update_used_state_for_path(source_path: String) -> void:
+	for child in get_children():
+		if child is Button and child.get_meta(\"library_path\", \"\") == source_path:
+			_update_button_visual(child, source_path)
+			break
+
+func _update_button_visual(button: Button, source_path: String) -> void:
+	var is_used := _is_icon_used(source_path)
+	button.set_meta(\"is_used\", is_used)
+
+	_update_used_check(button)
+
+	if is_used:
+		button.tooltip_text = (
+			_get_icon_name(source_path) + \"\\n\\n\" +
+			\"✓ Used by project\" +
+			\"\\nLeft click: copy declaration\" +
+			\"\\nDouble click: copy/use icon\" +
+			\"\\nRight click: remove icon\"
+		)
+	else:
+		button.tooltip_text = (
+			_get_icon_name(source_path) + \"\\n\\n\" +
+			\"Not used\" +
+			\"\\nLeft click: copy declaration\" +
+			\"\\nDouble click: use icon\" +
+			\"\\nRight click: remove icon\"
+		)
+
+func _update_used_check(button: Button) -> void:
+	var check := button.get_node_or_null(\"UsedCheck\") as TextureRect
+	if not check:
+		return
+
+	var is_used: bool = button.get_meta(\"is_used\", false)
+
+	var theme := EditorInterface.get_editor_theme()
+	var texture: Texture2D
+	if is_used:
+		texture = theme.get_icon(\"checked\", \"CheckBox\")
+	else:
+		texture = theme.get_icon(\"unchecked\", \"CheckBox\")
+
+	check.texture = texture
+
+	var scale := editor_scale * icon_scale
+
+	var size := PREVIEW_CHECK_SIZE * scale
+	var margin := PREVIEW_CHECK_MARGIN * scale
+
+	check.position = Vector2(
+		button.custom_minimum_size.x - size.x - margin, 
+		button.custom_minimum_size.y - size.y - margin
+	)
+	check.size = size
+	
+	#check.offset_left = -size.x - margin
+	#check.offset_top = -size.y - margin
+	#check.offset_right = -margin
+	#check.offset_bottom = -margin
+
+# ============================================================
+# USED-ONLY FILTER
+# ============================================================
+
+func update_used_only() -> void:
+	used_only = used_toggle.button_pressed
+	_apply_filter()
+	_update_editor_settings()
+
+
+func _apply_filter() -> void:
+	search(search_bar.text if search_bar else \"\")
+
+
+func search(text: String) -> void:
+	text = text.strip_edges().replace(\" \", \"_\").to_lower()
+
+	var search_aliases: Dictionary = (
+		json_holder.search_aliases if json_holder else {}
+	)
+
+	for child in get_children():
+		if not child is Button:
+			continue
+
+		var path: String = child.get_meta(\"library_path\", \"\")
+		var icon_name: String = child.get_meta(\"icon\", \"\")
+
+		if used_only and not _is_icon_used(path):
+			child.visible = false
+			continue
+
+		if text.is_empty():
+			child.visible = true
+			continue
+
+		var aliases: Array = search_aliases.get(icon_name, [icon_name])
+		var matches := false
+
+		for alias: String in aliases:
+			if text in alias.to_lower():
+				matches = true
+				break
+
+		child.visible = matches
+
+
+# ============================================================
+# SCALE
+# ============================================================
+
+func update_icon_scale() -> void:
+	icon_scale = 2.0 if scale_toggle.button_pressed else 1.0
+
+	var real_scale := editor_scale * icon_scale
+
+	for child in get_children():
+		if not child is Button:
+			continue
+
+		var button := child as Button
+		button.custom_minimum_size = (
+			Vector2(ICON_PREVIEW_WIDTH, ICON_PREVIEW_HEIGHT) * real_scale
+		)
+
+		if button.get_child_count() > 0:
+			var texture_rect := button.get_child(0) as TextureRect
+			if texture_rect:
+				_update_texture_rect_size(texture_rect)
+			
+			_update_used_check(button)
+
+	_apply_filter()
+
+func _update_texture_rect_size(texture_rect: TextureRect) -> void:
+	var size := ICON_SIZE * editor_scale * icon_scale
+
+	texture_rect.offset_left = -size.x / 2
+	texture_rect.offset_right = size.x / 2
+	texture_rect.offset_top = -size.y / 2
+	texture_rect.offset_bottom = size.y / 2
+
+
+# ============================================================
+# DECLARATION
+# ============================================================
+
+func _copy_declaration_for_icon(source_path: String) -> void:
+	var icon_name := _get_icon_name(source_path)
+	var declaration_path := (
+		USED_DIRECTORY + selected_type.to_lower() + \"/\" + icon_name + \".svg\"
+	)
+
+	var string := \"\"
+
+	match selected_lang:
+		\"GDScript\":
+			string = '@icon(\"%s\")\\n' % declaration_path
+		\"C#\":
+			string = '[GlobalClass, Icon(\"%s\")]\\n' % declaration_path
+
+	DisplayServer.clipboard_set(string)
+	_show_toast(\"Icon declaration copied!\")
+
+
+# ============================================================
+# THEME
+# ============================================================
+
+func get_editor_theme() -> void:
+	if not Engine.is_editor_hint():
+		return
+
+	var settings := EditorInterface.get_editor_settings()
+
+	match settings.get_setting(\"interface/theme/icon_and_font_color\"):
+		0:
+			var col: Color = settings.get_setting(\"interface/theme/base_color\")
+			color_mode = \"light\" if col.ok_hsl_l > 0.5 else \"dark\"
+		1:
+			color_mode = \"light\"
+		2:
+			color_mode = \"dark\"
+
+	update_preview_colors()
+
+
+func update_preview_colors() -> void:
+	if not icon_type_button or not COLORS.has(selected_type):
+		return
+
+	var color: Color = COLORS[selected_type][color_mode]
+
+	icon_material_light.set_shader_parameter(\"requested_color\", color)
+	icon_material_dark.set_shader_parameter(\"requested_color\", color)
+
+
+# ============================================================
+# SETTINGS
+# ============================================================
+
+func _register_editor_settings() -> void:
+	if not Engine.is_editor_hint():
+		return
+
+	var settings := EditorInterface.get_editor_settings()
+
+	settings.add_property_info({
+		\"name\": SETTING_NAME_COLOR,
+		\"type\": TYPE_STRING,
+		\"hint\": PROPERTY_HINT_ENUM,
+		\"hint_string\": \"Preview,Node,Node2D,Node3D,Control,Animation,Mesh\",
+	})
+
+	settings.add_property_info({
+		\"name\": SETTING_NAME_LANG,
+		\"type\": TYPE_STRING,
+		\"hint\": PROPERTY_HINT_ENUM,
+		\"hint_string\": \"GDScript,C#\",
+	})
+
+	settings.add_property_info({
+		\"name\": SETTING_NAME_SCALE,
+		\"type\": TYPE_BOOL,
+		\"hint\": PROPERTY_HINT_NONE,
+	})
+
+	settings.add_property_info({
+		\"name\": SETTING_NAME_USED_ONLY,
+		\"type\": TYPE_BOOL,
+		\"hint\": PROPERTY_HINT_NONE,
+	})
+
+
+func _update_editor_settings() -> void:
+	if not Engine.is_editor_hint():
+		return
+
+	var settings := EditorInterface.get_editor_settings()
+
+	settings.set_setting(SETTING_NAME_COLOR, selected_type)
+	settings.set_setting(SETTING_NAME_LANG, selected_lang)
+	settings.set_setting(SETTING_NAME_SCALE, scale_toggle.button_pressed)
+	settings.set_setting(SETTING_NAME_USED_ONLY, used_toggle.button_pressed)
+
+
+func _update_from_editor_settings() -> void:
+	if not Engine.is_editor_hint():
+		return
+
+	var settings := EditorInterface.get_editor_settings()
+
+	if settings.has_setting(SETTING_NAME_COLOR):
+		var value: String = settings.get_setting(SETTING_NAME_COLOR)
+		for i in icon_type_button.item_count:
+			if icon_type_button.get_item_text(i) == value:
+				icon_type_button.select(i)
+				break
+
+	if settings.has_setting(SETTING_NAME_LANG):
+		var value: String = settings.get_setting(SETTING_NAME_LANG)
+		for i in declaration_type_button.item_count:
+			if declaration_type_button.get_item_text(i) == value:
+				declaration_type_button.select(i)
+				break
+
+	if settings.has_setting(SETTING_NAME_SCALE):
+		scale_toggle.button_pressed = settings.get_setting(SETTING_NAME_SCALE)
+
+	if settings.has_setting(SETTING_NAME_USED_ONLY):
+		used_only = settings.get_setting(SETTING_NAME_USED_ONLY)
+		if used_toggle:
+			used_toggle.button_pressed = used_only
+
+	update_icon_scale()
+	update_preview_colors()
+
+
+# ============================================================
+# TOAST
+# ============================================================
+
+func _show_toast(text: String) -> void:
+	if not Engine.is_editor_hint():
+		return
+
+	EditorInterface.get_editor_toaster().push_toast(text)
+"
+
+[sub_resource type="Shader" id="Shader_8e00h"]
+code = "shader_type canvas_item;
+
+void vertex() {
+	// Called for every vertex the material is visible on.
+}
+
+uniform vec3 requested_color;
+
+void fragment() {
+	COLOR.r = requested_color.r;
+	COLOR.g = requested_color.g;
+	COLOR.b = requested_color.b;
+}
+
+//void light() {
+//	// Called for every pixel for every light affecting the CanvasItem.
+//	// Uncomment to replace the default light processing function with this one.
+//}
+"
+
+[sub_resource type="GDScript" id="GDScript_6a224"]
+resource_name = "json_holder"
+script/source = "@tool
+extends Node
+
+
+@export_multiline() var json_string: String
+
+var search_aliases: Dictionary[String, Array] = {}
+
+
+func _ready() -> void:
+	update_search_aliases()
+
+
+func _get_raw_data() -> Dictionary:
+	var data = JSON.parse_string(json_string)
+
+	if data is Dictionary:
+		return data
+
+	return {}
+
+
+func _csv_to_array(csv: String) -> PackedStringArray:
+	return csv.split(\", \")
+
+
+func _get_search_aliases(
+	data: Dictionary = _get_raw_data()
+) -> Dictionary[String, Array]:
+
+	var aliases: Dictionary[String, Array] = {}
+
+	for icon: String in data:
+		var description = data[icon].get(\"description\", \"\")
+
+		aliases[icon] = _csv_to_array(description)
+		aliases[icon].append(icon)
+
+	return aliases
+
+
+func update_search_aliases() -> void:
+	search_aliases = _get_search_aliases()
+"
+
+[node name="AtIcons" type="Control" unique_id=1278436117]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="MainContainer" type="VBoxContainer" parent="." unique_id=82487286]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Options" type="VBoxContainer" parent="MainContainer" unique_id=1628051619]
+layout_mode = 2
+
+[node name="TypePicker" type="HBoxContainer" parent="MainContainer/Options" unique_id=1920125294]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="MainContainer/Options/TypePicker" unique_id=152125741]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Icon Color"
+
+[node name="TypePickerButton" type="OptionButton" parent="MainContainer/Options/TypePicker" unique_id=1776969653]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+selected = 2
+fit_to_longest_item = false
+item_count = 6
+popup/item_0/text = "Node"
+popup/item_0/id = 0
+popup/item_1/text = "Node2D"
+popup/item_1/id = 1
+popup/item_2/text = "Node3D"
+popup/item_2/id = 2
+popup/item_3/text = "Control"
+popup/item_3/id = 3
+popup/item_4/text = "Animation"
+popup/item_4/id = 4
+popup/item_5/text = "Mesh"
+popup/item_5/id = 5
+
+[node name="DeclarationType" type="HBoxContainer" parent="MainContainer/Options" unique_id=998833387]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="MainContainer/Options/DeclarationType" unique_id=789736423]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Declaration Type"
+
+[node name="DeclarationPickerButton" type="OptionButton" parent="MainContainer/Options/DeclarationType" unique_id=392579028]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+selected = 0
+fit_to_longest_item = false
+item_count = 2
+popup/item_0/text = "GDScript"
+popup/item_0/id = 0
+popup/item_1/text = "C#"
+popup/item_1/id = 1
+
+[node name="Scale" type="HBoxContainer" parent="MainContainer/Options" unique_id=1810444556]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="MainContainer/Options/Scale" unique_id=370202035]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "2× Scale"
+
+[node name="ScaleToggle" type="CheckButton" parent="MainContainer/Options/Scale" unique_id=1498505067]
+unique_name_in_owner = true
+layout_mode = 2
+button_pressed = true
+text = "On"
+
+[node name="UsedOnly" type="HBoxContainer" parent="MainContainer/Options" unique_id=1554455516]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="MainContainer/Options/UsedOnly" unique_id=514875218]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Used Only"
+
+[node name="UsedOnlyToggle" type="CheckButton" parent="MainContainer/Options/UsedOnly" unique_id=1721167427]
+unique_name_in_owner = true
+layout_mode = 2
+text = "On"
+
+[node name="SearchBar" type="LineEdit" parent="MainContainer" unique_id=568912931]
+unique_name_in_owner = true
+layout_mode = 2
+placeholder_text = "Search icons..."
+emoji_menu_enabled = false
+clear_button_enabled = true
+
+[node name="ScrollContainer" type="ScrollContainer" parent="MainContainer" unique_id=838385131]
+layout_mode = 2
+size_flags_vertical = 3
+horizontal_scroll_mode = 0
+
+[node name="HFlowContainer" type="HFlowContainer" parent="MainContainer/ScrollContainer" unique_id=90885539]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+script = SubResource("GDScript_54k6s")
+icon_shader = SubResource("Shader_8e00h")
+
+[node name="JSON" type="Node" parent="." unique_id=325858942]
+unique_name_in_owner = true
+script = SubResource("GDScript_6a224")
+json_string = "{
+  \"wrench\": {
+    \"description\": \"tool, fix, repair, configure, settings, configuration\",
+    \"documentationLinks\": [],
+    \"id\": \"223:368\"
+  },
+  \"info\": {
+    \"description\": \"information, help\",
+    \"documentationLinks\": [],
+    \"id\": \"223:156\"
+  },
+  \"help\": {
+    \"description\": \"question, symbol\",
+    \"documentationLinks\": [],
+    \"id\": \"223:208\"
+  },
+  \"folder\": {
+    \"description\": \"open, file, directory, explorer\",
+    \"documentationLinks\": [],
+    \"id\": \"223:341\"
+  },
+  \"windows\": {
+    \"description\": \"see, glass, house\",
+    \"documentationLinks\": [],
+    \"id\": \"223:349\"
+  },
+  \"window\": {
+    \"description\": \"gui, user, interface\",
+    \"documentationLinks\": [],
+    \"id\": \"223:321\"
+  },
+  \"wind_sock\": {
+    \"description\": \"measure, speed\",
+    \"documentationLinks\": [],
+    \"id\": \"223:306\"
+  },
+  \"wind\": {
+    \"description\": \"dash, gust, air, elemental, blow\",
+    \"documentationLinks\": [],
+    \"id\": \"223:271\"
+  },
+  \"video_player\": {
+    \"description\": \"playback, playbar, seek, film, movie, watch\",
+    \"documentationLinks\": [],
+    \"id\": \"223:84\"
+  },
+  \"video\": {
+    \"description\": \"play, movie, film, footage, movie\",
+    \"documentationLinks\": [],
+    \"id\": \"223:296\"
+  },
+  \"vertex\": {
+    \"description\": \"3d, editing, vertices, mesh, modeling, cube\",
+    \"documentationLinks\": [],
+    \"id\": \"223:197\"
+  },
+  \"unlock\": {
+    \"description\": \"padlock, security, access\",
+    \"documentationLinks\": [],
+    \"id\": \"223:392\"
+  },
+  \"umbrella\": {
+    \"description\": \"rain, rainy\",
+    \"documentationLinks\": [],
+    \"id\": \"223:372\"
+  },
+  \"trophy\": {
+    \"description\": \"reward, leaderboard, award, first, ranking, victory, champion\",
+    \"documentationLinks\": [],
+    \"id\": \"223:375\"
+  },
+  \"troll\": {
+    \"description\": \"enemy, fantasy, monster, creature, ogre, orc\",
+    \"documentationLinks\": [],
+    \"id\": \"223:399\"
+  },
+  \"triangle\": {
+    \"description\": \"shape, arrow, 2d, primitive\",
+    \"documentationLinks\": [],
+    \"id\": \"223:188\"
+  },
+  \"tree_evergreen\": {
+    \"description\": \"nature, plant, trunk, wood\",
+    \"documentationLinks\": [],
+    \"id\": \"223:86\"
+  },
+  \"tree\": {
+    \"description\": \"nature, plant, trunk, wood\",
+    \"documentationLinks\": [],
+    \"id\": \"223:398\"
+  },
+  \"trash_can\": {
+    \"description\": \"remove, delete, recycle\",
+    \"documentationLinks\": [],
+    \"id\": \"223:369\"
+  },
+  \"train\": {
+    \"description\": \"tracks, locomotive, transportation, vehicle, rail\",
+    \"documentationLinks\": [],
+    \"id\": \"223:59\"
+  },
+  \"traffic_lights\": {
+    \"description\": \"navigation, stop, go, directions, signal\",
+    \"documentationLinks\": [],
+    \"id\": \"223:181\"
+  },
+  \"traffic_cone\": {
+    \"description\": \"obstacle, hazard\",
+    \"documentationLinks\": [],
+    \"id\": \"223:251\"
+  },
+  \"tower\": {
+    \"description\": \"medieval, guard, castle, fortress\",
+    \"documentationLinks\": [],
+    \"id\": \"223:301\"
+  },
+  \"torus\": {
+    \"description\": \"geometry, mesh, primitive, donut, 3d, shape\",
+    \"documentationLinks\": [],
+    \"id\": \"223:16\"
+  },
+  \"tileset\": {
+    \"description\": \"tiles, map, platformer, 2d, tilemap\",
+    \"documentationLinks\": [],
+    \"id\": \"223:394\"
+  },
+  \"tilemap\": {
+    \"description\": \"tiles, world, platformer, 2d\",
+    \"documentationLinks\": [],
+    \"id\": \"223:246\"
+  },
+  \"thunderstorm\": {
+    \"description\": \"lightning, weather, cloud, zap, smite, electricity\",
+    \"documentationLinks\": [],
+    \"id\": \"223:376\"
+  },
+  \"thumbtack_diagonal\": {
+    \"description\": \"pin, save\",
+    \"documentationLinks\": [],
+    \"id\": \"223:359\"
+  },
+  \"thumbtack\": {
+    \"description\": \"pin, save\",
+    \"documentationLinks\": [],
+    \"id\": \"223:357\"
+  },
+  \"thermometer\": {
+    \"description\": \"temperature, hot, cold, warm, measure\",
+    \"documentationLinks\": [],
+    \"id\": \"223:267\"
+  },
+  \"text\": {
+    \"description\": \"font, letter, alphabet, typeface, edit\",
+    \"documentationLinks\": [],
+    \"id\": \"223:355\"
+  },
+  \"test_tube\": {
+    \"description\": \"experimental, science, chemistry\",
+    \"documentationLinks\": [],
+    \"id\": \"223:383\"
+  },
+  \"tennis_ball\": {
+    \"description\": \"play, sports, game, throw, bounce, racket, racquet\",
+    \"documentationLinks\": [],
+    \"id\": \"223:342\"
+  },
+  \"television\": {
+    \"description\": \"watch, broadcast, video, tv, show, tube\",
+    \"documentationLinks\": [],
+    \"id\": \"223:351\"
+  },
+  \"target\": {
+    \"description\": \"aim, bullseye, goal, objective\",
+    \"documentationLinks\": [],
+    \"id\": \"223:138\"
+  },
+  \"tap\": {
+    \"description\": \"interact, touchscreen, touch, finger, body, drag\",
+    \"documentationLinks\": [],
+    \"id\": \"223:329\"
+  },
+  \"tank\": {
+    \"description\": \"vehicle, war, weapon, fight, kill, combat, shell, warfare\",
+    \"documentationLinks\": [],
+    \"id\": \"223:350\"
+  },
+  \"tag\": {
+    \"description\": \"\",
+    \"documentationLinks\": [],
+    \"id\": \"223:319\"
+  },
+  \"tablet\": {
+    \"description\": \"device, technology, touchscreen, screen, display\",
+    \"documentationLinks\": [],
+    \"id\": \"223:345\"
+  },
+  \"syringe\": {
+    \"description\": \"item, medicine, health, drugs, heal, needle, vaccine\",
+    \"documentationLinks\": [],
+    \"id\": \"223:343\"
+  },
+  \"sword\": {
+    \"description\": \"weapon, blade, knife, stab, attack, hurt, cut, slice, combat, kill, sharp, medieval\",
+    \"documentationLinks\": [],
+    \"id\": \"223:102\"
+  },
+  \"switch\": {
+    \"description\": \"boolean, toggle, power, electricity, paddle, on, off\",
+    \"documentationLinks\": [],
+    \"id\": \"223:374\"
+  },
+  \"swatches\": {
+    \"description\": \"color, colour, tool, editing, palette\",
+    \"documentationLinks\": [],
+    \"id\": \"223:313\"
+  },
+  \"sun_cloud\": {
+    \"description\": \"weather\",
+    \"documentationLinks\": [],
+    \"id\": \"223:336\"
+  },
+  \"sun\": {
+    \"description\": \"astronomy, space, day, sunny, weather, hot, warm, cosmos, star, scifi, sunlight\",
+    \"documentationLinks\": [],
+    \"id\": \"223:115\"
+  },
+  \"storage\": {
+    \"description\": \"hard, drive, ssd, store, data, memory, server, technology, device, computer\",
+    \"documentationLinks\": [],
+    \"id\": \"223:128\"
+  },
+  \"stopwatch\": {
+    \"description\": \"timer, clock, time, chronometer, duration, seconds, speed\",
+    \"documentationLinks\": [],
+    \"id\": \"223:276\"
+  },
+  \"stop_sign\": {
+    \"description\": \"prohibition, forbid, interdiction, disabled, prevent, ban\",
+    \"documentationLinks\": [],
+    \"id\": \"223:333\"
+  },
+  \"sticker\": {
+    \"description\": \"sticky, note, paper, reminder, decal\",
+    \"documentationLinks\": [],
+    \"id\": \"223:326\"
+  },
+  \"stars\": {
+    \"description\": \"space, scifi, cosmos, night, sky, astronomy, sparkle, twinkle\",
+    \"documentationLinks\": [],
+    \"id\": \"223:353\"
+  },
+  \"star\": {
+    \"description\": \"favorite, favourite, sparkle, twinkle\",
+    \"documentationLinks\": [],
+    \"id\": \"223:324\"
+  },
+  \"staircase_up\": {
+    \"description\": \"floor, ascend, stairs, step, transition\",
+    \"documentationLinks\": [],
+    \"id\": \"223:19\"
+  },
+  \"staircase_down\": {
+    \"description\": \"floor, descend, stairs, step, transition\",
+    \"documentationLinks\": [],
+    \"id\": \"223:305\"
+  },
+  \"staircase\": {
+    \"description\": \"floor, up, down, ascend, descend, stairs, step, transition\",
+    \"documentationLinks\": [],
+    \"id\": \"223:37\"
+  },
+  \"square\": {
+    \"description\": \"shape, primitive, 2d, geometry, plane, quad\",
+    \"documentationLinks\": [],
+    \"id\": \"223:190\"
+  },
+  \"sprout\": {
+    \"description\": \"nature, plant, agriculture, grow, seed\",
+    \"documentationLinks\": [],
+    \"id\": \"223:24\"
+  },
+  \"spring_joint\": {
+    \"description\": \"attach, connect, articulation, affix, stretch, elastic, bounce\",
+    \"documentationLinks\": [],
+    \"id\": \"223:280\"
+  },
+  \"sphere\": {
+    \"description\": \"primitive, mesh, circle, 3d, geometry, smooth\",
+    \"documentationLinks\": [],
+    \"id\": \"223:346\"
+  },
+  \"speech_bubble_question\": {
+    \"description\": \"ask, communicate, chat, dialogue, comment\",
+    \"documentationLinks\": [],
+    \"id\": \"223:390\"
+  },
+  \"speech_bubble_exclamation\": {
+    \"description\": \"quest, alert, communicate, chat, dialogue, comment\",
+    \"documentationLinks\": [],
+    \"id\": \"223:381\"
+  },
+  \"speech_bubble_ellipsis\": {
+    \"description\": \"communicate, chat, dialogue, comment\",
+    \"documentationLinks\": [],
+    \"id\": \"223:297\"
+  },
+  \"speech_bubble\": {
+    \"description\": \"communicate, chat, dialogue, comment\",
+    \"documentationLinks\": [],
+    \"id\": \"223:365\"
+  },
+  \"speaker_mute\": {
+    \"description\": \"sound, audio, loudspeaker, volume, silence\",
+    \"documentationLinks\": [],
+    \"id\": \"223:314\"
+  },
+  \"speaker_low\": {
+    \"description\": \"sound, audio, loudspeaker, volume\",
+    \"documentationLinks\": [],
+    \"id\": \"223:309\"
+  },
+  \"speaker\": {
+    \"description\": \"sound, audio, loudspeaker, volume\",
+    \"documentationLinks\": [],
+    \"id\": \"223:311\"
+  },
+  \"spade\": {
+    \"description\": \"card, figure, suit, game, play, board\",
+    \"documentationLinks\": [],
+    \"id\": \"223:308\"
+  },
+  \"snowflake\": {
+    \"description\": \"elemental, ice, cold, freeze, freezing, weather, frozen\",
+    \"documentationLinks\": [],
+    \"id\": \"223:99\"
+  },
+  \"snow\": {
+    \"description\": \"cold, freeze, freezing, weather, cloud\",
+    \"documentationLinks\": [],
+    \"id\": \"223:303\"
+  },
+  \"sliders\": {
+    \"description\": \"parameters, settings, cursor\",
+    \"documentationLinks\": [],
+    \"id\": \"223:158\"
+  },
+  \"slider_joint\": {
+    \"description\": \"attach, connect, articulation, affix\",
+    \"documentationLinks\": [],
+    \"id\": \"223:320\"
+  },
+  \"sledgehammer\": {
+    \"description\": \"destroy, tool, break, smash, hit\",
+    \"documentationLinks\": [],
+    \"id\": \"223:293\"
+  },
+  \"sky\": {
+    \"description\": \"clouds, air, atmosphere, skybox\",
+    \"documentationLinks\": [],
+    \"id\": \"223:70\"
+  },
+  \"skull_and_crossbones\": {
+    \"description\": \"death, dead, body, corpse, cadaver, skeleton, creature, monster, fantasy, casualty, pirate, enemy\",
+    \"documentationLinks\": [],
+    \"id\": \"223:282\"
+  },
+  \"skull\": {
+    \"description\": \"death, dead, body, corpse, cadaver, skeleton, creature, monster, fantasy, casualty, enemy\",
+    \"documentationLinks\": [],
+    \"id\": \"223:284\"
+  },
+  \"signal_wave\": {
+    \"description\": \"radio, sound, audio, pulse, heartbeat, life\",
+    \"documentationLinks\": [],
+    \"id\": \"223:291\"
+  },
+  \"shovel\": {
+    \"description\": \"dig, tool, spade, garden, terrain, soil\",
+    \"documentationLinks\": [],
+    \"id\": \"223:279\"
+  },
+  \"shield\": {
+    \"description\": \"protect, armor, moderation, moderator, guard\",
+    \"documentationLinks\": [],
+    \"id\": \"223:387\"
+  },
+  \"server\": {
+    \"description\": \"technology, device, storage, datacenter, data, client, networking, internet, website, infrastructure, online\",
+    \"documentationLinks\": [],
+    \"id\": \"223:154\"
+  },
+  \"sea\": {
+    \"description\": \"water, ocean, waves, elemental\",
+    \"documentationLinks\": [],
+    \"id\": \"223:53\"
+  },
+  \"script\": {
+    \"description\": \"scroll, code, message, paper, text, document\",
+    \"documentationLinks\": [],
+    \"id\": \"223:287\"
+  },
+  \"screwdriver\": {
+    \"description\": \"fix, tool, repair, fasten\",
+    \"documentationLinks\": [],
+    \"id\": \"223:300\"
+  },
+  \"sailboat\": {
+    \"description\": \"ship, sea, vehicle, transportation\",
+    \"documentationLinks\": [],
+    \"id\": \"223:286\"
+  },
+  \"ruler\": {
+    \"description\": \"measure, distance, straight, level\",
+    \"documentationLinks\": [],
+    \"id\": \"223:402\"
+  },
+  \"rotate\": {
+    \"description\": \"transform, arrow, clockwise, spin\",
+    \"documentationLinks\": [],
+    \"id\": \"223:25\"
+  },
+  \"chess_rook\": {
+    \"description\": \"tower, chess, piece, pawn, board, game, play\",
+    \"documentationLinks\": [],
+    \"id\": \"223:331\"
+  },
+  \"rocketship\": {
+    \"description\": \"scifi, vehicle, space, travel, transportation, spaceship, cosmos, astronomy, launch, release, achievement\",
+    \"documentationLinks\": [],
+    \"id\": \"223:92\"
+  },
+  \"roadblock\": {
+    \"description\": \"obstacle, construction, warnng\",
+    \"documentationLinks\": [],
+    \"id\": \"223:231\"
+  },
+  \"road\": {
+    \"description\": \"path, car, vehicle, track, circuit\",
+    \"documentationLinks\": [],
+    \"id\": \"223:283\"
+  },
+  \"ring\": {
+    \"description\": \"circle, round, primitive, shape, 3d, geometry, mesh\",
+    \"documentationLinks\": [],
+    \"id\": \"223:274\"
+  },
+  \"rewind\": {
+    \"description\": \"arrow, playback, music, video, triangle, previous, back, left\",
+    \"documentationLinks\": [],
+    \"id\": \"223:396\"
+  },
+  \"reverse\": {
+    \"description\": \"arrow, playback, music, video, triangle, back, left, previous\",
+    \"documentationLinks\": [],
+    \"id\": \"223:269\"
+  },
+  \"reticle\": {
+    \"description\": \"aim, weapon, sights, look, combat, firearm, gun, target, crosshair, hud\",
+    \"documentationLinks\": [],
+    \"id\": \"223:264\"
+  },
+  \"resize\": {
+    \"description\": \"arrows, expand, transform, scale, rescale\",
+    \"documentationLinks\": [],
+    \"id\": \"223:362\"
+  },
+  \"recover\": {
+    \"description\": \"undo, time, rewind, counterclockwise, arrow, history\",
+    \"documentationLinks\": [],
+    \"id\": \"223:187\"
+  },
+  \"receiver\": {
+    \"description\": \"transmitter, antenna, satellite, radio\",
+    \"documentationLinks\": [],
+    \"id\": \"223:334\"
+  },
+  \"rain\": {
+    \"description\": \"cloud, water, weather, storm\",
+    \"documentationLinks\": [],
+    \"id\": \"223:262\"
+  },
+  \"radioactive_symbol\": {
+    \"description\": \"trefoil, danger, biohazard, nuclear, atomic, energy, power\",
+    \"documentationLinks\": [],
+    \"id\": \"223:366\"
+  },
+  \"racket\": {
+    \"description\": \"sports, play, game, tennis, racquet, badminton\",
+    \"documentationLinks\": [],
+    \"id\": \"223:117\"
+  },
+  \"chess_queen\": {
+    \"description\": \"chess, pawn, piece, board, game, play, crown\",
+    \"documentationLinks\": [],
+    \"id\": \"223:258\"
+  },
+  \"pyramid\": {
+    \"description\": \"shape, 3d, primitive, triangle, mesh, geometry\",
+    \"documentationLinks\": [],
+    \"id\": \"223:254\"
+  },
+  \"projector\": {
+    \"description\": \"light, lens, meeting\",
+    \"documentationLinks\": [],
+    \"id\": \"223:397\"
+  },
+  \"prism\": {
+    \"description\": \"shape, 3d, primitive, mesh, geometry\",
+    \"documentationLinks\": [],
+    \"id\": \"223:253\"
+  },
+  \"poultry_eaten\": {
+    \"description\": \"food, eat, chicken, meat, hunger\",
+    \"documentationLinks\": [],
+    \"id\": \"223:272\"
+  },
+  \"poultry\": {
+    \"description\": \"food, eat, chicken, meat, hunger\",
+    \"documentationLinks\": [],
+    \"id\": \"223:169\"
+  },
+  \"pouch\": {
+    \"description\": \"bag, bundle, storage, items, money, coins, currency, pay, trade, inventory\",
+    \"documentationLinks\": [],
+    \"id\": \"223:247\"
+  },
+  \"potion\": {
+    \"description\": \"flask, bottle, chemistry, alchemy, item, health, magic, sorcery, witch, collectible, pickup, fantasy\",
+    \"documentationLinks\": [],
+    \"id\": \"223:294\"
+  },
+  \"pointer\": {
+    \"description\": \"cursor, index, link, tap, touch, body, finger\",
+    \"documentationLinks\": [],
+    \"id\": \"223:245\"
+  },
+  \"plus_sign_in_square\": {
+    \"description\": \"add, addition, mathematics, operation, new, duplicate, calculation\",
+    \"documentationLinks\": [],
+    \"id\": \"223:244\"
+  },
+  \"plus\": {
+    \"description\": \"add, addition, mathematics, operation, new, duplicate, calculation\",
+    \"documentationLinks\": [],
+    \"id\": \"223:243\"
+  },
+  \"plug_and_socket\": {
+    \"description\": \"electricity, power, socket, connect, plugin, addon, connection\",
+    \"documentationLinks\": [],
+    \"id\": \"223:240\"
+  },
+  \"plug\": {
+    \"description\": \"electricity, power, socket, connect, plugin, addon, connection\",
+    \"documentationLinks\": [],
+    \"id\": \"223:255\"
+  },
+  \"playing_card\": {
+    \"description\": \"suit, figure, game, play, board, poker, solitaire, deal\",
+    \"documentationLinks\": [],
+    \"id\": \"223:316\"
+  },
+  \"play\": {
+    \"description\": \"playback, video, music, arrow, triangle, forwards, next\",
+    \"documentationLinks\": [],
+    \"id\": \"223:239\"
+  },
+  \"planet\": {
+    \"description\": \"space, cosmos, scifi, science, astronomy, alien, world, saturn\",
+    \"documentationLinks\": [],
+    \"id\": \"223:236\"
+  },
+  \"airplane\": {
+    \"description\": \"aeroplane, airport, fly, wings\",
+    \"documentationLinks\": [],
+    \"id\": \"223:234\"
+  },
+  \"pipette\": {
+    \"description\": \"eyedropper, sample, color, colour, picker\",
+    \"documentationLinks\": [],
+    \"id\": \"223:388\"
+  },
+  \"pin\": {
+    \"description\": \"location, map, waypoint, itinerary, route, directions\",
+    \"documentationLinks\": [],
+    \"id\": \"223:232\"
+  },
+  \"pill\": {
+    \"description\": \"item, medicine, pickup, collectible, healing, health, drugs\",
+    \"documentationLinks\": [],
+    \"id\": \"223:384\"
+  },
+  \"pickaxe\": {
+    \"description\": \"tool, mine, resource, dig, terrain, ore\",
+    \"documentationLinks\": [],
+    \"id\": \"223:340\"
+  },
+  \"piano\": {
+    \"description\": \"music, song, midi, keyboard\",
+    \"documentationLinks\": [],
+    \"id\": \"223:214\"
+  },
+  \"photo_camera\": {
+    \"description\": \"photography, snapshot, picture, film\",
+    \"documentationLinks\": [],
+    \"id\": \"223:228\"
+  },
+  \"pencil\": {
+    \"description\": \"edit, pen, write, scribble, drawing, writing, tool\",
+    \"documentationLinks\": [],
+    \"id\": \"223:318\"
+  },
+  \"chess_pawn\": {
+    \"description\": \"chess, game, play, piece, board\",
+    \"documentationLinks\": [],
+    \"id\": \"223:226\"
+  },
+  \"pause\": {
+    \"description\": \"video, music, playback\",
+    \"documentationLinks\": [],
+    \"id\": \"223:224\"
+  },
+  \"clipboard\": {
+    \"description\": \"paste\",
+    \"documentationLinks\": [],
+    \"id\": \"223:328\"
+  },
+  \"parking_sign\": {
+    \"description\": \"\",
+    \"documentationLinks\": [],
+    \"id\": \"223:242\"
+  },
+  \"palette\": {
+    \"description\": \"paint, color, colour, swatches, tool\",
+    \"documentationLinks\": [],
+    \"id\": \"223:222\"
+  },
+  \"paintbrush\": {
+    \"description\": \"color, colour, tool, drawing\",
+    \"documentationLinks\": [],
+    \"id\": \"223:219\"
+  },
+  \"oven\": {
+    \"description\": \"bake, cook, kitchen, food\",
+    \"documentationLinks\": [],
+    \"id\": \"223:216\"
+  },
+  \"subdivision\": {
+    \"description\": \"octtree, quadtree, grid, square\",
+    \"documentationLinks\": [],
+    \"id\": \"223:107\"
+  },
+  \"octagon\": {
+    \"description\": \"shape, primitive, 2d, angle, geometry\",
+    \"documentationLinks\": [],
+    \"id\": \"223:192\"
+  },
+  \"numbers\": {
+    \"description\": \"digits, counting, counter, increase, decrease, mathematics, figures\",
+    \"documentationLinks\": [],
+    \"id\": \"223:210\"
+  },
+  \"note_double\": {
+    \"description\": \"music, song, audio, sound\",
+    \"documentationLinks\": [],
+    \"id\": \"223:263\"
+  },
+  \"note\": {
+    \"description\": \"music, song, audio, sound\",
+    \"documentationLinks\": [],
+    \"id\": \"223:60\"
+  },
+  \"no_symbol\": {
+    \"description\": \"prohibition, forbid, interdiction, disabled, prevent, ban\",
+    \"documentationLinks\": [],
+    \"id\": \"223:322\"
+  },
+  \"no_entry\": {
+    \"description\": \"prohibition, forbid, interdiction, disabled, prevent, ban\",
+    \"documentationLinks\": [],
+    \"id\": \"223:203\"
+  },
+  \"moving_platform\": {
+    \"description\": \"slide, motion, track\",
+    \"documentationLinks\": [],
+    \"id\": \"223:332\"
+  },
+  \"move\": {
+    \"description\": \"arrow, translate\",
+    \"documentationLinks\": [],
+    \"id\": \"223:145\"
+  },
+  \"mouse\": {
+    \"description\": \"click, peripheral, control, interact, device, tech, computer\",
+    \"documentationLinks\": [],
+    \"id\": \"223:204\"
+  },
+  \"mountains\": {
+    \"description\": \"hills, terrain, world, map, location, focus, far, horizon, landscape\",
+    \"documentationLinks\": [],
+    \"id\": \"223:121\"
+  },
+  \"moon\": {
+    \"description\": \"night, dark, satellite, crescent, phase, moonlight\",
+    \"documentationLinks\": [],
+    \"id\": \"223:235\"
+  },
+  \"mobile_phone\": {
+    \"description\": \"device, tech, app, call, smartphone, technology\",
+    \"documentationLinks\": [],
+    \"id\": \"223:201\"
+  },
+  \"missile\": {
+    \"description\": \"explosive, weapon, boom, explode, blast, bomb, combat, ranged, kill, nuke, nuclear, warfare, military\",
+    \"documentationLinks\": [],
+    \"id\": \"223:198\"
+  },
+  \"microphone\": {
+    \"description\": \"call, chat, voice, communication\",
+    \"documentationLinks\": [],
+    \"id\": \"223:195\"
+  },
+  \"medkit\": {
+    \"description\": \"heal, health, pharmacy, cross, medicine, item, collectible, pickup\",
+    \"documentationLinks\": [],
+    \"id\": \"223:391\"
+  },
+  \"medal_3rd\": {
+    \"description\": \"reward, leaderboard, award, third, ranking, victory, champion\",
+    \"documentationLinks\": [],
+    \"id\": \"223:288\"
+  },
+  \"medal_2nd\": {
+    \"description\": \"reward, leaderboard, award, second, ranking, victory, champion\",
+    \"documentationLinks\": [],
+    \"id\": \"223:227\"
+  },
+  \"medal_1st\": {
+    \"description\": \"reward, leaderboard, award, first, ranking, victory, champion\",
+    \"documentationLinks\": [],
+    \"id\": \"223:193\"
+  },
+  \"medal\": {
+    \"description\": \"reward, leaderboard, award, first, ranking, victory, champion\",
+    \"documentationLinks\": [],
+    \"id\": \"223:189\"
+  },
+  \"meat_eaten\": {
+    \"description\": \"food, eat, lamb, pork, beef, hunger\",
+    \"documentationLinks\": [],
+    \"id\": \"223:185\"
+  },
+  \"meat\": {
+    \"description\": \"food, eat, lamb, pork, beef, hunger\",
+    \"documentationLinks\": [],
+    \"id\": \"223:184\"
+  },
+  \"map\": {
+    \"description\": \"fold, atlas, world, location\",
+    \"documentationLinks\": [],
+    \"id\": \"223:400\"
+  },
+  \"magnifying_glass\": {
+    \"description\": \"search, zoom, look, seek, find\",
+    \"documentationLinks\": [],
+    \"id\": \"223:206\"
+  },
+  \"magnet\": {
+    \"description\": \"attract, snap, physics, magnetism\",
+    \"documentationLinks\": [],
+    \"id\": \"223:361\"
+  },
+  \"magic_wand\": {
+    \"description\": \"select, magician, wizard, sorcery, sparkle\",
+    \"documentationLinks\": [],
+    \"id\": \"223:182\"
+  },
+  \"lock\": {
+    \"description\": \"security, key, padlock\",
+    \"documentationLinks\": [],
+    \"id\": \"223:168\"
+  },
+  \"location\": {
+    \"description\": \"pin, marker, map, position, goal, waypoint, itinerary, direction\",
+    \"documentationLinks\": [],
+    \"id\": \"223:347\"
+  },
+  \"link\": {
+    \"description\": \"chains, chained, attach\",
+    \"documentationLinks\": [],
+    \"id\": \"223:200\"
+  },
+  \"lightning_bolt\": {
+    \"description\": \"bolt, electricity, power, zap, powerup, generator, elemental, energy\",
+    \"documentationLinks\": [],
+    \"id\": \"223:211\"
+  },
+  \"lightbulb\": {
+    \"description\": \"lamp, point, spotlight, filament, lighting\",
+    \"documentationLinks\": [],
+    \"id\": \"223:380\"
+  },
+  \"library\": {
+    \"description\": \"books, bookshelf, sort, store, read\",
+    \"documentationLinks\": [],
+    \"id\": \"223:179\"
+  },
+  \"leaf\": {
+    \"description\": \"nature, plant, ecology, eco, savings\",
+    \"documentationLinks\": [],
+    \"id\": \"223:268\"
+  },
+  \"layers\": {
+    \"description\": \"pile, stack, parallax\",
+    \"documentationLinks\": [],
+    \"id\": \"223:177\"
+  },
+  \"laser_gun\": {
+    \"description\": \"weapon, scifi, shot, ammunition, ammo, pistol, blaster, combat, firearm, fight, ranged\",
+    \"documentationLinks\": [],
+    \"id\": \"223:289\"
+  },
+  \"laptop\": {
+    \"description\": \"computer, tech, device, monitor, cpu, ram, gpu, pc, portable\",
+    \"documentationLinks\": [],
+    \"id\": \"223:265\"
+  },
+  \"ladder\": {
+    \"description\": \"climb, ascend, elevate, up, down, level, floor\",
+    \"documentationLinks\": [],
+    \"id\": \"223:176\"
+  },
+  \"chess_knight\": {
+    \"description\": \"horse, animal, pawn, play, piece, chess, game, board\",
+    \"documentationLinks\": [],
+    \"id\": \"223:356\"
+  },
+  \"knife\": {
+    \"description\": \"weapon, blade, knife, stab, attack, hurt, cut, slice, combat, kill, sharp, cooking, kitchen\",
+    \"documentationLinks\": [],
+    \"id\": \"223:382\"
+  },
+  \"chess_king\": {
+    \"description\": \"pawn, play, piece, chess, game, board, crown\",
+    \"documentationLinks\": [],
+    \"id\": \"223:209\"
+  },
+  \"keyhole\": {
+    \"description\": \"lock, peep, unlock, security\",
+    \"documentationLinks\": [],
+    \"id\": \"223:166\"
+  },
+  \"keyboard\": {
+    \"description\": \"keys, button, type, text, typing, write, control, peripheral, interact, device, tech, computer\",
+    \"documentationLinks\": [],
+    \"id\": \"223:174\"
+  },
+  \"key_modern\": {
+    \"description\": \"lock, unlock, item, collectible, encryption, security\",
+    \"documentationLinks\": [],
+    \"id\": \"223:173\"
+  },
+  \"key\": {
+    \"description\": \"lock, unlock, item, collectible, encryption, security\",
+    \"documentationLinks\": [],
+    \"id\": \"223:191\"
+  },
+  \"joystick\": {
+    \"description\": \"controller, dpad, button, game, play, gaming, video, gamepad, analog, directional, peripheral\",
+    \"documentationLinks\": [],
+    \"id\": \"223:172\"
+  },
+  \"joypad\": {
+    \"description\": \"controller, dpad, button, game, play, gaming, video, gamepad, peripheral\",
+    \"documentationLinks\": [],
+    \"id\": \"223:259\"
+  },
+  \"itinerary\": {
+    \"description\": \"path, location, marker, pin, map, route, directions\",
+    \"documentationLinks\": [],
+    \"id\": \"223:261\"
+  },
+  \"institutional_building\": {
+    \"description\": \"structure, townhall, court, public\",
+    \"documentationLinks\": [],
+    \"id\": \"223:367\"
+  },
+  \"image\": {
+    \"description\": \"photograph, picture, landscape, texture\",
+    \"documentationLinks\": [],
+    \"id\": \"223:170\"
+  },
+  \"icons\": {
+    \"description\": \"shapes, symbols, glyphs\",
+    \"documentationLinks\": [],
+    \"id\": \"223:167\"
+  },
+  \"human\": {
+    \"description\": \"person, player, avatar, npc, character, friend, smile, body, user\",
+    \"documentationLinks\": [],
+    \"id\": \"223:164\"
+  },
+  \"house\": {
+    \"description\": \"home, building, residential, structure\",
+    \"documentationLinks\": [],
+    \"id\": \"223:162\"
+  },
+  \"hourglass\": {
+    \"description\": \"timer, sand, wait, patience\",
+    \"documentationLinks\": [],
+    \"id\": \"223:161\"
+  },
+  \"hinge_joint\": {
+    \"description\": \"attach, connect, rotate, swing, pivot, articulation, affix\",
+    \"documentationLinks\": [],
+    \"id\": \"223:157\"
+  },
+  \"hexagon\": {
+    \"description\": \"shape, 2d, angle, primitive\",
+    \"documentationLinks\": [],
+    \"id\": \"223:186\"
+  },
+  \"heart_broken\": {
+    \"description\": \"heartbreak, pain, dislike, hurt, health, dead\",
+    \"documentationLinks\": [],
+    \"id\": \"223:194\"
+  },
+  \"heart\": {
+    \"description\": \"life, lives, love, organ, card, suit, figure, blood, living, alive, body, health\",
+    \"documentationLinks\": [],
+    \"id\": \"223:285\"
+  },
+  \"head_with_gear\": {
+    \"description\": \"process, thinking, thought, memory, intelligence\",
+    \"documentationLinks\": [],
+    \"id\": \"223:152\"
+  },
+  \"handset\": {
+    \"description\": \"call, phone, communicate, communication, microphone, chat, speak\",
+    \"documentationLinks\": [],
+    \"id\": \"223:149\"
+  },
+  \"hand\": {
+    \"description\": \"stop, wave, body, fingers, palm, drag, cursor, pointer, prohibit\",
+    \"documentationLinks\": [],
+    \"id\": \"223:47\"
+  },
+  \"hammer\": {
+    \"description\": \"tool, strike, fix, repair, diagnose, diagnostics\",
+    \"documentationLinks\": [],
+    \"id\": \"223:386\"
+  },
+  \"gun\": {
+    \"description\": \"weapon, combat, kill, firearm, glock, pistol, bullet, ammo, ammunition, fight, ranged, warfare, military\",
+    \"documentationLinks\": [],
+    \"id\": \"223:150\"
+  },
+  \"grid_fine\": {
+    \"description\": \"dense, subdivide, geometry, mesh\",
+    \"documentationLinks\": [],
+    \"id\": \"223:147\"
+  },
+  \"grid_coarse\": {
+    \"description\": \"subdivide, geometry, mesh\",
+    \"documentationLinks\": [],
+    \"id\": \"223:221\"
+  },
+  \"grenade\": {
+    \"description\": \"explosive, weapon, boom, explode, blast, bomb, combat, ranged, kill, warfare, military\",
+    \"documentationLinks\": [],
+    \"id\": \"223:378\"
+  },
+  \"gravity\": {
+    \"description\": \"apple, fall, attraction, force\",
+    \"documentationLinks\": [],
+    \"id\": \"223:155\"
+  },
+  \"golf_club\": {
+    \"description\": \"sports, play, ball, par, course, game\",
+    \"documentationLinks\": [],
+    \"id\": \"223:249\"
+  },
+  \"golf_ball\": {
+    \"description\": \"sports, play, club, par, course, game\",
+    \"documentationLinks\": [],
+    \"id\": \"223:163\"
+  },
+  \"gobot\": {
+    \"description\": \"godot, robot\",
+    \"documentationLinks\": [],
+    \"id\": \"223:144\"
+  },
+  \"globe\": {
+    \"description\": \"earth, website, meridian, latitude, longitude, geography, equator, networking, internet, online, language, international\",
+    \"documentationLinks\": [],
+    \"id\": \"223:143\"
+  },
+  \"glass\": {
+    \"description\": \"drink, liquid, beverage, container\",
+    \"documentationLinks\": [],
+    \"id\": \"223:278\"
+  },
+  \"gimbal\": {
+    \"description\": \"rotate, transform, axis, axes, trackball, gyroscope, motion\",
+    \"documentationLinks\": [],
+    \"id\": \"223:141\"
+  },
+  \"ghost\": {
+    \"description\": \"dead, monster, creature, scared, shy, hide, invisible, follow, haunt, fantasy, enemy\",
+    \"documentationLinks\": [],
+    \"id\": \"223:151\"
+  },
+  \"gauge\": {
+    \"description\": \"speedometer, performance, display, monitoring, diagnostics\",
+    \"documentationLinks\": [],
+    \"id\": \"223:140\"
+  },
+  \"gate\": {
+    \"description\": \"obstacle, close, door, enclose, fence, barrier\",
+    \"documentationLinks\": [],
+    \"id\": \"223:32\"
+  },
+  \"die\": {
+    \"description\": \"play, game, board, random, randomize, dice\",
+    \"documentationLinks\": [],
+    \"id\": \"223:323\"
+  },
+  \"galaxy\": {
+    \"description\": \"space, milky, way, nebula, stars, cosmos, scifi, science, astronomy, alien\",
+    \"documentationLinks\": [],
+    \"id\": \"223:137\"
+  },
+  \"force_field\": {
+    \"description\": \"arrows, gravity, area, physics, influence\",
+    \"documentationLinks\": [],
+    \"id\": \"223:277\"
+  },
+  \"football\": {
+    \"description\": \"game, sports, play, kick, throw, goal\",
+    \"documentationLinks\": [],
+    \"id\": \"223:135\"
+  },
+  \"font\": {
+    \"description\": \"text, alphabet, letters, characters, type\",
+    \"documentationLinks\": [],
+    \"id\": \"223:134\"
+  },
+  \"folder_open\": {
+    \"description\": \"file, directory, explorer\",
+    \"documentationLinks\": [],
+    \"id\": \"223:165\"
+  },
+  \"fog\": {
+    \"description\": \"weather, cloud, mist, smog, obscure\",
+    \"documentationLinks\": [],
+    \"id\": \"223:133\"
+  },
+  \"flower\": {
+    \"description\": \"bloom, petals, plant, botany, nature, focus, macro\",
+    \"documentationLinks\": [],
+    \"id\": \"223:129\"
+  },
+  \"floppy_disk\": {
+    \"description\": \"save, data, storage, memory, diskette, data, export\",
+    \"documentationLinks\": [],
+    \"id\": \"223:127\"
+  },
+  \"flag_triangular\": {
+    \"description\": \"checkpoint, finish, start, waypoint, goal, report\",
+    \"documentationLinks\": [],
+    \"id\": \"223:364\"
+  },
+  \"flag_cone\": {
+    \"description\": \"checkpoint, finish, start, waypoint, goal\",
+    \"documentationLinks\": [],
+    \"id\": \"223:238\"
+  },
+  \"flag_checkered\": {
+    \"description\": \"checkpoint, finish, start, checkerboard, goal\",
+    \"documentationLinks\": [],
+    \"id\": \"223:281\"
+  },
+  \"fire\": {
+    \"description\": \"flame, burn, hot, hazard, danger, popular, trending, cook, heat, nature, elemental\",
+    \"documentationLinks\": [],
+    \"id\": \"223:183\"
+  },
+  \"fingerprint\": {
+    \"description\": \"identity, mark\",
+    \"documentationLinks\": [],
+    \"id\": \"223:126\"
+  },
+  \"filter\": {
+    \"description\": \"hopper\",
+    \"documentationLinks\": [],
+    \"id\": \"223:123\"
+  },
+  \"film\": {
+    \"description\": \"strip, movie, cinematography, photography, footage\",
+    \"documentationLinks\": [],
+    \"id\": \"223:120\"
+  },
+  \"file\": {
+    \"description\": \"document, sheet, paper, new\",
+    \"documentationLinks\": [],
+    \"id\": \"223:119\"
+  },
+  \"field_of_view\": {
+    \"description\": \"observer, eye, watch, vision, look\",
+    \"documentationLinks\": [],
+    \"id\": \"223:327\"
+  },
+  \"feather\": {
+    \"description\": \"author, ink, write, pen, bird, fly, animal, nature\",
+    \"documentationLinks\": [],
+    \"id\": \"223:363\"
+  },
+  \"fast_forward\": {
+    \"description\": \"arrow, playback, music, video, triangle, skip, next\",
+    \"documentationLinks\": [],
+    \"id\": \"223:118\"
+  },
+  \"factory\": {
+    \"description\": \"building, construction\",
+    \"documentationLinks\": [],
+    \"id\": \"223:379\"
+  },
+  \"face\": {
+    \"description\": \"geometry, editing, cube, 3d, mesh, quad, modeling\",
+    \"documentationLinks\": [],
+    \"id\": \"223:113\"
+  },
+  \"eye_closed\": {
+    \"description\": \"hide, hidden, conceal\",
+    \"documentationLinks\": [],
+    \"id\": \"223:112\"
+  },
+  \"eye\": {
+    \"description\": \"show, watch, look, observe\",
+    \"documentationLinks\": [],
+    \"id\": \"223:109\"
+  },
+  \"expand\": {
+    \"description\": \"scale, arrows, upscale\",
+    \"documentationLinks\": [],
+    \"id\": \"223:108\"
+  },
+  \"envelope\": {
+    \"description\": \"mail, email, e-mail, send, communication, message, inbox, sent\",
+    \"documentationLinks\": [],
+    \"id\": \"223:105\"
+  },
+  \"doorway_entrance\": {
+    \"description\": \"doorway, arrow, enter, transition\",
+    \"documentationLinks\": [],
+    \"id\": \"223:104\"
+  },
+  \"doorway_exit\": {
+    \"description\": \"doorway, arrow, leave, transition\",
+    \"documentationLinks\": [],
+    \"id\": \"223:103\"
+  },
+  \"emitter\": {
+    \"description\": \"antenna, signal, radio, transmitter\",
+    \"documentationLinks\": [],
+    \"id\": \"223:298\"
+  },
+  \"eight_ball\": {
+    \"description\": \"game, play, question, billards, snooker, cue, toy\",
+    \"documentationLinks\": [],
+    \"id\": \"223:100\"
+  },
+  \"edge\": {
+    \"description\": \"geometry, editing, cube, 3d, mesh, modeling\",
+    \"documentationLinks\": [],
+    \"id\": \"223:146\"
+  },
+  \"duplicate\": {
+    \"description\": \"copy, add, plus, double\",
+    \"documentationLinks\": [],
+    \"id\": \"223:97\"
+  },
+  \"droplet\": {
+    \"description\": \"water, sweat, blood, drip, rain, tear, liquid, elemental\",
+    \"documentationLinks\": [],
+    \"id\": \"223:212\"
+  },
+  \"drawing_compass\": {
+    \"description\": \"compasses, drawing, geometry, arc, circle\",
+    \"documentationLinks\": [],
+    \"id\": \"223:275\"
+  },
+  \"doorway\": {
+    \"description\": \"doors, transition, scene, open, entrance, enter, exit, leave\",
+    \"documentationLinks\": [],
+    \"id\": \"223:96\"
+  },
+  \"doors\": {
+    \"description\": \"doorway, transition, scene, open, entrance, enter, exit, leave\",
+    \"documentationLinks\": [],
+    \"id\": \"223:95\"
+  },
+  \"door\": {
+    \"description\": \"doorway, transition, scene, closed, entrance, enter, exit, leave\",
+    \"documentationLinks\": [],
+    \"id\": \"223:93\"
+  },
+  \"division_sign_in_square\": {
+    \"description\": \"divide, calculation, mathematics, operation\",
+    \"documentationLinks\": [],
+    \"id\": \"223:7\"
+  },
+  \"dice\": {
+    \"description\": \"random, die, randomize, game, play, board\",
+    \"documentationLinks\": [],
+    \"id\": \"223:389\"
+  },
+  \"diamond_shape\": {
+    \"description\": \"plane, geometry, quad, square, primitive\",
+    \"documentationLinks\": [],
+    \"id\": \"223:401\"
+  },
+  \"diamond\": {
+    \"description\": \"cards, suit, figure, diamonds, shape, game, play\",
+    \"documentationLinks\": [],
+    \"id\": \"223:377\"
+  },
+  \"desktop\": {
+    \"description\": \"computer, tech, device, monitor, tower, cpu, ram, gpu, pc\",
+    \"documentationLinks\": [],
+    \"id\": \"223:250\"
+  },
+  \"desk_lamp\": {
+    \"description\": \"lighting, lampshade, table\",
+    \"documentationLinks\": [],
+    \"id\": \"223:299\"
+  },
+  \"delivery_box\": {
+    \"description\": \"container, crate, shipment, parcel, package, archive, bundle\",
+    \"documentationLinks\": [],
+    \"id\": \"223:98\"
+  },
+  \"database\": {
+    \"description\": \"pile, information, server, stack\",
+    \"documentationLinks\": [],
+    \"id\": \"223:207\"
+  },
+  \"dash_in_square\": {
+    \"description\": \"subtraction, remove, uncheck, indeterminate, checkbox, math, operation, calculation\",
+    \"documentationLinks\": [],
+    \"id\": \"223:91\"
+  },
+  \"danger\": {
+    \"description\": \"warning, sign, triangle, exclamation\",
+    \"documentationLinks\": [],
+    \"id\": \"223:171\"
+  },
+  \"dagger\": {
+    \"description\": \"weapon, blade, knife, stab, attack, hurt, cut, slice, combat, kill, sharp\",
+    \"documentationLinks\": [],
+    \"id\": \"223:215\"
+  },
+  \"d20\": {
+    \"description\": \"polygon, mesh, 3d, roleplay, dice, die, random, shape, play, game, board, primitive\",
+    \"documentationLinks\": [],
+    \"id\": \"223:83\"
+  },
+  \"cylinder\": {
+    \"description\": \"volume, 3d, shape, mesh, geometry, primitive\",
+    \"documentationLinks\": [],
+    \"id\": \"223:248\"
+  },
+  \"scissors\": {
+    \"description\": \"weapon, blade, tool, cut, splice\",
+    \"documentationLinks\": [],
+    \"id\": \"223:160\"
+  },
+  \"cursor\": {
+    \"description\": \"mouse, arrow, click, interact\",
+    \"documentationLinks\": [],
+    \"id\": \"223:90\"
+  },
+  \"cup\": {
+    \"description\": \"coffee, tea, beverage, food, drink, break, pause\",
+    \"documentationLinks\": [],
+    \"id\": \"223:81\"
+  },
+  \"cube\": {
+    \"description\": \"3d, shape, mesh, volume, quad, geometry, primitive\",
+    \"documentationLinks\": [],
+    \"id\": \"223:270\"
+  },
+  \"cross_in_square\": {
+    \"description\": \"cancel, multiply, no, disagree, mathematics, calculation, multiplication, uncheck, close, operation\",
+    \"documentationLinks\": [],
+    \"id\": \"223:370\"
+  },
+  \"cross\": {
+    \"description\": \"cancel, multiply, no, disagree, mathematics, calculation, multiplication, uncheck, close, operation\",
+    \"documentationLinks\": [],
+    \"id\": \"223:43\"
+  },
+  \"crate\": {
+    \"description\": \"container, collectible, treasure, box, item\",
+    \"documentationLinks\": [],
+    \"id\": \"223:295\"
+  },
+  \"crash_test_dummy\": {
+    \"description\": \"ragdoll, head, experiment, physics, fall\",
+    \"documentationLinks\": [],
+    \"id\": \"223:257\"
+  },
+  \"crane\": {
+    \"description\": \"construction, vehicle, machinery, build, hook, lift\",
+    \"documentationLinks\": [],
+    \"id\": \"223:256\"
+  },
+  \"cpu\": {
+    \"description\": \"chip, memory, ram, gpu, computer, device, tech\",
+    \"documentationLinks\": [],
+    \"id\": \"223:304\"
+  },
+  \"couch\": {
+    \"description\": \"lobby, sit, furniture, chair, sofa, living, room\",
+    \"documentationLinks\": [],
+    \"id\": \"223:80\"
+  },
+  \"files\": {
+    \"description\": \"duplicate, copy, sheets, pages, paper, documents\",
+    \"documentationLinks\": [],
+    \"id\": \"223:335\"
+  },
+  \"conveyor_belt\": {
+    \"description\": \"mover, mechanical, factory\",
+    \"documentationLinks\": [],
+    \"id\": \"223:290\"
+  },
+  \"cone\": {
+    \"description\": \"shape, 3d, volume, geometry, mesh, primitive\",
+    \"documentationLinks\": [],
+    \"id\": \"223:78\"
+  },
+  \"compass\": {
+    \"description\": \"location, orientation, cardinal, wayfinding, path, direction, north, east, south, west, needle\",
+    \"documentationLinks\": [],
+    \"id\": \"223:89\"
+  },
+  \"comet\": {
+    \"description\": \"meteor, space, danger, meteorite, rock, fireball, scifi, science, hazard, astronomy, alien\",
+    \"documentationLinks\": [],
+    \"id\": \"223:77\"
+  },
+  \"coins\": {
+    \"description\": \"money, buy, purchase, treasure, item, pickup, collectible, change, currency\",
+    \"documentationLinks\": [],
+    \"id\": \"223:74\"
+  },
+  \"coin\": {
+    \"description\": \"money, buy, purchase, treasure, item, pickup, collectible, change, currency\",
+    \"documentationLinks\": [],
+    \"id\": \"223:72\"
+  },
+  \"cog\": {
+    \"description\": \"options, settings, configuration, mechanical, machinery\",
+    \"documentationLinks\": [],
+    \"id\": \"223:71\"
+  },
+  \"club\": {
+    \"description\": \"clubs, card, suit, figure, play, game\",
+    \"documentationLinks\": [],
+    \"id\": \"223:348\"
+  },
+  \"cloud\": {
+    \"description\": \"weather, sky, cloudy, float, light, overcast\",
+    \"documentationLinks\": [],
+    \"id\": \"223:69\"
+  },
+  \"clothes_hanger\": {
+    \"description\": \"outfit, clothing, dress, clean\",
+    \"documentationLinks\": [],
+    \"id\": \"223:68\"
+  },
+  \"clock\": {
+    \"description\": \"time, minute, second, hour, timer, alarm, duration\",
+    \"documentationLinks\": [],
+    \"id\": \"223:196\"
+  },
+  \"click\": {
+    \"description\": \"cursor, arrow, interact, mouse\",
+    \"documentationLinks\": [],
+    \"id\": \"223:67\"
+  },
+  \"clapperboard\": {
+    \"description\": \"scene, film, filmmaking, shot, transition, cut, movie, cinematography\",
+    \"documentationLinks\": [],
+    \"id\": \"223:317\"
+  },
+  \"circle\": {
+    \"description\": \"ball, round, circular, shape, 2d, primitive, sphere\",
+    \"documentationLinks\": [],
+    \"id\": \"223:65\"
+  },
+  \"chest\": {
+    \"description\": \"container, treasure, store, stash, riches, loot, box, lock, inventory\",
+    \"documentationLinks\": [],
+    \"id\": \"223:315\"
+  },
+  \"checkmark_in_square\": {
+    \"description\": \"tick, approve, validate, agree\",
+    \"documentationLinks\": [],
+    \"id\": \"223:339\"
+  },
+  \"checkmark\": {
+    \"description\": \"tick, approve, validate, correct, agree\",
+    \"documentationLinks\": [],
+    \"id\": \"223:64\"
+  },
+  \"checkerboard_circle\": {
+    \"description\": \"texture, ball, square, mosaic, UV\",
+    \"documentationLinks\": [],
+    \"id\": \"223:73\"
+  },
+  \"checkerboard\": {
+    \"description\": \"texture, floor, square, mosaic, UV\",
+    \"documentationLinks\": [],
+    \"id\": \"223:233\"
+  },
+  \"castle\": {
+    \"description\": \"fortress, building\",
+    \"documentationLinks\": [],
+    \"id\": \"223:354\"
+  },
+  \"car\": {
+    \"description\": \"vehicle, transportation, drive, race\",
+    \"documentationLinks\": [],
+    \"id\": \"223:63\"
+  },
+  \"calendar\": {
+    \"description\": \"date, time, month, day, year, agenda, planning\",
+    \"documentationLinks\": [],
+    \"id\": \"223:260\"
+  },
+  \"calculator\": {
+    \"description\": \"mathematics, device, tech, calculate, multiply, add, subtract, divide, operation\",
+    \"documentationLinks\": [],
+    \"id\": \"223:148\"
+  },
+  \"bunny\": {
+    \"description\": \"rabbit, animal, livestock, pet\",
+    \"documentationLinks\": [],
+    \"id\": \"223:10\"
+  },
+  \"bullseye\": {
+    \"description\": \"weapon, attack, target, fight, combat, hit, aim, projectile, ammunition, ammo, kill, shot, fire, penetrate, ranged\",
+    \"documentationLinks\": [],
+    \"id\": \"223:371\"
+  },
+  \"bullet\": {
+    \"description\": \"ammunition, ammo, combat, weapon, firearm, shoot, shot, kill, ranged\",
+    \"documentationLinks\": [],
+    \"id\": \"223:199\"
+  },
+  \"bulldozer\": {
+    \"description\": \"destroy, demolish, demolition, construction, vehicle, heavy, machinery, scoop, build\",
+    \"documentationLinks\": [],
+    \"id\": \"223:33\"
+  },
+  \"building\": {
+    \"description\": \"apartment, residential, home, house, living, settlement\",
+    \"documentationLinks\": [],
+    \"id\": \"223:175\"
+  },
+  \"bug\": {
+    \"description\": \"insect, issue, glitch, critter\",
+    \"documentationLinks\": [],
+    \"id\": \"223:273\"
+  },
+  \"bucket_fill\": {
+    \"description\": \"tool, paint, draw, drawing, flood\",
+    \"documentationLinks\": [],
+    \"id\": \"223:61\"
+  },
+  \"brush\": {
+    \"description\": \"clean, clear, sweep, broom\",
+    \"documentationLinks\": [],
+    \"id\": \"223:58\"
+  },
+  \"briefcase\": {
+    \"description\": \"suitcase, container, store, storage\",
+    \"documentationLinks\": [],
+    \"id\": \"223:202\"
+  },
+  \"brick_wall\": {
+    \"description\": \"bricks, construction, build, construct, assemble\",
+    \"documentationLinks\": [],
+    \"id\": \"223:94\"
+  },
+  \"brain\": {
+    \"description\": \"health, organ, think, thought, intelligence, anatomy, body, head, memory\",
+    \"documentationLinks\": [],
+    \"id\": \"223:393\"
+  },
+  \"boxing_glove\": {
+    \"description\": \"fight, combat, punch, equipment, weapon, hit, attack, melee\",
+    \"documentationLinks\": [],
+    \"id\": \"223:57\"
+  },
+  \"box\": {
+    \"description\": \"cube, container, shape, volume, 3d, mesh, quad, geometry, primitive, modeling\",
+    \"documentationLinks\": [],
+    \"id\": \"223:55\"
+  },
+  \"bowling_pin\": {
+    \"description\": \"sports, game, play, throw, roll, strike, spare\",
+    \"documentationLinks\": [],
+    \"id\": \"223:307\"
+  },
+  \"bowling_ball\": {
+    \"description\": \"sports, game, play, throw, roll, strike, spare\",
+    \"documentationLinks\": [],
+    \"id\": \"223:79\"
+  },
+  \"bow_and_arrow\": {
+    \"description\": \"weapon, ranged, combat, fight, shoot, shot, kill, ranged\",
+    \"documentationLinks\": [],
+    \"id\": \"223:88\"
+  },
+  \"bot\": {
+    \"description\": \"robot, mechanical, artificial, ai, cpu\",
+    \"documentationLinks\": [],
+    \"id\": \"223:52\"
+  },
+  \"bookmark\": {
+    \"description\": \"save, keep\",
+    \"documentationLinks\": [],
+    \"id\": \"223:122\"
+  },
+  \"book_open\": {
+    \"description\": \"read, documentation, page, album, text\",
+    \"documentationLinks\": [],
+    \"id\": \"223:230\"
+  },
+  \"book\": {
+    \"description\": \"read, documentation, album, text\",
+    \"documentationLinks\": [],
+    \"id\": \"223:125\"
+  },
+  \"bone_horizontal\": {
+    \"description\": \"femur, humerus, body, anatomy, skeleton\",
+    \"documentationLinks\": [],
+    \"id\": \"223:51\"
+  },
+  \"bone_fracture\": {
+    \"description\": \"body, health, illness, affliction, pain, anatomy\",
+    \"documentationLinks\": [],
+    \"id\": \"223:82\"
+  },
+  \"bone\": {
+    \"description\": \"femur, humerus, body, anatomy, skeleton\",
+    \"documentationLinks\": [],
+    \"id\": \"223:50\"
+  },
+  \"bomb\": {
+    \"description\": \"explosive, weapon, boom, explode, blast, combat, ranged\",
+    \"documentationLinks\": [],
+    \"id\": \"223:395\"
+  },
+  \"boat\": {
+    \"description\": \"vehicle, sea, ship\",
+    \"documentationLinks\": [],
+    \"id\": \"223:130\"
+  },
+  \"black_hole\": {
+    \"description\": \"space\",
+    \"documentationLinks\": [],
+    \"id\": \"223:106\"
+  },
+  \"chess_bishop\": {
+    \"description\": \"chess, piece, pawn, play, game, board\",
+    \"documentationLinks\": [],
+    \"id\": \"223:153\"
+  },
+  \"binoculars\": {
+    \"description\": \"seek, find, look, observe\",
+    \"documentationLinks\": [],
+    \"id\": \"223:358\"
+  },
+  \"bike\": {
+    \"description\": \"bicycle, cycling, vehicle, transportation\",
+    \"documentationLinks\": [],
+    \"id\": \"223:49\"
+  },
+  \"bell\": {
+    \"description\": \"notification, ring\",
+    \"documentationLinks\": [],
+    \"id\": \"223:48\"
+  },
+  \"beaker\": {
+    \"description\": \"science, chemistry, potion, flask, experimental\",
+    \"documentationLinks\": [],
+    \"id\": \"223:45\"
+  },
+  \"basketball\": {
+    \"description\": \"sports, game, dribble, throw, play\",
+    \"documentationLinks\": [],
+    \"id\": \"223:44\"
+  },
+  \"baseball_bat\": {
+    \"description\": \"weapon, sports, game, hit, play, combat, attack, melee\",
+    \"documentationLinks\": [],
+    \"id\": \"223:360\"
+  },
+  \"baseball\": {
+    \"description\": \"sports, game, throw, play\",
+    \"documentationLinks\": [],
+    \"id\": \"223:42\"
+  },
+  \"banner\": {
+    \"description\": \"waypoint, flag\",
+    \"documentationLinks\": [],
+    \"id\": \"223:85\"
+  },
+  \"bandages\": {
+    \"description\": \"heal, medicine, health\",
+    \"documentationLinks\": [],
+    \"id\": \"223:217\"
+  },
+  \"balloon\": {
+    \"description\": \"float, light, play, game\",
+    \"documentationLinks\": [],
+    \"id\": \"223:40\"
+  },
+  \"ball_and_socket_joint\": {
+    \"description\": \"attach, connect, rotate, swing, pivot, articulation, affix\",
+    \"documentationLinks\": [],
+    \"id\": \"223:38\"
+  },
+  \"badge\": {
+    \"description\": \"flower, petals, star, award\",
+    \"documentationLinks\": [],
+    \"id\": \"223:36\"
+  },
+  \"backpack\": {
+    \"description\": \"bag, carry, inventory, storage\",
+    \"documentationLinks\": [],
+    \"id\": \"223:35\"
+  },
+  \"axe\": {
+    \"description\": \"weapon, tool, chop, cut, kill, resource\",
+    \"documentationLinks\": [],
+    \"id\": \"223:403\"
+  },
+  \"atom\": {
+    \"description\": \"molecule, chemistry, science, physics\",
+    \"documentationLinks\": [],
+    \"id\": \"223:139\"
+  },
+  \"at\": {
+    \"description\": \"mention, annotation\",
+    \"documentationLinks\": [],
+    \"id\": \"223:385\"
+  },
+  \"arrows_counterclockwise\": {
+    \"description\": \"refresh, rotate, cycle\",
+    \"documentationLinks\": [],
+    \"id\": \"223:75\"
+  },
+  \"arrows_clockwise\": {
+    \"description\": \"refresh, rotate, cycle\",
+    \"documentationLinks\": [],
+    \"id\": \"223:111\"
+  },
+  \"arrow_x\": {
+    \"description\": \"expand, resize\",
+    \"documentationLinks\": [],
+    \"id\": \"223:31\"
+  },
+  \"arrow_uturn_up_right\": {
+    \"description\": \"redo\",
+    \"documentationLinks\": [],
+    \"id\": \"223:30\"
+  },
+  \"arrow_uturn_right_up\": {
+    \"description\": \"\",
+    \"documentationLinks\": [],
+    \"id\": \"223:241\"
+  },
+  \"arrow_uturn_right_down\": {
+    \"description\": \"\",
+    \"documentationLinks\": [],
+    \"id\": \"223:29\"
+  },
+  \"arrow_uturn_left_up\": {
+    \"description\": \"\",
+    \"documentationLinks\": [],
+    \"id\": \"223:76\"
+  },
+  \"arrow_uturn_left_down\": {
+    \"description\": \"\",
+    \"documentationLinks\": [],
+    \"id\": \"223:39\"
+  },
+  \"arrow_uturn_down_right\": {
+    \"description\": \"redo\",
+    \"documentationLinks\": [],
+    \"id\": \"223:213\"
+  },
+  \"arrow_uturn_down_left\": {
+    \"description\": \"undo\",
+    \"documentationLinks\": [],
+    \"id\": \"223:28\"
+  },
+  \"arrow_uturn_up_left\": {
+    \"description\": \"undo\",
+    \"documentationLinks\": [],
+    \"id\": \"223:110\"
+  },
+  \"arrow_up_to_line\": {
+    \"description\": \"\",
+    \"documentationLinks\": [],
+    \"id\": \"223:344\"
+  },
+  \"arrow_up_right\": {
+    \"description\": \"external\",
+    \"documentationLinks\": [],
+    \"id\": \"223:12\"
+  },
+  \"arrow_up_left\": {
+    \"description\": \"\",
+    \"documentationLinks\": [],
+    \"id\": \"223:337\"
+  },
+  \"arrow_up_from_line\": {
+    \"description\": \"upload, import\",
+    \"documentationLinks\": [],
+    \"id\": \"223:252\"
+  },
+  \"arrow_up_from_bracket\": {
+    \"description\": \"upload, import\",
+    \"documentationLinks\": [],
+    \"id\": \"223:66\"
+  },
+  \"arrow_up\": {
+    \"description\": \"\",
+    \"documentationLinks\": [],
+    \"id\": \"223:292\"
+  },
+  \"arrow_turn_up_right\": {
+    \"description\": \"\",
+    \"documentationLinks\": [],
+    \"id\": \"223:220\"
+  },
+  \"arrow_turn_up_left\": {
+    \"description\": \"\",
+    \"documentationLinks\": [],
+    \"id\": \"223:54\"
+  },
+  \"arrow_turn_right_up\": {
+    \"description\": \"\",
+    \"documentationLinks\": [],
+    \"id\": \"223:34\"
+  },
+  \"arrow_turn_right_down\": {
+    \"description\": \"\",
+    \"documentationLinks\": [],
+    \"id\": \"223:26\"
+  },
+  \"arrow_turn_left_up\": {
+    \"description\": \"\",
+    \"documentationLinks\": [],
+    \"id\": \"223:205\"
+  },
+  \"arrow_turn_left_down\": {
+    \"description\": \"\",
+    \"documentationLinks\": [],
+    \"id\": \"223:23\"
+  },
+  \"arrow_turn_down_right\": {
+    \"description\": \"\",
+    \"documentationLinks\": [],
+    \"id\": \"223:87\"
+  },
+  \"arrow_turn_down_left\": {
+    \"description\": \"\",
+    \"documentationLinks\": [],
+    \"id\": \"223:136\"
+  },
+  \"arrow_split\": {
+    \"description\": \"\",
+    \"documentationLinks\": [],
+    \"id\": \"223:132\"
+  },
+  \"arrow_shuffle\": {
+    \"description\": \"randomize\",
+    \"documentationLinks\": [],
+    \"id\": \"223:229\"
+  },
+  \"arrow_right_to_line\": {
+    \"description\": \"enter\",
+    \"documentationLinks\": [],
+    \"id\": \"223:22\"
+  },
+  \"arrow_right_to_bracket\": {
+    \"description\": \"\",
+    \"documentationLinks\": [],
+    \"id\": \"223:21\"
+  },
+  \"arrow_right_from_line\": {
+    \"description\": \"exit\",
+    \"documentationLinks\": [],
+    \"id\": \"223:20\"
+  },
+  \"arrow_right_from_bracket\": {
+    \"description\": \"\",
+    \"documentationLinks\": [],
+    \"id\": \"223:18\"
+  },
+  \"arrow_right_arrow_left\": {
+    \"description\": \"\",
+    \"documentationLinks\": [],
+    \"id\": \"223:114\"
+  },
+  \"arrow_right\": {
+    \"description\": \"next, forward\",
+    \"documentationLinks\": [],
+    \"id\": \"223:159\"
+  },
+  \"arrow_merge\": {
+    \"description\": \"\",
+    \"documentationLinks\": [],
+    \"id\": \"223:225\"
+  },
+  \"arrow_local_axes\": {
+    \"description\": \"transform, coordinates, axis, relative, vector3, vec3, x, y, z, position, location, dimensional, space, spatial\",
+    \"documentationLinks\": [],
+    \"id\": \"223:312\"
+  },
+  \"arrow_left_to_line\": {
+    \"description\": \"enter\",
+    \"documentationLinks\": [],
+    \"id\": \"223:17\"
+  },
+  \"arrow_left_from_line\": {
+    \"description\": \"exit\",
+    \"documentationLinks\": [],
+    \"id\": \"223:352\"
+  },
+  \"arrow_left\": {
+    \"description\": \"previous, back\",
+    \"documentationLinks\": [],
+    \"id\": \"223:46\"
+  },
+  \"arrow_down_to_line\": {
+    \"description\": \"download, save\",
+    \"documentationLinks\": [],
+    \"id\": \"223:15\"
+  },
+  \"arrow_down_to_bracket\": {
+    \"description\": \"download, save\",
+    \"documentationLinks\": [],
+    \"id\": \"223:373\"
+  },
+  \"arrow_down_right\": {
+    \"description\": \"\",
+    \"documentationLinks\": [],
+    \"id\": \"223:14\"
+  },
+  \"arrow_down_left\": {
+    \"description\": \"\",
+    \"documentationLinks\": [],
+    \"id\": \"223:178\"
+  },
+  \"arrow_down_from_line\": {
+    \"description\": \"\",
+    \"documentationLinks\": [],
+    \"id\": \"223:266\"
+  },
+  \"arrow_down_arrow_up\": {
+    \"description\": \"sort\",
+    \"documentationLinks\": [],
+    \"id\": \"223:13\"
+  },
+  \"arrow_down\": {
+    \"description\": \"\",
+    \"documentationLinks\": [],
+    \"id\": \"223:124\"
+  },
+  \"arrow_double_vertical\": {
+    \"description\": \"height, stretch\",
+    \"documentationLinks\": [],
+    \"id\": \"223:223\"
+  },
+  \"arrow_double_horizontal\": {
+    \"description\": \"width, stretch\",
+    \"documentationLinks\": [],
+    \"id\": \"223:11\"
+  },
+  \"arrow_double_diagonal_reverse\": {
+    \"description\": \"scale\",
+    \"documentationLinks\": [],
+    \"id\": \"223:116\"
+  },
+  \"arrow_double_diagonal\": {
+    \"description\": \"scale\",
+    \"documentationLinks\": [],
+    \"id\": \"223:237\"
+  },
+  \"arrow_cross\": {
+    \"description\": \"move, translate, translation, motion\",
+    \"documentationLinks\": [],
+    \"id\": \"223:27\"
+  },
+  \"arrow_counterclockwise\": {
+    \"description\": \"reset, rotate, anticlockwise\",
+    \"documentationLinks\": [],
+    \"id\": \"223:338\"
+  },
+  \"arrow_clockwise\": {
+    \"description\": \"refresh, rotate\",
+    \"documentationLinks\": [],
+    \"id\": \"223:9\"
+  },
+  \"arrow_axes\": {
+    \"description\": \"3d, orthographic, transform, coordinates, axis, vector3, vec3, x, y, z, position, location, dimensional, space, spatial\",
+    \"documentationLinks\": [],
+    \"id\": \"223:330\"
+  },
+  \"arrow_projectile\": {
+    \"description\": \"weapon, ammunition, ammo, combat, fight, shoot, shot, kill, ranged\",
+    \"documentationLinks\": [],
+    \"id\": \"223:8\"
+  },
+  \"area\": {
+    \"description\": \"zone, field, volume, barrier, wall\",
+    \"documentationLinks\": [],
+    \"id\": \"223:302\"
+  },
+  \"archive\": {
+    \"description\": \"box, stash, store, asset, container, storage, package, bundle\",
+    \"documentationLinks\": [],
+    \"id\": \"223:56\"
+  },
+  \"apple_eaten\": {
+    \"description\": \"food, eat, fruit, hunger\",
+    \"documentationLinks\": [],
+    \"id\": \"223:142\"
+  },
+  \"apple\": {
+    \"description\": \"food, eat, fruit, hunger\",
+    \"documentationLinks\": [],
+    \"id\": \"223:41\"
+  },
+  \"anchor\": {
+    \"description\": \"\",
+    \"documentationLinks\": [],
+    \"id\": \"223:218\"
+  },
+  \"ammunition\": {
+    \"description\": \"ammo, bullets, collectible, item, pickup, firearm, combat, fight, kill, ranged\",
+    \"documentationLinks\": [],
+    \"id\": \"223:131\"
+  },
+  \"american_football\": {
+    \"description\": \"sports, game, play, throw\",
+    \"documentationLinks\": [],
+    \"id\": \"223:310\"
+  },
+  \"microphone_mute\": {
+    \"description\": \"communicate, voice, chat, silence\",
+    \"documentationLinks\": [],
+    \"id\": \"223:101\"
+  },
+  \"jigsaw_piece\": {
+    \"description\": \"puzzle, addon, plugin, module, component\",
+    \"documentationLinks\": [],
+    \"id\": \"223:6\"
+  },
+  \"thumbs_up\": {
+    \"description\": \"like, rate, body, hand, approve, agree\",
+    \"documentationLinks\": [],
+    \"id\": \"223:325\"
+  },
+  \"thumbs_down\": {
+    \"description\": \"dislike, rate, body, hand, disapprove, disagree\",
+    \"documentationLinks\": [],
+    \"id\": \"223:5\"
+  },
+  \"eraser\": {
+    \"description\": \"tool, drawing, painting\",
+    \"documentationLinks\": [],
+    \"id\": \"223:62\"
+  },
+  \"weight\": {
+    \"description\": \"density, mass, ton\",
+    \"documentationLinks\": [],
+    \"id\": \"223:4\"
+  },
+  \"explosion\": {
+    \"description\": \"boom, blast, fireball, danger, hazard, bomb, explosive\",
+    \"documentationLinks\": [],
+    \"id\": \"223:180\"
+  },
+  \"wing\": {
+    \"description\": \"fly, flap, feather\",
+    \"documentationLinks\": [],
+    \"id\": \"223:474\"
+  },
+  \"window_terminal\": {
+    \"description\": \"command, prompt, type, code, development, programming, scripting\",
+    \"documentationLinks\": [],
+    \"id\": \"223:504\"
+  },
+  \"window_script\": {
+    \"description\": \"command, prompt, type, code, development, programming, scripting, terminal\",
+    \"documentationLinks\": [],
+    \"id\": \"223:511\"
+  },
+  \"wheel\": {
+    \"description\": \"vehicle, spin, roll, drive, tire, tyre\",
+    \"documentationLinks\": [],
+    \"id\": \"223:487\"
+  },
+  \"wave\": {
+    \"description\": \"ocean, sea, water, nature, elemental, tsunami, tide\",
+    \"documentationLinks\": [],
+    \"id\": \"223:499\"
+  },
+  \"vr_headset\": {
+    \"description\": \"goggles, virtual, reality, xr\",
+    \"documentationLinks\": [],
+    \"id\": \"223:503\"
+  },
+  \"voxels\": {
+    \"description\": \"blocks, cubes, stack, build, assemble\",
+    \"documentationLinks\": [],
+    \"id\": \"223:492\"
+  },
+  \"vortex\": {
+    \"description\": \"spin, hurricane, hazard, weather\",
+    \"documentationLinks\": [],
+    \"id\": \"223:496\"
+  },
+  \"translate\": {
+    \"description\": \"language, international\",
+    \"documentationLinks\": [],
+    \"id\": \"223:485\"
+  },
+  \"tragedy_mask\": {
+    \"description\": \"emotion, sad, theater, play\",
+    \"documentationLinks\": [],
+    \"id\": \"223:488\"
+  },
+  \"torch\": {
+    \"description\": \"flashlight, lighting\",
+    \"documentationLinks\": [],
+    \"id\": \"223:506\"
+  },
+  \"text_input\": {
+    \"description\": \"form, control, select, setting, option, input, type, enter\",
+    \"documentationLinks\": [],
+    \"id\": \"223:500\"
+  },
+  \"swords\": {
+    \"description\": \"combat, sharp, blades, duel, attack, melee, kill, fight, danger, warfare\",
+    \"documentationLinks\": [],
+    \"id\": \"223:435\"
+  },
+  \"stylus_tap\": {
+    \"description\": \"interact, pen, tablet, drawing\",
+    \"documentationLinks\": [],
+    \"id\": \"223:482\"
+  },
+  \"stepper\": {
+    \"description\": \"form, control, select, setting, option, input, spinbox\",
+    \"documentationLinks\": [],
+    \"id\": \"223:480\"
+  },
+  \"steering_wheel\": {
+    \"description\": \"direction, car, vehicle, pilot, drive\",
+    \"documentationLinks\": [],
+    \"id\": \"223:477\"
+  },
+  \"stamp\": {
+    \"description\": \"paint, draw, image, tool, editing\",
+    \"documentationLinks\": [],
+    \"id\": \"223:514\"
+  },
+  \"square_root\": {
+    \"description\": \"mathematics, equation, formula, variable, value, unknown, operation\",
+    \"documentationLinks\": [],
+    \"id\": \"223:509\"
+  },
+  \"spray\": {
+    \"description\": \"spraycan, mist, tool, paint, color, colour, draw, editing\",
+    \"documentationLinks\": [],
+    \"id\": \"223:442\"
+  },
+  \"sponge\": {
+    \"description\": \"wash, clean, bubbles, wipe\",
+    \"documentationLinks\": [],
+    \"id\": \"223:478\"
+  },
+  \"spiral\": {
+    \"description\": \"spin, geometry, shape, dizzy, vortex\",
+    \"documentationLinks\": [],
+    \"id\": \"223:505\"
+  },
+  \"smiley_face\": {
+    \"description\": \"body, emotion, happy, smiley, emoji\",
+    \"documentationLinks\": [],
+    \"id\": \"223:472\"
+  },
+  \"slide_switch\": {
+    \"description\": \"form, control, select, setting, option, input, toggle, boolean, on, off, enable, disable\",
+    \"documentationLinks\": [],
+    \"id\": \"223:479\"
+  },
+  \"signal\": {
+    \"description\": \"wave, wifi, communication, radio\",
+    \"documentationLinks\": [],
+    \"id\": \"223:476\"
+  },
+  \"sign_post\": {
+    \"description\": \"direction, signage, information, waypoint\",
+    \"documentationLinks\": [],
+    \"id\": \"223:473\"
+  },
+  \"shopping_cart\": {
+    \"description\": \"buy, purchase, store\",
+    \"documentationLinks\": [],
+    \"id\": \"223:470\"
+  },
+  \"shopping_basket\": {
+    \"description\": \"buy, purchase, store\",
+    \"documentationLinks\": [],
+    \"id\": \"223:451\"
+  },
+  \"shopping_bag\": {
+    \"description\": \"purse, handbag, storage, pack, carry, inventory, container\",
+    \"documentationLinks\": [],
+    \"id\": \"223:497\"
+  },
+  \"sheep\": {
+    \"description\": \"livestock, clone, animal, wool\",
+    \"documentationLinks\": [],
+    \"id\": \"223:495\"
+  },
+  \"screw\": {
+    \"description\": \"attach, affix, fastener, nail\",
+    \"documentationLinks\": [],
+    \"id\": \"223:466\"
+  },
+  \"scoreboard\": {
+    \"description\": \"counter, display, numbers, digits, value\",
+    \"documentationLinks\": [],
+    \"id\": \"223:502\"
+  },
+  \"scales\": {
+    \"description\": \"balance, weight, justice, court, law\",
+    \"documentationLinks\": [],
+    \"id\": \"223:464\"
+  },
+  \"satellite\": {
+    \"description\": \"communication, space, probe, scifi, cosmos, astronomy, device, technology, emittter, receiver, transmitter, internet\",
+    \"documentationLinks\": [],
+    \"id\": \"223:468\"
+  },
+  \"sand\": {
+    \"description\": \"grains, powder, grit, nature, elemental\",
+    \"documentationLinks\": [],
+    \"id\": \"223:510\"
+  },
+  \"rotary_dial\": {
+    \"description\": \"form, control, select, setting, option, input\",
+    \"documentationLinks\": [],
+    \"id\": \"223:428\"
+  },
+  \"rocks\": {
+    \"description\": \"stone, pebble, boulder, nature\",
+    \"documentationLinks\": [],
+    \"id\": \"223:494\"
+  },
+  \"reflect\": {
+    \"description\": \"arrow, bounce, reflection, physics\",
+    \"documentationLinks\": [],
+    \"id\": \"223:462\"
+  },
+  \"recycle\": {
+    \"description\": \"arrows\",
+    \"documentationLinks\": [],
+    \"id\": \"223:459\"
+  },
+  \"razor_blade\": {
+    \"description\": \"slice, cut, sharp, weapon, splice, editing, video\",
+    \"documentationLinks\": [],
+    \"id\": \"223:484\"
+  },
+  \"radio_button\": {
+    \"description\": \"form, control, select, setting, option, input\",
+    \"documentationLinks\": [],
+    \"id\": \"223:461\"
+  },
+  \"racing_circuit\": {
+    \"description\": \"track, car, vehicle, road, race\",
+    \"documentationLinks\": [],
+    \"id\": \"223:465\"
+  },
+  \"push_button\": {
+    \"description\": \"form, control, select, setting, option, input, press, click, interact, mechanism\",
+    \"documentationLinks\": [],
+    \"id\": \"223:458\"
+  },
+  \"printer\": {
+    \"description\": \"device, paper, document, sheet, technology\",
+    \"documentationLinks\": [],
+    \"id\": \"223:455\"
+  },
+  \"previous\": {
+    \"description\": \"back, arrow, triangle, playback\",
+    \"documentationLinks\": [],
+    \"id\": \"223:467\"
+  },
+  \"pig\": {
+    \"description\": \"livestock, animal, pet\",
+    \"documentationLinks\": [],
+    \"id\": \"223:452\"
+  },
+  \"pie_chart\": {
+    \"description\": \"graph, data, statistics\",
+    \"documentationLinks\": [],
+    \"id\": \"223:475\"
+  },
+  \"pen_nib\": {
+    \"description\": \"pen, draw, editing, vector, bezier\",
+    \"documentationLinks\": [],
+    \"id\": \"223:456\"
+  },
+  \"paw_print\": {
+    \"description\": \"feet, track, animal\",
+    \"documentationLinks\": [],
+    \"id\": \"223:450\"
+  },
+  \"paperclip\": {
+    \"description\": \"attachment, fastener\",
+    \"documentationLinks\": [],
+    \"id\": \"223:443\"
+  },
+  \"paper_airplane\": {
+    \"description\": \"send, aeroplane, throw, fly\",
+    \"documentationLinks\": [],
+    \"id\": \"223:446\"
+  },
+  \"paint_roller\": {
+    \"description\": \"tool, draw, color, colour, fill\",
+    \"documentationLinks\": [],
+    \"id\": \"223:508\"
+  },
+  \"out_of_bounds\": {
+    \"description\": \"death, dead, area, zone, volume, skull\",
+    \"documentationLinks\": [],
+    \"id\": \"223:444\"
+  },
+  \"orbit\": {
+    \"description\": \"rotate, planet, force, attraction, spin, atom, physics, simulation, newtonian\",
+    \"documentationLinks\": [],
+    \"id\": \"223:453\"
+  },
+  \"nut_and_bolt\": {
+    \"description\": \"attach, affix, screw, fastener\",
+    \"documentationLinks\": [],
+    \"id\": \"223:513\"
+  },
+  \"number_sign\": {
+    \"description\": \"pound, hash, integer, numeral\",
+    \"documentationLinks\": [],
+    \"id\": \"223:498\"
+  },
+  \"notepad\": {
+    \"description\": \"write, text, document\",
+    \"documentationLinks\": [],
+    \"id\": \"223:441\"
+  },
+  \"next\": {
+    \"description\": \"playback, arrow, triangle, forwards\",
+    \"documentationLinks\": [],
+    \"id\": \"223:440\"
+  },
+  \"motion_vector\": {
+    \"description\": \"arrow, move, translate, slide, direction, velocity, speed\",
+    \"documentationLinks\": [],
+    \"id\": \"223:438\"
+  },
+  \"mirror_vertically\": {
+    \"description\": \"flip, edit, image\",
+    \"documentationLinks\": [],
+    \"id\": \"223:457\"
+  },
+  \"mirror_horizontally\": {
+    \"description\": \"flip, edit, image\",
+    \"documentationLinks\": [],
+    \"id\": \"223:501\"
+  },
+  \"metaballs\": {
+    \"description\": \"liquid, merge, melt, blob\",
+    \"documentationLinks\": [],
+    \"id\": \"223:436\"
+  },
+  \"measuring_tape\": {
+    \"description\": \"measure, distance, tool\",
+    \"documentationLinks\": [],
+    \"id\": \"223:432\"
+  },
+  \"mailbox\": {
+    \"description\": \"communication, inbox, send, envelope\",
+    \"documentationLinks\": [],
+    \"id\": \"223:429\"
+  },
+  \"line_graph\": {
+    \"description\": \"chart, statistics, data\",
+    \"documentationLinks\": [],
+    \"id\": \"223:425\"
+  },
+  \"lightning_in_clockwise_arrow\": {
+    \"description\": \"generator, bolt, zap, electricity, power, energy\",
+    \"documentationLinks\": [],
+    \"id\": \"223:424\"
+  },
+  \"lightning_in_circle\": {
+    \"description\": \"bolt, zap, electricity, power, energy, powerup\",
+    \"documentationLinks\": [],
+    \"id\": \"223:490\"
+  },
+  \"lever\": {
+    \"description\": \"mechanism, switch, toggle, on, off, pull\",
+    \"documentationLinks\": [],
+    \"id\": \"223:447\"
+  },
+  \"laser\": {
+    \"description\": \"raycast, beam, light\",
+    \"documentationLinks\": [],
+    \"id\": \"223:423\"
+  },
+  \"knot\": {
+    \"description\": \"rope, attach, affix, secure, tie\",
+    \"documentationLinks\": [],
+    \"id\": \"223:427\"
+  },
+  \"hook\": {
+    \"description\": \"bait, fishing\",
+    \"documentationLinks\": [],
+    \"id\": \"223:454\"
+  },
+  \"headphones\": {
+    \"description\": \"listen, audio, music, sound, headset, earphones\",
+    \"documentationLinks\": [],
+    \"id\": \"223:469\"
+  },
+  \"hand_mirror\": {
+    \"description\": \"reflection, reflective, appearance, accessory\",
+    \"documentationLinks\": [],
+    \"id\": \"223:448\"
+  },
+  \"ground\": {
+    \"description\": \"soil, grass, dirt, elemental\",
+    \"documentationLinks\": [],
+    \"id\": \"223:422\"
+  },
+  \"grass\": {
+    \"description\": \"nature, hair, fur, strands, simulation\",
+    \"documentationLinks\": [],
+    \"id\": \"223:421\"
+  },
+  \"golf_hole\": {
+    \"description\": \"course, par, goal, objective\",
+    \"documentationLinks\": [],
+    \"id\": \"223:430\"
+  },
+  \"glasses\": {
+    \"description\": \"spectacles, disguise, accessory, eyesight\",
+    \"documentationLinks\": [],
+    \"id\": \"223:434\"
+  },
+  \"glass_pane\": {
+    \"description\": \"mirror, window, reflection, reflective, shiny, glossy\",
+    \"documentationLinks\": [],
+    \"id\": \"223:507\"
+  },
+  \"gift\": {
+    \"description\": \"present, box, reward, free\",
+    \"documentationLinks\": [],
+    \"id\": \"223:420\"
+  },
+  \"frowning_face\": {
+    \"description\": \"body, emotion, sad, upset, smiley, emoji\",
+    \"documentationLinks\": [],
+    \"id\": \"223:445\"
+  },
+  \"forest\": {
+    \"description\": \"nature, trees, evergreen, canopy\",
+    \"documentationLinks\": [],
+    \"id\": \"223:418\"
+  },
+  \"footsteps\": {
+    \"description\": \"direction, walk, run, position, velocity, locomotion\",
+    \"documentationLinks\": [],
+    \"id\": \"223:417\"
+  },
+  \"flintlock\": {
+    \"description\": \"gun, firearm, combat, fight, ranged, ammo, ammunition, bullet, shot, shoot, pirate\",
+    \"documentationLinks\": [],
+    \"id\": \"223:460\"
+  },
+  \"fist\": {
+    \"description\": \"hand, punch, combat, fight, melee, raised, activism\",
+    \"documentationLinks\": [],
+    \"id\": \"223:416\"
+  },
+  \"fish\": {
+    \"description\": \"animal, food, sealife, marine, pet\",
+    \"documentationLinks\": [],
+    \"id\": \"223:439\"
+  },
+  \"fan\": {
+    \"description\": \"wind, cool, air, aerate, spin, blade\",
+    \"documentationLinks\": [],
+    \"id\": \"223:449\"
+  },
+  \"egg\": {
+    \"description\": \"animal, hatch, child, grow, food, omelet\",
+    \"documentationLinks\": [],
+    \"id\": \"223:415\"
+  },
+  \"dropdown\": {
+    \"description\": \"menu, select, form, control, setting, option, input\",
+    \"documentationLinks\": [],
+    \"id\": \"223:414\"
+  },
+  \"dragon\": {
+    \"description\": \"creature, monster, animal, fantasy, enemy, boss\",
+    \"documentationLinks\": [],
+    \"id\": \"223:426\"
+  },
+  \"dog\": {
+    \"description\": \"animal, pet, puppy\",
+    \"documentationLinks\": [],
+    \"id\": \"223:481\"
+  },
+  \"distance\": {
+    \"description\": \"measure, arrow\",
+    \"documentationLinks\": [],
+    \"id\": \"223:512\"
+  },
+  \"gem\": {
+    \"description\": \"diamond, ruby, emerald, amethyst, valuable, item, treasure, pickup, collectible\",
+    \"documentationLinks\": [],
+    \"id\": \"223:413\"
+  },
+  \"cutlass\": {
+    \"description\": \"weapon, blade, knife, stab, attack, hurt, cut, slice, combat, kill, sharp, sword, pirate\",
+    \"documentationLinks\": [],
+    \"id\": \"223:471\"
+  },
+  \"cursor_text\": {
+    \"description\": \"beam, editing, write, type\",
+    \"documentationLinks\": [],
+    \"id\": \"223:433\"
+  },
+  \"comedy_mask\": {
+    \"description\": \"emotion, happy, theater, play\",
+    \"documentationLinks\": [],
+    \"id\": \"223:463\"
+  },
+  \"comb\": {
+    \"description\": \"groom, hair, style\",
+    \"documentationLinks\": [],
+    \"id\": \"223:489\"
+  },
+  \"chair\": {
+    \"description\": \"furniture, sit, wait\",
+    \"documentationLinks\": [],
+    \"id\": \"223:486\"
+  },
+  \"cauldron\": {
+    \"description\": \"bubbles, alchemy, potion, witchcraft, brew\",
+    \"documentationLinks\": [],
+    \"id\": \"223:437\"
+  },
+  \"cat\": {
+    \"description\": \"feline, kitty, pet, animal\",
+    \"documentationLinks\": [],
+    \"id\": \"223:412\"
+  },
+  \"carnival_mask\": {
+    \"description\": \"digsuise, incognito\",
+    \"documentationLinks\": [],
+    \"id\": \"223:411\"
+  },
+  \"buoy\": {
+    \"description\": \"help, lifesaver\",
+    \"documentationLinks\": [],
+    \"id\": \"223:410\"
+  },
+  \"bird\": {
+    \"description\": \"chick, animal, fly, pet\",
+    \"documentationLinks\": [],
+    \"id\": \"223:409\"
+  },
+  \"battery_low\": {
+    \"description\": \"charge, energy, electricity, power\",
+    \"documentationLinks\": [],
+    \"id\": \"223:408\"
+  },
+  \"battery_high\": {
+    \"description\": \"charge, energy, electricity, power\",
+    \"documentationLinks\": [],
+    \"id\": \"223:407\"
+  },
+  \"battery_half\": {
+    \"description\": \"charge, energy, electricity, power\",
+    \"documentationLinks\": [],
+    \"id\": \"223:491\"
+  },
+  \"battery_full\": {
+    \"description\": \"charge, energy, electricity, power\",
+    \"documentationLinks\": [],
+    \"id\": \"223:419\"
+  },
+  \"battery_empty\": {
+    \"description\": \"charge, energy, electricity, power, deplete\",
+    \"documentationLinks\": [],
+    \"id\": \"223:406\"
+  },
+  \"bar_graph\": {
+    \"description\": \"chart, statistics, data\",
+    \"documentationLinks\": [],
+    \"id\": \"223:483\"
+  },
+  \"balance\": {
+    \"description\": \"pivot, seesaw, physics, swing, tilt\",
+    \"documentationLinks\": [],
+    \"id\": \"223:493\"
+  },
+  \"archive_arrow_down\": {
+    \"description\": \"box, asset, stash, download, save, library\",
+    \"documentationLinks\": [],
+    \"id\": \"223:431\"
+  },
+  \"angle\": {
+    \"description\": \"measure, obtuse, acute, geometry\",
+    \"documentationLinks\": [],
+    \"id\": \"223:405\"
+  },
+  \"alarm_clock\": {
+    \"description\": \"time\",
+    \"documentationLinks\": [],
+    \"id\": \"223:404\"
+  },
+  \"unwrap\": {
+    \"description\": \"uv, unfold, seams, box, texture, cube, modeling, texturing, mapping\",
+    \"documentationLinks\": [],
+    \"id\": \"320:488\"
+  },
+  \"underline\": {
+    \"description\": \"text, editing, formatting, insert, important\",
+    \"documentationLinks\": [],
+    \"id\": \"320:475\"
+  },
+  \"table\": {
+    \"description\": \"data, formatting, spreadsheet, rows, columns, text, editing, insert, dictionary\",
+    \"documentationLinks\": [],
+    \"id\": \"320:485\"
+  },
+  \"superscript\": {
+    \"description\": \"text, editing, formatting, insert, exponent, small, superior, numerator, ordinal, footnote\",
+    \"documentationLinks\": [],
+    \"id\": \"320:480\"
+  },
+  \"subscript\": {
+    \"description\": \"text, editing, formatting, insert, denominator, formula, inferior, small\",
+    \"documentationLinks\": [],
+    \"id\": \"320:459\"
+  },
+  \"strikethrough\": {
+    \"description\": \"text, editing, formatting, remove, dash, delete, line\",
+    \"documentationLinks\": [],
+    \"id\": \"320:478\"
+  },
+  \"shocked_face\": {
+    \"description\": \"body, emotion, surprised, bewildered, gasp, smiley, emoji\",
+    \"documentationLinks\": [],
+    \"id\": \"320:474\"
+  },
+  \"quotation_marks\": {
+    \"description\": \"quote, quoteblock, cite, text, editing, formatting, insert, string\",
+    \"documentationLinks\": [],
+    \"id\": \"320:487\"
+  },
+  \"paragraph\": {
+    \"description\": \"section, text, editing, heading, body, style, formatting\",
+    \"documentationLinks\": [],
+    \"id\": \"320:473\"
+  },
+  \"neutral_face\": {
+    \"description\": \"body, emotion, unamused, meh, expressionless, smiley, emoji\",
+    \"documentationLinks\": [],
+    \"id\": \"326:27\"
+  },
+  \"list_unordered\": {
+    \"description\": \"text, editing, bullet, formatting, insert\",
+    \"documentationLinks\": [],
+    \"id\": \"320:470\"
+  },
+  \"list_ordered\": {
+    \"description\": \"text, editing, numbered, tier, formatting, insert\",
+    \"documentationLinks\": [],
+    \"id\": \"320:472\"
+  },
+  \"list_checkboxes\": {
+    \"description\": \"text, editing, tasklist, checklist, formatting, insert\",
+    \"documentationLinks\": [],
+    \"id\": \"320:469\"
+  },
+  \"italics\": {
+    \"description\": \"text, editing, formatting, insert, style, slant, emphasis\",
+    \"documentationLinks\": [],
+    \"id\": \"320:464\"
+  },
+  \"happy_face\": {
+    \"description\": \"body, emotion, grinning, laughing, ecstatic, beaming smiley, emoji\",
+    \"documentationLinks\": [],
+    \"id\": \"320:477\"
+  },
+  \"folder_zip\": {
+    \"description\": \"file, directory, compressed, 7z, rar\",
+    \"documentationLinks\": [],
+    \"id\": \"320:461\"
+  },
+  \"folder_lock\": {
+    \"description\": \"file, directory, locked, encrypted\",
+    \"documentationLinks\": [],
+    \"id\": \"320:467\"
+  },
+  \"floppy_disks\": {
+    \"description\": \"save, as, copy, backup, diskettes, floppies\",
+    \"documentationLinks\": [],
+    \"id\": \"320:463\"
+  },
+  \"file_video\": {
+    \"description\": \"document, sheet, paper, video, playback, film, movie\",
+    \"documentationLinks\": [],
+    \"id\": \"320:460\"
+  },
+  \"file_terminal\": {
+    \"description\": \"document, sheet, paper, new, command, line, script, batch, bash\",
+    \"documentationLinks\": [],
+    \"id\": \"320:468\"
+  },
+  \"file_sliders\": {
+    \"description\": \"document, sheet, paper, configuration, settings, options\",
+    \"documentationLinks\": [],
+    \"id\": \"320:483\"
+  },
+  \"file_plus\": {
+    \"description\": \"document, sheet, paper, new, add, duplicate, copy, create\",
+    \"documentationLinks\": [],
+    \"id\": \"320:457\"
+  },
+  \"file_pencil\": {
+    \"description\": \"document, sheet, paper, edit, modify, write\",
+    \"documentationLinks\": [],
+    \"id\": \"320:482\"
+  },
+  \"file_note_double\": {
+    \"description\": \"document, sheet, paper, music, sound, audio, song\",
+    \"documentationLinks\": [],
+    \"id\": \"320:456\"
+  },
+  \"file_note\": {
+    \"description\": \"document, sheet, paper, music, sound, audio, song\",
+    \"documentationLinks\": [],
+    \"id\": \"320:466\"
+  },
+  \"file_magnifying_glass\": {
+    \"description\": \"document, sheet, paper, search, find, locate\",
+    \"documentationLinks\": [],
+    \"id\": \"320:454\"
+  },
+  \"file_image\": {
+    \"description\": \"document, sheet, paper, picture, photo, texture,\",
+    \"documentationLinks\": [],
+    \"id\": \"320:452\"
+  },
+  \"file_document\": {
+    \"description\": \"document, sheet, paper, new, text, write, documentation, readme\",
+    \"documentationLinks\": [],
+    \"id\": \"320:465\"
+  },
+  \"file_cross\": {
+    \"description\": \"document, sheet, paper, delete, remove, no, invalid\",
+    \"documentationLinks\": [],
+    \"id\": \"320:453\"
+  },
+  \"file_cog\": {
+    \"description\": \"document, sheet, paper, configuration, settings\",
+    \"documentationLinks\": [],
+    \"id\": \"320:451\"
+  },
+  \"file_code\": {
+    \"description\": \"document, sheet, paper, script\",
+    \"documentationLinks\": [],
+    \"id\": \"320:471\"
+  },
+  \"file_checkmark\": {
+    \"description\": \"document, sheet, paper, validate, yes, ok, verify, verified\",
+    \"documentationLinks\": [],
+    \"id\": \"320:484\"
+  },
+  \"file_box\": {
+    \"description\": \"document, sheet, paper, new\",
+    \"documentationLinks\": [],
+    \"id\": \"320:450\"
+  },
+  \"file_arrow_up_right\": {
+    \"description\": \"document, sheet, paper, external\",
+    \"documentationLinks\": [],
+    \"id\": \"320:449\"
+  },
+  \"file_arrow_up_left\": {
+    \"description\": \"document, sheet, paper, internal, import\",
+    \"documentationLinks\": [],
+    \"id\": \"320:448\"
+  },
+  \"file_arrow_up\": {
+    \"description\": \"document, sheet, paper, import, upload, open\",
+    \"documentationLinks\": [],
+    \"id\": \"320:479\"
+  },
+  \"file_arrow_right\": {
+    \"description\": \"document, sheet, paper, new, output, export\",
+    \"documentationLinks\": [],
+    \"id\": \"320:446\"
+  },
+  \"file_arrow_left\": {
+    \"description\": \"document, sheet, paper, input, insert, import\",
+    \"documentationLinks\": [],
+    \"id\": \"320:486\"
+  },
+  \"file_arrow_down_right\": {
+    \"description\": \"document, sheet, paper\",
+    \"documentationLinks\": [],
+    \"id\": \"320:445\"
+  },
+  \"file_arrow_down_left\": {
+    \"description\": \"document, sheet, paper, internal\",
+    \"documentationLinks\": [],
+    \"id\": \"320:458\"
+  },
+  \"file_arrow_down\": {
+    \"description\": \"document, sheet, paper, export, download, save\",
+    \"documentationLinks\": [],
+    \"id\": \"320:476\"
+  },
+  \"code\": {
+    \"description\": \"codeblock, preformatted, script, monospace, text, editing, style, formatting, insert\",
+    \"documentationLinks\": [],
+    \"id\": \"320:462\"
+  },
+  \"cloud_arrow_up\": {
+    \"description\": \"external, upload, import, storage\",
+    \"documentationLinks\": [],
+    \"id\": \"320:444\"
+  },
+  \"cloud_arrow_down\": {
+    \"description\": \"external, download, export, storage, local, copy\",
+    \"documentationLinks\": [],
+    \"id\": \"320:447\"
+  },
+  \"bold\": {
+    \"description\": \"text, editing, formatting, insert, strong, weight, important\",
+    \"documentationLinks\": [],
+    \"id\": \"320:481\"
+  },
+  \"angry_face\": {
+    \"description\": \"body, emotion, furious, upset, mad, smiley, emoji\",
+    \"documentationLinks\": [],
+    \"id\": \"320:455\"
+  },
+  \"video_camera\": {
+    \"description\": \"movie, filmmaking, filming, recording, motion, cinema, cinematic, viewpoint\",
+    \"documentationLinks\": [],
+    \"id\": \"404:237\"
+  },
+  \"variable\": {
+    \"description\": \"component, value, mathematics, formula, brackets, parentheses\",
+    \"documentationLinks\": [],
+    \"id\": \"434:301\"
+  },
+  \"tungsten_light\": {
+    \"description\": \"incandescent, white, balance, lightbulb, warm\",
+    \"documentationLinks\": [],
+    \"id\": \"404:233\"
+  },
+  \"television_flat_screen\": {
+    \"description\": \"monitor, screen, display, widescreen, projection, watch\",
+    \"documentationLinks\": [],
+    \"id\": \"404:222\"
+  },
+  \"telescope\": {
+    \"description\": \"observe, distant, space, astronomy, lens, probe, explore\",
+    \"documentationLinks\": [],
+    \"id\": \"434:294\"
+  },
+  \"square_brackets\": {
+    \"description\": \"array, enclose\",
+    \"documentationLinks\": [],
+    \"id\": \"404:252\"
+  },
+  \"sky_panorama\": {
+    \"description\": \"clouds, atmosphere, air, equirectangular, panoramic, panorama\",
+    \"documentationLinks\": [],
+    \"id\": \"404:249\"
+  },
+  \"sky_dome\": {
+    \"description\": \"skysphere, sphere, clouds, atmosphere, air\",
+    \"documentationLinks\": [],
+    \"id\": \"404:221\"
+  },
+  \"siren\": {
+    \"description\": \"warning, emergency, urgent, light, flash, urgency, crucial, critical, important, caution\",
+    \"documentationLinks\": [],
+    \"id\": \"404:230\"
+  },
+  \"shop\": {
+    \"description\": \"store, convenience, buy, purchase, building, commercial, storefront, market, marketplace\",
+    \"documentationLinks\": [],
+    \"id\": \"404:238\"
+  },
+  \"sewing_needle\": {
+    \"description\": \"thread, stitch, sting, sharp, poke, knitting, suture, crochet, embroidering, yarn\",
+    \"documentationLinks\": [],
+    \"id\": \"404:250\"
+  },
+  \"set_square\": {
+    \"description\": \"triangle, measurement, measuring, tool, right\",
+    \"documentationLinks\": [],
+    \"id\": \"434:297\"
+  },
+  \"selection_square\": {
+    \"description\": \"marquee, rectangular, rectangle\",
+    \"documentationLinks\": [],
+    \"id\": \"404:248\"
+  },
+  \"selection_circle\": {
+    \"description\": \"marquee, round, circular, ellipse\",
+    \"documentationLinks\": [],
+    \"id\": \"404:231\"
+  },
+  \"security_camera\": {
+    \"description\": \"surveillance, observation, spying\",
+    \"documentationLinks\": [],
+    \"id\": \"404:256\"
+  },
+  \"rainbow\": {
+    \"description\": \"lgbtqia, light, prism, colors\",
+    \"documentationLinks\": [],
+    \"id\": \"404:247\"
+  },
+  \"quaternion\": {
+    \"description\": \"rotation, angle, vector, x, y, z, w, turning, transform, space\",
+    \"documentationLinks\": [],
+    \"id\": \"404:219\"
+  },
+  \"pointer_right\": {
+    \"description\": \"cursor, index, link, tap, touch, body, finger, manicule, direction\",
+    \"documentationLinks\": [],
+    \"id\": \"404:255\"
+  },
+  \"pointer_left\": {
+    \"description\": \"cursor, index, link, tap, touch, body, finger, manicule, direction\",
+    \"documentationLinks\": [],
+    \"id\": \"409:67\"
+  },
+  \"pointer_down\": {
+    \"description\": \"cursor, index, link, tap, touch, body, finger, manicule, direction\",
+    \"documentationLinks\": [],
+    \"id\": \"409:68\"
+  },
+  \"person_body\": {
+    \"description\": \"human, stickman, man, woman, player, character, humanoid, armature, rigging\",
+    \"documentationLinks\": [],
+    \"id\": \"404:224\"
+  },
+  \"number_float\": {
+    \"description\": \"decimal, point, real, numeral, fractional, mathematics\",
+    \"documentationLinks\": [],
+    \"id\": \"404:254\"
+  },
+  \"node_graph_target\": {
+    \"description\": \"extremity, last, chain, child\",
+    \"documentationLinks\": [],
+    \"id\": \"434:299\"
+  },
+  \"node_graph_root\": {
+    \"description\": \"origin, chain, first, start, parent\",
+    \"documentationLinks\": [],
+    \"id\": \"434:298\"
+  },
+  \"node_graph_node\": {
+    \"description\": \"\",
+    \"documentationLinks\": [],
+    \"id\": \"434:296\"
+  },
+  \"node_graph_connection\": {
+    \"description\": \"wire\",
+    \"documentationLinks\": [],
+    \"id\": \"434:302\"
+  },
+  \"node_graph\": {
+    \"description\": \"chain, group, tree\",
+    \"documentationLinks\": [],
+    \"id\": \"434:300\"
+  },
+  \"movie_reel\": {
+    \"description\": \"film, cinematography, motion, picture, filming, filmmaking, view, spool, project, frames\",
+    \"documentationLinks\": [],
+    \"id\": \"404:228\"
+  },
+  \"mesh_quad\": {
+    \"description\": \"geometry, 3d, modeling, vertex, vertices, edges, faces, polygon\",
+    \"documentationLinks\": [],
+    \"id\": \"404:226\"
+  },
+  \"mesh_polygon\": {
+    \"description\": \"triangle, geometry, 3d, modeling, vertex, vertices, edges, faces, triangulated\",
+    \"documentationLinks\": [],
+    \"id\": \"404:227\"
+  },
+  \"mesh_plane\": {
+    \"description\": \"triangle, triangulated, geometry, 3d, modeling, vertex, vertices, edges, faces, polygon\",
+    \"documentationLinks\": [],
+    \"id\": \"404:243\"
+  },
+  \"megaphone\": {
+    \"description\": \"callable, loudspeaker, announcement, important\",
+    \"documentationLinks\": [],
+    \"id\": \"404:229\"
+  },
+  \"matrix\": {
+    \"description\": \"mathematics, transform, transformation, projection, matrices, row, column, square, transpose, transposition, identity, basis, determinant\",
+    \"documentationLinks\": [],
+    \"id\": \"404:245\"
+  },
+  \"lasso\": {
+    \"description\": \"selection, whip, freehand\",
+    \"documentationLinks\": [],
+    \"id\": \"434:292\"
+  },
+  \"grid_perspective\": {
+    \"description\": \"floor, vanishing, point, distance, ground, view, perspective\",
+    \"documentationLinks\": [],
+    \"id\": \"404:260\"
+  },
+  \"git_pull_request\": {
+    \"description\": \"version, control, state, machine, open, source, branch\",
+    \"documentationLinks\": [],
+    \"id\": \"404:246\"
+  },
+  \"git_merge\": {
+    \"description\": \"version, control, state, machine, open, source, pull, request, branch\",
+    \"documentationLinks\": [],
+    \"id\": \"404:258\"
+  },
+  \"git_fork\": {
+    \"description\": \"version, control, open, source, split, separate, state, machine\",
+    \"documentationLinks\": [],
+    \"id\": \"404:253\"
+  },
+  \"git_commit\": {
+    \"description\": \"version, control, open, source, state, machine\",
+    \"documentationLinks\": [],
+    \"id\": \"404:262\"
+  },
+  \"git_branch\": {
+    \"description\": \"version, control, state, machine, open, source, split, feature\",
+    \"documentationLinks\": [],
+    \"id\": \"404:257\"
+  },
+  \"function\": {
+    \"description\": \"formula, mathematics, method, routine\",
+    \"documentationLinks\": [],
+    \"id\": \"434:291\"
+  },
+  \"fluorescent_light\": {
+    \"description\": \"tube, white, balance, neon, cool, cold\",
+    \"documentationLinks\": [],
+    \"id\": \"404:234\"
+  },
+  \"flowchart\": {
+    \"description\": \"diagram, nodes, visual, scripting, shader, graph, network\",
+    \"documentationLinks\": [],
+    \"id\": \"404:225\"
+  },
+  \"floor_plane\": {
+    \"description\": \"ground, solid, axis, up\",
+    \"documentationLinks\": [],
+    \"id\": \"404:218\"
+  },
+  \"film_cartridge\": {
+    \"description\": \"spool, reel, photography, picture, develop, process, print\",
+    \"documentationLinks\": [],
+    \"id\": \"404:235\"
+  },
+  \"film_camera\": {
+    \"description\": \"movie, filmmaking, filming, recording, motion, reel, cinema, cinematic, viewpoint\",
+    \"documentationLinks\": [],
+    \"id\": \"404:239\"
+  },
+  \"exposure\": {
+    \"description\": \"brightness, lightness, value, increment, decrement, iso\",
+    \"documentationLinks\": [],
+    \"id\": \"434:295\"
+  },
+  \"ellipsis_vertical\": {
+    \"description\": \"overflow, menu, options, more\",
+    \"documentationLinks\": [],
+    \"id\": \"404:240\"
+  },
+  \"ellipsis_horizontal\": {
+    \"description\": \"overflow, menu, options, more\",
+    \"documentationLinks\": [],
+    \"id\": \"404:242\"
+  },
+  \"dumbbell\": {
+    \"description\": \"weights, lifting, strength, muscle, exercise, training, sports\",
+    \"documentationLinks\": [],
+    \"id\": \"433:52\"
+  },
+  \"curly_brackets\": {
+    \"description\": \"object, json, dictionary, braces\",
+    \"documentationLinks\": [],
+    \"id\": \"404:241\"
+  },
+  \"circuit_board\": {
+    \"description\": \"electronics, pcb, printed, traces, contacts, copper, wafer\",
+    \"documentationLinks\": [],
+    \"id\": \"434:293\"
+  },
+  \"circle_half_filled\": {
+    \"description\": \"contrast, brightness, lightness, theme\",
+    \"documentationLinks\": [],
+    \"id\": \"404:232\"
+  },
+  \"cage\": {
+    \"description\": \"prison, jail, cell, locked, trapped, restrained\",
+    \"documentationLinks\": [],
+    \"id\": \"433:20\"
+  },
+  \"box_wireframe\": {
+    \"description\": \"aabb, edges, bounding, cube, 3d, primitive, object, mesh, model\",
+    \"documentationLinks\": [],
+    \"id\": \"404:259\"
+  },
+  \"boolean\": {
+    \"description\": \"truthy, true, false, binary, no, yes, cross, check\",
+    \"documentationLinks\": [],
+    \"id\": \"404:220\"
+  },
+  \"arrow_zigzag\": {
+    \"description\": \"high, voltage, power, electricity, flash\",
+    \"documentationLinks\": [],
+    \"id\": \"404:236\"
+  },
+  \"arrow_axes_4d\": {
+    \"description\": \"coordinates, vector4, vec4, quaternion, x, y, z, w, dimensional, transform, axis\",
+    \"documentationLinks\": [],
+    \"id\": \"404:223\"
+  },
+  \"arrow_axes_2d_down\": {
+    \"description\": \"x, y, vector2, vec2, coordinates, position, location, dimensional, transform, axis\",
+    \"documentationLinks\": [],
+    \"id\": \"404:244\"
+  },
+  \"arrow_axes_2d\": {
+    \"description\": \"x, y, up, vector2, vec2, coordinates, position, location, dimensional, transform, axis\",
+    \"documentationLinks\": [],
+    \"id\": \"404:261\"
+  },
+  \"aperture\": {
+    \"description\": \"lens, exposure, shutter, snap, picture, photography\",
+    \"documentationLinks\": [],
+    \"id\": \"404:251\"
+  }
+}"
+
+[node name="CheckBox" type="CheckBox" parent="." unique_id=1977548198]
+layout_mode = 0
+offset_right = 118.0
+offset_bottom = 70.0
+
+[connection signal="text_changed" from="MainContainer/SearchBar" to="MainContainer/ScrollContainer/HFlowContainer" method="search"]

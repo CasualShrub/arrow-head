@@ -1,14 +1,25 @@
+@tool
+@icon("res://addons/at-icons/node3d/motion_vector.svg")
 extends Node3D
 class_name DashPreview
 
-@export var color := Color(0.2, 0.8, 1.0, 0.502)
+@export var color := Color(0.2, 0.8, 1.0, 0.502):
+	set(value):
+		color = value
+		_update_colors()
 @export var highlight_color := Color(1.0, 0.2, 0.2, 1.0)
 @export var max_range := 5.0:
 	set(value):
 		max_range = value
 		_update_max_range()
-@export var body_texture: Texture
-@export var eyes_texture: Texture
+@export var body_texture: Texture:
+	set(value):
+		body_texture = value
+		_update_sprites()
+@export var eyes_texture: Texture:
+	set(value):
+		eyes_texture = value
+		_update_sprites()
 
 @onready var _sprite: Sprite3D = %PreviewSprite
 @onready var _eyes_sprite: Sprite3D = %PreviewEyes
@@ -26,13 +37,9 @@ var _targets := Set.new()
 @onready var _enabled := visible
 
 func _ready() -> void:
-	if body_texture:
-		_sprite.texture = body_texture
-	if eyes_texture:
-		_eyes_sprite.texture = eyes_texture
-	_sprite.modulate = color
-	_line.material_override.albedo_color = color
 	_update_max_range()
+	_update_sprites()
+	_update_colors()
 
 func is_enabled() -> bool:
 	return _enabled
@@ -89,6 +96,28 @@ func set_preview_targets(newTargets: Array[TargetArea]) -> void:
 	for t in newTargets:
 		add_target(t)
 
+func _update_colors() -> void:
+	if _sprite:
+		_sprite.modulate = color
+	if _line:
+		_line.material_override.albedo_color = color
+	if _range:
+		var mat := _range.material_override as ShaderMaterial
+		if mat:
+			var no_transparency := color
+			no_transparency.a = 1.0
+			mat.set_shader_parameter("color", no_transparency)
+
 func _update_max_range() -> void:
 	if not _range: return
-	_range.scale = Vector3(max_range, 1, max_range)
+	if max_range < 0.0:
+		_range.hide()
+		return
+	var real_scale := max_range * 2.6
+	_range.scale = Vector3(real_scale, 1, real_scale)
+
+func _update_sprites() -> void:
+	if _sprite:
+		_sprite.texture = body_texture
+	if _eyes_sprite:
+		_eyes_sprite.texture = eyes_texture

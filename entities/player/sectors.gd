@@ -1,4 +1,5 @@
 @tool
+@icon("res://addons/at-icons/node3d/checkerboard_circle.svg")
 extends Node3D
 class_name Sectors
 

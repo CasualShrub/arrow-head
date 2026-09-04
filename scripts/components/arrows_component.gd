@@ -20,14 +20,17 @@ func has_arrow(arrow: Arrow) -> bool:
 func get_arrow_count() -> int:
 	return _arrows.size()
 
-func add_arrow(arrow: Arrow) -> bool:
-	if has_arrow(arrow) or is_full() or not _can_add_arrow(arrow):
+func try_add_arrow(arrow: Arrow) -> bool:
+	if has_arrow(arrow) or not _can_add_arrow(arrow):
 		return false
+	add_arrow(arrow)
+	return true
+
+func add_arrow(arrow: Arrow) -> void:
 	_arrows.add(arrow)
 	arrow.reparent(container)
 	_on_arrow_added(arrow)
 	arrow_added.emit(arrow)
-	return true
 
 ## Destroys arrow if its found.[br]
 ## Returns whether or not arrow was destroyed.

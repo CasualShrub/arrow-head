@@ -1,3 +1,4 @@
+@icon("res://addons/at-icons/node3d/arrow_projectile.svg")
 extends Node3D
 class_name Arrow
 
@@ -21,11 +22,14 @@ var simulation: ArrowSimulation
 
 func _ready() -> void:
 	var collision_shapes := find_children("*", "ShapeCast3D", true, false)
-	assert(
-		collision_shapes.size() == 1,
-		"%s must have exactly 1 ShapeCast3D." % get_path()
-	)
-	_shape_cast = collision_shapes[0]
+	#assert(
+	#	collision_shapes.size() == 1,
+	#	"%s must have exactly 1 ShapeCast3D." % get_path()
+	#)
+	if collision_shapes.is_empty():
+		_shape_cast = ShapeCast3D.new()
+	else:
+		_shape_cast = collision_shapes[0]
 	_shape_cast_offset = _shape_cast.position
 	
 	deactivate()

@@ -1,3 +1,4 @@
+@icon("res://addons/at-icons/control/glass.svg")
 extends Control
 class_name JuiceBarHud
 

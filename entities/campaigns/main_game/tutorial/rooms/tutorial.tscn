@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://b5kvwxtstao3r"]
 
-[ext_resource type="PackedScene" uid="uid://b6c1h2si8ob6l" path="res://entities/campaigns/room.tscn" id="1_muapo"]
+[ext_resource type="PackedScene" uid="uid://b6c1h2si8ob6l" path="res://entities/room/room.tscn" id="1_muapo"]
 [ext_resource type="PackedScene" uid="uid://cwall3d8prfb0" path="res://scenes/wall.tscn" id="2_0wb5c"]
 
 [node name="Room" unique_id=84024719 instance=ExtResource("1_muapo")]

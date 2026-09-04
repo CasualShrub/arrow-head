@@ -10,10 +10,11 @@ signal level_unloading(level: Level)
 
 var current_campaign: CampaignState
 var current_level: Level
-var game_parent : Node #just a node for the level data to serve as parent of spawning level data
+var game_parent : Node
 var player: Player:
 	get():
-		return current_level.player if current_level else null
+		if current_level: return current_level.player 
+		else: return get_tree().get_first_node_in_group("player")
 
 func start(host: Node) -> void:
 	start_campaign(MAIN_GAME, host)

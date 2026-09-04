@@ -1,3 +1,4 @@
+@icon("res://addons/at-icons/node/motion_vector.svg")
 extends Node
 class_name DashComponent
 
@@ -100,7 +101,9 @@ func get_dash_destination(origin: Vector3, target: Vector3) -> Vector3:
 	if result[0] < 1.0:
 		return origin + motion * result[0]
 	
-	return target
+	print(target.length())
+	
+	return origin + motion
 
 func get_dash_targets(origin: Vector3, dest: Vector3) -> Array[TargetArea]:
 	var targets: Array[TargetArea] = []

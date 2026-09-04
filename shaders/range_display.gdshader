@@ -1,6 +1,6 @@
 shader_type spatial;
 
-render_mode unshaded, cull_disabled, depth_draw_never, blend_mix;
+render_mode unshaded, cull_back, depth_test_disabled, blend_mix;
 
 uniform vec4 color : source_color = vec4(0.1, 0.6, 1.0, 1.0);
 
