@@ -148,18 +148,20 @@ func simulate(
 		var normal := _shape_cast.get_collision_normal(i)
 		var point := _shape_cast.get_collision_point(i)
 		sim.position = point - offset
+		var incoming_facing := sim.facing
 		if collider is not ArrowCollider:
 			ArrowCollider.default_bounce(sim, normal, point)
 		else:
 			collider.simulate_collision(sim, normal, point)
 		if sim.bounces >= max_bounces:
 			if wall_stick_decay_time > 0.0:
-				sim.disable()
 				sim.position = _project_onto_axis(
 					sim.position,
-					sim.velocity,
+					incoming_facing,
 					point
 				)
+				sim.facing = incoming_facing
+				sim.disable()
 			else:
 				sim.kill()
 		_on_collision_simulated(sim, collider)
