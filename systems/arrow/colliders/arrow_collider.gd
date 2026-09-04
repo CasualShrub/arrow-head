@@ -1,3 +1,4 @@
+@icon("res://addons/at-icons/used/node3d/bullseye.svg")
 extends Area3D
 class_name ArrowCollider
 

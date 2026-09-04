@@ -1,5 +1,5 @@
 @tool
-@icon("res://addons/at-icons/node3d/motion_vector.svg")
+@icon("res://addons/at-icons/used/node3d/motion_vector.svg")
 extends Node3D
 class_name DashPreview
 

@@ -1,3 +1,4 @@
+@icon("res://addons/at-icons/used/control/pause.svg")
 extends MenuOverlay
 
 func _input(event: InputEvent) -> void:

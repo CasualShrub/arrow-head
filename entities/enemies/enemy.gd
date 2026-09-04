@@ -1,5 +1,5 @@
 @tool
-@icon("res://addons/at-icons/node3d/troll.svg")
+@icon("res://addons/at-icons/used/node3d/troll.svg")
 extends CharacterBody3D
 class_name Enemy
 

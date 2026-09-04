@@ -1,4 +1,5 @@
 @tool
+@icon("res://addons/at-icons/used/node3d/itinerary.svg")
 extends Node3D
 class_name PatrolPath
 

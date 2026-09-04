@@ -1,4 +1,4 @@
-@icon("res://addons/at-icons/node/motion_vector.svg")
+@icon("res://addons/at-icons/used/node/motion_vector.svg")
 extends Node
 class_name DashComponent
 

@@ -1,3 +1,4 @@
+@icon("res://addons/at-icons/used/node/files.svg")
 extends Node
 class_name AfterimageComponent
 

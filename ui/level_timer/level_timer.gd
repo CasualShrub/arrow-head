@@ -1,5 +1,5 @@
 @tool
-@icon("res://addons/at-icons/control/stopwatch.svg")
+@icon("res://addons/at-icons/used/control/stopwatch.svg")
 extends Control
 class_name LevelTimer
 

@@ -1,3 +1,4 @@
+@icon("res://addons/at-icons/used/node/push_button.svg")
 extends Node
 class_name InputComponent
 

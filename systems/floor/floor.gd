@@ -1,4 +1,5 @@
 @tool
+@icon("res://addons/at-icons/used/node3d/ground.svg")
 extends GeometryInstance3D
 class_name GrassFloor
 

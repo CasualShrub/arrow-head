@@ -1,3 +1,4 @@
+@icon("res://addons/at-icons/used/control/skull_and_crossbones.svg")
 extends EndScreen
 
 @export var death_anim_delay := 1.0
