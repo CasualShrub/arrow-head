@@ -7,8 +7,11 @@
 [ext_resource type="FontFile" uid="uid://dg3navvnlkmpw" path="res://shared/fonts/Puffy-gxW55.otf" id="5_t7kvd"]
 [ext_resource type="Script" uid="uid://dqm7utkqr11r7" path="res://menus/main_menu/main_menu_sectors.gd" id="6_sectors"]
 [ext_resource type="Texture2D" uid="uid://b6jvtuhjn38ie" path="res://menus/main_menu/red.png" id="8_play"]
+[ext_resource type="Texture2D" uid="uid://dpttmd4ccldk4" path="res://menus/main_menu/big_green_arrow.png" id="9_8woyc"]
 [ext_resource type="Texture2D" uid="uid://do5jxgbiiap5r" path="res://menus/main_menu/levels.png" id="9_levels"]
 [ext_resource type="Texture2D" uid="uid://bkxpgqa424kbn" path="res://menus/main_menu/exit.png" id="10_exit"]
+[ext_resource type="Texture2D" uid="uid://6qk7m52f8sap" path="res://menus/main_menu/big_red_arrow.png" id="12_fire"]
+[ext_resource type="Texture2D" uid="uid://bfkgltqto3ai" path="res://menus/main_menu/big_blue_arrow.png" id="13_ice"]
 
 [node name="MainMenu" type="Control" unique_id=1484598755]
 layout_mode = 3
@@ -19,6 +22,9 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_oic2i")
 scenes_to_warm = Array[String](["res://entities/enemies/enemy.tscn", "res://entities/player/player.tscn"])
+play_arrow = ExtResource("9_8woyc")
+levels_arrow = ExtResource("12_fire")
+exit_arrow = ExtResource("13_ice")
 
 [node name="Background" type="TextureRect" parent="." unique_id=1572156878]
 z_index = -1
@@ -26,6 +32,10 @@ layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
+offset_left = -48.0
+offset_top = -48.0
+offset_right = 48.0
+offset_bottom = 48.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
@@ -47,6 +57,7 @@ exit_center = 56.075
 exit_half = 41.125
 
 [node name="Apple" type="TextureRect" parent="." unique_id=1931255156]
+z_index = 1
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -130,6 +141,11 @@ mouse_filter = 2
 texture = ExtResource("4_81su3")
 expand_mode = 1
 stretch_mode = 5
+
+[node name="LaunchArrow" type="Sprite2D" parent="." unique_id=192619002]
+visible = false
+scale = Vector2(0.26, 0.26)
+texture = ExtResource("9_8woyc")
 
 [node name="LevelSelect" type="Control" parent="." unique_id=804275844]
 unique_name_in_owner = true

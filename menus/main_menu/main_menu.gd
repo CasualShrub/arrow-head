@@ -4,10 +4,27 @@ const GAME_SCENE := "uid://c8ghost4gme01"
 
 @export var scenes_to_warm: Array[String] = []
 
+@export_group("Arrows")
+@export var play_arrow: Texture2D
+@export var levels_arrow: Texture2D
+@export var exit_arrow: Texture2D
+@export var embed_ratio: float = 0.4
+
+@export var launch_distance: float = 1500.0
+@export var launch_time: float = 0.32
+@export_group("Impact Shake")
+@export var impact_trauma: float = 0.9
+@export var trauma_decay: float = 2.2
+@export var max_shake_offset: float = 34.0
+
 @onready var _level_select: Control = $LevelSelect
 @onready var _sectors: Control = $"Sectors (Buttons)"
 @onready var _apple: Control = $Apple
 @onready var _title: Control = $Title
+@onready var _launch_arrow: Sprite2D = $LaunchArrow
+
+var _launching := false
+var _trauma := 0.0
 @onready var _labels := {
 	&"play": $Labels/Play,
 	&"levels": $Labels/Levels,
@@ -43,13 +60,60 @@ func _ready() -> void:
 		_level_select.hide()
 
 func _on_sector_activated(sector: StringName) -> void:
+	if _launching:
+		return
 	match sector:
 		&"play":
-			get_tree().change_scene_to_file(GAME_SCENE)
+			_launch(_sectors.play_center, play_arrow, func() -> void: get_tree().change_scene_to_file(GAME_SCENE))
 		&"levels":
-			_open_levels()
+			_launch(_sectors.levels_center, levels_arrow, _open_levels)
 		&"exit":
-			get_tree().quit()
+			_launch(_sectors.exit_center, exit_arrow, func() -> void: get_tree().quit())
+
+func _launch(sector_center_deg: float, texture: Texture2D, on_complete: Callable) -> void:
+	_launching = true
+
+	var apple_center: Vector2 = _apple.global_position + _apple.size * 0.5
+	var sector_angle := deg_to_rad(sector_center_deg)
+	var out_dir := Vector2(cos(sector_angle), sin(sector_angle))
+	var start := apple_center + out_dir * launch_distance
+
+	var rest_rotation := sector_angle + PI * 0.5
+	_launch_arrow.texture = texture
+	_launch_arrow.position = start
+	_launch_arrow.rotation = rest_rotation
+	_launch_arrow.show()
+
+	var arrow_length := texture.get_height() * _launch_arrow.scale.y
+	var end_pos := apple_center + out_dir * (arrow_length * embed_ratio)
+
+	var tween := create_tween()
+	tween.tween_property(_launch_arrow, "position", end_pos, launch_time) \
+		.set_trans(Tween.TRANS_QUINT).set_ease(Tween.EASE_IN)
+
+	tween.tween_callback(_add_trauma.bind(impact_trauma))
+	tween.tween_property(_launch_arrow, "rotation", rest_rotation, 0.35) \
+		.from(rest_rotation - 0.18).set_trans(Tween.TRANS_ELASTIC).set_ease(Tween.EASE_OUT)
+
+	await tween.finished
+	_trauma = 0.0
+	get_viewport().canvas_transform = Transform2D.IDENTITY
+	on_complete.call()
+	_launch_arrow.hide()
+	_launching = false
+
+func _add_trauma(amount: float) -> void:
+	_trauma = minf(_trauma + amount, 1.0)
+
+func _process(delta: float) -> void:
+	if _trauma <= 0.0:
+		return
+	_trauma = maxf(_trauma - trauma_decay * delta, 0.0)
+	var offset := Vector2.ZERO
+	if _trauma > 0.0:
+		var shake := _trauma * _trauma
+		offset = Vector2(randf_range(-1.0, 1.0), randf_range(-1.0, 1.0)) * shake * max_shake_offset
+	get_viewport().canvas_transform = Transform2D(0.0, offset)
 
 func _on_sector_hovered(sector: StringName) -> void:
 	for key in _labels:
