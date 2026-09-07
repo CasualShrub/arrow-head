@@ -12,6 +12,15 @@
 [ext_resource type="Texture2D" uid="uid://bkxpgqa424kbn" path="res://menus/main_menu/exit.png" id="10_exit"]
 [ext_resource type="Texture2D" uid="uid://6qk7m52f8sap" path="res://menus/main_menu/big_red_arrow.png" id="12_fire"]
 [ext_resource type="Texture2D" uid="uid://bfkgltqto3ai" path="res://menus/main_menu/big_blue_arrow.png" id="13_ice"]
+[ext_resource type="Script" uid="uid://it1hcnvfi1hr" path="res://scripts/classes/screen_shake.gd" id="14_shake"]
+
+[sub_resource type="Resource" id="ScreenShake_menu"]
+resource_local_to_scene = true
+script = ExtResource("14_shake")
+stimulus_amount = 0.9
+decay = 2.2
+max_offset = 34.0
+metadata/_custom_type_script = "uid://it1hcnvfi1hr"
 
 [node name="MainMenu" type="Control" unique_id=1484598755]
 layout_mode = 3
@@ -25,6 +34,7 @@ scenes_to_warm = Array[String](["res://entities/enemies/enemy.tscn", "res://enti
 play_arrow = ExtResource("9_8woyc")
 levels_arrow = ExtResource("12_fire")
 exit_arrow = ExtResource("13_ice")
+shake = SubResource("ScreenShake_menu")
 
 [node name="Background" type="TextureRect" parent="." unique_id=1572156878]
 z_index = -1

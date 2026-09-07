@@ -13,9 +13,7 @@ const GAME_SCENE := "uid://c8ghost4gme01"
 @export var launch_distance: float = 1500.0
 @export var launch_time: float = 0.32
 @export_group("Impact Shake")
-@export var impact_trauma: float = 0.9
-@export var trauma_decay: float = 2.2
-@export var max_shake_offset: float = 34.0
+@export var shake: ScreenShake
 
 @onready var _level_select: Control = $LevelSelect
 @onready var _sectors: Control = $"Sectors (Buttons)"
@@ -24,7 +22,6 @@ const GAME_SCENE := "uid://c8ghost4gme01"
 @onready var _launch_arrow: Sprite2D = $LaunchArrow
 
 var _launching := false
-var _trauma := 0.0
 @onready var _labels := {
 	&"play": $Labels/Play,
 	&"levels": $Labels/Levels,
@@ -91,29 +88,21 @@ func _launch(sector_center_deg: float, texture: Texture2D, on_complete: Callable
 	tween.tween_property(_launch_arrow, "position", end_pos, launch_time) \
 		.set_trans(Tween.TRANS_QUINT).set_ease(Tween.EASE_IN)
 
-	tween.tween_callback(_add_trauma.bind(impact_trauma))
+	tween.tween_callback(shake.trigger)
 	tween.tween_property(_launch_arrow, "rotation", rest_rotation, 0.35) \
 		.from(rest_rotation - 0.18).set_trans(Tween.TRANS_ELASTIC).set_ease(Tween.EASE_OUT)
 
 	await tween.finished
-	_trauma = 0.0
+	shake.intensity = 0.0
 	get_viewport().canvas_transform = Transform2D.IDENTITY
 	on_complete.call()
 	_launch_arrow.hide()
 	_launching = false
 
-func _add_trauma(amount: float) -> void:
-	_trauma = minf(_trauma + amount, 1.0)
-
 func _process(delta: float) -> void:
-	if _trauma <= 0.0:
+	if shake.intensity <= 0.0:
 		return
-	_trauma = maxf(_trauma - trauma_decay * delta, 0.0)
-	var offset := Vector2.ZERO
-	if _trauma > 0.0:
-		var shake := _trauma * _trauma
-		offset = Vector2(randf_range(-1.0, 1.0), randf_range(-1.0, 1.0)) * shake * max_shake_offset
-	get_viewport().canvas_transform = Transform2D(0.0, offset)
+	get_viewport().canvas_transform = Transform2D(0.0, shake.poll(delta))
 
 func _on_sector_hovered(sector: StringName) -> void:
 	for key in _labels:
