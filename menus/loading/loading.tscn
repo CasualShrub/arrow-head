@@ -1,0 +1,50 @@
+[gd_scene format=3 uid="uid://2uk3x70c4jlg"]
+
+[ext_resource type="Texture2D" uid="uid://dnllso1o8w6ak" path="res://menus/loading/yellow pattern.PNG" id="1_bg"]
+[ext_resource type="Shader" uid="uid://51mjarsnv4ao" path="res://menus/loading/loading_background.gdshader" id="2_shader"]
+[ext_resource type="SpriteFrames" uid="uid://dl0adg7n2q1xk" path="res://menus/loading/loading_frames.tres" id="3_frames"]
+[ext_resource type="FontFile" uid="uid://dg3navvnlkmpw" path="res://shared/fonts/Puffy-gxW55.otf" id="4_font"]
+[ext_resource type="Script" uid="uid://cmyx6yucu0wj8" path="res://menus/loading/loading_text.gd" id="5_text"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_bg"]
+shader = ExtResource("2_shader")
+shader_parameter/pattern = ExtResource("1_bg")
+shader_parameter/pan_speed = Vector2(-0.025, -0.025)
+shader_parameter/tiling = Vector2(3, 2)
+
+[node name="Loading" type="Control" unique_id=1004154187]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Background" type="ColorRect" parent="." unique_id=1847940439]
+material = SubResource("ShaderMaterial_bg")
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="LoadingAnimation" type="AnimatedSprite2D" parent="." unique_id=25544910]
+position = Vector2(1752, 901)
+sprite_frames = ExtResource("3_frames")
+autoplay = "default"
+
+[node name="LoadingText" type="Label" parent="." unique_id=874786939]
+layout_mode = 0
+offset_left = 1629.0
+offset_top = 971.0
+offset_right = 2029.0
+offset_bottom = 1041.0
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 10
+theme_override_fonts/font = ExtResource("4_font")
+theme_override_font_sizes/font_size = 48
+text = "Loading"
+vertical_alignment = 1
+script = ExtResource("5_text")
