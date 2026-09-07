@@ -1,3 +1,4 @@
+@icon("res://addons/at-icons/used/node3d/node_graph_target.svg")
 extends Area3D
 class_name TargetArea
 

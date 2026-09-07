@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://djrcxameou2he"]
 
-[ext_resource type="PackedScene" uid="uid://b6c1h2si8ob6l" path="res://entities/campaigns/room.tscn" id="1_vithe"]
+[ext_resource type="PackedScene" uid="uid://b6c1h2si8ob6l" path="res://entities/room/room.tscn" id="1_vithe"]
 [ext_resource type="PackedScene" uid="uid://tmhabgv3ovyb" path="res://entities/enemies/banana/enemy_banana.tscn" id="2_q1x0w"]
 [ext_resource type="PackedScene" uid="uid://cwall3d8prfb0" path="res://scenes/wall.tscn" id="3_at4vf"]
 

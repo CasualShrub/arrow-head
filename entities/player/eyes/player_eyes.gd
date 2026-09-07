@@ -1,3 +1,4 @@
+@icon("res://addons/at-icons/used/node3d/eye.svg")
 extends AnimatedSprite3D
 class_name PlayerEyes
 

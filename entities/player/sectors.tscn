@@ -5,7 +5,7 @@
 [ext_resource type="Shader" uid="uid://bcds3powkj5ap" path="res://shaders/triangle.gdshader" id="3_5d62w"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_3qflg"]
-render_priority = 0
+render_priority = 7
 shader = ExtResource("3_5d62w")
 shader_parameter/concavity = 0.150000007125
 shader_parameter/fill_color = Color(0.8980392, 0.34901962, 0.15294118, 0.8235294)
@@ -17,7 +17,7 @@ size = Vector2(0.3, 0.1)
 orientation = 1
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_o8r0j"]
-render_priority = 0
+render_priority = 7
 shader = ExtResource("1_tp26x")
 shader_parameter/sector_count = 4
 shader_parameter/aimed_sector = -1

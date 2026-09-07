@@ -5,22 +5,20 @@
 [ext_resource type="Texture2D" uid="uid://wvlanxvgy8iq" path="res://entities/player/eyes/angry/apple_eyes_angry_centered.png" id="3_i17dr"]
 [ext_resource type="Shader" uid="uid://cp3fgvgeuswl5" path="res://shaders/range_display.gdshader" id="4_7qmk0"]
 
-[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_iutdw"]
-load_path = "res://.godot/imported/apple_base.png-e311a7281c64ab8239ff5ce823ecf545.s3tc.ctex"
-
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_pc74m"]
+render_priority = 4
 transparency = 1
 shading_mode = 0
-albedo_color = Color(0.2, 0.8, 1, 0.5)
+albedo_color = Color(0.101960786, 0.6, 1, 0.59607846)
 
 [sub_resource type="QuadMesh" id="QuadMesh_7dqbv"]
 size = Vector2(0.06, 2.3)
 orientation = 1
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_b72i6"]
-render_priority = 0
+render_priority = 5
 shader = ExtResource("4_7qmk0")
-shader_parameter/color = Color(0.1, 0.6, 1, 1)
+shader_parameter/color = Color(0.101960786, 0.6, 1, 1)
 shader_parameter/outer_radius = 4.9399999999999995
 shader_parameter/thickness = 0.27
 shader_parameter/edge_softness = 0.0410000019475
@@ -32,8 +30,12 @@ shader_parameter/opacity = 1.0
 [sub_resource type="QuadMesh" id="QuadMesh_ub6uw"]
 orientation = 1
 
+[sub_resource type="BoxMesh" id="BoxMesh_ub6uw"]
+size = Vector3(0.4, 0.4, 0.4)
+
 [node name="DashPreview" type="Node3D" unique_id=609039478]
 script = ExtResource("1_miij3")
+color = Color(0.101960786, 0.6, 1, 0.59607846)
 max_range = 10.0
 body_texture = ExtResource("2_x6rtf")
 eyes_texture = ExtResource("3_i17dr")
@@ -43,9 +45,10 @@ metadata/_custom_type_script = "uid://8jd6wlvsiper"
 unique_name_in_owner = true
 transform = Transform3D(0.6, 0, 0, 0, -2.6226834e-08, 0.6, 0, -0.6, -2.6226834e-08, 0, 0, -2.202)
 layers = 524289
-modulate = Color(0.2, 0.8, 1, 0.5019608)
+modulate = Color(0.101960786, 0.6, 1, 0.59607846)
 double_sided = false
-texture = SubResource("CompressedTexture2D_iutdw")
+render_priority = 5
+texture = ExtResource("2_x6rtf")
 
 [node name="PreviewEyes" type="Sprite3D" parent="PreviewSprite" unique_id=397188224]
 unique_name_in_owner = true
@@ -53,6 +56,7 @@ transform = Transform3D(0.99999994, 0, 0, 0, 0.99999994, 0, 0, 0, 0.99999994, 0,
 layers = 524289
 modulate = Color(0.2, 0.8, 1, 0.5019608)
 double_sided = false
+render_priority = 6
 texture = ExtResource("3_i17dr")
 
 [node name="PreviewLine" type="MeshInstance3D" parent="." unique_id=282548725]
@@ -65,7 +69,11 @@ mesh = SubResource("QuadMesh_7dqbv")
 
 [node name="Range" type="MeshInstance3D" parent="." unique_id=1061907551]
 unique_name_in_owner = true
-transform = Transform3D(2.9490669, 0, 0, 0, 1, 0, 0, 0, 2.9490669, 0, 0, 0)
+transform = Transform3D(26, 0, 0, 0, 1, 0, 0, 0, 26, 0, 0, 0)
 layers = 524289
 material_override = SubResource("ShaderMaterial_b72i6")
 mesh = SubResource("QuadMesh_ub6uw")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=1435882438]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -5)
+mesh = SubResource("BoxMesh_ub6uw")

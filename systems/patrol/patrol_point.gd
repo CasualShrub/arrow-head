@@ -1,4 +1,5 @@
 @tool
+@icon("res://addons/at-icons/used/node3d/pin.svg")
 extends Marker3D
 class_name PatrolPoint
 
