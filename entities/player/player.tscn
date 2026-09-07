@@ -22,6 +22,15 @@
 [ext_resource type="Script" uid="uid://doms8x46cr1tt" path="res://entities/player/player_camera.gd" id="16_myrg7"]
 [ext_resource type="Script" uid="uid://qahpn0qappgp" path="res://scripts/components/vector_input_component.gd" id="18_uf5tr"]
 [ext_resource type="Script" uid="uid://buoj7rr88dblc" path="res://systems/arrow/colliders/arrow_collider.gd" id="19_arwct"]
+[ext_resource type="Script" uid="uid://it1hcnvfi1hr" path="res://scripts/classes/screen_shake.gd" id="20_shake"]
+
+[sub_resource type="Resource" id="ScreenShake_camera"]
+resource_local_to_scene = true
+script = ExtResource("20_shake")
+stimulus_amount = 0.4
+decay = 1.5
+max_offset = 0.3
+metadata/_custom_type_script = "uid://it1hcnvfi1hr"
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_oprun"]
 radius = 0.3
@@ -75,6 +84,7 @@ transform = Transform3D(1, 0, 0, 0, -4.371139e-08, 1, 0, -1, -4.371139e-08, 0, 1
 current = true
 fov = 45.0
 script = ExtResource("16_myrg7")
+screen_shake = SubResource("ScreenShake_camera")
 metadata/_custom_type_script = "uid://doms8x46cr1tt"
 
 [node name="ArrowCatcher" type="Area3D" parent="." unique_id=1281273496]

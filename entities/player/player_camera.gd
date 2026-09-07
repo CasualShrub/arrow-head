@@ -10,9 +10,7 @@ class_name PlayerCamera
 @export var lookahead_strength := 0.25
 @export var lookahead_smoothing := 6.0
 @export_group("shake")
-@export var sector_hit_trauma := 0.4
-@export var trauma_decay := 1.5
-@export var max_shake_offset := 0.30
+@export var screen_shake: ScreenShake
 @export_group("dash")
 @export var dash_catchup_smoothing := 14.0
 
@@ -21,7 +19,6 @@ signal shaken(strength: float)
 var _current_lookahead := Vector3.ZERO
 var _target_lookahead := Vector3.ZERO
 var _follow_offset := Vector3.ZERO
-var _trauma := 0.0
 
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
@@ -48,11 +45,9 @@ func _process(delta: float) -> void:
 		_current_lookahead.z + _follow_offset.z
 	)
 
-	if running and _trauma > 0.0:
-		_trauma = maxf(_trauma - trauma_decay * real_delta, 0.0)
-		var shake := _trauma * _trauma
-		var jitter := Vector3(randf_range(-1.0, 1.0), 0.0, randf_range(-1.0, 1.0))
-		position += jitter * shake * max_shake_offset
+	if running and screen_shake.intensity > 0.0:
+		var offset := screen_shake.poll(real_delta)
+		position += Vector3(offset.x, 0.0, offset.y)
 
 	DarkenManager.sync_mask_camera(self)
 
@@ -78,11 +73,11 @@ func ease_after_teleport(from: Vector3, to: Vector3) -> void:
 	_follow_offset += from - to
 
 func add_shake(amount: float) -> void:
-	_trauma = minf(_trauma + amount, 1.0)
+	screen_shake.add(amount)
 	shaken.emit(amount)
 
 func shake() -> void:
-	add_shake(sector_hit_trauma)
+	add_shake(screen_shake.stimulus_amount)
 	shaken.emit()
 
 func get_mouse_position() -> Vector3:

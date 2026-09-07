@@ -1,12 +1,29 @@
 [gd_scene format=3 uid="uid://dq024rj3sseom"]
 
 [ext_resource type="Script" uid="uid://bugssx86lrsmi" path="res://menus/main_menu/main_menu.gd" id="1_oic2i"]
-[ext_resource type="Texture2D" uid="uid://b6nig8e2qectk" path="res://menus/main_menu/main_menu_portrait.png" id="2_er5qh"]
 [ext_resource type="Texture2D" uid="uid://xtwlpdcb73i7" path="res://menus/main_menu/main_menu_background.png" id="3_f7ts8"]
-[ext_resource type="Texture2D" uid="uid://cyme6stdtt8qw" path="res://menus/main_menu/main_menu_title.png" id="4_81su3"]
+[ext_resource type="Texture2D" uid="uid://b2vww8jgbyk5x" path="res://menus/main_menu/title2.png" id="4_81su3"]
+[ext_resource type="Texture2D" uid="uid://c5w3uc4upc1av" path="res://entities/player/apple_idle.png" id="4_t7kvd"]
 [ext_resource type="FontFile" uid="uid://dg3navvnlkmpw" path="res://shared/fonts/Puffy-gxW55.otf" id="5_t7kvd"]
+[ext_resource type="Script" uid="uid://dqm7utkqr11r7" path="res://menus/main_menu/main_menu_sectors.gd" id="6_sectors"]
+[ext_resource type="Texture2D" uid="uid://b6jvtuhjn38ie" path="res://menus/main_menu/red.png" id="8_play"]
+[ext_resource type="Texture2D" uid="uid://dpttmd4ccldk4" path="res://menus/main_menu/big_green_arrow.png" id="9_8woyc"]
+[ext_resource type="Texture2D" uid="uid://do5jxgbiiap5r" path="res://menus/main_menu/levels.png" id="9_levels"]
+[ext_resource type="Texture2D" uid="uid://bkxpgqa424kbn" path="res://menus/main_menu/exit.png" id="10_exit"]
+[ext_resource type="Texture2D" uid="uid://6qk7m52f8sap" path="res://menus/main_menu/big_red_arrow.png" id="12_fire"]
+[ext_resource type="Texture2D" uid="uid://bfkgltqto3ai" path="res://menus/main_menu/big_blue_arrow.png" id="13_ice"]
+[ext_resource type="Script" uid="uid://it1hcnvfi1hr" path="res://scripts/classes/screen_shake.gd" id="14_shake"]
+[ext_resource type="PackedScene" uid="uid://c8ghost4gme01" path="res://scenes/game.tscn" id="15_game"]
 
-[node name="MainMenu" type="Control" unique_id=583947652]
+[sub_resource type="Resource" id="ScreenShake_menu"]
+resource_local_to_scene = true
+script = ExtResource("14_shake")
+stimulus_amount = 0.9
+decay = 2.2
+max_offset = 34.0
+metadata/_custom_type_script = "uid://it1hcnvfi1hr"
+
+[node name="MainMenu" type="Control" unique_id=1484598755]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -14,89 +31,133 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_oic2i")
+game_scene = ExtResource("15_game")
 scenes_to_warm = Array[String](["res://entities/enemies/enemy.tscn", "res://entities/player/player.tscn"])
+play_arrow = ExtResource("9_8woyc")
+levels_arrow = ExtResource("12_fire")
+exit_arrow = ExtResource("13_ice")
+shake = SubResource("ScreenShake_menu")
 
-[node name="Apple" type="TextureRect" parent="." unique_id=482219649]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = 314.0
-offset_top = -82.0
-offset_right = 314.0
-offset_bottom = -82.0
-grow_horizontal = 2
-grow_vertical = 2
-scale = Vector2(1.085, 1.085)
-texture = ExtResource("2_er5qh")
-stretch_mode = 4
-
-[node name="Background" type="TextureRect" parent="." unique_id=2044523840]
+[node name="Background" type="TextureRect" parent="." unique_id=1572156878]
 z_index = -1
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
+offset_left = -48.0
+offset_top = -48.0
+offset_right = 48.0
+offset_bottom = 48.0
 grow_horizontal = 2
 grow_vertical = 2
+mouse_filter = 2
 texture = ExtResource("3_f7ts8")
 
-[node name="Title" type="TextureRect" parent="." unique_id=601157004]
-z_index = 1
+[node name="Sectors (Buttons)" type="Control" parent="." unique_id=331550344]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_top = -14.0
-offset_bottom = 62.0
 grow_horizontal = 2
 grow_vertical = 2
+script = ExtResource("6_sectors")
+play_center = 205.015
+play_half = 44.225
+levels_center = -33.195
+levels_half = 30.505
+exit_center = 56.075
+exit_half = 41.125
+
+[node name="Apple" type="TextureRect" parent="." unique_id=1931255156]
+z_index = 1
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -220.0
+offset_top = -140.0
+offset_right = 220.0
+offset_bottom = 300.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+texture = ExtResource("4_t7kvd")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Labels" type="Control" parent="." unique_id=521384443]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="Play" type="TextureRect" parent="Labels" unique_id=2136009933]
+layout_mode = 0
+offset_left = 296.00003
+offset_top = 300.00003
+offset_right = 596.0
+offset_bottom = 520.0
+rotation = 0.16153833
+scale = Vector2(1.62, 1.62)
+pivot_offset = Vector2(150, 110)
+mouse_filter = 2
+texture = ExtResource("8_play")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Levels" type="TextureRect" parent="Labels" unique_id=1600311007]
+layout_mode = 0
+offset_left = 1250.0
+offset_top = 260.0
+offset_right = 1570.0
+offset_bottom = 490.00003
+rotation = -0.34093606
+scale = Vector2(1.285, 1.285)
+pivot_offset = Vector2(160, 115)
+mouse_filter = 2
+texture = ExtResource("9_levels")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Exit" type="TextureRect" parent="Labels" unique_id=1485841514]
+layout_mode = 0
+offset_left = 1121.0
+offset_top = 828.0
+offset_right = 1371.0
+offset_bottom = 1017.99994
+rotation = 0.20950891
+pivot_offset = Vector2(125, 95)
+mouse_filter = 2
+texture = ExtResource("10_exit")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Title" type="TextureRect" parent="." unique_id=1519589912]
+visible = false
+z_index = 1
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -320.0
+offset_top = 24.0
+offset_right = 320.0
+offset_bottom = 230.0
+grow_horizontal = 2
+mouse_filter = 2
 texture = ExtResource("4_81su3")
+expand_mode = 1
+stretch_mode = 5
 
-[node name="Play" type="Button" parent="." unique_id=179610114]
-layout_mode = 1
-anchors_preset = 4
-anchor_top = 0.5
-anchor_bottom = 0.5
-offset_left = -2.0
-offset_top = -31.0
-offset_right = 243.0
-offset_bottom = 46.0
-grow_vertical = 2
-theme_override_fonts/font = ExtResource("5_t7kvd")
-theme_override_font_sizes/font_size = 34
-text = " Play"
-alignment = 0
-
-[node name="Levels" type="Button" parent="." unique_id=1322853751]
-layout_mode = 1
-anchors_preset = 4
-anchor_top = 0.5
-anchor_bottom = 0.5
-offset_left = -2.0
-offset_top = 59.0
-offset_right = 216.0
-offset_bottom = 124.0
-grow_vertical = 2
-theme_override_fonts/font = ExtResource("5_t7kvd")
-theme_override_font_sizes/font_size = 30
-text = " Levels"
-alignment = 0
-
-[node name="Quit" type="Button" parent="." unique_id=2069726673]
-layout_mode = 1
-anchors_preset = 4
-anchor_top = 0.5
-anchor_bottom = 0.5
-offset_left = -2.0
-offset_top = 135.0
-offset_right = 158.0
-offset_bottom = 188.0
-grow_vertical = 2
-theme_override_fonts/font = ExtResource("5_t7kvd")
-theme_override_font_sizes/font_size = 24
-text = "  Quit"
-alignment = 0
+[node name="LaunchArrow" type="Sprite2D" parent="." unique_id=192619002]
+visible = false
+scale = Vector2(0.26, 0.26)
+texture = ExtResource("9_8woyc")
 
 [node name="LevelSelect" type="Control" parent="." unique_id=804275844]
 unique_name_in_owner = true
