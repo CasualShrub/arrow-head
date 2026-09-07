@@ -5,6 +5,15 @@ const GAME_SCENE := "uid://c8ghost4gme01"
 @export var scenes_to_warm: Array[String] = []
 
 @onready var _level_select: Control = $LevelSelect
+@onready var _sectors: Control = $"Sectors (Buttons)"
+@onready var _apple: Control = $Apple
+@onready var _title: Control = $Title
+@onready var _labels := {
+	&"play": $Labels/Play,
+	&"levels": $Labels/Levels,
+	&"exit": $Labels/Exit,
+}
+var _label_base_scale := {}
 
 func _ready() -> void:
 	Engine.time_scale = 1.0  # clear leftover slowmo when quitting out mid-game
@@ -23,25 +32,42 @@ func _ready() -> void:
 	
 	viewport.queue_free()
 	
+
 	SoundManager.play_music("TITLE_SCREEN")
-	$Play.pressed.connect(_on_play_pressed)
-	$Levels.pressed.connect(_on_levels_pressed)
-	$Quit.pressed.connect(_on_quit_pressed)
+	for key in _labels:
+		_label_base_scale[key] = _labels[key].scale  # keep the size set in the editor
+	_sectors.sector_activated.connect(_on_sector_activated)
+	_sectors.sector_hovered.connect(_on_sector_hovered)
+	_on_sector_hovered(&"")
 	if _level_select:
 		_level_select.hide()
-	$Play.grab_focus()
 
-func _set_main_buttons(shown: bool) -> void:
-	$Play.visible = shown
-	$Levels.visible = shown
-	$Quit.visible = shown
+func _on_sector_activated(sector: StringName) -> void:
+	match sector:
+		&"play":
+			get_tree().change_scene_to_file(GAME_SCENE)
+		&"levels":
+			_open_levels()
+		&"exit":
+			get_tree().quit()
 
-func _on_play_pressed() -> void:
-	get_tree().change_scene_to_file(GAME_SCENE)
+func _on_sector_hovered(sector: StringName) -> void:
+	for key in _labels:
+		var label: Control = _labels[key]
+		var active: bool = key == sector
+		var base: Vector2 = _label_base_scale.get(key, label.scale)
+		label.scale = base * 1.08 if active else base
+		label.modulate = Color.WHITE if active else Color(0.86, 0.86, 0.86)
 
-func _on_levels_pressed() -> void:
+func _set_menu_shown(shown: bool) -> void:
+	_sectors.visible = shown
+	_apple.visible = shown
+	_title.visible = shown
+	$Labels.visible = shown
+
+func _open_levels() -> void:
 	if _level_select:
-		_set_main_buttons(false)
+		_set_menu_shown(false)
 		_level_select.show()
 
 func _load_level(path: String) -> void:
@@ -54,7 +80,4 @@ func _load_level(path: String) -> void:
 func _close_levels() -> void:
 	if _level_select:
 		_level_select.hide()
-		_set_main_buttons(true)
-
-func _on_quit_pressed() -> void:
-	get_tree().quit()
+		_set_menu_shown(true)
