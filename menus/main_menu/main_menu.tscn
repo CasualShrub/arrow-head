@@ -13,6 +13,7 @@
 [ext_resource type="Texture2D" uid="uid://6qk7m52f8sap" path="res://menus/main_menu/big_red_arrow.png" id="12_fire"]
 [ext_resource type="Texture2D" uid="uid://bfkgltqto3ai" path="res://menus/main_menu/big_blue_arrow.png" id="13_ice"]
 [ext_resource type="Script" uid="uid://it1hcnvfi1hr" path="res://scripts/classes/screen_shake.gd" id="14_shake"]
+[ext_resource type="PackedScene" uid="uid://c8ghost4gme01" path="res://scenes/game.tscn" id="15_game"]
 
 [sub_resource type="Resource" id="ScreenShake_menu"]
 resource_local_to_scene = true
@@ -30,6 +31,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_oic2i")
+game_scene = ExtResource("15_game")
 scenes_to_warm = Array[String](["res://entities/enemies/enemy.tscn", "res://entities/player/player.tscn"])
 play_arrow = ExtResource("9_8woyc")
 levels_arrow = ExtResource("12_fire")

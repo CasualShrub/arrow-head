@@ -1,6 +1,6 @@
 extends Control
 
-const GAME_SCENE := "uid://c8ghost4gme01"
+@export var game_scene: PackedScene
 
 @export var scenes_to_warm: Array[String] = []
 
@@ -61,7 +61,7 @@ func _on_sector_activated(sector: StringName) -> void:
 		return
 	match sector:
 		&"play":
-			_launch(_sectors.play_center, play_arrow, func() -> void: get_tree().change_scene_to_file(GAME_SCENE))
+			_launch(_sectors.play_center, play_arrow, func() -> void: get_tree().change_scene_to_packed(game_scene))
 		&"levels":
 			_launch(_sectors.levels_center, levels_arrow, _open_levels)
 		&"exit":
@@ -128,7 +128,7 @@ func _load_level(path: String) -> void:
 		get_tree().change_scene_to_file(path)
 	# just a fallback incase resource isn't valid
 	else:
-		get_tree().change_scene_to_file(GAME_SCENE)
+		get_tree().change_scene_to_packed(game_scene)
 
 func _close_levels() -> void:
 	if _level_select:
