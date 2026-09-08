@@ -5,6 +5,7 @@
 [ext_resource type="Texture2D" uid="uid://b2vww8jgbyk5x" path="res://menus/main_menu/title2.png" id="4_81su3"]
 [ext_resource type="Script" uid="uid://deyltpalamqlt" path="res://menus/main_menu/apple_look.gd" id="4_apple"]
 [ext_resource type="Texture2D" uid="uid://dotinjptgf7d3" path="res://menus/main_menu/middle_front.PNG" id="4_mfront"]
+[ext_resource type="Texture2D" uid="uid://dpf5ekyd016md" path="res://menus/main_menu/middle_front_eyes.PNG" id="4_meyes"]
 [ext_resource type="FontFile" uid="uid://dg3navvnlkmpw" path="res://shared/fonts/Puffy-gxW55.otf" id="5_t7kvd"]
 [ext_resource type="Script" uid="uid://dqm7utkqr11r7" path="res://menus/main_menu/main_menu_sectors.gd" id="6_sectors"]
 [ext_resource type="Texture2D" uid="uid://b6jvtuhjn38ie" path="res://menus/main_menu/red.png" id="8_play"]
@@ -88,6 +89,18 @@ texture = ExtResource("4_mfront")
 expand_mode = 1
 stretch_mode = 5
 script = ExtResource("4_apple")
+
+[node name="Eyes" type="TextureRect" parent="Apple" unique_id=771122335]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+texture = ExtResource("4_meyes")
+expand_mode = 1
+stretch_mode = 5
 
 [node name="Labels" type="Control" parent="." unique_id=521384443]
 layout_mode = 1

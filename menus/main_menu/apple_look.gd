@@ -18,9 +18,29 @@ const POSES := {
 	},
 }
 
+const EYES := {
+	&"top": {
+		&"front": preload("res://menus/main_menu/top_front_eyes.PNG"),
+		&"mid": preload("res://menus/main_menu/top_mid_eyes.PNG"),
+		&"side": preload("res://menus/main_menu/top_side_eyes.PNG"),
+	},
+	&"middle": {
+		&"front": preload("res://menus/main_menu/middle_front_eyes.PNG"),
+		&"mid": preload("res://menus/main_menu/middle_mid_eyes.PNG"),
+		&"side": preload("res://menus/main_menu/middle_side_eyes.PNG"),
+	},
+	&"down": {
+		&"front": preload("res://menus/main_menu/down_front_eyes.PNG"),
+		&"mid": preload("res://menus/main_menu/down_mid_eyes.PNG"),
+		&"side": preload("res://menus/main_menu/down_side_eyes.PNG"),
+	},
+}
+
 @export var horizontal_deadzone: float = 0.22
 @export var horizontal_side: float = 0.6
 @export var vertical_split: float = 0.33
+
+@onready var _eyes: TextureRect = $Eyes
 
 var _mouse_in_window: bool = true
 
@@ -70,3 +90,5 @@ func _process(_delta: float) -> void:
 func _apply(row: StringName, pose: StringName, flip: bool) -> void:
 	texture = POSES[row][pose]
 	flip_h = flip
+	_eyes.texture = EYES[row][pose]
+	_eyes.flip_h = flip
