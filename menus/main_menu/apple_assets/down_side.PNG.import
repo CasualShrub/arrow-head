@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://m7ppte7x0nrj"
-path="res://.godot/imported/middle_side_eyes.PNG-0d14d3f5943438383d08de356c3d61b2.ctex"
+uid="uid://u0infqe7d4cf"
+path="res://.godot/imported/down_side.PNG-62513a7a8890374a67d070cedee9558f.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://menus/main_menu/middle_side_eyes.PNG"
-dest_files=["res://.godot/imported/middle_side_eyes.PNG-0d14d3f5943438383d08de356c3d61b2.ctex"]
+source_file="res://menus/main_menu/apple_assets/down_side.PNG"
+dest_files=["res://.godot/imported/down_side.PNG-62513a7a8890374a67d070cedee9558f.ctex"]
 
 [params]
 

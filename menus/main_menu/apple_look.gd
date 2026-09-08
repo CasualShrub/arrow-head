@@ -2,37 +2,37 @@ extends TextureRect
 
 const POSES := {
 	&"top": {
-		&"front": preload("res://menus/main_menu/top_front.PNG"),
-		&"mid": preload("res://menus/main_menu/top_mid.PNG"),
-		&"side": preload("res://menus/main_menu/top_side.PNG"),
+		&"front": preload("res://menus/main_menu/apple_assets/top_front.PNG"),
+		&"mid": preload("res://menus/main_menu/apple_assets/top_mid.PNG"),
+		&"side": preload("res://menus/main_menu/apple_assets/top_side.PNG"),
 	},
 	&"middle": {
-		&"front": preload("res://menus/main_menu/middle_front.PNG"),
-		&"mid": preload("res://menus/main_menu/middle_mid.PNG"),
-		&"side": preload("res://menus/main_menu/middle_side.PNG"),
+		&"front": preload("res://menus/main_menu/apple_assets/middle_front.PNG"),
+		&"mid": preload("res://menus/main_menu/apple_assets/middle_mid.PNG"),
+		&"side": preload("res://menus/main_menu/apple_assets/middle_side.PNG"),
 	},
 	&"down": {
-		&"front": preload("res://menus/main_menu/down_front.PNG"),
-		&"mid": preload("res://menus/main_menu/down_mid.PNG"),
-		&"side": preload("res://menus/main_menu/down_side.PNG"),
+		&"front": preload("res://menus/main_menu/apple_assets/down_front.PNG"),
+		&"mid": preload("res://menus/main_menu/apple_assets/down_mid.PNG"),
+		&"side": preload("res://menus/main_menu/apple_assets/down_side.PNG"),
 	},
 }
 
 const EYES := {
 	&"top": {
-		&"front": preload("res://menus/main_menu/top_front_eyes.PNG"),
-		&"mid": preload("res://menus/main_menu/top_mid_eyes.PNG"),
-		&"side": preload("res://menus/main_menu/top_side_eyes.PNG"),
+		&"front": preload("res://menus/main_menu/apple_assets/top_front_eyes.PNG"),
+		&"mid": preload("res://menus/main_menu/apple_assets/top_mid_eyes.PNG"),
+		&"side": preload("res://menus/main_menu/apple_assets/top_side_eyes.PNG"),
 	},
 	&"middle": {
-		&"front": preload("res://menus/main_menu/middle_front_eyes.PNG"),
-		&"mid": preload("res://menus/main_menu/middle_mid_eyes.PNG"),
-		&"side": preload("res://menus/main_menu/middle_side_eyes.PNG"),
+		&"front": preload("res://menus/main_menu/apple_assets/middle_front_eyes.PNG"),
+		&"mid": preload("res://menus/main_menu/apple_assets/middle_mid_eyes.PNG"),
+		&"side": preload("res://menus/main_menu/apple_assets/middle_side_eyes.PNG"),
 	},
 	&"down": {
-		&"front": preload("res://menus/main_menu/down_front_eyes.PNG"),
-		&"mid": preload("res://menus/main_menu/down_mid_eyes.PNG"),
-		&"side": preload("res://menus/main_menu/down_side_eyes.PNG"),
+		&"front": preload("res://menus/main_menu/apple_assets/down_front_eyes.PNG"),
+		&"mid": preload("res://menus/main_menu/apple_assets/down_mid_eyes.PNG"),
+		&"side": preload("res://menus/main_menu/apple_assets/down_side_eyes.PNG"),
 	},
 }
 
