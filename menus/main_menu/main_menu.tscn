@@ -10,9 +10,13 @@
 [ext_resource type="Script" uid="uid://dqm7utkqr11r7" path="res://menus/main_menu/main_menu_sectors.gd" id="6_sectors"]
 [ext_resource type="Texture2D" uid="uid://b6jvtuhjn38ie" path="res://menus/main_menu/red.png" id="8_play"]
 [ext_resource type="Texture2D" uid="uid://dpttmd4ccldk4" path="res://menus/main_menu/big_green_arrow.png" id="9_8woyc"]
+[ext_resource type="Texture2D" uid="uid://dygnrfy0h4ncx" path="res://menus/loading/green pattern.PNG" id="9_c1gu4"]
 [ext_resource type="Texture2D" uid="uid://do5jxgbiiap5r" path="res://menus/main_menu/levels.png" id="9_levels"]
 [ext_resource type="Texture2D" uid="uid://bkxpgqa424kbn" path="res://menus/main_menu/exit.png" id="10_exit"]
+[ext_resource type="Texture2D" uid="uid://cmp5g38c4qn6o" path="res://menus/loading/pink pattern.PNG" id="10_oi7a3"]
+[ext_resource type="Texture2D" uid="uid://vdclooh70w4j" path="res://menus/loading/blue pattern.PNG" id="11_c1gu4"]
 [ext_resource type="Texture2D" uid="uid://6qk7m52f8sap" path="res://menus/main_menu/big_red_arrow.png" id="12_fire"]
+[ext_resource type="Shader" uid="uid://51mjarsnv4ao" path="res://menus/loading/loading_background.gdshader" id="12_oi7a3"]
 [ext_resource type="Texture2D" uid="uid://bfkgltqto3ai" path="res://menus/main_menu/big_blue_arrow.png" id="13_ice"]
 [ext_resource type="Script" uid="uid://it1hcnvfi1hr" path="res://scripts/classes/screen_shake.gd" id="14_shake"]
 [ext_resource type="PackedScene" uid="uid://c8ghost4gme01" path="res://scenes/game.tscn" id="15_game"]
@@ -65,10 +69,14 @@ grow_vertical = 2
 script = ExtResource("6_sectors")
 play_center = 205.015
 play_half = 44.225
+play_pattern = ExtResource("9_c1gu4")
 levels_center = -33.195
 levels_half = 30.505
+levels_pattern = ExtResource("10_oi7a3")
 exit_center = 56.075
 exit_half = 41.125
+exit_pattern = ExtResource("11_c1gu4")
+pattern_shader = ExtResource("12_oi7a3")
 
 [node name="Apple" type="TextureRect" parent="." unique_id=1931255156]
 z_index = 1
