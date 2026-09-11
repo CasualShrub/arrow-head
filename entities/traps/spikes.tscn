@@ -1,0 +1,17 @@
+[gd_scene format=3 uid="uid://b8p6tycpyrcr2"]
+
+[ext_resource type="Script" uid="uid://cx7lkspf1s201" path="res://entities/traps/spikes.gd" id="1_m5arx"]
+[ext_resource type="Texture2D" uid="uid://w5firgaw1fbf" path="res://shared/textures/obsidian.png" id="2_piran"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_0db7h"]
+
+[node name="Spikes" type="Node3D" unique_id=805408981]
+script = ExtResource("1_m5arx")
+
+[node name="Sprite3D" type="Sprite3D" parent="." unique_id=1441811607]
+transform = Transform3D(1, 0, 0, 0, -4.3711385e-08, -0.99999994, 0, 0.99999994, -4.3711385e-08, 0, 0, 0)
+texture = ExtResource("2_piran")
+
+[node name="ShapeCast3D" type="ShapeCast3D" parent="." unique_id=782246315]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.022985, 0)
+shape = SubResource("BoxShape3D_0db7h")

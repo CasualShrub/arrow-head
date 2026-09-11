@@ -13,7 +13,7 @@
 [ext_resource type="Script" uid="uid://360h68v2nvph" path="res://scripts/components/sector_arrows_component.gd" id="8_fcs02"]
 [ext_resource type="SpriteFrames" uid="uid://cmjbdroql258f" path="res://entities/player/player_frames.tres" id="8_yj68g"]
 [ext_resource type="Script" uid="uid://bocqfysv2edvs" path="res://scripts/components/afterimage_component.gd" id="9_3j4b4"]
-[ext_resource type="Texture2D" uid="uid://dxs2lnb7aysuj" path="res://entities/player/status/satus_fire_frame1.png" id="9_ioxgp"]
+[ext_resource type="Texture2D" uid="uid://dxs2lnb7aysuj" path="res://entities/player/status/status_fire_frame1.png" id="9_ioxgp"]
 [ext_resource type="Texture2D" uid="uid://clnx5whue0a7g" path="res://entities/player/status/status_fire_frame2.png" id="10_cnsyf"]
 [ext_resource type="Texture2D" uid="uid://d4flnp6puxus3" path="res://entities/player/status/status_ice.png" id="11_007i1"]
 [ext_resource type="SpriteFrames" uid="uid://dcj3tcewuhc6p" path="res://entities/player/eyes/player_eyes_frames.tres" id="12_6cv16"]
@@ -23,6 +23,7 @@
 [ext_resource type="Script" uid="uid://qahpn0qappgp" path="res://scripts/components/vector_input_component.gd" id="18_uf5tr"]
 [ext_resource type="Script" uid="uid://buoj7rr88dblc" path="res://systems/arrow/colliders/arrow_collider.gd" id="19_arwct"]
 [ext_resource type="Script" uid="uid://it1hcnvfi1hr" path="res://scripts/classes/screen_shake.gd" id="20_shake"]
+
 
 [sub_resource type="Resource" id="ScreenShake_camera"]
 resource_local_to_scene = true

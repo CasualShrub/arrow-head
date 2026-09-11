@@ -1,0 +1,459 @@
+[gd_scene format=3 uid="uid://db87rtso8n8l0"]
+
+[ext_resource type="Texture2D" uid="uid://bniv2qrjb14o0" path="res://menus/Settings/settings_icon.PNG" id="1_434sr"]
+[ext_resource type="Script" uid="uid://sh0osek64eid" path="res://scripts/singletons/settings_manager.gd" id="1_fks6x"]
+[ext_resource type="Script" uid="uid://dp1y85x3ukl01" path="res://menus/Settings/gear.gd" id="1_g803k"]
+[ext_resource type="Texture2D" uid="uid://cfm8ivajqcipk" path="res://menus/Settings/shrub_BG.PNG" id="2_i1qw6"]
+[ext_resource type="Script" uid="uid://b2ll7buld703p" path="res://menus/Settings/music_slider.gd" id="2_q1l7g"]
+[ext_resource type="Script" uid="uid://b8dtyr5ufgq7m" path="res://menus/Settings/sfx_slider.gd" id="2_t3pqy"]
+[ext_resource type="Texture2D" uid="uid://nyhek2wwylnj" path="res://menus/Settings/apple_slider.png" id="3_fbvfs"]
+[ext_resource type="Texture2D" uid="uid://c364hcy3u3qg4" path="res://menus/Settings/settings_CLICK.PNG" id="3_yunvi"]
+[ext_resource type="FontFile" uid="uid://dg3navvnlkmpw" path="res://shared/fonts/Puffy-gxW55.otf" id="4_a4086"]
+[ext_resource type="Script" uid="uid://cr2ohmp26cq5g" path="res://menus/Settings/ms_slider.gd" id="6_fbvfs"]
+[ext_resource type="Texture2D" uid="uid://cn067lcqdki0f" path="res://menus/Settings/slidebar_1.PNG" id="6_h1rm7"]
+[ext_resource type="Texture2D" uid="uid://bb1wx0of68lhn" path="res://menus/Settings/slidebar_2.PNG" id="9_6lta7"]
+[ext_resource type="Texture2D" uid="uid://bgx7546bgq8vq" path="res://menus/Settings/slidebar_3.PNG" id="11_8vima"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_fks6x"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_fbvfs"]
+
+[sub_resource type="Shader" id="Shader_6lta7"]
+code = "shader_type canvas_item;
+
+// all ai code, feel free to change
+void vertex() {
+	// Called for every vertex the material is visible on.
+}
+
+// Controls for the background gradient
+uniform vec4 color_left : source_color = vec4(1.0, 0.773, 0.322, 1.0);
+uniform vec4 color_right : source_color = vec4(1.0, 0.667, 0.0, 1.0);
+
+// FIX: Controls the shape stretching. 
+// Set this to (Width / Height) of your TextureRect.
+//yeah based on the textureRect size is prob cap by ai, not sure why but ratio=2 works
+uniform float aspect_ratio = 2; 
+uniform float fill_amount : hint_range(0.0, 1.0) = 1;
+
+// Controls for the bubbles
+uniform int bubble_count = 15;
+uniform float min_bubble_size = 0.02;
+uniform float max_bubble_size = 0.08;
+uniform float bubble_speed = 0.5;
+
+float hash(float n) {
+    return fract(sin(n) * 43758.5453123);
+}
+
+void fragment() {
+    // 1. Correct the UV coordinates for aspect ratio
+    // This makes the math treat the space as perfectly square
+    vec2 corrected_uv = UV;
+    corrected_uv.x *= aspect_ratio;
+
+    // 2. Get the shape mask from your custom image texture
+    vec4 mask_color = texture(TEXTURE, UV);
+    float mask = mask_color.a;
+	
+	if (UV.x > fill_amount) {
+        mask = 0.0; 
+    }
+
+    // 3. Create the base background gradient (Left to Right)
+    vec4 base_gradient = mix(color_left, color_right, UV.x);
+    vec3 final_color = base_gradient.rgb;
+
+    // 4. Generate moving bubbles
+    for (int i = 0; i < bubble_count; i++) {
+        float index = float(i);
+        
+        float size = mix(min_bubble_size, max_bubble_size, hash(index + 123.45));
+        float speed_mod = mix(0.5, 1.5, hash(index + 543.21));
+        float start_y = hash(index + 987.65);
+        
+        // Adjust the X movement bounds based on the aspect ratio
+        float x_range = aspect_ratio + (size * 2.0);
+        float x_pos = fract(TIME * bubble_speed * speed_mod + hash(index)) * x_range - size;
+        
+        float y_pos = start_y + sin(TIME * 2.0 + index) * 0.03;
+        
+        // Use corrected_uv for the distance calculation to ensure a perfect circle
+        vec2 bubble_center = vec2(x_pos, y_pos);
+        float dist = distance(corrected_uv, bubble_center);
+        
+        if (dist < size) {
+            float edge = smoothstep(size, size - 0.01, dist);
+            float inner_glow = pow(dist / size, 3.0) * 0.4;
+            final_color = mix(final_color, vec3(1.0), edge * (inner_glow + 0.2));
+        }
+    }
+
+    COLOR = vec4(final_color, mask * base_gradient.a);
+}
+"
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_8vima"]
+shader = SubResource("Shader_6lta7")
+shader_parameter/color_left = Color(1, 0.773, 0.322, 1)
+shader_parameter/color_right = Color(1, 0.667, 0, 1)
+shader_parameter/aspect_ratio = 2.0
+shader_parameter/fill_amount = 1.0
+shader_parameter/bubble_count = 15
+shader_parameter/min_bubble_size = 0.02
+shader_parameter/max_bubble_size = 0.08
+shader_parameter/bubble_speed = 0.5
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_6lta7"]
+
+[sub_resource type="Shader" id="Shader_4ysa8"]
+code = "shader_type canvas_item;
+
+// all ai code, feel free to change
+void vertex() {
+	// Called for every vertex the material is visible on.
+}
+
+// Controls for the background gradient
+uniform vec4 color_left : source_color = vec4(1.0, 0.773, 0.322, 1.0);
+uniform vec4 color_right : source_color = vec4(1.0, 0.667, 0.0, 1.0);
+
+// FIX: Controls the shape stretching. 
+// Set this to (Width / Height) of your TextureRect.
+//yeah based on the textureRect size is prob cap by ai, not sure why but ratio=2 works
+uniform float aspect_ratio = 2; 
+uniform float fill_amount : hint_range(0.0, 1.0) = 1;
+
+// Controls for the bubbles
+uniform int bubble_count = 15;
+uniform float min_bubble_size = 0.02;
+uniform float max_bubble_size = 0.08;
+uniform float bubble_speed = 0.5;
+
+float hash(float n) {
+    return fract(sin(n) * 43758.5453123);
+}
+
+void fragment() {
+    // 1. Correct the UV coordinates for aspect ratio
+    // This makes the math treat the space as perfectly square
+    vec2 corrected_uv = UV;
+    corrected_uv.x *= aspect_ratio;
+
+    // 2. Get the shape mask from your custom image texture
+    vec4 mask_color = texture(TEXTURE, UV);
+    float mask = mask_color.a;
+	
+	if (UV.x > fill_amount) {
+        mask = 0.0; 
+    }
+
+    // 3. Create the base background gradient (Left to Right)
+    vec4 base_gradient = mix(color_left, color_right, UV.x);
+    vec3 final_color = base_gradient.rgb;
+
+    // 4. Generate moving bubbles
+    for (int i = 0; i < bubble_count; i++) {
+        float index = float(i);
+        
+        float size = mix(min_bubble_size, max_bubble_size, hash(index + 123.45));
+        float speed_mod = mix(0.5, 1.5, hash(index + 543.21));
+        float start_y = hash(index + 987.65);
+        
+        // Adjust the X movement bounds based on the aspect ratio
+        float x_range = aspect_ratio + (size * 2.0);
+        float x_pos = fract(TIME * bubble_speed * speed_mod + hash(index)) * x_range - size;
+        
+        float y_pos = start_y + sin(TIME * 2.0 + index) * 0.03;
+        
+        // Use corrected_uv for the distance calculation to ensure a perfect circle
+        vec2 bubble_center = vec2(x_pos, y_pos);
+        float dist = distance(corrected_uv, bubble_center);
+        
+        if (dist < size) {
+            float edge = smoothstep(size, size - 0.01, dist);
+            float inner_glow = pow(dist / size, 3.0) * 0.4;
+            final_color = mix(final_color, vec3(1.0), edge * (inner_glow + 0.2));
+        }
+    }
+
+    COLOR = vec4(final_color, mask * base_gradient.a);
+}
+"
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_bse0t"]
+shader = SubResource("Shader_4ysa8")
+shader_parameter/color_left = Color(1, 0.773, 0.322, 1)
+shader_parameter/color_right = Color(1, 0.667, 0, 1)
+shader_parameter/aspect_ratio = 2.0
+shader_parameter/fill_amount = 1.0
+shader_parameter/bubble_count = 15
+shader_parameter/min_bubble_size = 0.02
+shader_parameter/max_bubble_size = 0.08
+shader_parameter/bubble_speed = 0.5
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_8vima"]
+
+[sub_resource type="Shader" id="Shader_li1gp"]
+code = "shader_type canvas_item;
+
+// all ai code, feel free to change
+void vertex() {
+	// Called for every vertex the material is visible on.
+}
+
+// Controls for the background gradient
+uniform vec4 color_left : source_color = vec4(1.0, 0.773, 0.322, 1.0);
+uniform vec4 color_right : source_color = vec4(1.0, 0.667, 0.0, 1.0);
+
+// FIX: Controls the shape stretching. 
+// Set this to (Width / Height) of your TextureRect.
+//yeah based on the textureRect size is prob cap by ai, not sure why but ratio=2 works
+uniform float aspect_ratio = 2; 
+uniform float fill_amount : hint_range(0.0, 1.0) = 1;
+
+// Controls for the bubbles
+uniform int bubble_count = 15;
+uniform float min_bubble_size = 0.02;
+uniform float max_bubble_size = 0.08;
+uniform float bubble_speed = 0.5;
+
+float hash(float n) {
+    return fract(sin(n) * 43758.5453123);
+}
+
+void fragment() {
+    // 1. Correct the UV coordinates for aspect ratio
+    // This makes the math treat the space as perfectly square
+    vec2 corrected_uv = UV;
+    corrected_uv.x *= aspect_ratio;
+
+    // 2. Get the shape mask from your custom image texture
+    vec4 mask_color = texture(TEXTURE, UV);
+    float mask = mask_color.a;
+	
+	if (UV.x > fill_amount) {
+        mask = 0.0; 
+    }
+
+    // 3. Create the base background gradient (Left to Right)
+    vec4 base_gradient = mix(color_left, color_right, UV.x);
+    vec3 final_color = base_gradient.rgb;
+
+    // 4. Generate moving bubbles
+    for (int i = 0; i < bubble_count; i++) {
+        float index = float(i);
+        
+        float size = mix(min_bubble_size, max_bubble_size, hash(index + 123.45));
+        float speed_mod = mix(0.5, 1.5, hash(index + 543.21));
+        float start_y = hash(index + 987.65);
+        
+        // Adjust the X movement bounds based on the aspect ratio
+        float x_range = aspect_ratio + (size * 2.0);
+        float x_pos = fract(TIME * bubble_speed * speed_mod + hash(index)) * x_range - size;
+        
+        float y_pos = start_y + sin(TIME * 2.0 + index) * 0.03;
+        
+        // Use corrected_uv for the distance calculation to ensure a perfect circle
+        vec2 bubble_center = vec2(x_pos, y_pos);
+        float dist = distance(corrected_uv, bubble_center);
+        
+        if (dist < size) {
+            float edge = smoothstep(size, size - 0.01, dist);
+            float inner_glow = pow(dist / size, 3.0) * 0.4;
+            final_color = mix(final_color, vec3(1.0), edge * (inner_glow + 0.2));
+        }
+    }
+
+    COLOR = vec4(final_color, mask * base_gradient.a);
+}
+"
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_y0eux"]
+shader = SubResource("Shader_li1gp")
+shader_parameter/color_left = Color(1, 0.773, 0.322, 1)
+shader_parameter/color_right = Color(1, 0.667, 0, 1)
+shader_parameter/aspect_ratio = 2.0
+shader_parameter/fill_amount = 1.0
+shader_parameter/bubble_count = 15
+shader_parameter/min_bubble_size = 0.02
+shader_parameter/max_bubble_size = 0.08
+shader_parameter/bubble_speed = 0.5
+
+[node name="Settings" type="Control" unique_id=453627718]
+layout_mode = 3
+anchors_preset = 0
+script = ExtResource("1_fks6x")
+
+[node name="SettingsPopup" type="Control" parent="." unique_id=1503283294]
+visible = false
+anchors_preset = 0
+offset_left = 982.0
+offset_top = 6.0
+offset_right = 1022.0
+offset_bottom = 46.0
+
+[node name="SettingsBackground" type="NinePatchRect" parent="SettingsPopup" unique_id=735799590]
+layout_mode = 0
+offset_left = -761.0
+offset_top = 126.0
+offset_right = 762.0
+offset_bottom = 986.0
+texture = ExtResource("2_i1qw6")
+
+[node name="PanelContainer" type="PanelContainer" parent="SettingsPopup" unique_id=1052344310]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = -13.225
+anchor_top = 7.2
+anchor_right = 13.175001
+anchor_bottom = 22.325
+offset_right = -6.1035156e-05
+offset_bottom = -6.1035156e-05
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxEmpty_fks6x")
+metadata/_edit_use_anchors_ = true
+
+[node name="top bottom split" type="VBoxContainer" parent="SettingsPopup/PanelContainer" unique_id=1072485317]
+layout_mode = 2
+
+[node name="top half" type="HBoxContainer" parent="SettingsPopup/PanelContainer/top bottom split" unique_id=1309337309]
+layout_mode = 2
+
+[node name="left buttons" type="VBoxContainer" parent="SettingsPopup/PanelContainer/top bottom split/top half" unique_id=448444753]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 0
+
+[node name="Sfx" type="HBoxContainer" parent="SettingsPopup/PanelContainer/top bottom split/top half/left buttons" unique_id=10221862]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="SfxSlider" type="HSlider" parent="SettingsPopup/PanelContainer/top bottom split/top half/left buttons/Sfx" unique_id=1720331404]
+custom_minimum_size = Vector2(250, 20)
+layout_mode = 2
+theme_override_constants/center_grabber = 1
+theme_override_icons/grabber = ExtResource("3_fbvfs")
+theme_override_icons/grabber_highlight = ExtResource("3_fbvfs")
+theme_override_icons/grabber_disabled = ExtResource("3_fbvfs")
+theme_override_styles/slider = SubResource("StyleBoxEmpty_fbvfs")
+max_value = 1.0
+step = 0.05
+value = 1.0
+script = ExtResource("2_t3pqy")
+
+[node name="TextureRect" type="TextureRect" parent="SettingsPopup/PanelContainer/top bottom split/top half/left buttons/Sfx/SfxSlider" unique_id=643732924]
+show_behind_parent = true
+material = SubResource("ShaderMaterial_8vima")
+layout_mode = 0
+offset_left = -2.0
+offset_top = 10.0
+offset_right = 273.0
+offset_bottom = 85.0
+texture = ExtResource("6_h1rm7")
+expand_mode = 1
+stretch_mode = 6
+
+[node name="Label" type="Label" parent="SettingsPopup/PanelContainer/top bottom split/top half/left buttons/Sfx" unique_id=156660851]
+layout_mode = 2
+size_flags_horizontal = 10
+theme_override_fonts/font = ExtResource("4_a4086")
+theme_override_font_sizes/font_size = 24
+text = "Sfx"
+
+[node name="Music" type="HBoxContainer" parent="SettingsPopup/PanelContainer/top bottom split/top half/left buttons" unique_id=1649483098]
+layout_mode = 2
+
+[node name="MusicSlider" type="HSlider" parent="SettingsPopup/PanelContainer/top bottom split/top half/left buttons/Music" unique_id=575193384]
+custom_minimum_size = Vector2(250, 20)
+layout_mode = 2
+theme_override_constants/center_grabber = 1
+theme_override_icons/grabber = ExtResource("3_fbvfs")
+theme_override_icons/grabber_highlight = ExtResource("3_fbvfs")
+theme_override_icons/grabber_disabled = ExtResource("3_fbvfs")
+theme_override_styles/slider = SubResource("StyleBoxEmpty_6lta7")
+max_value = 1.0
+step = 0.05
+value = 1.0
+script = ExtResource("2_q1l7g")
+
+[node name="TextureRect" type="TextureRect" parent="SettingsPopup/PanelContainer/top bottom split/top half/left buttons/Music/MusicSlider" unique_id=905368406]
+show_behind_parent = true
+material = SubResource("ShaderMaterial_bse0t")
+layout_mode = 0
+offset_left = -3.0
+offset_top = 10.0
+offset_right = 272.0
+offset_bottom = 85.0
+texture = ExtResource("9_6lta7")
+expand_mode = 1
+stretch_mode = 6
+
+[node name="Label" type="Label" parent="SettingsPopup/PanelContainer/top bottom split/top half/left buttons/Music" unique_id=1214477434]
+layout_mode = 2
+size_flags_horizontal = 10
+theme_override_fonts/font = ExtResource("4_a4086")
+theme_override_font_sizes/font_size = 24
+text = "Music"
+
+[node name="MS" type="HBoxContainer" parent="SettingsPopup/PanelContainer/top bottom split/top half/left buttons" unique_id=1005078158]
+layout_mode = 2
+
+[node name="MSSlider" type="HSlider" parent="SettingsPopup/PanelContainer/top bottom split/top half/left buttons/MS" unique_id=1105113092]
+custom_minimum_size = Vector2(250, 20)
+layout_mode = 2
+theme_override_constants/center_grabber = 1
+theme_override_icons/grabber = ExtResource("3_fbvfs")
+theme_override_icons/grabber_highlight = ExtResource("3_fbvfs")
+theme_override_icons/grabber_disabled = ExtResource("3_fbvfs")
+theme_override_styles/slider = SubResource("StyleBoxEmpty_8vima")
+max_value = 1.0
+step = 0.05
+value = 1.0
+script = ExtResource("6_fbvfs")
+
+[node name="TextureRect" type="TextureRect" parent="SettingsPopup/PanelContainer/top bottom split/top half/left buttons/MS/MSSlider" unique_id=1677244730]
+show_behind_parent = true
+material = SubResource("ShaderMaterial_y0eux")
+layout_mode = 1
+anchors_preset = -1
+anchor_left = -0.023599975
+anchor_top = 0.25862068
+anchor_right = 1.1254001
+anchor_bottom = 1.4368275
+offset_left = -0.10000038
+offset_top = -13.5
+offset_right = -12.350006
+offset_bottom = -41.003998
+texture = ExtResource("11_8vima")
+expand_mode = 1
+stretch_mode = 6
+metadata/_edit_use_anchors_ = true
+
+[node name="Label" type="Label" parent="SettingsPopup/PanelContainer/top bottom split/top half/left buttons/MS" unique_id=2063166471]
+layout_mode = 2
+size_flags_horizontal = 10
+theme_override_fonts/font = ExtResource("4_a4086")
+theme_override_font_sizes/font_size = 24
+text = "Mouse Sensitivity"
+
+[node name="right buttons" type="VBoxContainer" parent="SettingsPopup/PanelContainer/top bottom split/top half" unique_id=854767007]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="bottom half" type="HBoxContainer" parent="SettingsPopup/PanelContainer/top bottom split" unique_id=126377296]
+layout_mode = 2
+
+[node name="Gear" type="TextureButton" parent="." unique_id=1630564991]
+layout_mode = 0
+offset_left = 898.0
+offset_top = 39.0
+offset_right = 2456.0
+offset_bottom = 1597.0
+scale = Vector2(0.12000017, 0.11999927)
+texture_normal = ExtResource("1_434sr")
+texture_pressed = ExtResource("3_yunvi")
+script = ExtResource("1_g803k")
+
+[connection signal="pressed" from="Gear" to="Gear" method="_on_pressed"]

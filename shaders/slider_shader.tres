@@ -1,0 +1,14 @@
+[gd_resource type="ShaderMaterial" format=3 uid="uid://c5nmncfodiavg"]
+
+[ext_resource type="Shader" uid="uid://dr0vrg8jjrqcb" path="res://menus/Settings/slider.gdshader" id="1_m11pw"]
+
+[resource]
+shader = ExtResource("1_m11pw")
+shader_parameter/color_left = Color(1, 0.773, 0.322, 1)
+shader_parameter/color_right = Color(1, 0.667, 0, 1)
+shader_parameter/aspect_ratio = 2.0
+shader_parameter/fill_amount = 1.0
+shader_parameter/bubble_count = 15
+shader_parameter/min_bubble_size = 0.02
+shader_parameter/max_bubble_size = 0.08
+shader_parameter/bubble_speed = 0.5
