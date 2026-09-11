@@ -52,6 +52,7 @@ const BLINK := [
 
 @onready var _eyes: TextureRect = $Eyes
 
+var look_enabled: bool = true
 var _mouse_in_window: bool = true
 var _row: StringName = &"middle"
 var _pose: StringName = &"front"
@@ -71,6 +72,10 @@ func _notification(what: int) -> void:
 
 func _process(delta: float) -> void:
 	if not is_visible_in_tree():
+		return
+
+	if not look_enabled:
+		_apply(&"middle", &"front", false)
 		return
 
 	var row: StringName = &"middle"

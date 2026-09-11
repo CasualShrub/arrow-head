@@ -93,6 +93,7 @@ func _play_intro() -> void:
 	_title.modulate.a = 0.0
 	_title.visible = true
 	_apple.visible = true
+	_apple.set(&"look_enabled", false)
 	_labels_root.modulate.a = 0.0
 	_labels_root.visible = true
 	_sectors.visible = false
@@ -112,6 +113,7 @@ func _play_intro() -> void:
 	tween.tween_property(_labels_root, "modulate:a", 1.0, labels_fade_time)
 	await tween.finished
 
+	_apple.set(&"look_enabled", true)
 	shake.intensity = 0.0
 	get_viewport().canvas_transform = Transform2D.IDENTITY
 	_title.visible = false
