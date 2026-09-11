@@ -35,6 +35,14 @@ signal sector_hovered(sector: StringName)
 @export_group("Button Feedback")
 @export var click_darken: float = 0.28
 
+@export_group("Edges")
+@export var show_edges: bool = false:
+	set(v): show_edges = v; queue_redraw()
+@export var edge_color: Color = Color(1, 1, 1, 0.22):
+	set(v): edge_color = v; queue_redraw()
+@export var edge_width: float = 3.0:
+	set(v): edge_width = v; queue_redraw()
+
 var _hovered: StringName = &""
 var _darkened: StringName = &""
 var _hover_fill: Polygon2D
@@ -174,6 +182,7 @@ func _draw() -> void:
 			draw_colored_polygon(poly, Color(col.r, col.g, col.b, 0.22))
 		elif s["name"] == _darkened:
 			draw_colored_polygon(poly, Color(0, 0, 0, click_darken))
-		var edge_col := Color(col.r, col.g, col.b, 0.9) if editor else Color(1, 1, 1, 0.22)
-		draw_line(c, _edge_point(a0), edge_col, 3.0)
-		draw_line(c, _edge_point(a1), edge_col, 3.0)
+		if show_edges:
+			var edge_col := Color(col.r, col.g, col.b, 0.9) if editor else edge_color
+			draw_line(c, _edge_point(a0), edge_col, edge_width)
+			draw_line(c, _edge_point(a1), edge_col, edge_width)

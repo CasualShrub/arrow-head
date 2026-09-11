@@ -20,6 +20,7 @@
 [ext_resource type="Texture2D" uid="uid://bfkgltqto3ai" path="res://menus/main_menu/big_blue_arrow.png" id="13_ice"]
 [ext_resource type="Script" uid="uid://it1hcnvfi1hr" path="res://scripts/classes/screen_shake.gd" id="14_shake"]
 [ext_resource type="PackedScene" uid="uid://c8ghost4gme01" path="res://scenes/game.tscn" id="15_game"]
+[ext_resource type="Shader" uid="uid://blt3jorw6dqxv" path="res://menus/main_menu/dots_wave.gdshader" id="16_dots_wave"]
 
 [sub_resource type="Resource" id="ScreenShake_menu"]
 resource_local_to_scene = true
@@ -28,6 +29,12 @@ stimulus_amount = 0.9
 decay = 2.2
 max_offset = 34.0
 metadata/_custom_type_script = "uid://it1hcnvfi1hr"
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_dots"]
+shader = ExtResource("16_dots_wave")
+shader_parameter/wave_speed = 0.3
+shader_parameter/wave_amount = Vector2(0.012, 0.012)
+shader_parameter/wave_frequency = Vector2(3.7, 3)
 
 [node name="MainMenu" type="Control" unique_id=1484598755]
 layout_mode = 3
@@ -57,6 +64,7 @@ color = Color(0, 0, 0, 1)
 
 [node name="Dots" type="TextureRect" parent="." unique_id=1572156879]
 z_index = -1
+material = SubResource("ShaderMaterial_dots")
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -80,13 +88,13 @@ grow_vertical = 2
 script = ExtResource("6_sectors")
 play_center = 205.015
 play_half = 44.225
-play_pattern = ExtResource("9_c1gu4")
+play_pattern = ExtResource("11_c1gu4")
 levels_center = -33.195
 levels_half = 30.505
 levels_pattern = ExtResource("10_oi7a3")
 exit_center = 56.075
 exit_half = 41.125
-exit_pattern = ExtResource("11_c1gu4")
+exit_pattern = ExtResource("9_c1gu4")
 pattern_shader = ExtResource("12_oi7a3")
 
 [node name="Apple" type="TextureRect" parent="." unique_id=1931255156]
