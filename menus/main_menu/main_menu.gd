@@ -40,6 +40,12 @@ var _label_base_scale := {}
 
 func _ready() -> void:
 	Engine.time_scale = 1.0  # clear leftover slowmo when quitting out mid-game
+
+	var first_load := not GameManager.main_menu_intro_played
+	if first_load:
+		GameManager.main_menu_intro_played = true
+		_prepare_intro()
+
 	var viewport = SubViewport.new()
 	viewport.size = Vector2i(1, 1)  # tiny, barely renders
 	viewport.render_target_update_mode = SubViewport.UPDATE_ALWAYS
@@ -65,11 +71,16 @@ func _ready() -> void:
 	if _level_select:
 		_level_select.hide()
 
-	if GameManager.main_menu_intro_played:
-		_show_menu_instant()
-	else:
-		GameManager.main_menu_intro_played = true
+	if first_load:
 		_play_intro()
+	else:
+		_show_menu_instant()
+
+func _prepare_intro() -> void:
+	_title.visible = false
+	_apple.visible = false
+	_labels_root.modulate.a = 0.0
+	_sectors.visible = false
 
 func _show_menu_instant() -> void:
 	_title.visible = false
@@ -81,6 +92,7 @@ func _show_menu_instant() -> void:
 func _play_intro() -> void:
 	_title.modulate.a = 0.0
 	_title.visible = true
+	_apple.visible = true
 	_labels_root.modulate.a = 0.0
 	_labels_root.visible = true
 	_sectors.visible = false
