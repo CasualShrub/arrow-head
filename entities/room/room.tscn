@@ -2,10 +2,16 @@
 
 [ext_resource type="Script" uid="uid://cm3vh4qq01y8d" path="res://entities/room/room.gd" id="1_ybpoa"]
 [ext_resource type="PackedScene" uid="uid://boryk37cbh1nx" path="res://entities/player/player.tscn" id="2_qtoah"]
+[ext_resource type="Texture2D" uid="uid://0g4rbrdjvt8c" path="res://systems/floor/BLANK grass.PNG" id="4_t3ekj"]
 [ext_resource type="Script" uid="uid://eu00f1h8cit6" path="res://systems/floor/floor.gd" id="4_tk5fv"]
 [ext_resource type="Shader" uid="uid://nejcjbetx08r" path="res://shaders/darken_exclude.gdshader" id="4_ybpoa"]
+[ext_resource type="Texture2D" uid="uid://cxnjm3smajfkf" path="res://systems/floor/var1.PNG" id="5_81v6v"]
 [ext_resource type="PackedScene" uid="uid://bg4meover1ui0" path="res://menus/game_over/game_over.tscn" id="6_23wr2"]
+[ext_resource type="Texture2D" uid="uid://b74rajeyw0sdd" path="res://systems/floor/var2.PNG" id="6_qg0iu"]
 [ext_resource type="PackedScene" uid="uid://dgwhmtq7epmrm" path="res://menus/pause/pause.tscn" id="7_3j2fx"]
+[ext_resource type="Texture2D" uid="uid://6encdhbu133b" path="res://systems/floor/var3.PNG" id="7_rnxti"]
+[ext_resource type="Texture2D" uid="uid://clfltebgbn3f6" path="res://systems/floor/var4.PNG" id="8_xyui2"]
+[ext_resource type="Texture2D" uid="uid://bqislijt1qfjn" path="res://systems/floor/var5.PNG" id="9_bys4u"]
 [ext_resource type="PackedScene" uid="uid://brdllokhjucwb" path="res://ui/level_timer/level_timer.tscn" id="10_pkxqy"]
 [ext_resource type="PackedScene" uid="uid://ctc58r8jhuyu5" path="res://ui/juice_bar/juice_bar_hud.tscn" id="10_qtoah"]
 
@@ -43,6 +49,7 @@ transform = Transform3D(0.8239569, 7.3667486e-08, 0.5666525, -0.29468933, 0.8541
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.2, 0)
 mesh = SubResource("QuadMesh_8wtow")
 script = ExtResource("4_tk5fv")
+floor_tiles = Array[Texture2D]([ExtResource("4_t3ekj"), ExtResource("5_81v6v"), ExtResource("6_qg0iu"), ExtResource("7_rnxti"), ExtResource("8_xyui2"), ExtResource("9_bys4u")])
 
 [node name="Darken" type="CanvasLayer" parent="." unique_id=1976756876]
 layer = 10

@@ -3,13 +3,13 @@
 extends GeometryInstance3D
 class_name GrassFloor
 
-const FLOOR_TILES: Array[Texture2D] = [
-	preload("uid://5hy638fvyevd"),
-	preload("uid://0lmw4s7jhkqt"),
-	preload("uid://d36keilc5ipfc"),
-	preload("uid://hfeerd7gji65"),
-	preload("uid://dmkbg56vsyjnc"),
-]
+@export var floor_tiles: Array[Texture2D] = []:
+	set(value):
+		floor_tiles = value
+		_preview_material = null
+		_preview_texture = null
+		if is_inside_tree():
+			_apply_preview()
 
 @export_tool_button("Reload", "Reload")
 var reload_button := func():
@@ -76,7 +76,7 @@ func _build_texture() -> ImageTexture:
 
 	for cy in range(cells):
 		for cx in range(cells):
-			var tex: Texture2D = FLOOR_TILES.pick_random()
+			var tex: Texture2D = floor_tiles.pick_random()
 			var src := tex.get_image()
 
 			if src.is_compressed():
