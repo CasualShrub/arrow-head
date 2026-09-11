@@ -8,6 +8,8 @@ signal campaign_ended(campaign: CampaignState)
 signal level_loaded(level: Level)
 signal level_unloading(level: Level)
 
+var main_menu_intro_played := false
+
 var current_campaign: CampaignState
 var current_level: Level
 var game_parent : Node

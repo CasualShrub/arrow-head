@@ -15,10 +15,19 @@ extends Control
 @export_group("Impact Shake")
 @export var shake: ScreenShake
 
+@export_group("Intro Animation")
+@export var title_fade_time: float = 0.8
+@export var title_hold_time: float = 1.5
+@export var apple_fall_distance: float = 1100.0
+@export var apple_fall_time: float = 0.55
+@export var title_pan_time: float = 0.7
+@export var labels_fade_time: float = 0.5
+
 @onready var _level_select: Control = $LevelSelect
 @onready var _sectors: Control = $"Sectors (Buttons)"
 @onready var _apple: Control = $Apple
 @onready var _title: Control = $Title
+@onready var _labels_root: Control = $Labels
 @onready var _launch_arrow: Sprite2D = $LaunchArrow
 
 var _launching := false
@@ -55,6 +64,46 @@ func _ready() -> void:
 	_on_sector_hovered(&"")
 	if _level_select:
 		_level_select.hide()
+
+	if GameManager.main_menu_intro_played:
+		_show_menu_instant()
+	else:
+		GameManager.main_menu_intro_played = true
+		_play_intro()
+
+func _show_menu_instant() -> void:
+	_title.visible = false
+	_apple.modulate.a = 1.0
+	_labels_root.modulate.a = 1.0
+	_labels_root.visible = true
+	_sectors.visible = true
+
+func _play_intro() -> void:
+	_title.modulate.a = 0.0
+	_title.visible = true
+	_labels_root.modulate.a = 0.0
+	_labels_root.visible = true
+	_sectors.visible = false
+	var title_rest_y := _title.position.y
+	var apple_rest_y := _apple.position.y
+	_apple.position.y = apple_rest_y - apple_fall_distance
+
+	var tween := create_tween()
+	tween.tween_property(_title, "modulate:a", 1.0, title_fade_time)
+	tween.tween_interval(title_hold_time)
+	tween.tween_property(_apple, "position:y", apple_rest_y, apple_fall_time) \
+		.set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN)
+	tween.tween_callback(shake.trigger)
+	tween.tween_property(_title, "position:y", -(_title.size.y + 100.0), title_pan_time) \
+		.set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_IN)
+	tween.tween_callback(func() -> void: _sectors.visible = true)
+	tween.tween_property(_labels_root, "modulate:a", 1.0, labels_fade_time)
+	await tween.finished
+
+	shake.intensity = 0.0
+	get_viewport().canvas_transform = Transform2D.IDENTITY
+	_title.visible = false
+	_title.position.y = title_rest_y
 
 func _on_sector_activated(sector: StringName) -> void:
 	if _launching:
@@ -115,8 +164,7 @@ func _on_sector_hovered(sector: StringName) -> void:
 func _set_menu_shown(shown: bool) -> void:
 	_sectors.visible = shown
 	_apple.visible = shown
-	_title.visible = shown
-	$Labels.visible = shown
+	_labels_root.visible = shown
 
 func _open_levels() -> void:
 	if _level_select:
