@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" uid="uid://bugssx86lrsmi" path="res://menus/main_menu/main_menu.gd" id="1_oic2i"]
 [ext_resource type="Texture2D" uid="uid://xtwlpdcb73i7" path="res://menus/main_menu/main_menu_background.png" id="3_f7ts8"]
-[ext_resource type="Texture2D" uid="uid://b2vww8jgbyk5x" path="res://menus/main_menu/title2.png" id="4_81su3"]
+[ext_resource type="Texture2D" uid="uid://p75mdr2e67ra" path="res://menus/main_menu/title.PNG" id="4_81su3"]
 [ext_resource type="Script" uid="uid://deyltpalamqlt" path="res://menus/main_menu/apple_look.gd" id="4_apple"]
 [ext_resource type="Texture2D" uid="uid://dpf5ekyd016md" path="res://menus/main_menu/apple_assets/middle_front_eyes.PNG" id="4_meyes"]
 [ext_resource type="Texture2D" uid="uid://dotinjptgf7d3" path="res://menus/main_menu/apple_assets/middle_front.PNG" id="4_mfront"]
