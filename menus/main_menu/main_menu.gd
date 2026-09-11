@@ -29,10 +29,16 @@ extends Control
 @onready var _title: Control = $Title
 @onready var _labels_root: Control = $Labels
 @onready var _launch_arrow: Sprite2D = $LaunchArrow
+@onready var _skip_prompt: Label = $SkipPrompt
 
 var _launching := false
 var _hovered_sector: StringName = &""
 var _darkened_label: StringName = &""
+var _intro_playing := false
+var _is_showing_skip_prompt := false
+var _intro_tween: Tween
+var _apple_rest_y := 0.0
+var _title_rest_y := 0.0
 @onready var _labels := {
 	&"play": $Labels/Play,
 	&"levels": $Labels/Levels,
@@ -92,6 +98,7 @@ func _show_menu_instant() -> void:
 	_sectors.visible = true
 
 func _play_intro() -> void:
+	_intro_playing = true
 	_title.modulate.a = 0.0
 	_title.visible = true
 	_apple.visible = true
@@ -99,27 +106,50 @@ func _play_intro() -> void:
 	_labels_root.modulate.a = 0.0
 	_labels_root.visible = true
 	_sectors.visible = false
-	var title_rest_y := _title.position.y
-	var apple_rest_y := _apple.position.y
-	_apple.position.y = apple_rest_y - apple_fall_distance
+	_title_rest_y = _title.position.y
+	_apple_rest_y = _apple.position.y
+	_apple.position.y = _apple_rest_y - apple_fall_distance
 
-	var tween := create_tween()
-	tween.tween_property(_title, "modulate:a", 1.0, title_fade_time)
-	tween.tween_interval(title_hold_time)
-	tween.tween_property(_apple, "position:y", apple_rest_y, apple_fall_time) \
+	_intro_tween = create_tween()
+	_intro_tween.tween_property(_title, "modulate:a", 1.0, title_fade_time)
+	_intro_tween.tween_interval(title_hold_time)
+	_intro_tween.tween_property(_apple, "position:y", _apple_rest_y, apple_fall_time) \
 		.set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN)
-	tween.tween_callback(shake.trigger)
-	tween.tween_property(_title, "position:y", -(_title.size.y + 100.0), title_pan_time) \
+	_intro_tween.tween_callback(shake.trigger)
+	_intro_tween.tween_property(_title, "position:y", -(_title.size.y + 100.0), title_pan_time) \
 		.set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_IN)
-	tween.tween_callback(func() -> void: _sectors.visible = true)
-	tween.tween_property(_labels_root, "modulate:a", 1.0, labels_fade_time)
-	await tween.finished
+	_intro_tween.tween_callback(func() -> void: _sectors.visible = true)
+	_intro_tween.tween_property(_labels_root, "modulate:a", 1.0, labels_fade_time)
+	_intro_tween.finished.connect(_finish_intro)
 
+func _input(event: InputEvent) -> void:
+	if not _intro_playing:
+		return
+	if event is InputEventMouseButton and event.pressed:
+		if not _is_showing_skip_prompt:
+			_is_showing_skip_prompt = true
+			_skip_prompt.visible = true
+		else:
+			_finish_intro()
+		get_viewport().set_input_as_handled()
+
+func _finish_intro() -> void:
+	if not _intro_playing:
+		return
+	_intro_playing = false
+	if _intro_tween and _intro_tween.is_valid():
+		_intro_tween.kill()
+
+	_skip_prompt.visible = false
+	_apple.position.y = _apple_rest_y
 	_apple.set(&"look_enabled", true)
+	_title.visible = false
+	_title.position.y = _title_rest_y
+	_labels_root.modulate.a = 1.0
+	_labels_root.visible = true
+	_sectors.visible = true
 	shake.intensity = 0.0
 	get_viewport().canvas_transform = Transform2D.IDENTITY
-	_title.visible = false
-	_title.position.y = title_rest_y
 
 func _on_sector_activated(sector: StringName) -> void:
 	if _launching:
