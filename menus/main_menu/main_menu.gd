@@ -31,6 +31,8 @@ extends Control
 @onready var _launch_arrow: Sprite2D = $LaunchArrow
 
 var _launching := false
+var _hovered_sector: StringName = &""
+var _darkened_label: StringName = &""
 @onready var _labels := {
 	&"play": $Labels/Play,
 	&"levels": $Labels/Levels,
@@ -122,6 +124,7 @@ func _play_intro() -> void:
 func _on_sector_activated(sector: StringName) -> void:
 	if _launching:
 		return
+	_set_sector_darkened(sector)
 	match sector:
 		&"play":
 			_launch(_sectors.play_center, play_arrow, func() -> void: get_tree().change_scene_to_packed(game_scene))
@@ -159,8 +162,14 @@ func _launch(sector_center_deg: float, texture: Texture2D, on_complete: Callable
 	shake.intensity = 0.0
 	get_viewport().canvas_transform = Transform2D.IDENTITY
 	on_complete.call()
+	_set_sector_darkened(&"")
 	_launch_arrow.hide()
 	_launching = false
+
+func _set_sector_darkened(sector: StringName) -> void:
+	_darkened_label = sector
+	_sectors.set_darkened(sector)
+	_on_sector_hovered(_hovered_sector)
 
 func _process(delta: float) -> void:
 	if shake.intensity <= 0.0:
@@ -168,12 +177,15 @@ func _process(delta: float) -> void:
 	get_viewport().canvas_transform = Transform2D(0.0, shake.poll(delta))
 
 func _on_sector_hovered(sector: StringName) -> void:
+	_hovered_sector = sector
 	for key in _labels:
 		var label: Control = _labels[key]
 		var active: bool = key == sector
 		var base: Vector2 = _label_base_scale.get(key, label.scale)
 		label.scale = base * 1.08 if active else base
 		label.modulate = Color.WHITE if active else Color(0.86, 0.86, 0.86)
+		if key == _darkened_label:
+			label.modulate = label.modulate.darkened(_sectors.click_darken)
 
 func _set_menu_shown(shown: bool) -> void:
 	_sectors.visible = shown

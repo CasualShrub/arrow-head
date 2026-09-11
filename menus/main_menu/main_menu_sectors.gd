@@ -32,7 +32,11 @@ signal sector_hovered(sector: StringName)
 @export var pattern_pan_speed: Vector2 = Vector2(-0.025, -0.025)
 @export var pattern_tiling: Vector2 = Vector2(3, 2)
 
+@export_group("Button Feedback")
+@export var click_darken: float = 0.28
+
 var _hovered: StringName = &""
+var _darkened: StringName = &""
 var _hover_fill: Polygon2D
 
 func _ready() -> void:
@@ -71,6 +75,12 @@ func _update_hover_fill() -> void:
 			_hover_fill.uv = uv
 			_hover_fill.show()
 			return
+
+func set_darkened(sector: StringName) -> void:
+	if _darkened == sector:
+		return
+	_darkened = sector
+	queue_redraw()
 
 func _sectors() -> Array:
 	return [
@@ -162,6 +172,8 @@ func _draw() -> void:
 		var poly := _wedge(a0, a1)
 		if editor:
 			draw_colored_polygon(poly, Color(col.r, col.g, col.b, 0.22))
+		elif s["name"] == _darkened:
+			draw_colored_polygon(poly, Color(0, 0, 0, click_darken))
 		var edge_col := Color(col.r, col.g, col.b, 0.9) if editor else Color(1, 1, 1, 0.22)
 		draw_line(c, _edge_point(a0), edge_col, 3.0)
 		draw_line(c, _edge_point(a1), edge_col, 3.0)
