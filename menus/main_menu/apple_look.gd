@@ -1,3 +1,4 @@
+@icon("res://addons/at-icons/used/control/apple.svg")
 extends TextureRect
 
 const POSES := {

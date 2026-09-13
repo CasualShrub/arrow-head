@@ -1,3 +1,4 @@
+@icon("res://addons/at-icons/used/control/play.svg")
 extends Control
 
 @export var game_scene: PackedScene

@@ -30,9 +30,6 @@ shader_parameter/opacity = 1.0
 [sub_resource type="QuadMesh" id="QuadMesh_ub6uw"]
 orientation = 1
 
-[sub_resource type="BoxMesh" id="BoxMesh_ub6uw"]
-size = Vector3(0.4, 0.4, 0.4)
-
 [node name="DashPreview" type="Node3D" unique_id=609039478]
 script = ExtResource("1_miij3")
 color = Color(0.101960786, 0.6, 1, 0.59607846)
@@ -73,7 +70,3 @@ transform = Transform3D(26, 0, 0, 0, 1, 0, 0, 0, 26, 0, 0, 0)
 layers = 524289
 material_override = SubResource("ShaderMaterial_b72i6")
 mesh = SubResource("QuadMesh_ub6uw")
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=1435882438]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -5)
-mesh = SubResource("BoxMesh_ub6uw")
