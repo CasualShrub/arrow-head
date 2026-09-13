@@ -16,9 +16,8 @@ func _ready() -> void:
 	var current_db = AudioServer.get_bus_volume_db(bus_index)
 	value = db_to_linear(current_db)
 	
-	#juice shader
+	#slider shader
 	_update_shader_fill(value)
-	
 	value_changed.connect(_update_shader_fill)
 
 func _on_value_changed(new_value: float) -> void:
@@ -27,7 +26,8 @@ func _on_value_changed(new_value: float) -> void:
 	AudioServer.set_bus_volume_db(bus_index, db_value)
 	
 	
-func _update_shader_fill(new_value: float) -> void:
+	
+func _update_shader_fill(new_value: float) -> void: #updates slider
 	# Calculate fill ratio between 0.0 and 1.0
 	var fill_ratio = (new_value - min_value) / (max_value - min_value)
 	
@@ -35,3 +35,6 @@ func _update_shader_fill(new_value: float) -> void:
 	var mat = texture_rect.material as ShaderMaterial
 	if mat:
 		mat.set_shader_parameter("fill_amount", fill_ratio)
+
+func _on_drag_ended(value_changed):
+	SettingsManager._save()

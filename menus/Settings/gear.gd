@@ -10,8 +10,8 @@ var fade_tween: Tween
 func _ready():
 	
 	#makes settings screen invis
-	SettingsPopup.modulate.a=0.0
-	SettingsPopup.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	#SettingsPopup.modulate.a=0.0
+	#SettingsPopup.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	
 	SettingsPopup.visible=false
 	
@@ -40,7 +40,7 @@ func _on_pressed():
 	
 	self.rotation_degrees=0
 
-	if is_showing:
+	if SettingsPopup.visible == false:
 		#SettingsPopup.mouse_filter = Control.MOUSE_FILTER_STOP
 		SettingsPopup.visible=true
 		
@@ -53,9 +53,9 @@ func _on_pressed():
 		#SettingsPopup.mouse_filter = Control.MOUSE_FILTER_IGNORE
 		SettingsPopup.visible=false
 		
-		fade_tween.tween_property(SettingsPopup, "modulate:a", 0.0, fade_duration)\
-		.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN)
-		tween.tween_property(self, "rotation_degrees", -45, 0.4).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
+		#fade_tween.tween_property(SettingsPopup, "modulate:a", 0.0, fade_duration)\
+		#.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN)
+		#tween.tween_property(self, "rotation_degrees", -45, 0.4).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
 
 	#SettingsPopup.visible = !SettingsPopup.visible
 	

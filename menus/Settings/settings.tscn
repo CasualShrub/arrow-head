@@ -6,13 +6,32 @@
 [ext_resource type="Texture2D" uid="uid://cfm8ivajqcipk" path="res://menus/Settings/shrub_BG.PNG" id="2_i1qw6"]
 [ext_resource type="Script" uid="uid://b2ll7buld703p" path="res://menus/Settings/music_slider.gd" id="2_q1l7g"]
 [ext_resource type="Script" uid="uid://b8dtyr5ufgq7m" path="res://menus/Settings/sfx_slider.gd" id="2_t3pqy"]
+[ext_resource type="Texture2D" uid="uid://cnvettd0t2pyj" path="res://menus/Settings/settings_text.PNG" id="3_1qv61"]
 [ext_resource type="Texture2D" uid="uid://nyhek2wwylnj" path="res://menus/Settings/apple_slider.png" id="3_fbvfs"]
 [ext_resource type="Texture2D" uid="uid://c364hcy3u3qg4" path="res://menus/Settings/settings_CLICK.PNG" id="3_yunvi"]
 [ext_resource type="FontFile" uid="uid://dg3navvnlkmpw" path="res://shared/fonts/Puffy-gxW55.otf" id="4_a4086"]
 [ext_resource type="Script" uid="uid://cr2ohmp26cq5g" path="res://menus/Settings/ms_slider.gd" id="6_fbvfs"]
 [ext_resource type="Texture2D" uid="uid://cn067lcqdki0f" path="res://menus/Settings/slidebar_1.PNG" id="6_h1rm7"]
 [ext_resource type="Texture2D" uid="uid://bb1wx0of68lhn" path="res://menus/Settings/slidebar_2.PNG" id="9_6lta7"]
+[ext_resource type="Texture2D" uid="uid://byci4g0f8fxss" path="res://menus/Settings/display_leaf_LIGHTEN.PNG" id="11_4ysa8"]
 [ext_resource type="Texture2D" uid="uid://bgx7546bgq8vq" path="res://menus/Settings/slidebar_3.PNG" id="11_8vima"]
+[ext_resource type="Texture2D" uid="uid://j2ltaygukv4t" path="res://menus/Settings/display_leaf.PNG" id="12_bse0t"]
+[ext_resource type="Texture2D" uid="uid://ys0ocupoixi4" path="res://menus/Settings/display_leaf_DARKEN.PNG" id="13_si3c8"]
+[ext_resource type="Texture2D" uid="uid://dqcxx1uow743q" path="res://menus/Settings/exit_icon.PNG" id="14_nlnvu"]
+[ext_resource type="Texture2D" uid="uid://b71anbvuwgo8m" path="res://menus/Settings/BRANCH.PNG" id="15_ab842"]
+[ext_resource type="Texture2D" uid="uid://b0s0ck01ufl5t" path="res://menus/Settings/exit_icon_DARKEN.PNG" id="15_avnae"]
+[ext_resource type="Script" uid="uid://bau6lcqgw0548" path="res://menus/Settings/close.gd" id="16_ah2in"]
+[ext_resource type="Texture2D" uid="uid://bj5walxuv6wdk" path="res://menus/Settings/moss_1.PNG" id="16_s7qrp"]
+[ext_resource type="Texture2D" uid="uid://bm3xcpg8apa0v" path="res://menus/Settings/moss_1_DARKEN.PNG" id="17_bcdlt"]
+[ext_resource type="Texture2D" uid="uid://b8ffkk20n8yyp" path="res://menus/Settings/moss_1_LIGHTEN.PNG" id="18_2d1k3"]
+[ext_resource type="Texture2D" uid="uid://cysao8leeeb3u" path="res://menus/Settings/moss_2.PNG" id="19_4e1io"]
+[ext_resource type="Texture2D" uid="uid://ce7k04gi7070n" path="res://menus/Settings/moss_2_DARKEN.PNG" id="20_4gl8u"]
+[ext_resource type="Texture2D" uid="uid://cgr6un4b7hcmx" path="res://menus/Settings/moss_2_BRIGHTEN.PNG" id="21_ws7vk"]
+[ext_resource type="Texture2D" uid="uid://bheljaso5t1bg" path="res://menus/Settings/logo_no_outline.PNG" id="22_qngov"]
+[ext_resource type="Texture2D" uid="uid://ccd0mwt5yd7ea" path="res://menus/Settings/logo_no_outline_DARKEN.PNG" id="23_2uq6r"]
+[ext_resource type="Texture2D" uid="uid://bfnqaju5c6kh2" path="res://menus/Settings/moss_3.PNG" id="24_wx4ln"]
+[ext_resource type="Texture2D" uid="uid://nvf7lpjifyfs" path="res://menus/Settings/moss_3_DARKEN.PNG" id="25_bcp6w"]
+[ext_resource type="Texture2D" uid="uid://dldxla4mc7ljt" path="res://menus/Settings/moss_3_LIGHTEN.PNG" id="26_qknxr"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_fks6x"]
 
@@ -286,7 +305,6 @@ anchors_preset = 0
 script = ExtResource("1_fks6x")
 
 [node name="SettingsPopup" type="Control" parent="." unique_id=1503283294]
-visible = false
 anchors_preset = 0
 offset_left = 982.0
 offset_top = 6.0
@@ -295,11 +313,15 @@ offset_bottom = 46.0
 
 [node name="SettingsBackground" type="NinePatchRect" parent="SettingsPopup" unique_id=735799590]
 layout_mode = 0
-offset_left = -761.0
-offset_top = 126.0
-offset_right = 762.0
-offset_bottom = 986.0
+offset_left = -709.0
+offset_right = 674.0
+offset_bottom = 1070.0
 texture = ExtResource("2_i1qw6")
+
+[node name="SettingsText" type="Sprite2D" parent="SettingsPopup/SettingsBackground" unique_id=1179864262]
+position = Vector2(696, 189.00002)
+scale = Vector2(0.20700784, 0.20700786)
+texture = ExtResource("3_1qv61")
 
 [node name="PanelContainer" type="PanelContainer" parent="SettingsPopup" unique_id=1052344310]
 layout_mode = 1
@@ -330,6 +352,11 @@ size_flags_vertical = 0
 layout_mode = 2
 size_flags_vertical = 3
 
+[node name="Slidebar1" type="Sprite2D" parent="SettingsPopup/PanelContainer/top bottom split/top half/left buttons/Sfx" unique_id=936536099]
+position = Vector2(141, 47)
+scale = Vector2(0.1, 0.1)
+texture = ExtResource("6_h1rm7")
+
 [node name="SfxSlider" type="HSlider" parent="SettingsPopup/PanelContainer/top bottom split/top half/left buttons/Sfx" unique_id=1720331404]
 custom_minimum_size = Vector2(250, 20)
 layout_mode = 2
@@ -355,15 +382,24 @@ texture = ExtResource("6_h1rm7")
 expand_mode = 1
 stretch_mode = 6
 
+[node name="MarginContainer" type="MarginContainer" parent="SettingsPopup/PanelContainer/top bottom split/top half/left buttons/Sfx" unique_id=1603870583]
+custom_minimum_size = Vector2(20, 0)
+layout_mode = 2
+
 [node name="Label" type="Label" parent="SettingsPopup/PanelContainer/top bottom split/top half/left buttons/Sfx" unique_id=156660851]
 layout_mode = 2
-size_flags_horizontal = 10
+size_flags_horizontal = 6
 theme_override_fonts/font = ExtResource("4_a4086")
-theme_override_font_sizes/font_size = 24
+theme_override_font_sizes/font_size = 36
 text = "Sfx"
 
 [node name="Music" type="HBoxContainer" parent="SettingsPopup/PanelContainer/top bottom split/top half/left buttons" unique_id=1649483098]
 layout_mode = 2
+
+[node name="Slidebar2" type="Sprite2D" parent="SettingsPopup/PanelContainer/top bottom split/top half/left buttons/Music" unique_id=1701527946]
+position = Vector2(139, 48)
+scale = Vector2(0.1, 0.1)
+texture = ExtResource("9_6lta7")
 
 [node name="MusicSlider" type="HSlider" parent="SettingsPopup/PanelContainer/top bottom split/top half/left buttons/Music" unique_id=575193384]
 custom_minimum_size = Vector2(250, 20)
@@ -390,15 +426,24 @@ texture = ExtResource("9_6lta7")
 expand_mode = 1
 stretch_mode = 6
 
+[node name="MarginContainer" type="MarginContainer" parent="SettingsPopup/PanelContainer/top bottom split/top half/left buttons/Music" unique_id=1686243444]
+custom_minimum_size = Vector2(20, 0)
+layout_mode = 2
+
 [node name="Label" type="Label" parent="SettingsPopup/PanelContainer/top bottom split/top half/left buttons/Music" unique_id=1214477434]
 layout_mode = 2
-size_flags_horizontal = 10
+size_flags_horizontal = 6
 theme_override_fonts/font = ExtResource("4_a4086")
-theme_override_font_sizes/font_size = 24
+theme_override_font_sizes/font_size = 36
 text = "Music"
 
 [node name="MS" type="HBoxContainer" parent="SettingsPopup/PanelContainer/top bottom split/top half/left buttons" unique_id=1005078158]
 layout_mode = 2
+
+[node name="Slidebar3" type="Sprite2D" parent="SettingsPopup/PanelContainer/top bottom split/top half/left buttons/MS" unique_id=922422582]
+position = Vector2(136, 47)
+scale = Vector2(0.1, 0.1)
+texture = ExtResource("11_8vima")
 
 [node name="MSSlider" type="HSlider" parent="SettingsPopup/PanelContainer/top bottom split/top half/left buttons/MS" unique_id=1105113092]
 custom_minimum_size = Vector2(250, 20)
@@ -431,29 +476,189 @@ expand_mode = 1
 stretch_mode = 6
 metadata/_edit_use_anchors_ = true
 
+[node name="MarginContainer" type="MarginContainer" parent="SettingsPopup/PanelContainer/top bottom split/top half/left buttons/MS" unique_id=335651143]
+custom_minimum_size = Vector2(20, 0)
+layout_mode = 2
+
 [node name="Label" type="Label" parent="SettingsPopup/PanelContainer/top bottom split/top half/left buttons/MS" unique_id=2063166471]
 layout_mode = 2
-size_flags_horizontal = 10
+size_flags_horizontal = 6
 theme_override_fonts/font = ExtResource("4_a4086")
-theme_override_font_sizes/font_size = 24
-text = "Mouse Sensitivity"
+theme_override_font_sizes/font_size = 36
+text = "Mouse
+Sensitivity"
+horizontal_alignment = 1
+
+[node name="MarginContainer" type="MarginContainer" parent="SettingsPopup/PanelContainer/top bottom split/top half" unique_id=1755524721]
+custom_minimum_size = Vector2(50, 0)
+layout_mode = 2
 
 [node name="right buttons" type="VBoxContainer" parent="SettingsPopup/PanelContainer/top bottom split/top half" unique_id=854767007]
 layout_mode = 2
 size_flags_horizontal = 3
 
+[node name="HBoxContainer" type="HBoxContainer" parent="SettingsPopup/PanelContainer/top bottom split/top half/right buttons" unique_id=1253526250]
+layout_mode = 2
+
+[node name="Button" type="TextureButton" parent="SettingsPopup/PanelContainer/top bottom split/top half/right buttons/HBoxContainer" unique_id=61283608]
+custom_minimum_size = Vector2(250, 200)
+layout_mode = 2
+size_flags_horizontal = 10
+tooltip_text = "Black and White options"
+texture_normal = ExtResource("12_bse0t")
+texture_pressed = ExtResource("13_si3c8")
+texture_hover = ExtResource("11_4ysa8")
+ignore_texture_size = true
+stretch_mode = 0
+
+[node name="Label" type="Label" parent="SettingsPopup/PanelContainer/top bottom split/top half/right buttons/HBoxContainer/Button" unique_id=1366254580]
+layout_mode = 0
+offset_left = 80.0
+offset_top = 86.0
+offset_right = 172.0
+offset_bottom = 126.0
+theme_override_colors/font_color = Color(0.14901961, 0.14117648, 0, 1)
+theme_override_fonts/font = ExtResource("4_a4086")
+theme_override_font_sizes/font_size = 40
+text = "B & W"
+
+[node name="Button2" type="Button" parent="SettingsPopup/PanelContainer/top bottom split/top half/right buttons/HBoxContainer" unique_id=670788083]
+custom_minimum_size = Vector2(250, 200)
+layout_mode = 2
+size_flags_horizontal = 10
+theme_override_colors/font_pressed_color = Color(0.9312308, 0.91800004, 0.40083843, 1)
+theme_override_colors/font_hover_color = Color(0.7593483, 0.7423857, 0.14018503, 1)
+theme_override_fonts/font = ExtResource("4_a4086")
+theme_override_font_sizes/font_size = 52
+text = "Contrast
+Options"
+flat = true
+expand_icon = true
+
+[node name="MarginContainer" type="MarginContainer" parent="SettingsPopup/PanelContainer/top bottom split" unique_id=168854746]
+custom_minimum_size = Vector2(0, 50)
+layout_mode = 2
+
 [node name="bottom half" type="HBoxContainer" parent="SettingsPopup/PanelContainer/top bottom split" unique_id=126377296]
 layout_mode = 2
+alignment = 1
+
+[node name="Sprite2D" type="Sprite2D" parent="SettingsPopup/PanelContainer/top bottom split/bottom half" unique_id=361874738]
+position = Vector2(522, 44)
+scale = Vector2(0.373696, 0.37369597)
+texture = ExtResource("15_ab842")
+
+[node name="Credits" type="TextureButton" parent="SettingsPopup/PanelContainer/top bottom split/bottom half" unique_id=269046145]
+custom_minimum_size = Vector2(300, 300)
+layout_mode = 2
+size_flags_horizontal = 4
+texture_normal = ExtResource("16_s7qrp")
+texture_pressed = ExtResource("17_bcdlt")
+texture_hover = ExtResource("18_2d1k3")
+ignore_texture_size = true
+stretch_mode = 6
+
+[node name="Label" type="Label" parent="SettingsPopup/PanelContainer/top bottom split/bottom half/Credits" unique_id=249828534]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.20700002
+anchor_top = 0.357
+anchor_right = 0.80300003
+anchor_bottom = 0.48
+offset_left = -0.1000061
+offset_top = -0.099998474
+offset_right = 0.099990845
+offset_bottom = 5.0
+theme_override_colors/font_color = Color(0.14901961, 0.18039216, 0, 1)
+theme_override_fonts/font = ExtResource("4_a4086")
+theme_override_font_sizes/font_size = 52
+text = "CREDITS"
+metadata/_edit_use_anchors_ = true
+
+[node name="Logo" type="TextureButton" parent="SettingsPopup/PanelContainer/top bottom split/bottom half" unique_id=1568438593]
+custom_minimum_size = Vector2(170, 300)
+layout_mode = 2
+size_flags_horizontal = 4
+texture_normal = ExtResource("19_4e1io")
+texture_pressed = ExtResource("20_4gl8u")
+texture_hover = ExtResource("21_ws7vk")
+ignore_texture_size = true
+stretch_mode = 6
+
+[node name="TextureButton" type="TextureButton" parent="SettingsPopup/PanelContainer/top bottom split/bottom half/Logo" unique_id=1235210280]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.11800001
+anchor_top = 0.187
+anchor_right = 0.859
+anchor_bottom = 0.70000005
+offset_left = 0.9399986
+offset_top = -0.10000229
+offset_right = 0.9700012
+offset_bottom = -1.5258789e-05
+mouse_filter = 1
+texture_normal = ExtResource("22_qngov")
+texture_pressed = ExtResource("23_2uq6r")
+ignore_texture_size = true
+stretch_mode = 6
+
+[node name="Reset" type="TextureButton" parent="SettingsPopup/PanelContainer/top bottom split/bottom half" unique_id=1364166013]
+custom_minimum_size = Vector2(300, 300)
+layout_mode = 2
+size_flags_horizontal = 4
+texture_normal = ExtResource("24_wx4ln")
+texture_pressed = ExtResource("25_bcp6w")
+texture_hover = ExtResource("26_qknxr")
+ignore_texture_size = true
+stretch_mode = 6
+
+[node name="Label" type="Label" parent="SettingsPopup/PanelContainer/top bottom split/bottom half/Reset" unique_id=1325031222]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.15300001
+anchor_top = 0.31
+anchor_right = 0.81700003
+anchor_bottom = 0.573
+offset_left = 0.09999466
+offset_right = -0.1000061
+offset_bottom = 0.099990845
+theme_override_colors/font_color = Color(0.6901961, 0.08235294, 0, 1)
+theme_override_fonts/font = ExtResource("4_a4086")
+theme_override_font_sizes/font_size = 48
+text = "RESET TO
+DEFAULTS"
+
+[node name="Close" type="TextureButton" parent="SettingsPopup" unique_id=1228975464]
+custom_minimum_size = Vector2(100, 100)
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 8.375
+anchor_top = 4.1000004
+anchor_right = 11.575001
+anchor_bottom = 6.6000004
+offset_top = -1.5258789e-05
+offset_right = -3.0517578e-05
+tooltip_text = "Close Settings"
+texture_normal = ExtResource("14_nlnvu")
+texture_pressed = ExtResource("15_avnae")
+ignore_texture_size = true
+stretch_mode = 0
+script = ExtResource("16_ah2in")
 
 [node name="Gear" type="TextureButton" parent="." unique_id=1630564991]
 layout_mode = 0
-offset_left = 898.0
-offset_top = 39.0
-offset_right = 2456.0
-offset_bottom = 1597.0
-scale = Vector2(0.12000017, 0.11999927)
+offset_left = 1501.0
+offset_top = 9.0
+offset_right = 3051.0
+offset_bottom = 1559.0
+scale = Vector2(0.08, 0.08)
 texture_normal = ExtResource("1_434sr")
 texture_pressed = ExtResource("3_yunvi")
+ignore_texture_size = true
 script = ExtResource("1_g803k")
 
+[connection signal="drag_ended" from="SettingsPopup/PanelContainer/top bottom split/top half/left buttons/Sfx/SfxSlider" to="SettingsPopup/PanelContainer/top bottom split/top half/left buttons/Sfx/SfxSlider" method="_on_drag_ended"]
+[connection signal="drag_ended" from="SettingsPopup/PanelContainer/top bottom split/top half/left buttons/Music/MusicSlider" to="SettingsPopup/PanelContainer/top bottom split/top half/left buttons/Music/MusicSlider" method="_on_drag_ended"]
+[connection signal="drag_ended" from="SettingsPopup/PanelContainer/top bottom split/top half/left buttons/MS/MSSlider" to="SettingsPopup/PanelContainer/top bottom split/top half/left buttons/MS/MSSlider" method="_on_drag_ended"]
+[connection signal="pressed" from="SettingsPopup/Close" to="SettingsPopup/Close" method="_on_pressed"]
 [connection signal="pressed" from="Gear" to="Gear" method="_on_pressed"]

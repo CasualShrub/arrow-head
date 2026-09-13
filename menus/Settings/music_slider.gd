@@ -3,6 +3,7 @@ extends HSlider
 #Some AI code that runs, delete it if its better in the settings_manager, I couldn't get the thingy to work
 @export var audio_bus_name: String = "Music"
 @onready var texture_rect = $TextureRect
+#@onready var settings_manager = "res://scripts/singletons/settings_manager.gd"
 var bus_index: int
 
 func _ready() -> void:
@@ -18,7 +19,6 @@ func _ready() -> void:
 	
 	#juice shader
 	_update_shader_fill(value)
-	
 	value_changed.connect(_update_shader_fill)
 
 func _on_value_changed(new_value: float) -> void:
@@ -26,7 +26,7 @@ func _on_value_changed(new_value: float) -> void:
 	var db_value = linear_to_db(new_value)
 	AudioServer.set_bus_volume_db(bus_index, db_value)
 	
-func _update_shader_fill(new_value: float) -> void:
+func _update_shader_fill(new_value: float) -> void: 
 	# Calculate fill ratio between 0.0 and 1.0
 	var fill_ratio = (new_value - min_value) / (max_value - min_value)
 	
@@ -34,3 +34,7 @@ func _update_shader_fill(new_value: float) -> void:
 	var mat = texture_rect.material as ShaderMaterial
 	if mat:
 		mat.set_shader_parameter("fill_amount", fill_ratio)
+		
+		
+func _on_drag_ended(value_changed):
+	SettingsManager._save()

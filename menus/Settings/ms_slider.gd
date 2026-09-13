@@ -17,3 +17,7 @@ func _update_shader_fill(new_value: float) -> void:
 	var mat = texture_rect.material as ShaderMaterial
 	if mat:
 		mat.set_shader_parameter("fill_amount", fill_ratio)
+
+
+func _on_drag_ended(value_changed):
+	SettingsManager._save()
