@@ -15,191 +15,105 @@ uniform float boil_frequency : hint_range(1.0, 30.0) = 6.0;
 
 uniform float opacity : hint_range(0.0, 1.0) = 0.5;
 
-
-// ------------------------------------------------------------
-// Hash
-// ------------------------------------------------------------
-
 float hash(vec2 p)
 {
-	p = fract(p * vec2(123.34, 456.21));
-	p += dot(p, p + 45.32);
+    p = fract(p * vec2(123.34, 456.21));
+    p += dot(p, p + 45.32);
 
-	return fract(p.x * p.y);
+    return fract(p.x * p.y);
 }
 
-
-// ------------------------------------------------------------
-// Continuous value noise
-// ------------------------------------------------------------
 
 float noise(vec2 p)
 {
-	vec2 i = floor(p);
-	vec2 f = fract(p);
+    vec2 i = floor(p);
+    vec2 f = fract(p);
 
-	// Smooth interpolation.
-	f = f * f * (3.0 - 2.0 * f);
+    // Smooth interpolation.
+    f = f * f * (3.0 - 2.0 * f);
 
-	float a = hash(i);
-	float b = hash(i + vec2(1.0, 0.0));
-	float c = hash(i + vec2(0.0, 1.0));
-	float d = hash(i + vec2(1.0, 1.0));
+    float a = hash(i);
+    float b = hash(i + vec2(1.0, 0.0));
+    float c = hash(i + vec2(0.0, 1.0));
+    float d = hash(i + vec2(1.0, 1.0));
 
-	return mix(
-		mix(a, b, f.x),
-		mix(c, d, f.x),
-		f.y
-	);
+    return mix(
+        mix(a, b, f.x),
+        mix(c, d, f.x),
+        f.y
+    );
 }
-
-
-// ------------------------------------------------------------
-// Fragment
-// ------------------------------------------------------------
 
 void fragment()
 {
-	vec2 p = UV - vec2(0.5);
+    vec2 p = UV - vec2(0.5);
 
-	float max_radius =
-		outer_radius +
-		boil_amount +
-		edge_softness * outer_radius;
+    float dist = length(p);
 
-	float radius = length(p) * 2.0 * max_radius;
+    float max_radius =
+        outer_radius +
+        boil_amount +
+        edge_softness * outer_radius;
 
+    float radius = dist * (2.0 * max_radius);
 
-	// --------------------------------------------------------
-	// Direction around the circle
-	// --------------------------------------------------------
+    // Stable normalized direction.
+    vec2 direction = p / max(dist, 0.000001);
 
-	float p_length = length(p);
+    // Keep the original appearance, but introduce a tiny
+    // radial component so the noise is continuous across radius.
+    vec2 noise_pos =
+        direction * boil_frequency +
+        p * 0.15;
 
-	vec2 direction;
+    float t = TIME;
 
-	if (p_length < 0.0001)
-	{
-		direction = vec2(1.0, 0.0);
-	}
-	else
-	{
-		direction = p / p_length;
-	}
+    float n1 = noise(
+        noise_pos +
+        vec2(
+            t * boil_speed,
+            t * boil_speed * 0.73
+        )
+    );
 
+    float n2 = noise(
+        noise_pos * 2.17 +
+        vec2(
+            -t * boil_speed * 0.61,
+            t * boil_speed * 0.91
+        )
+    );
 
-	// --------------------------------------------------------
-	// IMPORTANT:
-	//
-	// Instead of using:
-	//
-	//     direction * frequency
-	//
-	// we map the angle onto a unit circle.
-	//
-	// This makes the noise spatially continuous at the
-	// -PI / +PI boundary.
-	// --------------------------------------------------------
+    float boil =
+        (n1 * 0.65 + n2 * 0.35) - 0.5;
 
-	float t = mod(TIME, 1000.0);
+    float animated_outer =
+        outer_radius +
+        boil * boil_amount;
 
-	vec2 circle_pos = direction;
+    float animated_inner =
+        animated_outer - thickness;
 
+    float softness =
+        edge_softness * outer_radius;
 
-	// --------------------------------------------------------
-	// First noise layer
-	// --------------------------------------------------------
+    float outer_alpha =
+        1.0 - smoothstep(
+            animated_outer - softness,
+            animated_outer + softness,
+            radius
+        );
 
-	vec2 noise_pos_1 =
-		circle_pos * boil_frequency;
+    float inner_alpha =
+        smoothstep(
+            animated_inner - softness,
+            animated_inner + softness,
+            radius
+        );
 
-	noise_pos_1 += vec2(
-		t * boil_speed,
-		t * boil_speed * 0.73
-	);
+    float alpha =
+        outer_alpha * inner_alpha;
 
-	float n1 = noise(noise_pos_1);
-
-
-	// --------------------------------------------------------
-	// Second noise layer
-	// --------------------------------------------------------
-
-	vec2 noise_pos_2 =
-		circle_pos * boil_frequency * 2.17;
-
-	noise_pos_2 += vec2(
-		-t * boil_speed * 0.61,
-		t * boil_speed * 0.91
-	);
-
-	float n2 = noise(noise_pos_2);
-
-
-	// --------------------------------------------------------
-	// Combine noise
-	// --------------------------------------------------------
-
-	float boil =
-		(
-			n1 * 0.65 +
-			n2 * 0.35
-		) - 0.5;
-
-
-	// --------------------------------------------------------
-	// Animated radius
-	// --------------------------------------------------------
-
-	float animated_outer =
-		outer_radius +
-		boil * boil_amount;
-
-	float animated_inner =
-		animated_outer - thickness;
-
-
-	// --------------------------------------------------------
-	// Edge softness
-	// --------------------------------------------------------
-
-	float softness =
-		edge_softness * outer_radius;
-
-
-	// --------------------------------------------------------
-	// Outer edge
-	// --------------------------------------------------------
-
-	float outer_alpha =
-		1.0 - smoothstep(
-			animated_outer - softness,
-			animated_outer + softness,
-			radius
-		);
-
-
-	// --------------------------------------------------------
-	// Inner edge
-	// --------------------------------------------------------
-
-	float inner_alpha =
-		smoothstep(
-			animated_inner - softness,
-			animated_inner + softness,
-			radius
-		);
-
-
-	// --------------------------------------------------------
-	// Final ring alpha
-	// --------------------------------------------------------
-
-	float alpha =
-		outer_alpha *
-		inner_alpha;
-
-
-	ALBEDO = color.rgb;
-	ALPHA = color.a * opacity * alpha;
+    ALBEDO = color.rgb;
+    ALPHA = color.a * opacity * alpha;
 }
