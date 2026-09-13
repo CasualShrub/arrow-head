@@ -86,11 +86,11 @@ void fragment()
         )
     );
 
-    float boil =
-        (
-            n1 * 0.65 +
-            n2 * 0.35
-        ) - 0.5;
+    float boil = sin(
+    atan(p.y, p.x) * 6.0 +
+    t * boil_speed
+) * 0.5;
+
 
 
     float animated_outer =
