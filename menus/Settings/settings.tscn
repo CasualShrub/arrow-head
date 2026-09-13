@@ -1,14 +1,11 @@
 [gd_scene format=3 uid="uid://db87rtso8n8l0"]
 
-[ext_resource type="Texture2D" uid="uid://bniv2qrjb14o0" path="res://menus/Settings/settings_icon.PNG" id="1_434sr"]
-[ext_resource type="Script" uid="uid://sh0osek64eid" path="res://scripts/singletons/settings_manager.gd" id="1_fks6x"]
-[ext_resource type="Script" uid="uid://dp1y85x3ukl01" path="res://menus/Settings/gear.gd" id="1_g803k"]
+[ext_resource type="Script" uid="uid://beekijkpwclly" path="res://menus/Settings/settings.gd" id="1_svfug"]
 [ext_resource type="Texture2D" uid="uid://cfm8ivajqcipk" path="res://menus/Settings/shrub_BG.PNG" id="2_i1qw6"]
 [ext_resource type="Script" uid="uid://b2ll7buld703p" path="res://menus/Settings/music_slider.gd" id="2_q1l7g"]
 [ext_resource type="Script" uid="uid://b8dtyr5ufgq7m" path="res://menus/Settings/sfx_slider.gd" id="2_t3pqy"]
 [ext_resource type="Texture2D" uid="uid://cnvettd0t2pyj" path="res://menus/Settings/settings_text.PNG" id="3_1qv61"]
 [ext_resource type="Texture2D" uid="uid://nyhek2wwylnj" path="res://menus/Settings/apple_slider.png" id="3_fbvfs"]
-[ext_resource type="Texture2D" uid="uid://c364hcy3u3qg4" path="res://menus/Settings/settings_CLICK.PNG" id="3_yunvi"]
 [ext_resource type="FontFile" uid="uid://dg3navvnlkmpw" path="res://shared/fonts/Puffy-gxW55.otf" id="4_a4086"]
 [ext_resource type="Script" uid="uid://cr2ohmp26cq5g" path="res://menus/Settings/ms_slider.gd" id="6_fbvfs"]
 [ext_resource type="Texture2D" uid="uid://cn067lcqdki0f" path="res://menus/Settings/slidebar_1.PNG" id="6_h1rm7"]
@@ -302,7 +299,7 @@ shader_parameter/bubble_speed = 0.5
 [node name="Settings" type="Control" unique_id=453627718]
 layout_mode = 3
 anchors_preset = 0
-script = ExtResource("1_fks6x")
+script = ExtResource("1_svfug")
 
 [node name="SettingsPopup" type="Control" parent="." unique_id=1503283294]
 anchors_preset = 0
@@ -645,20 +642,7 @@ ignore_texture_size = true
 stretch_mode = 0
 script = ExtResource("16_ah2in")
 
-[node name="Gear" type="TextureButton" parent="." unique_id=1630564991]
-layout_mode = 0
-offset_left = 1501.0
-offset_top = 9.0
-offset_right = 3051.0
-offset_bottom = 1559.0
-scale = Vector2(0.08, 0.08)
-texture_normal = ExtResource("1_434sr")
-texture_pressed = ExtResource("3_yunvi")
-ignore_texture_size = true
-script = ExtResource("1_g803k")
-
 [connection signal="drag_ended" from="SettingsPopup/PanelContainer/top bottom split/top half/left buttons/Sfx/SfxSlider" to="SettingsPopup/PanelContainer/top bottom split/top half/left buttons/Sfx/SfxSlider" method="_on_drag_ended"]
 [connection signal="drag_ended" from="SettingsPopup/PanelContainer/top bottom split/top half/left buttons/Music/MusicSlider" to="SettingsPopup/PanelContainer/top bottom split/top half/left buttons/Music/MusicSlider" method="_on_drag_ended"]
 [connection signal="drag_ended" from="SettingsPopup/PanelContainer/top bottom split/top half/left buttons/MS/MSSlider" to="SettingsPopup/PanelContainer/top bottom split/top half/left buttons/MS/MSSlider" method="_on_drag_ended"]
 [connection signal="pressed" from="SettingsPopup/Close" to="SettingsPopup/Close" method="_on_pressed"]
-[connection signal="pressed" from="Gear" to="Gear" method="_on_pressed"]

@@ -15,6 +15,9 @@
 [ext_resource type="Script" uid="uid://it1hcnvfi1hr" path="res://scripts/classes/screen_shake.gd" id="14_shake"]
 [ext_resource type="PackedScene" uid="uid://c8ghost4gme01" path="res://scenes/game.tscn" id="15_game"]
 [ext_resource type="PackedScene" uid="uid://db87rtso8n8l0" path="res://menus/Settings/settings.tscn" id="15_il6kl"]
+[ext_resource type="Texture2D" uid="uid://bniv2qrjb14o0" path="res://menus/Settings/settings_icon.PNG" id="16_venjw"]
+[ext_resource type="Texture2D" uid="uid://c364hcy3u3qg4" path="res://menus/Settings/settings_CLICK.PNG" id="17_c1gu4"]
+[ext_resource type="Script" uid="uid://dhycoelne4jfw" path="res://menus/main_menu/gear.gd" id="18_oi7a3"]
 
 [sub_resource type="Resource" id="ScreenShake_menu"]
 resource_local_to_scene = true
@@ -246,6 +249,19 @@ offset_top = 4.0
 offset_right = -13.0
 offset_bottom = 4.0
 
+[node name="Gear" type="TextureButton" parent="." unique_id=1131609519]
+custom_minimum_size = Vector2(100, 100)
+layout_mode = 0
+offset_left = 1762.0
+offset_top = 657.0
+offset_right = 1862.0
+offset_bottom = 757.0
+texture_normal = ExtResource("16_venjw")
+texture_pressed = ExtResource("17_c1gu4")
+ignore_texture_size = true
+stretch_mode = 6
+script = ExtResource("18_oi7a3")
+
 [connection signal="pressed" from="LevelSelect/Buttons/Tutorial" to="." method="_load_level" binds= ["res://scenes/levels/tutorial.tscn"]]
 [connection signal="pressed" from="LevelSelect/Buttons/Level1" to="." method="_load_level" binds= ["res://scenes/levels/level_1.tscn"]]
 [connection signal="pressed" from="LevelSelect/Buttons/Level2" to="." method="_load_level" binds= ["res://scenes/levels/level_2.tscn"]]
@@ -254,3 +270,4 @@ offset_bottom = 4.0
 [connection signal="pressed" from="LevelSelect/Buttons/Level5" to="." method="_load_level" binds= ["res://scenes/levels/level_5.tscn"]]
 [connection signal="pressed" from="LevelSelect/Buttons/Boss" to="." method="_load_level" binds= ["res://scenes/levels/level_boss.tscn"]]
 [connection signal="pressed" from="LevelSelect/Buttons/Back" to="." method="_close_levels"]
+[connection signal="pressed" from="Gear" to="Gear" method="_on_pressed"]
