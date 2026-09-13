@@ -3,11 +3,9 @@ extends HSlider
 #Some AI code that runs, delete it if its better in the settings_manager, I couldn't get the thingy to work
 @export var audio_bus_name: String = "Music"
 @onready var texture_rect = $TextureRect
-#@onready var settings_manager = "res://scripts/singletons/settings_manager.gd"
 var bus_index: int
 
 func _ready() -> void:
-	# Get the index of the "Music" bus
 	bus_index = AudioServer.get_bus_index(audio_bus_name)
 	
 	# Connect the slider's signal to our function
@@ -38,3 +36,9 @@ func _update_shader_fill(new_value: float) -> void:
 		
 func _on_drag_ended(value_changed):
 	SettingsManager._save()
+	
+func _on_reset_pressed():
+	AudioServer.set_bus_volume_db(bus_index, 1)
+	self.value = 1
+	SettingsManager._save()
+	

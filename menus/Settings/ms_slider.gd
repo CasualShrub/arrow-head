@@ -18,6 +18,13 @@ func _update_shader_fill(new_value: float) -> void:
 	if mat:
 		mat.set_shader_parameter("fill_amount", fill_ratio)
 
+func _on_value_changed(new_value: float) -> void:
+	SettingsManager.mouse_sensitivity = new_value
 
 func _on_drag_ended(value_changed):
+	SettingsManager._save()
+	
+func _on_reset_pressed():
+	
+	self.value = 1
 	SettingsManager._save()

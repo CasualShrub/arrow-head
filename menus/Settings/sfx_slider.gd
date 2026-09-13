@@ -6,10 +6,8 @@ extends HSlider
 var bus_index: int
 
 func _ready() -> void:
-	# Get the index of the "Music" bus
 	bus_index = AudioServer.get_bus_index(audio_bus_name)
 	
-	# Connect the slider's signal to our function
 	value_changed.connect(_on_value_changed)
 	
 	# Set the initial slider position to match the current volume
@@ -37,4 +35,10 @@ func _update_shader_fill(new_value: float) -> void: #updates slider
 		mat.set_shader_parameter("fill_amount", fill_ratio)
 
 func _on_drag_ended(value_changed):
+	SettingsManager._save()
+
+
+func _on_reset_pressed():
+	AudioServer.set_bus_volume_db(bus_index, 1)
+	self.value = 1
 	SettingsManager._save()

@@ -13,4 +13,5 @@ func _process(delta):
 
 
 func _on_pressed():
-	settings_menu.visible = !settings_menu.visible
+	if !settings_menu.visible:
+		settings_menu.visible = true

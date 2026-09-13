@@ -450,7 +450,8 @@ theme_override_icons/grabber = ExtResource("3_fbvfs")
 theme_override_icons/grabber_highlight = ExtResource("3_fbvfs")
 theme_override_icons/grabber_disabled = ExtResource("3_fbvfs")
 theme_override_styles/slider = SubResource("StyleBoxEmpty_8vima")
-max_value = 1.0
+min_value = 0.5
+max_value = 1.5
 step = 0.05
 value = 1.0
 script = ExtResource("6_fbvfs")
@@ -509,11 +510,13 @@ ignore_texture_size = true
 stretch_mode = 0
 
 [node name="Label" type="Label" parent="SettingsPopup/PanelContainer/top bottom split/top half/right buttons/HBoxContainer/Button" unique_id=1366254580]
-layout_mode = 0
-offset_left = 80.0
-offset_top = 86.0
-offset_right = 172.0
-offset_bottom = 126.0
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.32000002
+anchor_top = 0.43
+anchor_right = 0.69600004
+anchor_bottom = 0.63000005
+offset_right = -2.0000153
 theme_override_colors/font_color = Color(0.14901961, 0.14117648, 0, 1)
 theme_override_fonts/font = ExtResource("4_a4086")
 theme_override_font_sizes/font_size = 40
@@ -523,8 +526,8 @@ text = "B & W"
 custom_minimum_size = Vector2(250, 200)
 layout_mode = 2
 size_flags_horizontal = 10
-theme_override_colors/font_pressed_color = Color(0.9312308, 0.91800004, 0.40083843, 1)
-theme_override_colors/font_hover_color = Color(0.7593483, 0.7423857, 0.14018503, 1)
+theme_override_colors/font_pressed_color = Color(0.70647705, 0.6909864, 0.1343683, 1)
+theme_override_colors/font_hover_color = Color(0.9106859, 0.888577, 0.29049873, 1)
 theme_override_fonts/font = ExtResource("4_a4086")
 theme_override_font_sizes/font_size = 52
 text = "Contrast
@@ -645,4 +648,7 @@ script = ExtResource("16_ah2in")
 [connection signal="drag_ended" from="SettingsPopup/PanelContainer/top bottom split/top half/left buttons/Sfx/SfxSlider" to="SettingsPopup/PanelContainer/top bottom split/top half/left buttons/Sfx/SfxSlider" method="_on_drag_ended"]
 [connection signal="drag_ended" from="SettingsPopup/PanelContainer/top bottom split/top half/left buttons/Music/MusicSlider" to="SettingsPopup/PanelContainer/top bottom split/top half/left buttons/Music/MusicSlider" method="_on_drag_ended"]
 [connection signal="drag_ended" from="SettingsPopup/PanelContainer/top bottom split/top half/left buttons/MS/MSSlider" to="SettingsPopup/PanelContainer/top bottom split/top half/left buttons/MS/MSSlider" method="_on_drag_ended"]
+[connection signal="pressed" from="SettingsPopup/PanelContainer/top bottom split/bottom half/Reset" to="SettingsPopup/PanelContainer/top bottom split/top half/left buttons/Music/MusicSlider" method="_on_reset_pressed"]
+[connection signal="pressed" from="SettingsPopup/PanelContainer/top bottom split/bottom half/Reset" to="SettingsPopup/PanelContainer/top bottom split/top half/left buttons/Sfx/SfxSlider" method="_on_reset_pressed"]
+[connection signal="pressed" from="SettingsPopup/PanelContainer/top bottom split/bottom half/Reset" to="SettingsPopup/PanelContainer/top bottom split/top half/left buttons/MS/MSSlider" method="_on_reset_pressed"]
 [connection signal="pressed" from="SettingsPopup/Close" to="SettingsPopup/Close" method="_on_pressed"]

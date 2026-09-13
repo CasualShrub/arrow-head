@@ -1,22 +1,17 @@
 extends Node
 
-@onready var SfxSlider = $"SettingsPopup/PanelContainer/top bottom split/top half/left buttons/Sfx/SfxSlider"
-@onready var MusicSlider = $"SettingsPopup/PanelContainer/top bottom split/top half/left buttons/Music/MusicSlider"
-@onready var MSSlider = $"SettingsPopup/PanelContainer/top bottom split/top half/left buttons/MS/MSSlider"
-
 const PATH := "user://settings.cfg"
 
 var master_volume := 1.0
 var music_volume := 1
 var sfx_volume := 1.0
+var mouse_sensitivity := 1.0
 var fullscreen := false
 
 func _ready() -> void:
 	_load()
 	apply()
-	connectSliders()
 	
-
 func set_master_volume(v: float) -> void:
 	master_volume = clampf(v, 0.0, 1.0)
 	_apply_bus("Master", master_volume)
@@ -68,7 +63,3 @@ func _load() -> void:
 	sfx_volume = cfg.get_value("audio", "sfx", 1.0)
 	fullscreen = cfg.get_value("video", "fullscreen", false)
 	
-func connectSliders() -> void:
-	#MusicSlider.value_changed.connect(set_music_volume)
-	#SfxSlider.value_changed.connect(set_sfx_volume)
-	pass

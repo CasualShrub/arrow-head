@@ -8,25 +8,14 @@ var fade_tween: Tween
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	
-	#makes settings screen invis
-	#SettingsPopup.modulate.a=0.0
-	#SettingsPopup.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	
+
 	SettingsPopup.visible=false
 	
 	#this stuff is AI code, cuz I can't get the gear to appear in the right place on run if I want it to spin
-	await get_tree().process_frame
-	var original_pos = global_position
-	pivot_offset = size/2
-	global_position=original_pos
-	
-
-
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta):
-	pass
-
+	#await get_tree().process_frame
+	#var original_pos = global_position
+	#pivot_offset = size/2
+	#global_position=original_pos
 
 func _on_pressed():
 	
@@ -41,7 +30,6 @@ func _on_pressed():
 	self.rotation_degrees=0
 
 	if SettingsPopup.visible == false:
-		#SettingsPopup.mouse_filter = Control.MOUSE_FILTER_STOP
 		SettingsPopup.visible=true
 		
 		fade_tween.tween_property(SettingsPopup, "modulate:a", 1.0, fade_duration)\
@@ -49,14 +37,7 @@ func _on_pressed():
 		tween.tween_property(self, "rotation_degrees", 45, 0.4).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
 
 	else:
-		# Smoothly fade out to transparent (Alpha = 0.0)
-		#SettingsPopup.mouse_filter = Control.MOUSE_FILTER_IGNORE
 		SettingsPopup.visible=false
 		
-		#fade_tween.tween_property(SettingsPopup, "modulate:a", 0.0, fade_duration)\
-		#.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN)
-		#tween.tween_property(self, "rotation_degrees", -45, 0.4).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
-
-	#SettingsPopup.visible = !SettingsPopup.visible
 	
 	
