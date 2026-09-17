@@ -17,16 +17,21 @@ var _cleared := false
 
 @onready var _enemies := %Enemies
 @onready var _juice_bar := %JuiceBar
+@onready var _exit_indicator := %ExitIndicator
 
 func _ready() -> void:
 	_setup_player()
 	_setup_enemies()
 	_setup_juice_bar()
 	_setup_exit()
-	
+	_setup_exit_indicator()
+
 	DarkenManager.register_overlay(%DarkenOverlay)
-	
+
 	start()
+
+	if not any_enemy_alive():
+		_clear()
 
 func _input(event: InputEvent) -> void:
 	if not _ongoing: return   # end screens handle their own keys
@@ -57,6 +62,14 @@ func _setup_exit() -> void:
 		if not exit:
 			return
 	exit.player_entered.connect(_on_exit_entered)
+
+func _setup_exit_indicator() -> void:
+	if not exit:
+		_exit_indicator.hide()
+		return
+	_exit_indicator.bind(exit)
+	_exit_indicator.set_active(not exit.is_locked())
+	exit.locked_changed.connect(func(is_locked: bool): _exit_indicator.set_active(not is_locked))
 
 
 func _setup_juice_bar() -> void:
