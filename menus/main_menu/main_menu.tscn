@@ -21,6 +21,9 @@
 [ext_resource type="Script" uid="uid://it1hcnvfi1hr" path="res://scripts/classes/screen_shake.gd" id="14_shake"]
 [ext_resource type="PackedScene" uid="uid://c8ghost4gme01" path="res://scenes/game.tscn" id="15_game"]
 [ext_resource type="Shader" uid="uid://blt3jorw6dqxv" path="res://menus/main_menu/dots_wave.gdshader" id="16_dots_wave"]
+[ext_resource type="PackedScene" uid="uid://db87rtso8n8l0" path="res://menus/settings/settings.tscn" id="17_settings"]
+[ext_resource type="Texture2D" uid="uid://dk1tp5akt6x78" path="res://shared/art/settings/gear.png" id="18_gear"]
+[ext_resource type="Texture2D" uid="uid://dy4n0ixkhnjmj" path="res://shared/art/settings/gear_dark.png" id="19_gear_dark"]
 
 [sub_resource type="Resource" id="ScreenShake_menu"]
 resource_local_to_scene = true
@@ -304,6 +307,19 @@ theme_override_fonts/font = ExtResource("5_t7kvd")
 theme_override_font_sizes/font_size = 42
 text = "Back"
 
+[node name="Settings" parent="." unique_id=351075051 instance=ExtResource("17_settings")]
+
+[node name="Gear" type="TextureButton" parent="." unique_id=1131609519]
+layout_mode = 0
+offset_left = 1762.0
+offset_top = 657.0
+offset_right = 1862.0
+offset_bottom = 757.0
+texture_normal = ExtResource("18_gear")
+texture_pressed = ExtResource("19_gear_dark")
+ignore_texture_size = true
+stretch_mode = 6
+
 [connection signal="pressed" from="LevelSelect/Buttons/Tutorial" to="." method="_load_level" binds= ["res://scenes/levels/tutorial.tscn"]]
 [connection signal="pressed" from="LevelSelect/Buttons/Level1" to="." method="_load_level" binds= ["res://scenes/levels/level_1.tscn"]]
 [connection signal="pressed" from="LevelSelect/Buttons/Level2" to="." method="_load_level" binds= ["res://scenes/levels/level_2.tscn"]]
@@ -312,3 +328,4 @@ text = "Back"
 [connection signal="pressed" from="LevelSelect/Buttons/Level5" to="." method="_load_level" binds= ["res://scenes/levels/level_5.tscn"]]
 [connection signal="pressed" from="LevelSelect/Buttons/Boss" to="." method="_load_level" binds= ["res://scenes/levels/level_boss.tscn"]]
 [connection signal="pressed" from="LevelSelect/Buttons/Back" to="." method="_close_levels"]
+[connection signal="pressed" from="Gear" to="Settings" method="open"]
