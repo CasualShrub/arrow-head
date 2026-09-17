@@ -50,10 +50,11 @@ func _setup_enemies() -> void:
 
 func _setup_exit() -> void:
 	if not exit:
-		var exits := find_children("*", "Exit_Area", true)
-		if not exits.is_empty():
-			exit = exits[0]
-		else:
+		for node in find_children("*", "", true, false):
+			if node is ExitArea:
+				exit = node
+				break
+		if not exit:
 			return
 	exit.player_entered.connect(_on_exit_entered)
 
