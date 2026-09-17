@@ -3,6 +3,7 @@
 [ext_resource type="Script" uid="uid://ciw3wf4ubux6c" path="res://menus/pause/pause.gd" id="1_xld5c"]
 [ext_resource type="FontFile" uid="uid://dg3navvnlkmpw" path="res://shared/fonts/Puffy-gxW55.otf" id="2_k23cl"]
 [ext_resource type="Script" uid="uid://bgra1aqfhtseu" path="res://menus/hold_to_quit.gd" id="9_hold"]
+[ext_resource type="PackedScene" uid="uid://db87rtso8n8l0" path="res://menus/settings/settings.tscn" id="10_settings"]
 
 [node name="Pause" type="CanvasLayer" unique_id=677715933]
 process_mode = 3
@@ -60,6 +61,16 @@ theme_override_fonts/font = ExtResource("2_k23cl")
 theme_override_font_sizes/font_size = 18
 text = "space"
 vertical_alignment = 1
+
+[node name="SettingsButton" type="Button" parent="VBoxContainer" unique_id=1580214633]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(280, 56)
+layout_mode = 2
+size_flags_horizontal = 4
+focus_mode = 0
+theme_override_fonts/font = ExtResource("2_k23cl")
+theme_override_font_sizes/font_size = 24
+text = "Settings"
 
 [node name="Restart" type="Button" parent="VBoxContainer" unique_id=1213127399]
 unique_name_in_owner = true
@@ -121,3 +132,5 @@ theme_override_fonts/font = ExtResource("2_k23cl")
 theme_override_font_sizes/font_size = 18
 text = "tab"
 vertical_alignment = 1
+
+[node name="Settings" parent="." unique_id=1417726045 instance=ExtResource("10_settings")]

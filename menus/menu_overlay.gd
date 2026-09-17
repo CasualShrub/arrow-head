@@ -8,10 +8,13 @@ class_name MenuOverlay
 
 @export var primary_button := "Continue"
 
+const GROUP := &"menu_overlays"
+
 @onready var _root: Control = get_node_or_null("%Root")
 
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
+	add_to_group(GROUP)
 	var primary := get_node_or_null("%" + primary_button)
 	if primary:
 		primary.pressed.connect(_on_primary)
@@ -32,6 +35,9 @@ func _unhandled_input(event: InputEvent) -> void:
 # the end screens dim behind a Root control, the pause menu is the layer itself
 func is_open() -> bool:
 	return _root.visible if _root else visible
+
+static func any_open(tree: SceneTree) -> bool:
+	return tree.get_nodes_in_group(GROUP).any(func(overlay: MenuOverlay) -> bool: return overlay.is_open())
 
 func _set_open(value: bool) -> void:
 	if _root:

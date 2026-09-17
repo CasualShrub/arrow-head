@@ -31,6 +31,8 @@ extends Control
 @onready var _labels_root: Control = $Labels
 @onready var _launch_arrow: Sprite2D = $LaunchArrow
 @onready var _skip_prompt: Label = $SkipPrompt
+@onready var _gear: Control = $Gear
+@onready var _settings: CanvasLayer = $Settings
 
 var _launching := false
 var _hovered_sector: StringName = &""
@@ -90,6 +92,7 @@ func _prepare_intro() -> void:
 	_apple.visible = false
 	_labels_root.modulate.a = 0.0
 	_sectors.visible = false
+	_gear.visible = false
 
 func _show_menu_instant() -> void:
 	_title.visible = false
@@ -97,6 +100,7 @@ func _show_menu_instant() -> void:
 	_labels_root.modulate.a = 1.0
 	_labels_root.visible = true
 	_sectors.visible = true
+	_gear.visible = true
 
 func _play_intro() -> void:
 	_intro_playing = true
@@ -149,11 +153,12 @@ func _finish_intro() -> void:
 	_labels_root.modulate.a = 1.0
 	_labels_root.visible = true
 	_sectors.visible = true
+	_gear.visible = true
 	shake.intensity = 0.0
 	get_viewport().canvas_transform = Transform2D.IDENTITY
 
 func _on_sector_activated(sector: StringName) -> void:
-	if _launching:
+	if _launching or _settings.is_open():
 		return
 	_set_sector_darkened(sector)
 	match sector:
@@ -223,6 +228,7 @@ func _set_menu_shown(shown: bool) -> void:
 	_sectors.visible = shown
 	_apple.visible = shown
 	_labels_root.visible = shown
+	_gear.visible = shown
 
 func _open_levels() -> void:
 	if _level_select:

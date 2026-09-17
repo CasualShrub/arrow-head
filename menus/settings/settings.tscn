@@ -1,0 +1,857 @@
+[gd_scene format=3 uid="uid://db87rtso8n8l0"]
+
+[ext_resource type="Script" uid="uid://bkjoop7gcxt3o" path="res://menus/settings/settings.gd" id="1_svfug"]
+
+[ext_resource type="FontFile" uid="uid://dg3navvnlkmpw" path="res://shared/fonts/Puffy-gxW55.otf" id="2_a4086"]
+
+[ext_resource type="Shader" uid="uid://qsuww8lxcc8e" path="res://shaders/slider_fill.gdshader" id="3_fill"]
+
+[ext_resource type="Texture2D" uid="uid://cef0j3mlll8ba" path="res://shared/art/settings/background.png" id="4_i1qw6"]
+
+[ext_resource type="Texture2D" uid="uid://d01wf6o05vh7i" path="res://shared/art/settings/title.png" id="5_1qv61"]
+
+[ext_resource type="Texture2D" uid="uid://c8lf3fm0kfk87" path="res://shared/art/settings/close.png" id="6_nlnvu"]
+
+[ext_resource type="Texture2D" uid="uid://cwst51rjuotk8" path="res://shared/art/settings/close_dark.png" id="7_avnae"]
+
+[ext_resource type="Texture2D" uid="uid://spjy8oftrytp" path="res://shared/art/settings/apple.png" id="8_fbvfs"]
+
+[ext_resource type="Texture2D" uid="uid://b5omwuik01ibu" path="res://shared/art/settings/bar_1.png" id="9_h1rm7"]
+
+[ext_resource type="Texture2D" uid="uid://dda7c6twfvto4" path="res://shared/art/settings/bar_2.png" id="10_6lta7"]
+
+[ext_resource type="Texture2D" uid="uid://krjr17mjoubl" path="res://shared/art/settings/bar_3.png" id="11_8vima"]
+
+[ext_resource type="Texture2D" uid="uid://6b121exgnwow" path="res://shared/art/settings/leaf.png" id="12_bse0t"]
+
+[ext_resource type="Texture2D" uid="uid://dchs7a7lo8ls6" path="res://shared/art/settings/leaf_dark.png" id="13_si3c8"]
+
+[ext_resource type="Texture2D" uid="uid://c47f2yh3ptwml" path="res://shared/art/settings/leaf_light.png" id="14_4ysa8"]
+
+[ext_resource type="Texture2D" uid="uid://dirhac5p4ex81" path="res://shared/art/settings/branch.png" id="15_ab842"]
+
+[ext_resource type="Texture2D" uid="uid://dq7h4w1r34k5u" path="res://shared/art/settings/banner_credits.png" id="16_s7qrp"]
+
+[ext_resource type="Texture2D" uid="uid://c5r1b3xyloec2" path="res://shared/art/settings/banner_credits_dark.png" id="17_bcdlt"]
+
+[ext_resource type="Texture2D" uid="uid://cn7hc7f0dti4h" path="res://shared/art/settings/banner_credits_light.png" id="18_2d1k3"]
+
+[ext_resource type="Texture2D" uid="uid://ciqypdji7ds82" path="res://shared/art/settings/banner_logo.png" id="19_4e1io"]
+
+[ext_resource type="Texture2D" uid="uid://dsjp6hiev618u" path="res://shared/art/settings/banner_logo_dark.png" id="20_4gl8u"]
+
+[ext_resource type="Texture2D" uid="uid://dt5grhi6dbe17" path="res://shared/art/settings/banner_logo_light.png" id="21_ws7vk"]
+
+[ext_resource type="Texture2D" uid="uid://dk2ewiew6p6p5" path="res://shared/art/settings/logo_mark.png" id="22_lg0ob"]
+
+[ext_resource type="Texture2D" uid="uid://c3tptlfo6snvh" path="res://shared/art/settings/banner_reset.png" id="23_wx4ln"]
+
+[ext_resource type="Texture2D" uid="uid://bu2kmb3kv5oyp" path="res://shared/art/settings/banner_reset_dark.png" id="24_bcp6w"]
+
+[ext_resource type="Texture2D" uid="uid://bgf5ue84sa8xu" path="res://shared/art/settings/banner_reset_light.png" id="25_qknxr"]
+
+[ext_resource type="Texture2D" uid="uid://doukluedcb6ar" path="res://shared/art/settings/appleseed_logo.png" id="26_ap5lg"]
+
+[ext_resource type="Texture2D" uid="uid://b3j6tpacn7obf" path="res://shared/art/settings/popup.png" id="27_pop1u"]
+
+[ext_resource type="Script" uid="uid://dulvisetcnk5n" path="res://menus/settings/apple_slider.gd" id="30_apple"]
+
+[ext_resource type="Texture2D" uid="uid://qbbfiorhenpm" path="res://shared/art/settings/label_sfx.png" id="31_lsfx"]
+
+[ext_resource type="Texture2D" uid="uid://h10qs7voq66r" path="res://shared/art/settings/label_music.png" id="32_lmusic"]
+
+[ext_resource type="Texture2D" uid="uid://deuavaqewbyxd" path="res://shared/art/settings/label_sensitivity.png" id="33_lsens"]
+
+[ext_resource type="Texture2D" uid="uid://bww5ldcod6j8x" path="res://shared/art/settings/label_contrast.png" id="34_lcontrast"]
+
+[ext_resource type="Texture2D" uid="uid://dx13ufwerw7pi" path="res://shared/art/settings/label_bw.png" id="35_lbw"]
+
+[ext_resource type="Texture2D" uid="uid://beiwkl0atevpn" path="res://shared/art/settings/website_prompt.png" id="36_prompt"]
+
+[ext_resource type="Texture2D" uid="uid://crjjnkwp86et6" path="res://shared/art/settings/website_no.png" id="37_no"]
+
+[ext_resource type="Texture2D" uid="uid://bq3hlbnocq137" path="res://shared/art/settings/website_no_fill.png" id="38_nohl"]
+
+[ext_resource type="Texture2D" uid="uid://c33uci3liou0u" path="res://shared/art/settings/website_yes.png" id="39_yes"]
+
+[ext_resource type="Texture2D" uid="uid://cc043r373s5k3" path="res://shared/art/settings/website_yes_fill.png" id="40_yeshl"]
+
+[ext_resource type="Texture2D" uid="uid://bnh8qv56aiyys" path="res://shared/art/settings/label_credits.png" id="41_lcredits"]
+
+[ext_resource type="Texture2D" uid="uid://b6unu5hfxparx" path="res://shared/art/settings/label_reset.png" id="42_lreset"]
+
+[ext_resource type="Script" uid="uid://cbpg86pw25gtc" path="res://menus/settings/ink_button.gd" id="43_ink"]
+
+[ext_resource type="Texture2D" uid="uid://fdmoy61u3bk" path="res://shared/art/settings/close_light.png" id="46_xbright"]
+
+[ext_resource type="Texture2D" uid="uid://csifhkjikieq1" path="res://shared/art/settings/label_master.png" id="47_lmaster"]
+
+[ext_resource type="Texture2D" uid="uid://cdkq2156383gi" path="res://shared/art/settings/icon_audio.png" id="48_iaudio"]
+
+[ext_resource type="Texture2D" uid="uid://2osns04rxavj" path="res://shared/art/settings/icon_controls.png" id="49_icontrols"]
+
+[ext_resource type="Texture2D" uid="uid://bpwbfbj7i3867" path="res://shared/art/settings/icon_display.png" id="50_idisplay"]
+
+[ext_resource type="Texture2D" uid="uid://5uxokpjhrmxm" path="res://shared/art/settings/fullscreen_arrows.png" id="51_fsarrows"]
+
+[ext_resource type="Texture2D" uid="uid://1of2x80g0il3" path="res://shared/art/settings/branch_leaf.png" id="52_leaf"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_master"]
+resource_local_to_scene = true
+shader = ExtResource("3_fill")
+shader_parameter/fill_amount = 1.0
+shader_parameter/aspect_ratio = 5.256
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_sfx"]
+resource_local_to_scene = true
+shader = ExtResource("3_fill")
+shader_parameter/fill_amount = 1.0
+shader_parameter/aspect_ratio = 5.256
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_music"]
+resource_local_to_scene = true
+shader = ExtResource("3_fill")
+shader_parameter/fill_amount = 1.0
+shader_parameter/aspect_ratio = 5.256
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_sens"]
+resource_local_to_scene = true
+shader = ExtResource("3_fill")
+shader_parameter/fill_amount = 1.0
+shader_parameter/aspect_ratio = 5.256
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_contrast"]
+resource_local_to_scene = true
+shader = ExtResource("3_fill")
+shader_parameter/fill_amount = 1.0
+shader_parameter/aspect_ratio = 5.256
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_outline"]
+bg_color = Color(0, 0, 0, 0)
+border_width_left = 5
+border_width_top = 5
+border_width_right = 5
+border_width_bottom = 5
+border_color = Color(0.18, 0.2, 0.02, 1)
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_right = 6
+corner_radius_bottom_left = 6
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_outline_hover"]
+bg_color = Color(1, 1, 1, 0.12)
+border_width_left = 5
+border_width_top = 5
+border_width_right = 5
+border_width_bottom = 5
+border_color = Color(0.18, 0.2, 0.02, 1)
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_right = 6
+corner_radius_bottom_left = 6
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_outline_pressed"]
+bg_color = Color(0, 0, 0, 0.2)
+border_width_left = 5
+border_width_top = 5
+border_width_right = 5
+border_width_bottom = 5
+border_color = Color(0.18, 0.2, 0.02, 1)
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_right = 6
+corner_radius_bottom_left = 6
+
+[node name="Settings" type="CanvasLayer" unique_id=453627718]
+process_mode = 3
+layer = 110
+visible = false
+script = ExtResource("1_svfug")
+
+[node name="Dim" type="ColorRect" parent="." unique_id=1503283294]
+unique_name_in_owner = true
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0.5)
+
+[node name="Panel" type="Control" parent="." unique_id=735799590]
+unique_name_in_owner = true
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -691.5
+offset_top = -535.0
+offset_right = 691.5
+offset_bottom = 535.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="Background" type="TextureRect" parent="Panel" unique_id=1179864262]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+texture = ExtResource("4_i1qw6")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Title" type="TextureRect" parent="Panel" unique_id=1052344310]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 436.0
+offset_top = 107.0
+offset_right = 948.0
+offset_bottom = 267.19
+mouse_filter = 2
+texture = ExtResource("5_1qv61")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="CloseButton" type="TextureButton" parent="Panel" unique_id=1228975464]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 1024.0
+offset_top = 144.0
+offset_right = 1138.0
+offset_bottom = 261.58
+focus_mode = 0
+texture_normal = ExtResource("6_nlnvu")
+texture_pressed = ExtResource("7_avnae")
+texture_hover = ExtResource("46_xbright")
+ignore_texture_size = true
+stretch_mode = 5
+
+[node name="AudioIcon" type="TextureRect" parent="Panel" unique_id=1900000031]
+layout_mode = 0
+offset_left = 146.816
+offset_top = 254.0
+offset_right = 222.816
+offset_bottom = 330.0
+mouse_filter = 2
+texture = ExtResource("48_iaudio")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="MasterSlider" type="Control" parent="Panel" unique_id=1900000027]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 136.0
+offset_top = 324.0
+offset_right = 456.0
+offset_bottom = 408.0
+scale = Vector2(1.125, 1)
+focus_mode = 2
+mouse_filter = 2
+script = ExtResource("30_apple")
+min_value = 0.0
+max_value = 1.0
+step = 0.01
+value = 1.0
+
+[node name="Bar" type="TextureRect" parent="Panel/MasterSlider" unique_id=1900000028]
+material = SubResource("ShaderMaterial_master")
+layout_mode = 0
+offset_left = 48.0
+offset_top = 20.693
+offset_right = 272.0
+offset_bottom = 63.308
+mouse_filter = 2
+texture = ExtResource("11_8vima")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Knob" type="TextureButton" parent="Panel/MasterSlider" unique_id=1900000029]
+layout_mode = 0
+offset_left = 224.0
+offset_top = 0.401
+offset_right = 320.0
+offset_bottom = 83.601
+focus_mode = 0
+texture_normal = ExtResource("8_fbvfs")
+ignore_texture_size = true
+stretch_mode = 5
+
+[node name="MasterLabel" type="TextureRect" parent="Panel" unique_id=1900000030]
+layout_mode = 0
+offset_left = 505.099
+offset_top = 345.771
+offset_right = 649.099
+offset_bottom = 382.903
+mouse_filter = 2
+texture = ExtResource("47_lmaster")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="SfxSlider" type="Control" parent="Panel" unique_id=1900000001]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 136.0
+offset_top = 444.0
+offset_right = 456.0
+offset_bottom = 528.0
+scale = Vector2(1.125, 1)
+focus_mode = 2
+mouse_filter = 2
+script = ExtResource("30_apple")
+min_value = 0.0
+max_value = 1.0
+step = 0.01
+value = 1.0
+
+[node name="Bar" type="TextureRect" parent="Panel/SfxSlider" unique_id=1900000002]
+material = SubResource("ShaderMaterial_sfx")
+layout_mode = 0
+offset_left = 48.0
+offset_top = 20.693
+offset_right = 272.0
+offset_bottom = 63.308
+mouse_filter = 2
+texture = ExtResource("9_h1rm7")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Knob" type="TextureButton" parent="Panel/SfxSlider" unique_id=1900000003]
+layout_mode = 0
+offset_left = 224.0
+offset_top = 0.401
+offset_right = 320.0
+offset_bottom = 83.601
+focus_mode = 0
+texture_normal = ExtResource("8_fbvfs")
+ignore_texture_size = true
+stretch_mode = 5
+
+[node name="SfxLabel" type="TextureRect" parent="Panel" unique_id=1900000004]
+layout_mode = 0
+offset_left = 530.04
+offset_top = 461.581
+offset_right = 606.04
+offset_bottom = 512.081
+mouse_filter = 2
+texture = ExtResource("31_lsfx")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="MusicSlider" type="Control" parent="Panel" unique_id=1900000005]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 136.0
+offset_top = 564.0
+offset_right = 456.0
+offset_bottom = 648.0
+scale = Vector2(1.125, 1)
+focus_mode = 2
+mouse_filter = 2
+script = ExtResource("30_apple")
+min_value = 0.0
+max_value = 1.0
+step = 0.01
+value = 1.0
+
+[node name="Bar" type="TextureRect" parent="Panel/MusicSlider" unique_id=1900000006]
+material = SubResource("ShaderMaterial_music")
+layout_mode = 0
+offset_left = 48.0
+offset_top = 20.693
+offset_right = 272.0
+offset_bottom = 63.308
+mouse_filter = 2
+texture = ExtResource("10_6lta7")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Knob" type="TextureButton" parent="Panel/MusicSlider" unique_id=1900000007]
+layout_mode = 0
+offset_left = 224.0
+offset_top = 0.401
+offset_right = 320.0
+offset_bottom = 83.601
+focus_mode = 0
+texture_normal = ExtResource("8_fbvfs")
+ignore_texture_size = true
+stretch_mode = 5
+
+[node name="MusicLabel" type="TextureRect" parent="Panel" unique_id=1900000008]
+layout_mode = 0
+offset_left = 508.425
+offset_top = 583.006
+offset_right = 639.425
+offset_bottom = 624.006
+mouse_filter = 2
+texture = ExtResource("32_lmusic")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="ControlsIcon" type="TextureRect" parent="Panel" unique_id=1900000032]
+layout_mode = 0
+offset_left = 721.258
+offset_top = 250.734
+offset_right = 797.258
+offset_bottom = 326.734
+mouse_filter = 2
+texture = ExtResource("49_icontrols")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="SensitivitySlider" type="Control" parent="Panel" unique_id=1900000009]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 712.0
+offset_top = 324.0
+offset_right = 1032.0
+offset_bottom = 408.0
+scale = Vector2(1.125, 1)
+focus_mode = 2
+mouse_filter = 2
+script = ExtResource("30_apple")
+min_value = 0.5
+max_value = 1.5
+step = 0.05
+value = 1.0
+
+[node name="Bar" type="TextureRect" parent="Panel/SensitivitySlider" unique_id=1900000010]
+material = SubResource("ShaderMaterial_sens")
+layout_mode = 0
+offset_left = 48.0
+offset_top = 20.693
+offset_right = 272.0
+offset_bottom = 63.308
+mouse_filter = 2
+texture = ExtResource("9_h1rm7")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Knob" type="TextureButton" parent="Panel/SensitivitySlider" unique_id=1900000011]
+layout_mode = 0
+offset_left = 112.0
+offset_top = 0.401
+offset_right = 208.0
+offset_bottom = 83.601
+focus_mode = 0
+texture_normal = ExtResource("8_fbvfs")
+ignore_texture_size = true
+stretch_mode = 5
+
+[node name="SensitivityLabel" type="TextureRect" parent="Panel" unique_id=1900000012]
+layout_mode = 0
+offset_left = 1079.436
+offset_top = 326.616
+offset_right = 1271.436
+offset_bottom = 403.722
+mouse_filter = 2
+texture = ExtResource("33_lsens")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="DisplayIcon" type="TextureRect" parent="Panel" unique_id=1900000033]
+layout_mode = 0
+offset_left = 722.148
+offset_top = 412.516
+offset_right = 798.148
+offset_bottom = 488.516
+mouse_filter = 2
+texture = ExtResource("50_idisplay")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="ContrastSlider" type="Control" parent="Panel" unique_id=1900000015]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 712.0
+offset_top = 484.0
+offset_right = 1032.0
+offset_bottom = 568.0
+scale = Vector2(1.125, 1)
+focus_mode = 2
+mouse_filter = 2
+script = ExtResource("30_apple")
+min_value = 0.5
+max_value = 1.5
+step = 0.05
+value = 1.0
+
+[node name="Bar" type="TextureRect" parent="Panel/ContrastSlider" unique_id=1900000016]
+material = SubResource("ShaderMaterial_contrast")
+layout_mode = 0
+offset_left = 48.0
+offset_top = 20.693
+offset_right = 272.0
+offset_bottom = 63.308
+mouse_filter = 2
+texture = ExtResource("10_6lta7")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Knob" type="TextureButton" parent="Panel/ContrastSlider" unique_id=1900000017]
+layout_mode = 0
+offset_left = 112.0
+offset_top = 0.401
+offset_right = 208.0
+offset_bottom = 83.601
+focus_mode = 0
+texture_normal = ExtResource("8_fbvfs")
+ignore_texture_size = true
+stretch_mode = 5
+
+[node name="ContrastLabel" type="TextureRect" parent="Panel" unique_id=1900000014]
+layout_mode = 0
+offset_left = 1077.773
+offset_top = 504.746
+offset_right = 1286.773
+offset_bottom = 547.254
+mouse_filter = 2
+texture = ExtResource("34_lcontrast")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="BwToggle" type="TextureButton" parent="Panel" unique_id=61283608]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 761.122
+offset_top = 597.012
+offset_right = 971.122
+offset_bottom = 685.212
+toggle_mode = true
+texture_normal = ExtResource("12_bse0t")
+texture_pressed = ExtResource("13_si3c8")
+texture_hover = ExtResource("14_4ysa8")
+ignore_texture_size = true
+stretch_mode = 5
+
+[node name="Label" type="TextureRect" parent="Panel/BwToggle" unique_id=1900000013]
+layout_mode = 0
+offset_left = 62.517
+offset_top = 22.506
+offset_right = 152.517
+offset_bottom = 74.298
+mouse_filter = 2
+texture = ExtResource("35_lbw")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="FullscreenToggle" type="TextureButton" parent="Panel" unique_id=1900000034]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 959.105
+offset_top = 600.337
+offset_right = 1169.105
+offset_bottom = 688.537
+toggle_mode = true
+texture_normal = ExtResource("12_bse0t")
+texture_pressed = ExtResource("13_si3c8")
+texture_hover = ExtResource("14_4ysa8")
+ignore_texture_size = true
+stretch_mode = 5
+
+[node name="Arrows" type="TextureRect" parent="Panel/FullscreenToggle" unique_id=1900000035]
+layout_mode = 0
+offset_left = 58.0
+offset_top = 15.0
+offset_right = 162.0
+offset_bottom = 79.711
+mouse_filter = 2
+texture = ExtResource("51_fsarrows")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Branch" type="TextureRect" parent="Panel" unique_id=361874738]
+layout_mode = 0
+offset_left = 114.242
+offset_top = 710.111
+offset_right = 1248.242
+offset_bottom = 843.052
+mouse_filter = 2
+texture = ExtResource("15_ab842")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="TopLeaf" type="TextureRect" parent="Panel" unique_id=1900000036]
+layout_mode = 0
+offset_left = 566.259
+offset_top = 679.246
+offset_right = 612.488
+offset_bottom = 744.912
+mouse_filter = 2
+texture = ExtResource("52_leaf")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="CreditsButton" type="TextureButton" parent="Panel" unique_id=269046145]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 331.508
+offset_top = 727.931
+offset_right = 549.889
+offset_bottom = 953.579
+texture_normal = ExtResource("16_s7qrp")
+texture_pressed = ExtResource("17_bcdlt")
+texture_hover = ExtResource("18_2d1k3")
+ignore_texture_size = true
+stretch_mode = 5
+
+[node name="Label" type="TextureRect" parent="Panel/CreditsButton" unique_id=1900000021]
+layout_mode = 0
+offset_left = 26.698
+offset_top = 74.047
+offset_right = 197.871
+offset_bottom = 110.485
+mouse_filter = 2
+texture = ExtResource("41_lcredits")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="LogoButton" type="TextureButton" parent="Panel" unique_id=1568438593]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 608.18
+offset_top = 725.436
+offset_right = 764.18
+offset_bottom = 987.051
+texture_normal = ExtResource("19_4e1io")
+texture_pressed = ExtResource("20_4gl8u")
+texture_hover = ExtResource("21_ws7vk")
+ignore_texture_size = true
+stretch_mode = 5
+
+[node name="LogoMark" type="TextureRect" parent="Panel/LogoButton" unique_id=1235210280]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 19.0
+offset_top = 64.0
+offset_right = 137.0
+offset_bottom = 182.494
+mouse_filter = 2
+texture = ExtResource("22_lg0ob")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="ResetButton" type="TextureButton" parent="Panel" unique_id=1364166013]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 827.938
+offset_top = 727.903
+offset_right = 1078.415
+offset_bottom = 969.375
+texture_normal = ExtResource("23_wx4ln")
+texture_pressed = ExtResource("24_bcp6w")
+texture_hover = ExtResource("25_qknxr")
+ignore_texture_size = true
+stretch_mode = 5
+
+[node name="Label" type="TextureRect" parent="Panel/ResetButton" unique_id=1900000022]
+layout_mode = 0
+offset_left = 36.024
+offset_top = 59.192
+offset_right = 220.312
+offset_bottom = 145.032
+mouse_filter = 2
+texture = ExtResource("42_lreset")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="CreditsPage" type="Control" parent="Panel" unique_id=1072485317]
+unique_name_in_owner = true
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Background" type="TextureRect" parent="Panel/CreditsPage" unique_id=1309337309]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+texture = ExtResource("4_i1qw6")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="CreditsLogo" type="TextureRect" parent="Panel/CreditsPage" unique_id=448444753]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 591.0
+offset_top = 110.0
+offset_right = 791.0
+offset_bottom = 310.0
+mouse_filter = 2
+texture = ExtResource("26_ap5lg")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="CreditsBody" type="RichTextLabel" parent="Panel/CreditsPage" unique_id=10221862]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 300.0
+offset_top = 340.0
+offset_right = 1083.0
+offset_bottom = 850.0
+theme_override_colors/default_color = Color(0.97, 0.94, 0.66, 1)
+theme_override_fonts/normal_font = ExtResource("2_a4086")
+theme_override_font_sizes/normal_font_size = 30
+bbcode_enabled = true
+
+[node name="LicensesButton" type="Button" parent="Panel/CreditsPage" unique_id=936536099]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(280, 56)
+layout_mode = 0
+offset_left = 391.0
+offset_top = 880.0
+offset_right = 671.0
+offset_bottom = 936.0
+focus_neighbor_left = NodePath("../CreditsBack")
+focus_neighbor_right = NodePath("../CreditsBack")
+theme_override_colors/font_color = Color(0.18, 0.2, 0.02, 1)
+theme_override_colors/font_hover_color = Color(0.18, 0.2, 0.02, 1)
+theme_override_colors/font_pressed_color = Color(0.18, 0.2, 0.02, 1)
+theme_override_colors/font_hover_pressed_color = Color(0.18, 0.2, 0.02, 1)
+theme_override_fonts/font = ExtResource("2_a4086")
+theme_override_font_sizes/font_size = 24
+theme_override_styles/normal = SubResource("StyleBoxFlat_outline")
+theme_override_styles/hover = SubResource("StyleBoxFlat_outline_hover")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_outline_pressed")
+theme_override_styles/focus = SubResource("StyleBoxFlat_outline_hover")
+text = "Licenses"
+
+[node name="CreditsBack" type="Button" parent="Panel/CreditsPage" unique_id=1603870583]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(280, 56)
+layout_mode = 0
+offset_left = 711.0
+offset_top = 880.0
+offset_right = 991.0
+offset_bottom = 936.0
+focus_neighbor_left = NodePath("../LicensesButton")
+focus_neighbor_right = NodePath("../LicensesButton")
+theme_override_colors/font_color = Color(0.18, 0.2, 0.02, 1)
+theme_override_colors/font_hover_color = Color(0.18, 0.2, 0.02, 1)
+theme_override_colors/font_pressed_color = Color(0.18, 0.2, 0.02, 1)
+theme_override_colors/font_hover_pressed_color = Color(0.18, 0.2, 0.02, 1)
+theme_override_fonts/font = ExtResource("2_a4086")
+theme_override_font_sizes/font_size = 24
+theme_override_styles/normal = SubResource("StyleBoxFlat_outline")
+theme_override_styles/hover = SubResource("StyleBoxFlat_outline_hover")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_outline_pressed")
+theme_override_styles/focus = SubResource("StyleBoxFlat_outline_hover")
+text = "Back"
+
+[node name="WebsitePopup" type="Control" parent="." unique_id=1649483098]
+unique_name_in_owner = true
+visible = false
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Dim" type="ColorRect" parent="WebsitePopup" unique_id=1701527946]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0.5)
+
+[node name="Blob" type="TextureRect" parent="WebsitePopup" unique_id=1686243444]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -527.0
+offset_top = -392.0
+offset_right = 527.0
+offset_bottom = 392.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+texture = ExtResource("27_pop1u")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="WebsiteQuestion" type="TextureRect" parent="WebsitePopup/Blob" unique_id=1900000018]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 263.0
+offset_top = 163.0
+offset_right = 822.0
+offset_bottom = 491.0
+mouse_filter = 2
+texture = ExtResource("36_prompt")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="WebsiteNo" type="TextureButton" parent="WebsitePopup/Blob" unique_id=1900000019]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 199.0
+offset_top = 556.0
+offset_right = 490.0
+offset_bottom = 704.0
+focus_neighbor_left = NodePath("../WebsiteYes")
+focus_neighbor_top = NodePath("../WebsiteYes")
+focus_neighbor_right = NodePath("../WebsiteYes")
+focus_neighbor_bottom = NodePath("../WebsiteYes")
+texture_normal = ExtResource("37_no")
+ignore_texture_size = true
+stretch_mode = 5
+script = ExtResource("43_ink")
+
+[node name="Highlight" type="TextureRect" parent="WebsitePopup/Blob/WebsiteNo" unique_id=1900000023]
+visible = false
+show_behind_parent = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+texture = ExtResource("38_nohl")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="WebsiteYes" type="TextureButton" parent="WebsitePopup/Blob" unique_id=1900000020]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 576.0
+offset_top = 553.0
+offset_right = 891.0
+offset_bottom = 691.0
+focus_neighbor_left = NodePath("../WebsiteNo")
+focus_neighbor_top = NodePath("../WebsiteNo")
+focus_neighbor_right = NodePath("../WebsiteNo")
+focus_neighbor_bottom = NodePath("../WebsiteNo")
+texture_normal = ExtResource("39_yes")
+ignore_texture_size = true
+stretch_mode = 5
+script = ExtResource("43_ink")
+
+[node name="Highlight" type="TextureRect" parent="WebsitePopup/Blob/WebsiteYes" unique_id=1900000024]
+visible = false
+show_behind_parent = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+texture = ExtResource("40_yeshl")
+expand_mode = 1
+stretch_mode = 5

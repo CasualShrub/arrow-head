@@ -19,9 +19,11 @@ signal shaken(strength: float)
 var _current_lookahead := Vector3.ZERO
 var _target_lookahead := Vector3.ZERO
 var _follow_offset := Vector3.ZERO
+var _aim := AimCursor.new()
 
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
+	add_child(_aim)
 	DarkenManager.register_camera(self)
 
 func _process(delta: float) -> void:
@@ -81,7 +83,7 @@ func shake() -> void:
 	shaken.emit()
 
 func get_mouse_position() -> Vector3:
-	var mouse := get_viewport().get_mouse_position()
+	var mouse := _aim.aim_position()
 	var origin := project_ray_origin(mouse)
 	var dir := project_ray_normal(mouse)
 
@@ -112,7 +114,7 @@ func get_mouse_position() -> Vector3:
 ## Returns a normalized Vector2.
 func get_mouse_screen_offset() -> Vector2:
 	var viewport := get_viewport()
-	var mouse := viewport.get_mouse_position()
+	var mouse := _aim.aim_position()
 	var viewport_size := viewport.get_visible_rect().size
 	var center := viewport_size * 0.5
 
