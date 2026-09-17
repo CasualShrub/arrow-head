@@ -186,6 +186,7 @@ func _launch(sector_center_deg: float, texture: Texture2D, on_complete: Callable
 		.set_trans(Tween.TRANS_QUINT).set_ease(Tween.EASE_IN)
 
 	tween.tween_callback(shake.trigger)
+	tween.tween_callback(func() -> void: SoundManager.play("apple_damage1"))
 	tween.tween_property(_launch_arrow, "rotation", rest_rotation, 0.35) \
 		.from(rest_rotation - 0.18).set_trans(Tween.TRANS_ELASTIC).set_ease(Tween.EASE_OUT)
 
