@@ -8,10 +8,11 @@ signal closed
 const CREDITS := """[center]ARROWHEAD
 
 Game by
-CasualShrub
+Alex Francia
+Charlie Lette
 Eric Lee
-Iamtheepicado
 Jeremy Wangsa
+Rina Amami
 
 Made with Godot Engine
 
