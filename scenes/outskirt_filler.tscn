@@ -1,0 +1,27 @@
+[gd_scene load_steps=9 format=3 uid="uid://coutskfill01x"]
+
+[ext_resource type="Script" path="res://scenes/outskirt_filler.gd" id="1_script"]
+[ext_resource type="PackedScene" uid="uid://4tldq5e4ke5b" path="res://entities/props/trees/tree.tscn" id="2_tree"]
+[ext_resource type="Texture2D" uid="uid://bx4ncbvdfq6ke" path="res://entities/props/trees/tree var1.png" id="3_v1"]
+[ext_resource type="Texture2D" uid="uid://dkmc4olpuraxs" path="res://entities/props/trees/tree var2.png" id="4_v2"]
+[ext_resource type="Texture2D" uid="uid://c4m8genrr4nrw" path="res://entities/props/trees/tree var3.png" id="5_v3"]
+[ext_resource type="Texture2D" uid="uid://bwelgf5ryu40g" path="res://entities/props/trees/tree var4.png" id="6_v4"]
+[ext_resource type="Texture2D" uid="uid://byb3mu5ggny31" path="res://entities/props/trees/tree.png" id="7_v0"]
+
+[sub_resource type="BoxShape3D" id="OutskirtBox"]
+resource_local_to_scene = true
+size = Vector3(38.59, 3, 23.07)
+
+[node name="OutskirtFiller" type="Area3D"]
+monitoring = false
+monitorable = false
+collision_layer = 0
+collision_mask = 0
+script = ExtResource("1_script")
+items = Array[PackedScene]([ExtResource("2_tree")])
+sprite_textures = Array[Texture2D]([ExtResource("3_v1"), ExtResource("4_v2"), ExtResource("5_v3"), ExtResource("6_v4"), ExtResource("7_v0")])
+band_depth = 11.0
+spacing = 3.1
+
+[node name="Border" type="CollisionShape3D" parent="."]
+shape = SubResource("OutskirtBox")
