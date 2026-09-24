@@ -31,7 +31,7 @@ shader_parameter/darken_amount = 0.0
 [sub_resource type="BoxShape3D" id="BoxShape3D_exit"]
 size = Vector3(3, 2.5, 2)
 
-[node name="Room" type="Node3D" node_paths=PackedStringArray("exit") unique_id=84024719]
+[node name="Room" type="Node3D" unique_id=84024719 node_paths=PackedStringArray("exit")]
 script = ExtResource("1_ybpoa")
 exit = NodePath("Exit")
 metadata/_custom_type_script = "uid://cm3vh4qq01y8d"
@@ -101,11 +101,12 @@ visible = false
 [node name="Exit" type="Area3D" parent="." unique_id=771002501]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -6)
 collision_layer = 0
-collision_mask = 1
 script = ExtResource("11_exit")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Exit" unique_id=771002503]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
 shape = SubResource("BoxShape3D_exit")
+
+[node name="Walls" type="Node" parent="." unique_id=2117107331]
 
 [connection signal="ended" from="." to="GameOver" method="_on_encounter_ended"]
