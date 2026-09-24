@@ -1,0 +1,17 @@
+[gd_scene load_steps=3 format=3 uid="uid://dsbdsdhimm882"]
+
+[ext_resource type="ArrayMesh" path="res://scenes/nature/meshes/rock_02_mesh.res" id="1_mesh"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_col"]
+size = Vector3(2.34173965454102, 2.27950072288513, 1.73155236244202)
+
+[node name="Rock02" type="StaticBody3D"]
+collision_layer = 4
+collision_mask = 9
+
+[node name="Mesh" type="MeshInstance3D" parent="."]
+mesh = ExtResource("1_mesh")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0, 1.13975036144257, 0.00000011920929)
+shape = SubResource("BoxShape3D_col")

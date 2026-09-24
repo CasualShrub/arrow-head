@@ -1,0 +1,18 @@
+[gd_scene format=3 uid="uid://clnucp0syjoj8"]
+
+[ext_resource type="ArrayMesh" path="res://scenes/nature/meshes/cut_down_tree_mesh.res" id="1_mesh"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_col"]
+size = Vector3(1.5360713, 0.2965079, 0.29650795)
+
+[node name="CutDownTree" type="StaticBody3D" unique_id=2107171167]
+transform = Transform3D(1.6, 0, 0, 0, 1.6, 0, 0, 0, 1.6, 0, 0, 0)
+collision_layer = 4
+collision_mask = 9
+
+[node name="Mesh" type="MeshInstance3D" parent="." unique_id=1324437334]
+mesh = ExtResource("1_mesh")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=513370221]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.14825395, 0)
+shape = SubResource("BoxShape3D_col")

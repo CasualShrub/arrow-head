@@ -1,0 +1,9 @@
+[gd_resource type="StandardMaterial3D" format=3]
+
+[ext_resource type="Texture2D" uid="uid://cghm05b4baosq" path="res://shared/textures/nature_palette.png" id="1_egobo"]
+
+[resource]
+resource_name = "NaturePalette"
+specular_mode = 2
+albedo_texture = ExtResource("1_egobo")
+texture_filter = 0
