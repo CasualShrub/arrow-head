@@ -21,7 +21,7 @@
 [ext_resource type="Script" uid="uid://it1hcnvfi1hr" path="res://scripts/classes/screen_shake.gd" id="14_shake"]
 [ext_resource type="PackedScene" uid="uid://c8ghost4gme01" path="res://scenes/game.tscn" id="15_game"]
 [ext_resource type="Shader" uid="uid://blt3jorw6dqxv" path="res://menus/main_menu/dots_wave.gdshader" id="16_dots_wave"]
-[ext_resource type="PackedScene" uid="uid://db87rtso8n8l0" path="res://menus/settings/settings.tscn" id="17_settings"]
+[ext_resource type="PackedScene" uid="uid://db87rtso8n8l0" path="res://menus/Settings/settings.tscn" id="17_settings"]
 [ext_resource type="Texture2D" uid="uid://dk1tp5akt6x78" path="res://shared/art/settings/gear.png" id="18_gear"]
 [ext_resource type="Texture2D" uid="uid://dy4n0ixkhnjmj" path="res://shared/art/settings/gear_dark.png" id="19_gear_dark"]
 
@@ -311,10 +311,10 @@ text = "Back"
 
 [node name="Gear" type="TextureButton" parent="." unique_id=1131609519]
 layout_mode = 0
-offset_left = 1762.0
-offset_top = 657.0
-offset_right = 1862.0
-offset_bottom = 757.0
+offset_left = 1797.0
+offset_top = 24.0
+offset_right = 1897.0
+offset_bottom = 124.0
 texture_normal = ExtResource("18_gear")
 texture_pressed = ExtResource("19_gear_dark")
 ignore_texture_size = true
