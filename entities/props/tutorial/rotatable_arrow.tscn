@@ -1,0 +1,9 @@
+[gd_scene format=3]
+
+[ext_resource type="Texture2D" path="res://entities/props/tutorial/rotatable arrow.png" id="1_tex"]
+
+[node name="RotatableArrow" type="Sprite3D"]
+transform = Transform3D(1, 0, 0, 0, 0, 1, 0, -1, 0, 0, 0, 0)
+pixel_size = 0.0012
+alpha_cut = 1
+texture = ExtResource("1_tex")
