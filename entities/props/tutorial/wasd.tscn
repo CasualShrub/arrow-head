@@ -1,9 +1,40 @@
-[gd_scene format=3]
+[gd_scene format=3 uid="uid://dq2dmki7i3e1r"]
 
-[ext_resource type="Texture2D" path="res://entities/props/tutorial/wasd.PNG" id="1_wasd"]
+[ext_resource type="Script" uid="uid://gpqnetpuybl6" path="res://entities/props/tutorial/wasd.gd" id="1_script"]
+[ext_resource type="Texture2D" uid="uid://dxh17imyi4y85" path="res://entities/props/tutorial/wasd.PNG" id="1_wasd"]
 
-[node name="Wasd" type="Sprite3D"]
+[node name="Wasd" type="Node3D" unique_id=11984786]
 transform = Transform3D(1, 0, 0, 0, 0, 1, 0, -1, 0, 0, 0, 0)
+script = ExtResource("1_script")
+
+[node name="W" type="Sprite3D" parent="." unique_id=1116850049]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0222, 0.5184, 0)
 pixel_size = 0.0012
 alpha_cut = 1
 texture = ExtResource("1_wasd")
+region_enabled = true
+region_rect = Rect2(880, 265, 875, 840)
+
+[node name="A" type="Sprite3D" parent="." unique_id=1052963658]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.0602, -0.5016, 0)
+pixel_size = 0.0012
+alpha_cut = 1
+texture = ExtResource("1_wasd")
+region_enabled = true
+region_rect = Rect2(45, 1135, 815, 800)
+
+[node name="S" type="Sprite3D" parent="." unique_id=1225205587]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0102, -0.5346, 0)
+pixel_size = 0.0012
+alpha_cut = 1
+texture = ExtResource("1_wasd")
+region_enabled = true
+region_rect = Rect2(895, 1155, 865, 815)
+
+[node name="D" type="Sprite3D" parent="." unique_id=1187335058]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.0638, -0.5226, 0)
+pixel_size = 0.0012
+alpha_cut = 1
+texture = ExtResource("1_wasd")
+region_enabled = true
+region_rect = Rect2(1815, 1135, 815, 835)

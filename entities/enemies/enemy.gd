@@ -14,6 +14,8 @@ class_name Enemy
 		return patrol.path if patrol else null
 
 @export var has_intro := false
+@export var stationary := false #ignores other movement patterns, stands still
+@export var fixed_facing := false #will just face whatever is in editor. never looks at player/rotates
 @export_group("firing")
 @export var patterns: Array[ArrowPattern] = []
 @export var fire_release_frame := 3
@@ -62,6 +64,8 @@ func _physics_process(delta: float) -> void:
 func _ready() -> void:
 	if Engine.is_editor_hint(): return
 	
+	if fixed_facing:
+		face(global_position - global_basis.z)
 	suspicion.state = suspicion.SuspicionState.HIGH
 	_recovery.start()
 	
@@ -218,6 +222,7 @@ func _get_player() -> Player:
 	return null
 
 func _face_player() -> void:
+	if fixed_facing: return
 	var player := _get_player()
 	if not player:
 		return
@@ -259,6 +264,7 @@ func _select_pattern() -> ArrowPattern:
 	return patterns[0]
 
 func _patrol(delta: float) -> void:
+	if stationary: return
 	if not patrol.has_path(): return
 	patrol.tick(delta)
 	var patrol_pos := patrol.get_patrol_position()
@@ -311,7 +317,7 @@ func _alert(dt: float) -> void:
 	if _ray_right.is_colliding():
 		move -= right
 
-	if move.length() > 0.001:
+	if not stationary and move.length() > 0.001:
 		velocity = move.normalized() * combat_speed
 		move_and_slide()
 

@@ -2,8 +2,23 @@
 
 [ext_resource type="PackedScene" uid="uid://b8rs35o7f45v0" path="res://entities/enemies/enemy.tscn" id="1_xnfny"]
 [ext_resource type="SpriteFrames" uid="uid://0u4g146c4us5" path="res://entities/enemies/banana_dummy/banana_dummy_frames.tres" id="2_hvclp"]
+[ext_resource type="Script" uid="uid://d04k7pxjd2u24" path="res://systems/arrow/firing_data/arrow_pattern.gd" id="3_pattern"]
+[ext_resource type="Script" uid="uid://r4qbgt6it8lb" path="res://systems/arrow/firing_data/firing_instance.gd" id="4_instance"]
+[ext_resource type="PackedScene" uid="uid://dwkegkkx2sid4" path="res://entities/arrows/dummy/arrow_dummy.tscn" id="5_arrow"]
+
+[sub_resource type="Resource" id="Resource_brown_instance"]
+script = ExtResource("4_instance")
+type = ExtResource("5_arrow")
+metadata/_custom_type_script = "uid://r4qbgt6it8lb"
+
+[sub_resource type="Resource" id="Resource_brown_pattern"]
+script = ExtResource("3_pattern")
+recovery = 2.0
+instances = Array[ExtResource("4_instance")]([SubResource("Resource_brown_instance")])
+metadata/_custom_type_script = "uid://d04k7pxjd2u24"
 
 [node name="Enemy" unique_id=520769260 instance=ExtResource("1_xnfny")]
+patterns = Array[ExtResource("3_pattern")]([SubResource("Resource_brown_pattern")])
 
 [node name="SuspicionDisplay" parent="." index="4" unique_id=488316298]
 visible = false

@@ -3,7 +3,7 @@ class_name ExitIndicator
 
 @export var edge_margin: float = 72.0
 @export var fade_speed: float = 9.0
-@export var base_scale: float = 0.16
+@export var base_scale: float = 0.09
 @export var pulse_amount: float = 0.14
 @export var pulse_speed: float = 4.0
 

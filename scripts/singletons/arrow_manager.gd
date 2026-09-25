@@ -25,6 +25,12 @@ func make_arrow(
 	arrow.activate(at, velocity, target_mask)
 	return arrow
 
+func deactivate_all() -> void:
+	for child in get_children():
+		var arrow := child as Arrow
+		if arrow and arrow.is_active():
+			arrow.deactivate()
+
 func _destroy_arrow(arrow: Arrow) -> void:
 	arrow.queue_free()
 
