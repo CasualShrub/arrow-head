@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://cl12r2to8hcdp"]
 
 [ext_resource type="Shader" uid="uid://bfi638v144t8g" path="res://shaders/sector_visualiser.gdshader" id="1_tp26x"]
-[ext_resource type="Script" uid="uid://bdywsusg7sgug" path="res://entities/player/sectors.gd" id="2_div16"]
+[ext_resource type="Script" uid="uid://bdywsusg7sgug" path="res://entities/player/sectors/sectors.gd" id="2_div16"]
 [ext_resource type="Shader" uid="uid://bcds3powkj5ap" path="res://shaders/triangle.gdshader" id="3_5d62w"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_3qflg"]
