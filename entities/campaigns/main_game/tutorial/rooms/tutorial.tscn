@@ -12,7 +12,7 @@
 [ext_resource type="PackedScene" uid="uid://clnucp0syjoj8" path="res://scenes/nature/cut_down_tree.tscn" id="10_5jrp4"]
 [ext_resource type="PackedScene" uid="uid://bd1ono5bjqxde" path="res://scenes/nature/tree_02.tscn" id="11_t06ex"]
 [ext_resource type="PackedScene" uid="uid://b111y7l4h8xau" path="res://scenes/nature/stump.tscn" id="12_drje7"]
-[ext_resource type="PackedScene" path="res://entities/props/tutorial/wasd.tscn" id="13_wasd"]
+[ext_resource type="PackedScene" uid="uid://dq2dmki7i3e1r" path="res://entities/props/tutorial/wasd.tscn" id="13_wasd"]
 [ext_resource type="PackedScene" path="res://entities/props/tutorial/tutorial_arrow.tscn" id="14_tarrow"]
 [ext_resource type="PackedScene" path="res://entities/props/tutorial/apple_orbit.tscn" id="15_orbit"]
 [ext_resource type="PackedScene" uid="uid://cpxiel5uqal0m" path="res://entities/enemies/banana_dummy/enemy_banana_dummy.tscn" id="16_dummy"]
@@ -281,4 +281,4 @@ transform = Transform3D(0.28, 0, 0, 0, -1.2239188e-08, 0.28, 0, -0.28, -1.223918
 transform = Transform3D(0.705, 0, 0, 0, 0.705, 0, 0, 0, 0.705, -0.4554429, -0.18951291, -9.5)
 
 [node name="Stump" parent="." index="16" unique_id=1185279031 instance=ExtResource("12_drje7")]
-transform = Transform3D(1.79, 0, 0, 0, 1.79, 0, 0, 0, 1.79, 2.3702168, -0.29794943, -9.435123)
+transform = Transform3D(1.79, 0, 0, 0, 1.79, 0, 0, 0, 1.79, 2.3702168, -0.29794943, -9.483786)
