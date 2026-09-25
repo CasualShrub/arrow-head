@@ -80,7 +80,6 @@ func add_shake(amount: float) -> void:
 
 func shake() -> void:
 	add_shake(screen_shake.stimulus_amount)
-	shaken.emit()
 
 func get_mouse_position() -> Vector3:
 	var mouse := _aim.aim_position()

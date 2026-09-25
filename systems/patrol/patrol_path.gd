@@ -225,7 +225,8 @@ func add_point_auto(idx: int = get_point_count()) -> void:
 	var point := add_point(pos, idx)
 	
 	# force select new point
-	EditorInterface.call_deferred("edit_node", point)
+	if Engine.is_editor_hint():
+		Engine.get_singleton("EditorInterface").call_deferred("edit_node", point)
 
 func _get_new_point_position(idx: int) -> Vector3:
 	var points := get_points()
@@ -280,7 +281,7 @@ func add_point(at: Vector3, idx: int = get_point_count()) -> PatrolPoint:
 	point.gizmo_extents = MARKER_EXTENTS
  
 	if Engine.is_editor_hint():
-		var undo_redo := EditorInterface.get_editor_undo_redo()
+		var undo_redo = Engine.get_singleton("EditorInterface").get_editor_undo_redo()
 		undo_redo.create_action("Add Patrol Point")
 		undo_redo.add_do_method(self, "_do_add_point", point, idx)
 		undo_redo.add_do_reference(point)
@@ -308,7 +309,7 @@ func _do_remove_point(point: PatrolPoint) -> void:
 func remove_point(point: PatrolPoint) -> void:
 	if Engine.is_editor_hint():
 		var idx := get_point_number(point)
-		var undo_redo := EditorInterface.get_editor_undo_redo()
+		var undo_redo = Engine.get_singleton("EditorInterface").get_editor_undo_redo()
 		undo_redo.create_action("Remove Patrol Point")
 		undo_redo.add_do_method(self, "_do_remove_point", point)
 		undo_redo.add_undo_method(self, "_do_add_point", point, idx)
@@ -329,7 +330,7 @@ func move_point_later(point: PatrolPoint) -> void:
 
 func _move_point(point: PatrolPoint, from_idx: int, to_idx: int) -> void:
 	if Engine.is_editor_hint():
-		var undo_redo := EditorInterface.get_editor_undo_redo()
+		var undo_redo = Engine.get_singleton("EditorInterface").get_editor_undo_redo()
 		undo_redo.create_action("Reorder Patrol Point")
 		undo_redo.add_do_method(self, "_do_move_point", point, to_idx)
 		undo_redo.add_undo_method(self, "_do_move_point", point, from_idx)
@@ -344,7 +345,7 @@ func clear_points() -> void:
 	var points := get_points()
 	
 	if Engine.is_editor_hint():
-		var undo_redo := EditorInterface.get_editor_undo_redo()
+		var undo_redo = Engine.get_singleton("EditorInterface").get_editor_undo_redo()
 		undo_redo.create_action("Clear Patrol Points")
 		for i in range(points.size()):
 			var point := points[i]

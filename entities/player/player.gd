@@ -3,6 +3,8 @@
 extends CharacterBody3D
 class_name Player
 
+signal death_animation_finished()
+
 @export var health: HealthComponent:
 	set(value):
 		health = value
@@ -73,6 +75,8 @@ var _dash_arrows: Array[Arrow] = []
 func _ready() -> void:
 	if Engine.is_editor_hint(): update_configuration_warnings()
 	_update_collider()
+	if not Engine.is_editor_hint():
+		_sprite.animation_finished.connect(_on_animation_finished)
 
 func _process(_delta: float) -> void:
 	if Engine.is_editor_hint(): return
@@ -212,6 +216,10 @@ func _on_died() -> void:
 	_eyes.hide()
 	_status_sprite.hide()
 	_sectors.hide()
+
+func _on_animation_finished() -> void:
+	if _sprite.animation == &"death":
+		death_animation_finished.emit()
 
 func _get_target_slot() -> int:
 	var start := arrows.get_facing_slot()

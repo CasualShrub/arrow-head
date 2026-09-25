@@ -3,14 +3,104 @@
 [ext_resource type="Script" uid="uid://c6ijbyhvxtehx" path="res://menus/game_over/game_over.gd" id="1_s"]
 [ext_resource type="Texture2D" uid="uid://d14uaqs12ctn4" path="res://menus/game_over/dead-apple1.png" id="2_apple"]
 [ext_resource type="FontFile" uid="uid://dg3navvnlkmpw" path="res://shared/fonts/Puffy-gxW55.otf" id="3_puffy"]
-[ext_resource type="Script" uid="uid://bgra1aqfhtseu" path="res://menus/hold_to_quit.gd" id="9_hold"]
+[ext_resource type="Script" uid="uid://bgra1aqfhtseu" path="res://menus/hold_to_quit.gd" id="4_hold"]
+[ext_resource type="Shader" path="res://menus/game_over/death_backdrop.gdshader" id="5_backdrop"]
+[ext_resource type="Texture2D" path="res://menus/main_menu/red dots.png" id="6_dots"]
 
-[node name="GameOver" type="CanvasLayer" unique_id=1577397124]
+[sub_resource type="ShaderMaterial" id="BackdropMaterial"]
+resource_local_to_scene = true
+shader = ExtResource("5_backdrop")
+shader_parameter/dots = ExtResource("6_dots")
+
+[sub_resource type="AtlasTexture" id="AppleCrop"]
+atlas = ExtResource("2_apple")
+region = Rect2(76, 242, 369, 161)
+filter_clip = true
+
+[sub_resource type="StyleBoxFlat" id="RetryNormal"]
+bg_color = Color(1, 0.867, 0.439, 1)
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 3
+border_color = Color(0.29, 0.141, 0.149, 1)
+corner_radius_top_left = 7
+corner_radius_top_right = 7
+corner_radius_bottom_left = 7
+corner_radius_bottom_right = 7
+shadow_color = Color(0.29, 0.141, 0.149, 1)
+shadow_size = 2
+shadow_offset = Vector2(0, 4)
+content_margin_left = 18.0
+content_margin_right = 44.0
+
+[sub_resource type="StyleBoxFlat" id="RetryHover"]
+bg_color = Color(1, 0.941, 0.659, 1)
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 3
+border_color = Color(0.29, 0.141, 0.149, 1)
+corner_radius_top_left = 7
+corner_radius_top_right = 7
+corner_radius_bottom_left = 7
+corner_radius_bottom_right = 7
+shadow_color = Color(0.29, 0.141, 0.149, 1)
+shadow_size = 2
+shadow_offset = Vector2(0, 4)
+content_margin_left = 18.0
+content_margin_right = 44.0
+
+[sub_resource type="StyleBoxFlat" id="RetryPressed"]
+bg_color = Color(0.94, 0.77, 0.35, 1)
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 3
+border_color = Color(0.29, 0.141, 0.149, 1)
+corner_radius_top_left = 7
+corner_radius_top_right = 7
+corner_radius_bottom_left = 7
+corner_radius_bottom_right = 7
+content_margin_left = 18.0
+content_margin_right = 44.0
+
+[sub_resource type="StyleBoxFlat" id="Focus"]
+bg_color = Color(0, 0, 0, 0)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(1, 0.95, 0.76, 0.7)
+corner_radius_top_left = 7
+corner_radius_top_right = 7
+corner_radius_bottom_left = 7
+corner_radius_bottom_right = 7
+expand_margin_left = 5.0
+expand_margin_top = 5.0
+expand_margin_right = 5.0
+expand_margin_bottom = 5.0
+
+[sub_resource type="StyleBoxEmpty" id="MenuEmpty"]
+
+[sub_resource type="StyleBoxFlat" id="Keycap"]
+bg_color = Color(1, 0.945, 0.725, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.443, 0.294, 0.2, 1)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_left = 4
+corner_radius_bottom_right = 4
+
+[node name="GameOver" type="CanvasLayer"]
 process_mode = 3
 layer = 100
 script = ExtResource("1_s")
 
-[node name="Root" type="Control" parent="." unique_id=973900867]
+[node name="Root" type="Control" parent="."]
 unique_name_in_owner = true
 layout_mode = 3
 anchors_preset = 15
@@ -19,155 +109,121 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="Dim" type="ColorRect" parent="Root" unique_id=2084304043]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-color = Color(0, 0, 0, 0.5)
-
-[node name="Center" type="VBoxContainer" parent="Root" unique_id=30671039]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-theme_override_constants/separation = 16
-alignment = 1
-
-[node name="Control" type="Control" parent="Root/Center" unique_id=766327482]
-custom_minimum_size = Vector2(0, 252)
-layout_mode = 2
-size_flags_horizontal = 4
-size_flags_vertical = 4
-
-[node name="Apple" type="TextureRect" parent="Root/Center/Control" unique_id=580109864]
+[node name="Backdrop" type="ColorRect" parent="Root"]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(240, 252)
+material = SubResource("BackdropMaterial")
 layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -123.0
-offset_top = -147.99997
-offset_right = 117.31
-offset_bottom = 104.00003
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-scale = Vector2(3.2, 3.2)
-pivot_offset_ratio = Vector2(0.5, 0.57)
-size_flags_horizontal = 4
-size_flags_vertical = 4
-texture = ExtResource("2_apple")
+mouse_filter = 2
+
+[node name="Flash" type="ColorRect" parent="Root"]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(1, 0.463, 0.349, 1)
+
+[node name="Content" type="Control" parent="Root"]
+unique_name_in_owner = true
+layout_mode = 0
+offset_right = 430.0
+offset_bottom = 310.0
+mouse_filter = 2
+
+[node name="Art" type="Control" parent="Root/Content"]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 76.0
+offset_top = 25.0
+offset_right = 354.0
+offset_bottom = 167.0
+pivot_offset = Vector2(139, 129)
+mouse_filter = 2
+
+[node name="Apple" type="TextureRect" parent="Root/Content/Art"]
+layout_mode = 0
+offset_top = 13.0
+offset_right = 278.0
+offset_bottom = 134.3
+mouse_filter = 2
+texture = SubResource("AppleCrop")
 expand_mode = 1
 stretch_mode = 5
 
-[node name="Title" type="Label" parent="Root/Center" unique_id=21770467]
-layout_mode = 2
-theme_override_colors/font_color = Color(0.95, 0.3, 0.25, 1)
-theme_override_fonts/font = ExtResource("3_puffy")
-theme_override_font_sizes/font_size = 60
-text = "Game Over"
-horizontal_alignment = 1
-
-[node name="Time" type="Label" parent="Root/Center" unique_id=1906355323]
+[node name="Restart" type="Button" parent="Root/Content"]
 unique_name_in_owner = true
-layout_mode = 2
-theme_override_colors/font_color = Color(0.95, 0.85, 0.4, 1)
+layout_mode = 0
+offset_left = 100.0
+offset_top = 179.0
+offset_right = 330.0
+offset_bottom = 232.0
+focus_neighbor_top = NodePath("../MainMenu")
+focus_neighbor_bottom = NodePath("../MainMenu")
 theme_override_fonts/font = ExtResource("3_puffy")
-theme_override_font_sizes/font_size = 36
-text = "Time  00:00.00"
-horizontal_alignment = 1
+theme_override_font_sizes/font_size = 27
+theme_override_colors/font_color = Color(0.286, 0.137, 0.149, 1)
+theme_override_colors/font_hover_color = Color(0.286, 0.137, 0.149, 1)
+theme_override_colors/font_pressed_color = Color(0.286, 0.137, 0.149, 1)
+theme_override_colors/font_focus_color = Color(0.286, 0.137, 0.149, 1)
+theme_override_colors/font_disabled_color = Color(0.286, 0.137, 0.149, 1)
+theme_override_styles/normal = SubResource("RetryNormal")
+theme_override_styles/hover = SubResource("RetryHover")
+theme_override_styles/pressed = SubResource("RetryPressed")
+theme_override_styles/disabled = SubResource("RetryNormal")
+theme_override_styles/focus = SubResource("Focus")
+text = "Try again"
 
-[node name="Continue" type="Button" parent="Root/Center" unique_id=1213127397]
-unique_name_in_owner = true
-custom_minimum_size = Vector2(280, 56)
-layout_mode = 2
-size_flags_horizontal = 4
-focus_mode = 0
-theme_override_fonts/font = ExtResource("3_puffy")
-theme_override_font_sizes/font_size = 24
-disabled = true
-text = "Continue"
-
-[node name="Badge" type="Label" parent="Root/Center/Continue" unique_id=1618386804]
-layout_mode = 1
-anchors_preset = 4
-anchor_top = 0.5
-anchor_bottom = 0.5
-offset_left = 14.0
-offset_top = -14.0
-offset_right = 100.0
-offset_bottom = 14.0
-grow_vertical = 2
-theme_override_colors/font_color = Color(0.6, 0.6, 0.6, 1)
+[node name="Keycap" type="Label" parent="Root/Content/Restart"]
+layout_mode = 0
+offset_left = 182.0
+offset_top = 12.5
+offset_right = 210.0
+offset_bottom = 40.5
+mouse_filter = 2
+theme_override_styles/normal = SubResource("Keycap")
 theme_override_fonts/font = ExtResource("3_puffy")
 theme_override_font_sizes/font_size = 18
-text = "space"
+theme_override_colors/font_color = Color(0.286, 0.137, 0.149, 1)
+text = "R"
+horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="Restart" type="Button" parent="Root/Center" unique_id=1213127399]
+[node name="MainMenu" type="Button" parent="Root/Content"]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(280, 56)
-layout_mode = 2
-size_flags_horizontal = 4
-focus_mode = 0
+layout_mode = 0
+offset_left = 100.0
+offset_top = 244.0
+offset_right = 330.0
+offset_bottom = 288.0
+focus_neighbor_top = NodePath("../Restart")
+focus_neighbor_bottom = NodePath("../Restart")
 theme_override_fonts/font = ExtResource("3_puffy")
-theme_override_font_sizes/font_size = 24
-text = "Restart"
+theme_override_font_sizes/font_size = 16
+theme_override_colors/font_color = Color(0.973, 0.839, 0.627, 1)
+theme_override_colors/font_hover_color = Color(1, 0.941, 0.725, 1)
+theme_override_colors/font_focus_color = Color(1, 0.941, 0.725, 1)
+theme_override_colors/font_pressed_color = Color(1, 0.867, 0.439, 1)
+theme_override_colors/font_disabled_color = Color(0.973, 0.839, 0.627, 1)
+theme_override_styles/normal = SubResource("MenuEmpty")
+theme_override_styles/hover = SubResource("MenuEmpty")
+theme_override_styles/pressed = SubResource("MenuEmpty")
+theme_override_styles/disabled = SubResource("MenuEmpty")
+theme_override_styles/focus = SubResource("Focus")
+text = "Main menu"
+script = ExtResource("4_hold")
 
-[node name="Badge" type="Label" parent="Root/Center/Restart" unique_id=2113142895]
-layout_mode = 1
-anchors_preset = 4
-anchor_top = 0.5
-anchor_bottom = 0.5
-offset_left = 14.0
-offset_top = -14.0
-offset_right = 100.0
-offset_bottom = 14.0
-grow_vertical = 2
-theme_override_colors/font_color = Color(0.95, 0.85, 0.4, 1)
-theme_override_fonts/font = ExtResource("3_puffy")
-theme_override_font_sizes/font_size = 18
-text = "r"
-vertical_alignment = 1
-
-[node name="MainMenu" type="Button" parent="Root/Center" unique_id=1213127398]
-unique_name_in_owner = true
-custom_minimum_size = Vector2(280, 56)
-layout_mode = 2
-size_flags_horizontal = 4
-focus_mode = 0
-theme_override_fonts/font = ExtResource("3_puffy")
-theme_override_font_sizes/font_size = 24
-text = "Main Menu"
-script = ExtResource("9_hold")
-
-[node name="Sweep" type="ColorRect" parent="Root/Center/MainMenu" unique_id=1676519711]
+[node name="Sweep" type="ColorRect" parent="Root/Content/MainMenu"]
 layout_mode = 1
 anchors_preset = 9
 anchor_bottom = 1.0
 grow_vertical = 2
 mouse_filter = 2
-color = Color(1, 1, 1, 0.32)
-
-[node name="Badge" type="Label" parent="Root/Center/MainMenu" unique_id=14197194]
-layout_mode = 1
-anchors_preset = 4
-anchor_top = 0.5
-anchor_bottom = 0.5
-offset_left = 14.0
-offset_top = -14.0
-offset_right = 100.0
-offset_bottom = 14.0
-grow_vertical = 2
-theme_override_colors/font_color = Color(0.95, 0.85, 0.4, 1)
-theme_override_fonts/font = ExtResource("3_puffy")
-theme_override_font_sizes/font_size = 18
-text = "tab"
-vertical_alignment = 1
+color = Color(1, 1, 1, 0.16)
