@@ -105,6 +105,7 @@ metadata/_custom_type_script = "uid://cq7vk7ukbmts4"
 [node name="FireInput" type="Node" parent="." unique_id=1034469442]
 script = ExtResource("4_uf5tr")
 action_name = &"fire"
+trigger_fires_on_pull = true
 metadata/_custom_type_script = "uid://bw22qrc8y4p5b"
 
 [node name="SlowInput" type="Node" parent="." unique_id=382822114]

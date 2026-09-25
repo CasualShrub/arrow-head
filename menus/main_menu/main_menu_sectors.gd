@@ -46,6 +46,14 @@ signal sector_hovered(sector: StringName)
 var _hovered: StringName = &""
 var _darkened: StringName = &""
 var _hover_fill: Polygon2D
+var _mouse_selection := true
+
+func select_sector(sector: StringName, from_mouse := false) -> void:
+	_mouse_selection = from_mouse
+	_hovered = sector
+	sector_hovered.emit(sector)
+	_update_hover_fill()
+	queue_redraw()
 
 func _ready() -> void:
 	if Engine.is_editor_hint():
@@ -121,12 +129,12 @@ func _sector_at(pos: Vector2) -> StringName:
 
 func _gui_input(event: InputEvent) -> void:
 	if event is InputEventMouseMotion:
+		if ControllerManager.using_controller:
+			return
+		get_viewport().gui_release_focus()
 		var s := _sector_at(event.position)
 		if s != _hovered:
-			_hovered = s
-			sector_hovered.emit(s)
-			_update_hover_fill()
-			queue_redraw()
+			select_sector(s, true)
 	elif event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_LEFT:
 		var s := _sector_at(event.position)
 		sector_activated.emit(s)
@@ -135,7 +143,7 @@ func _notification(what: int) -> void:
 	if what == NOTIFICATION_RESIZED:
 		_update_hover_fill()
 		queue_redraw()
-	elif what == NOTIFICATION_MOUSE_EXIT and _hovered != &"":
+	elif what == NOTIFICATION_MOUSE_EXIT and _mouse_selection and _hovered != &"":
 		_hovered = &""
 		sector_hovered.emit(_hovered)
 		_update_hover_fill()

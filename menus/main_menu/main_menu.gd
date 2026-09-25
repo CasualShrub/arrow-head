@@ -48,6 +48,7 @@ var _title_rest_y := 0.0
 	&"exit": $Labels/Exit,
 }
 var _label_base_scale := {}
+var _menu_buttons: Array[Control] = []
 
 func _ready() -> void:
 	Engine.time_scale = 1.0  # clear leftover slowmo when quitting out mid-game
@@ -81,6 +82,7 @@ func _ready() -> void:
 	_on_sector_hovered(&"")
 	if _level_select:
 		_level_select.hide()
+	_setup_controller_navigation()
 
 	if first_load:
 		_play_intro()
@@ -101,9 +103,11 @@ func _show_menu_instant() -> void:
 	_labels_root.visible = true
 	_sectors.visible = true
 	_gear.visible = true
+	_focus_main()
 
 func _play_intro() -> void:
 	_intro_playing = true
+	_set_main_focus_enabled(false)
 	_title.modulate.a = 0.0
 	_title.visible = true
 	_apple.visible = true
@@ -130,7 +134,7 @@ func _play_intro() -> void:
 func _input(event: InputEvent) -> void:
 	if not _intro_playing:
 		return
-	if event is InputEventMouseButton and event.pressed:
+	if (event is InputEventMouseButton and event.pressed) or event.is_action_pressed("ui_accept"):
 		if not _is_showing_skip_prompt:
 			_is_showing_skip_prompt = true
 			_skip_prompt.visible = true
@@ -156,9 +160,78 @@ func _finish_intro() -> void:
 	_gear.visible = true
 	shake.intensity = 0.0
 	get_viewport().canvas_transform = Transform2D.IDENTITY
+	_focus_main()
+
+func _unhandled_input(event: InputEvent) -> void:
+	if _intro_playing or _launching or _settings.is_open():
+		return
+	if _level_select.visible:
+		if event.is_action_pressed("ui_cancel"):
+			_close_levels()
+			get_viewport().set_input_as_handled()
+		return
+	if get_viewport().gui_get_focus_owner() == null:
+		for action in [&"ui_up", &"ui_down", &"ui_left", &"ui_right", &"ui_focus_next", &"ui_accept"]:
+			if event.is_action_pressed(action):
+				_focus_main()
+				get_viewport().set_input_as_handled()
+				return
+
+func _setup_controller_navigation() -> void:
+	for key in _labels:
+		var button := Button.new()
+		button.name = String(key).capitalize() + "Focus"
+		button.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		for style in ["normal", "hover", "pressed", "focus"]:
+			button.add_theme_stylebox_override(style, StyleBoxEmpty.new())
+		add_child(button)
+		button.global_position = _labels[key].global_position
+		button.size = _labels[key].size * _labels[key].scale
+		button.focus_entered.connect(_sectors.select_sector.bind(key))
+		button.pressed.connect(_on_sector_activated.bind(key))
+		_menu_buttons.append(button)
+	_menu_buttons.append(_gear)
+	FocusFeedback.attach(_gear, 1.15)
+	_gear.focus_entered.connect(_sectors.select_sector.bind(&""))
+	for i in _menu_buttons.size():
+		var control := _menu_buttons[i]
+		var before := control.get_path_to(_menu_buttons[posmod(i - 1, _menu_buttons.size())])
+		var after := control.get_path_to(_menu_buttons[(i + 1) % _menu_buttons.size()])
+		control.focus_neighbor_top = before
+		control.focus_neighbor_left = before
+		control.focus_previous = before
+		control.focus_neighbor_bottom = after
+		control.focus_neighbor_right = after
+		control.focus_next = after
+	_settings.opened.connect(_set_main_focus_enabled.bind(false))
+	_settings.closed.connect(func(): _set_main_focus_enabled(true); _gear.grab_focus())
+	ControllerManager.changed.connect(_refresh_controller_selection)
+	for button in $LevelSelect/Buttons.get_children():
+		if button is Button:
+			FocusFeedback.attach(button, 1.04)
+	_set_main_focus_enabled(not _intro_playing and not _intro_tween)
+
+func _set_main_focus_enabled(enabled: bool) -> void:
+	for control in _menu_buttons:
+		control.focus_mode = Control.FOCUS_ALL if enabled else Control.FOCUS_NONE
+
+func _focus_main() -> void:
+	if _menu_buttons.is_empty(): return
+	_set_main_focus_enabled(true)
+	_menu_buttons[0].grab_focus()
+
+func _refresh_controller_selection() -> void:
+	if not ControllerManager.using_controller or _intro_playing or _settings.is_open() or _level_select.visible:
+		return
+	var focus := get_viewport().gui_get_focus_owner()
+	var index := _menu_buttons.find(focus)
+	if index < 0:
+		_focus_main()
+	else:
+		_sectors.select_sector(_labels.keys()[index] if index < _labels.size() else &"")
 
 func _on_sector_activated(sector: StringName) -> void:
-	if _launching or _settings.is_open():
+	if _intro_playing or _launching or _settings.is_open() or _level_select.visible:
 		return
 	_set_sector_darkened(sector)
 	match sector:
@@ -229,11 +302,13 @@ func _set_menu_shown(shown: bool) -> void:
 	_apple.visible = shown
 	_labels_root.visible = shown
 	_gear.visible = shown
+	_set_main_focus_enabled(shown)
 
 func _open_levels() -> void:
 	if _level_select:
 		_set_menu_shown(false)
 		_level_select.show()
+		$LevelSelect/Buttons/Tutorial.grab_focus()
 
 func _load_level(path: String) -> void:
 	if ResourceLoader.exists(path):
@@ -246,3 +321,4 @@ func _close_levels() -> void:
 	if _level_select:
 		_level_select.hide()
 		_set_menu_shown(true)
+		_menu_buttons[1].grab_focus()

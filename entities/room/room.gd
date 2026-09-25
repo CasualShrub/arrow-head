@@ -33,9 +33,10 @@ func _ready() -> void:
 	if not any_enemy_alive():
 		_clear()
 
-func _input(event: InputEvent) -> void:
+func _unhandled_input(event: InputEvent) -> void:
 	if not _ongoing: return   # end screens handle their own keys
-	if event is InputEventKey and event.pressed and not event.echo and event.keycode == KEY_R:
+	if event.is_action_pressed("restart"):
+		get_viewport().set_input_as_handled()
 		if GameManager.current_level:
 			GameManager.restart_room()
 		else:

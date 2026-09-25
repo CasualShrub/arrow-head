@@ -21,16 +21,17 @@ func _ready() -> void:
 	%Restart.pressed.connect(restart)
 	%MainMenu.pressed.connect(to_menu)
 	%MainMenu.completed.connect(to_menu)   # held the key down
+	var container: Node = _root if _root else get_node("VBoxContainer")
+	for button in container.find_children("*", "Button", true, false):
+		button.focus_mode = Control.FOCUS_ALL
+		FocusFeedback.attach(button, 1.04)
 	_set_open(false)
 
 func _unhandled_input(event: InputEvent) -> void:
 	if not is_open(): return
-	if event is InputEventKey and event.pressed and not event.echo:
-		match event.keycode:
-			KEY_SPACE:
-				_on_primary()
-			KEY_R:
-				restart()
+	if event.is_action_pressed("restart"):
+		restart()
+		get_viewport().set_input_as_handled()
 
 # the end screens dim behind a Root control, the pause menu is the layer itself
 func is_open() -> bool:
@@ -48,8 +49,12 @@ func _set_open(value: bool) -> void:
 func open() -> void:
 	_set_open(true)
 	get_tree().paused = true
+	var primary := get_node_or_null("%" + primary_button) as Control
+	if primary:
+		primary.grab_focus()
 
 func close() -> void:
+	get_viewport().gui_release_focus()
 	_set_open(false)
 	get_tree().paused = false
 

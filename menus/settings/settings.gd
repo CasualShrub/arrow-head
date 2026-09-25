@@ -48,14 +48,19 @@ const NAV_ACTIONS: Array[StringName] = [&"ui_left", &"ui_right", &"ui_up", &"ui_
 var _showing_licenses := false
 var _page_opener: Control
 var _page_first: Control
-var _close_tween: Tween
+var _main_controls: Array[Control] = []
+var _controller_page: Control
+var _controller_button: Button
+var _vibration: HSlider
+var _controller_guide: Label
+var _resistance: HSlider
+var _trigger_status: Label
+var _trigger_test: Button
 
 func _ready() -> void:
 	hide()
 	_close_button.pressed.connect(close)
-	_close_button.pivot_offset = _close_button.size * 0.5
-	_close_button.mouse_entered.connect(_grow_close.bind(1.15))
-	_close_button.mouse_exited.connect(_grow_close.bind(1.0))
+	FocusFeedback.attach(_close_button, 1.15)
 	_master.value_changed.connect(SettingsManager.set_master_volume)
 	_sfx.value_changed.connect(SettingsManager.set_sfx_volume)
 	_music.value_changed.connect(SettingsManager.set_music_volume)
@@ -75,14 +80,26 @@ func _ready() -> void:
 	_website_no.pressed.connect(_hide_pages)
 	_website_yes.pressed.connect(_on_website_yes)
 	SettingsManager.changed.connect(_sync)
+	_build_controller_page()
 	_sync()
 	_link_focus()
+	for control in _main_controls:
+		var companions: Array[Control] = []
+		if control is AppleSlider:
+			var label := %Panel.get_node_or_null(String(control.name).replace("Slider", "Label")) as Control
+			if label:
+				companions.append(label)
+		FocusFeedback.attach(control, 1.10 if control is AppleSlider else 1.06, companions)
+	ControllerManager.changed.connect(_sync_controller_guide)
+	ControllerManager.adaptive.status_changed.connect(_sync_trigger_status)
+	_sync_controller_guide()
+	_sync_trigger_status()
 
 func _input(event: InputEvent) -> void:
 	if not visible:
 		return
 	if event.is_action_pressed("ui_cancel") or event.is_action_pressed("pause"):
-		if _credits_page.visible or _website_popup.visible:
+		if _page_first:
 			_hide_pages()
 		else:
 			close()
@@ -98,6 +115,10 @@ func open() -> void:
 	show()
 	opened.emit()
 	_master.grab_focus()
+
+func _process(delta: float) -> void:
+	if visible and _credits_page.visible:
+		_credits_body.get_v_scroll_bar().value += Input.get_axis("aim_up", "aim_down") * 550.0 * delta / Engine.time_scale
 
 func close() -> void:
 	_hide_pages()
@@ -115,6 +136,10 @@ func _sync() -> void:
 	_contrast.set_value_no_signal(SettingsManager.contrast)
 	_bw.set_pressed_no_signal(SettingsManager.grayscale)
 	_fullscreen.set_pressed_no_signal(SettingsManager.fullscreen)
+	if _vibration:
+		_vibration.set_value_no_signal(SettingsManager.controller_vibration)
+	if _resistance:
+		_resistance.set_value_no_signal(SettingsManager.trigger_resistance)
 
 func _preview_sfx() -> void:
 	SoundManager.play("Q1_fill")
@@ -127,12 +152,19 @@ func _show_page(page: Control, opener: Control, first: Control) -> void:
 	_page_opener = opener
 	_page_first = first
 	get_viewport().gui_release_focus()
+	for control in _main_controls:
+		control.focus_mode = Control.FOCUS_NONE
 	page.show()
+	first.grab_focus()
 
 func _hide_pages() -> void:
+	ControllerManager.stop_feedback()
 	_credits_page.hide()
 	_website_popup.hide()
+	_controller_page.hide()
 	_page_first = null
+	for control in _main_controls:
+		control.focus_mode = Control.FOCUS_ALL
 	if _page_opener:
 		_page_opener.grab_focus()
 		_page_opener = null
@@ -152,23 +184,155 @@ func _on_website_yes() -> void:
 		OS.shell_open(website_url)
 	_hide_pages()
 
-func _grow_close(factor: float) -> void:
-	if _close_tween:
-		_close_tween.kill()
-	_close_tween = create_tween().set_ignore_time_scale()
-	_close_tween.tween_property(_close_button, "scale", Vector2.ONE * factor, 0.08)
-
 func _set_logo_mark(pressed: bool) -> void:
 	_logo_mark.texture = LOGO_MARK_PRESSED if pressed else LOGO_MARK
 
 func _link_focus() -> void:
-	var column: Array[Control] = [_master, _sfx, _music, _sensitivity, _contrast, _bw, _fullscreen, _credits_button, _logo_button, _reset_button]
+	var column: Array[Control] = [_master, _sfx, _music, _sensitivity, _controller_button, _contrast, _bw, _fullscreen, _credits_button, _logo_button, _reset_button, _close_button]
+	_main_controls = column
 	for i in column.size():
+		column[i].focus_mode = Control.FOCUS_ALL
 		column[i].focus_neighbor_top = column[i].get_path_to(column[(i - 1 + column.size()) % column.size()])
 		column[i].focus_neighbor_bottom = column[i].get_path_to(column[(i + 1) % column.size()])
+		column[i].focus_previous = column[i].focus_neighbor_top
+		column[i].focus_next = column[i].focus_neighbor_bottom
 	var rows: Array = [[_bw, _fullscreen], [_credits_button, _logo_button, _reset_button]]
 	for row in rows:
 		for i in row.size():
 			var c: Control = row[i]
 			c.focus_neighbor_left = c.get_path_to(row[(i - 1 + row.size()) % row.size()])
 			c.focus_neighbor_right = c.get_path_to(row[(i + 1) % row.size()])
+	for row in [[_licenses_button, _credits_back], [_website_no, _website_yes]]:
+		for i in row.size():
+			var c: Control = row[i]
+			var other: NodePath = c.get_path_to(row[1 - i])
+			c.focus_neighbor_top = other
+			c.focus_neighbor_bottom = other
+			c.focus_next = other
+			c.focus_previous = other
+
+func _build_controller_page() -> void:
+	_controller_button = Button.new()
+	_controller_button.name = "ControllerButton"
+	_controller_button.text = "Controller"
+	_controller_button.position = Vector2(835, 260)
+	_controller_button.size = Vector2(275, 52)
+	_controller_button.add_theme_font_override("font", preload("res://shared/fonts/Puffy-gxW55.otf"))
+	_controller_button.add_theme_font_size_override("font_size", 28)
+	_style_controller_button(_controller_button)
+	%Panel.add_child(_controller_button)
+	%Panel.move_child(_controller_button, _credits_page.get_index())
+	_controller_page = Control.new()
+	_controller_page.name = "ControllerPage"
+	%Panel.add_child(_controller_page)
+	_controller_page.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	var background := TextureRect.new()
+	background.texture = preload("res://shared/art/settings/background.png")
+	background.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	background.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+	background.mouse_filter = Control.MOUSE_FILTER_STOP
+	_controller_page.add_child(background)
+	background.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	var column := VBoxContainer.new()
+	column.position = Vector2(275, 200)
+	column.size = Vector2(835, 690)
+	column.add_theme_constant_override("separation", 16)
+	column.theme = Theme.new()
+	column.theme.default_font = preload("res://shared/fonts/Puffy-gxW55.otf")
+	column.theme.default_font_size = 28
+	column.theme.set_color("font_color", "Label", Color(0.92, 0.94, 0.67))
+	_controller_page.add_child(column)
+	var title := Label.new()
+	title.text = "Controller"
+	title.add_theme_font_size_override("font_size", 48)
+	column.add_child(title)
+	_controller_guide = Label.new()
+	_controller_guide.add_theme_font_size_override("font_size", 24)
+	column.add_child(_controller_guide)
+	var feedback_row := HBoxContainer.new()
+	feedback_row.add_theme_constant_override("separation", 36)
+	column.add_child(feedback_row)
+	var vibration_column := VBoxContainer.new()
+	vibration_column.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	vibration_column.add_theme_constant_override("separation", 12)
+	feedback_row.add_child(vibration_column)
+	var trigger_column := VBoxContainer.new()
+	trigger_column.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	trigger_column.add_theme_constant_override("separation", 12)
+	feedback_row.add_child(trigger_column)
+	var label := Label.new()
+	label.text = "Vibration (0 = off)"
+	vibration_column.add_child(label)
+	_vibration = HSlider.new()
+	_vibration.min_value = 0.0
+	_vibration.max_value = 1.0
+	_vibration.step = 0.1
+	_vibration.custom_minimum_size.y = 44
+	_vibration.value_changed.connect(SettingsManager.set_controller_vibration)
+	vibration_column.add_child(_vibration)
+	var test := Button.new()
+	test.text = "Test vibration"
+	test.pressed.connect(func(): ControllerManager.pulse(0.5, 0.7, 0.25, 0.5, true))
+	_style_controller_button(test)
+	vibration_column.add_child(test)
+	var trigger_label := Label.new()
+	trigger_label.text = "Trigger strength (0 = off)"
+	trigger_column.add_child(trigger_label)
+	_resistance = HSlider.new()
+	_resistance.max_value = 1.0
+	_resistance.step = 0.05
+	_resistance.custom_minimum_size.y = 44
+	_resistance.value_changed.connect(SettingsManager.set_trigger_resistance)
+	trigger_column.add_child(_resistance)
+	_trigger_test = Button.new()
+	_trigger_test.text = "Test R2 for 3 seconds"
+	_trigger_test.pressed.connect(ControllerManager.test_trigger)
+	_style_controller_button(_trigger_test)
+	trigger_column.add_child(_trigger_test)
+	_trigger_status = Label.new()
+	_trigger_status.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	_trigger_status.add_theme_font_size_override("font_size", 22)
+	_trigger_status.custom_minimum_size.y = 56
+	column.add_child(_trigger_status)
+	var controls: Array[Control] = [_vibration, test, _resistance, _trigger_test]
+	if OS.has_feature("web"):
+		var connect_button := Button.new()
+		connect_button.text = "Connect DualSense"
+		connect_button.pressed.connect(ControllerManager.adaptive.connect_device)
+		_style_controller_button(connect_button)
+		column.add_child(connect_button)
+		controls.append(connect_button)
+	var back := Button.new()
+	back.text = "Back"
+	back.pressed.connect(_hide_pages)
+	_style_controller_button(back)
+	column.add_child(back)
+	controls.append(back)
+	for i in controls.size():
+		var c := controls[i]
+		c.focus_neighbor_top = c.get_path_to(controls[posmod(i - 1, controls.size())])
+		c.focus_neighbor_bottom = c.get_path_to(controls[(i + 1) % controls.size()])
+		c.focus_previous = c.focus_neighbor_top
+		c.focus_next = c.focus_neighbor_bottom
+		FocusFeedback.attach(c, 1.05)
+	for i in 2:
+		var c: Control = [test, _trigger_test][i]
+		c.focus_neighbor_left = c.get_path_to([_trigger_test, test][i])
+		c.focus_neighbor_right = c.focus_neighbor_left
+	_controller_button.pressed.connect(_show_page.bind(_controller_page, _controller_button, _vibration))
+	_controller_page.hide()
+
+func _style_controller_button(button: Button) -> void:
+	button.custom_minimum_size.y = 52
+	for style in [&"normal", &"hover", &"pressed", &"focus"]:
+		button.add_theme_stylebox_override(style, _credits_back.get_theme_stylebox(style))
+	for color in [&"font_color", &"font_hover_color", &"font_pressed_color", &"font_focus_color"]:
+		button.add_theme_color_override(color, Color(0.92, 0.94, 0.67))
+
+func _sync_controller_guide() -> void:
+	var fire_buttons := ControllerManager.button_label(&"fire").split(" / ")
+	_controller_guide.text = "Left stick: move\nRight stick: aim / outer edge = full range\n%s: pull to 95%% to attack, release to reset\n%s: hold to aim, release to attack\n%s: slow motion   /   %s: pause\n%s: select   /   %s: back\n%s: restart room" % [fire_buttons[0], fire_buttons[1], ControllerManager.button_label(&"slow"), ControllerManager.button_label(&"pause"), ControllerManager.button_label(&"ui_accept"), ControllerManager.button_label(&"ui_cancel"), ControllerManager.button_label(&"restart")]
+
+func _sync_trigger_status() -> void:
+	_trigger_status.text = ControllerManager.adaptive.status
+	_trigger_test.disabled = not ControllerManager.adaptive.available

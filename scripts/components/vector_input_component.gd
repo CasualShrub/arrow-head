@@ -30,4 +30,4 @@ func _input(_event: InputEvent) -> void:
 
 ## Returns Vector2 with max length of 1.0.
 func get_vector() -> Vector2:
-	return _vec
+	return Input.get_vector(left_action, right_action, up_action, down_action)

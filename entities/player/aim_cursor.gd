@@ -23,11 +23,11 @@ func _ready() -> void:
 	layer.add_child(_reticle)
 
 func _process(_delta: float) -> void:
-	var want := get_viewport() == get_window() and DisplayServer.window_is_focused() and not MenuOverlay.any_open(get_tree())
+	var want := not ControllerManager.using_controller and get_viewport() == get_window() and DisplayServer.window_is_focused() and not MenuOverlay.any_open(get_tree())
 	if want and not _capturing:
 		_capture()
 	elif _capturing and not want:
-		_release()
+		_release(not ControllerManager.using_controller)
 	if _capturing:
 		_reticle.queue_redraw()
 
