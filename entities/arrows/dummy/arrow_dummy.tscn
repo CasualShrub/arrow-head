@@ -2,7 +2,7 @@
 
 [ext_resource type="PackedScene" uid="uid://bxgfy1nvmlb7v" path="res://entities/arrows/arrow.tscn" id="1_ilg34"]
 [ext_resource type="Shader" uid="uid://4cl7l7a1abfv" path="res://shaders/outline_3d.gdshader" id="2_m328s"]
-[ext_resource type="Texture2D" uid="uid://buqutmlha3vbg" path="res://entities/arrows/default/arrow_normal.png" id="3_5hy8x"]
+[ext_resource type="Texture2D" uid="uid://cqgc0gixf7526" path="res://entities/arrows/brown/arrow_brown.png" id="3_5hy8x"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_ilg34"]
 resource_local_to_scene = true
@@ -18,3 +18,4 @@ max_bounces = 0
 
 [node name="Sprite3D" parent="." index="0" unique_id=1125079801]
 material_override = SubResource("ShaderMaterial_ilg34")
+texture = ExtResource("3_5hy8x")
