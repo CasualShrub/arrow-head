@@ -69,6 +69,7 @@ func load_room(index: int) -> void:
 func _unload_room() -> void:
 	if not current_room: return
 	room_unloading.emit(current_room)
+	ArrowManager.deactivate_all()
 	current_room.queue_free()
 	current_room = null
 
