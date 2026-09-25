@@ -1,0 +1,15 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://entities/props/tutorial/apple_orbit.gd" id="1_script"]
+[ext_resource type="PackedScene" path="res://entities/props/tutorial/apple_outline.tscn" id="2_apple"]
+[ext_resource type="PackedScene" path="res://entities/props/tutorial/rotatable_arrow.tscn" id="3_arrow"]
+
+[node name="AppleOrbit" type="Node3D"]
+script = ExtResource("1_script")
+
+[node name="AppleOutline" parent="." instance=ExtResource("2_apple")]
+
+[node name="Pivot" type="Node3D" parent="."]
+
+[node name="RotatableArrow" parent="Pivot" instance=ExtResource("3_arrow")]
+transform = Transform3D(1, 0, 0, 0, 0, 1, 0, -1, 0, 0, 0.001, 0)
