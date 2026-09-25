@@ -4,5 +4,5 @@
 
 [resource]
 script = ExtResource("1_6ditx")
-rooms = Array[String](["uid://dfwtack6wno5k", ""])
+rooms = Array[String](["uid://b5kvwxtstao3r", "uid://dfwtack6wno5k", "uid://jjp45sqqik06", "uid://kh2yhxasfrek", "uid://bt2v3nxpdgagf", "uid://b0m1nshd2hfu5", "uid://djrcxameou2he", "uid://do6yorjx4ucpi", "uid://bi37jm4coxuq5"])
 metadata/_custom_type_script = "uid://bxgdem1c8rvxa"
