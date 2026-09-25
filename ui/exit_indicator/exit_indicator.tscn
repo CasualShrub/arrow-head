@@ -1,9 +1,9 @@
-[gd_scene load_steps=3 format=3 uid="uid://dxtind5e6f7g8"]
+[gd_scene format=3 uid="uid://dxtind5e6f7g8"]
 
 [ext_resource type="Script" uid="uid://cxtind1a2b3c4" path="res://ui/exit_indicator/exit_indicator.gd" id="1_exind"]
 [ext_resource type="Texture2D" uid="uid://l6g4jva1cfvi" path="res://ui/exit_indicator/apple-arrow.png" id="2_apple"]
 
-[node name="ExitIndicator" type="Control"]
+[node name="ExitIndicator" type="Control" unique_id=469035669]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -13,11 +13,11 @@ grow_vertical = 2
 mouse_filter = 2
 script = ExtResource("1_exind")
 
-[node name="Arrow" type="Node2D" parent="."]
+[node name="Arrow" type="Node2D" parent="." unique_id=826302498]
 unique_name_in_owner = true
 
-[node name="Sprite" type="Sprite2D" parent="Arrow"]
+[node name="Sprite" type="Sprite2D" parent="Arrow" unique_id=588635648]
 unique_name_in_owner = true
 texture_filter = 4
-scale = Vector2(0.16, 0.16)
+scale = Vector2(0.07, 0.07)
 texture = ExtResource("2_apple")
