@@ -176,7 +176,7 @@ func _add_line_segment(
 ) -> void:
 	var direction := end - start
 	
-	if direction.length_squared() < 0.0001:
+	if direction.is_zero_approx():
 		return
 
 	direction = direction.normalized()
@@ -187,7 +187,7 @@ func _add_line_segment(
 		direction.x
 	)
 
-	if side.length_squared() < 0.0001:
+	if side.is_zero_approx():
 		return
 
 	side = side.normalized()

@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=3 uid="uid://coutskfill01x"]
+[gd_scene format=3 uid="uid://coutskfill01x"]
 
 [ext_resource type="Script" path="res://scenes/outskirt_filler.gd" id="1_script"]
 [ext_resource type="PackedScene" uid="uid://4tldq5e4ke5b" path="res://entities/props/trees/tree.tscn" id="2_tree"]

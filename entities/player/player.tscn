@@ -24,6 +24,9 @@
 [ext_resource type="Script" uid="uid://buoj7rr88dblc" path="res://systems/arrow/colliders/arrow_collider.gd" id="19_arwct"]
 [ext_resource type="Script" uid="uid://it1hcnvfi1hr" path="res://scripts/classes/screen_shake.gd" id="20_shake"]
 
+[sub_resource type="SphereShape3D" id="SphereShape3D_oprun"]
+radius = 0.3
+
 [sub_resource type="Resource" id="ScreenShake_camera"]
 resource_local_to_scene = true
 script = ExtResource("20_shake")
@@ -31,9 +34,6 @@ stimulus_amount = 0.4
 decay = 1.5
 max_offset = 0.3
 metadata/_custom_type_script = "uid://it1hcnvfi1hr"
-
-[sub_resource type="SphereShape3D" id="SphereShape3D_oprun"]
-radius = 0.3
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_jej6c"]
 animations = [{
