@@ -35,9 +35,18 @@ func _ready() -> void:
 	deactivate()
 
 func _physics_process(delta: float) -> void:
-	if not simulation or not simulation.enabled: return
+	if not simulation: return
+	if not simulation.enabled:
+		_process_wall_stick(delta)
+		return
 	simulate(simulation, delta)
 	apply_simulation()
+
+func _process_wall_stick(delta: float) -> void:
+	if not simulation.state.get(&"wall_stuck", false): return
+	simulation.increment_lifetime(delta)
+	if simulation.is_lifetime_over():
+		deactivate()
 
 func is_active() -> bool:
 	return simulation != null
@@ -168,6 +177,8 @@ func simulate(
 					point
 				)
 				sim.facing = incoming_facing
+				sim.lifetime_remaining = wall_stick_decay_time
+				sim.state[&"wall_stuck"] = true
 				sim.disable()
 			else:
 				sim.kill()
