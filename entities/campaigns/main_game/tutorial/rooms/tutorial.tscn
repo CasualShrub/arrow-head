@@ -15,8 +15,27 @@
 [ext_resource type="PackedScene" path="res://entities/props/tutorial/wasd.tscn" id="13_wasd"]
 [ext_resource type="PackedScene" path="res://entities/props/tutorial/tutorial_arrow.tscn" id="14_tarrow"]
 [ext_resource type="PackedScene" path="res://entities/props/tutorial/apple_orbit.tscn" id="15_orbit"]
+[ext_resource type="PackedScene" uid="uid://cpxiel5uqal0m" path="res://entities/enemies/banana_dummy/enemy_banana_dummy.tscn" id="16_dummy"]
+[ext_resource type="Script" uid="uid://d04k7pxjd2u24" path="res://systems/arrow/firing_data/arrow_pattern.gd" id="18_pattern"]
+[ext_resource type="Script" uid="uid://r4qbgt6it8lb" path="res://systems/arrow/firing_data/firing_instance.gd" id="19_instance"]
+[ext_resource type="PackedScene" uid="uid://dwkegkkx2sid4" path="res://entities/arrows/dummy/arrow_dummy.tscn" id="20_arrow"]
+
+[sub_resource type="Resource" id="Resource_dummy_instance"]
+script = ExtResource("19_instance")
+type = ExtResource("20_arrow")
+
+[sub_resource type="Resource" id="Resource_dummy_pattern"]
+script = ExtResource("18_pattern")
+recovery = 2.0
+instances = Array[ExtResource("19_instance")]([SubResource("Resource_dummy_instance")])
 
 [node name="Room" unique_id=84024719 instance=ExtResource("1_muapo")]
+
+[node name="BananaDummy" parent="Enemies" parent_id_path=PackedInt32Array(1185931971) index="0" unique_id=1390955125 instance=ExtResource("16_dummy")]
+transform = Transform3D(-4.3711385e-08, 0, -0.99999994, 0, 1, 0, 0.99999994, 0, -4.3711385e-08, -5.7670846, 0.1, -9.544085)
+stationary = true
+fixed_facing = true
+patterns = Array[ExtResource("18_pattern")]([SubResource("Resource_dummy_pattern")])
 
 [node name="DirectionalLight3D" parent="." index="4" unique_id=492064517]
 transform = Transform3D(0.8239569, 7.3667486e-08, 0.5666525, -0.29468933, 0.8541341, 0.4285011, -0.4839972, -0.52005285, 0.7037697, -0.8318329, 21.925713, -1.5631456)
@@ -256,10 +275,10 @@ transform = Transform3D(4, 0, 0, 0, 4, 0, 0, 0, 4, -7.2664113, -0.33971363, -13.
 transform = Transform3D(0.705, 0, 0, 0, -3.081653e-08, 0.705, 0, -0.705, -3.081653e-08, -0.4554429, -0.18951291, -3.560069)
 
 [node name="TutorialArrow" parent="." index="14" unique_id=1718344981 instance=ExtResource("14_tarrow")]
-transform = Transform3D(0.325, 0, 0, 0, -1.4206201e-08, 0.325, 0, -0.325, -1.4206201e-08, -3.278123, -0.18951291, -9.572298)
+transform = Transform3D(0.28, 0, 0, 0, -1.2239188e-08, 0.28, 0, -0.28, -1.2239188e-08, -1.8892794, -0.18951291, -9.572298)
 
 [node name="AppleOrbit" parent="." index="15" unique_id=1169932969 instance=ExtResource("15_orbit")]
 transform = Transform3D(0.705, 0, 0, 0, 0.705, 0, 0, 0, 0.705, -0.4554429, -0.18951291, -9.5)
 
 [node name="Stump" parent="." index="16" unique_id=1185279031 instance=ExtResource("12_drje7")]
-transform = Transform3D(1.79, 0, 0, 0, 1.79, 0, 0, 0, 1.79, 2.3702168, 0, -9.570742)
+transform = Transform3D(1.79, 0, 0, 0, 1.79, 0, 0, 0, 1.79, 2.3702168, -0.29794943, -9.435123)
