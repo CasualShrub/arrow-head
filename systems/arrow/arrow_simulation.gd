@@ -3,13 +3,19 @@ class_name ArrowSimulation
 
 var simulating: Arrow
 
-var position := Vector3.ZERO
+var height := 0.0
+var position := Vector3.ZERO:
+	set(value):
+		value.y = height
+		position = value
 var velocity := Vector3.ZERO:
 	set(value):
+		value.y = 0.0
 		velocity = value
 		facing = value
 var facing := Vector3.FORWARD:
 	set(value):
+		value.y = 0.0
 		if value.length_squared() < 0.001:
 			value = Vector3.FORWARD
 		facing = value.normalized()
@@ -83,6 +89,7 @@ func clear_collisions() -> void:
 func duplicate() -> ArrowSimulation:
 	var dup := ArrowSimulation.new(simulating)
 	
+	dup.height = height
 	dup.position = position
 	dup.velocity = velocity
 	

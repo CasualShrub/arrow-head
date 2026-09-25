@@ -49,6 +49,7 @@ func activate(
 ) -> void:
 	simulation = create_simulation()
 	
+	simulation.height = at.y
 	simulation.position = at
 	velocity.y = 0
 	simulation.velocity = velocity * speed
@@ -91,7 +92,7 @@ func create_simulation() -> ArrowSimulation:
 
 func apply_simulation(sim: ArrowSimulation = simulation) -> void:
 	simulation = sim
-	var max_bounces_reached := max_bounces >= 0 and sim.bounces > max_bounces
+	var max_bounces_reached := sim.enabled and max_bounces >= 0 and sim.bounces > max_bounces
 	global_position = sim.position
 	look_at(global_position + sim.facing)
 	if not sim.alive or max_bounces_reached or sim.is_lifetime_over():
@@ -153,11 +154,13 @@ func simulate(
 		var point := _shape_cast.get_collision_point(i)
 		sim.position = point - offset
 		var incoming_facing := sim.facing
+		var bounces_before := sim.bounces
 		if collider is not ArrowCollider:
 			ArrowCollider.default_bounce(sim, normal, point)
 		else:
 			collider.simulate_collision(sim, normal, point)
-		if sim.bounces >= max_bounces:
+		var bounced := sim.bounces > bounces_before
+		if bounced and max_bounces >= 0 and sim.bounces >= max_bounces:
 			if wall_stick_decay_time > 0.0:
 				sim.position = _project_onto_axis(
 					sim.position,

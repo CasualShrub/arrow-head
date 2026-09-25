@@ -35,5 +35,7 @@ static func default_bounce(
 	normal,
 	point: Vector3
 ) -> void:
-	sim.velocity = sim.velocity.bounce(normal)
+	var flat_normal := Vector3(normal.x, 0.0, normal.z)
+	if flat_normal.length_squared() > 0.001:
+		sim.velocity = sim.velocity.bounce(flat_normal.normalized())
 	sim.bounces += 1
