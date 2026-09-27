@@ -23,6 +23,7 @@ SoundManager="*res://scripts/singletons/sound_manager.gd"
 ArrowManager="*uid://bk7ogpk8resli"
 DarkenManager="*uid://32eh6c8miqqw"
 DebugManager="*uid://dbiurbp18km0n"
+ControllerManager="*res://scripts/singletons/controller_manager.gd"
 
 [display]
 
