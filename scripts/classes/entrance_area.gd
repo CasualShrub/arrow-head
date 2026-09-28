@@ -11,6 +11,8 @@ func _ready() -> void:
 	_apply_size()
 	monitoring = false
 	monitorable = false
+	if Engine.is_editor_hint(): return
+	$DirectionMarker.hide()
 
 func get_entry_direction() -> Vector3:
 	var forward := -global_basis.z

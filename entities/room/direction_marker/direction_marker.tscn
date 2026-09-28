@@ -14,6 +14,5 @@ size = Vector3(1, 1.4, 0.05)
 
 [node name="Mesh" type="MeshInstance3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 0, 1, 0, -1, 0, 0, 0, 0)
-layers = 262144
 cast_shadow = 0
 mesh = SubResource("PrismMesh_marker")

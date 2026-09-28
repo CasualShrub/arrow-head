@@ -67,8 +67,12 @@ class_name Player
 @onready var _sectors: Sectors = %Sectors
 @onready var _chunks: CPUParticles3D = %AppleChunks
 
+signal force_walk_finished()
+
 var _dash_charges := 0
 var _dash_arrows: Array[Arrow] = []
+var _force_walk_direction := Vector3.ZERO
+var _force_walk_target: Variant = null
 
 func _ready() -> void:
 	if Engine.is_editor_hint(): update_configuration_warnings()
@@ -76,7 +80,12 @@ func _ready() -> void:
 
 func _process(_delta: float) -> void:
 	if Engine.is_editor_hint(): return
-	
+
+	if is_force_walking():
+		face(global_position + _force_walk_direction)
+		_camera.set_lookahead(Vector2.ZERO)
+		return
+
 	var aim_target := _get_aim_target()
 	face(aim_target)
 	var lookahead_offset := Vector2.ZERO
@@ -101,7 +110,11 @@ func _process(_delta: float) -> void:
 
 func _physics_process(delta: float) -> void:
 	if Engine.is_editor_hint() or health.is_dead(): return
-	
+
+	if is_force_walking():
+		_force_walk_step(delta)
+		return
+
 	if slow_input.consume_pressed():
 		if not time.is_slowed():
 			time.slow()
@@ -198,6 +211,52 @@ func _move(dir: Vector2, _dt: float) -> void:
 	velocity.z = v.y
 	velocity.y = 0
 	move_and_slide()
+
+func is_force_walking() -> bool:
+	return _force_walk_direction != Vector3.ZERO
+
+func force_walk(direction: Vector3) -> void:
+	_begin_force_walk(direction)
+	_force_walk_target = null
+
+func force_walk_to(target: Vector3) -> void:
+	target.y = global_position.y
+	_begin_force_walk(target - global_position)
+	_force_walk_target = target
+	if not is_force_walking():
+		force_walk_finished.emit()
+
+func stop_force_walk() -> void:
+	if not is_force_walking(): return
+	_force_walk_direction = Vector3.ZERO
+	_force_walk_target = null
+	_collider.disabled = false
+	force_walk_finished.emit()
+
+func _begin_force_walk(direction: Vector3) -> void:
+	direction.y = 0
+	_force_walk_direction = direction.normalized()
+	if not is_force_walking(): return
+	if time.is_slowed():
+		time.resume()
+	dash.disable()
+	_collider.disabled = true
+	velocity = Vector3.ZERO
+
+func _force_walk_step(delta: float) -> void:
+	fire_input.consume_pressed()
+	fire_input.consume_released()
+	slow_input.consume_pressed()
+	slow_input.consume_released()
+	var step := _force_walk_direction * speed * delta
+	if _force_walk_target != null:
+		var remaining: Vector3 = _force_walk_target - global_position
+		remaining.y = 0
+		if remaining.length() <= step.length():
+			global_position = _force_walk_target
+			stop_force_walk()
+			return
+	global_position += step
 
 func _on_died() -> void:
 	_dash_charges = 0

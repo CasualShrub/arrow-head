@@ -15,6 +15,7 @@ var _locked := true
 func _ready() -> void:
 	_apply_size()
 	if Engine.is_editor_hint(): return
+	$DirectionMarker.hide()
 	body_entered.connect(_on_body_entered)
 
 func is_locked() -> bool:
