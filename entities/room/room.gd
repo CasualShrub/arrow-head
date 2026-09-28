@@ -2,8 +2,10 @@
 extends Node3D
 class_name Room
 
-@export var entrance: Marker3D
+@export var entrance: EntranceArea
 @export var exit: ExitArea
+@export var entrance_walk_distance := 4.0
+@export var allow_ricochet := true
 
 const HIGHLIGHT_LAYER := 20
 
@@ -133,7 +135,16 @@ func _clear() -> void:
 	if exit:
 		exit.unlock()
 
+func play_entrance(direction: Vector3) -> void:
+	if entrance:
+		direction = entrance.get_entry_direction()
+	var spawn := player.global_position
+	player.global_position = spawn - direction * entrance_walk_distance
+	player.force_walk_to(spawn)
+
 func _on_exit_entered() -> void:
+	if not is_ongoing(): return
+	player.force_walk(exit.get_exit_direction())
 	end(true)
 
 func _on_player_died() -> void:
