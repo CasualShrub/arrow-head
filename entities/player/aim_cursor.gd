@@ -8,6 +8,7 @@ static var _parked := Vector2.INF
 
 var screen_position := Vector2.ZERO
 
+var _anchor := Vector2.ZERO
 var _capturing := false
 var _reticle := Control.new()
 
@@ -33,8 +34,17 @@ func _process(_delta: float) -> void:
 
 func _input(event: InputEvent) -> void:
 	if _capturing and event is InputEventMouseMotion:
+		var sensitivity := SettingsManager.mouse_sensitivity
+		if is_equal_approx(sensitivity, 1.0):
+			screen_position = event.position
+			_anchor = event.position
+			return
+		var moved: Vector2 = event.position - _anchor
+		if moved.length_squared() < 0.0001:
+			return
 		var rect := get_viewport().get_visible_rect()
-		screen_position = (screen_position + event.relative * SettingsManager.mouse_sensitivity).clamp(rect.position, rect.end)
+		screen_position = (screen_position + moved * sensitivity).clamp(rect.position, rect.end)
+		_warp_to(screen_position)
 
 func _notification(what: int) -> void:
 	if not _capturing:
@@ -57,7 +67,14 @@ func _capture() -> void:
 	_owner = self
 	_capturing = true
 	_reticle.show()
-	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
+	Input.mouse_mode = Input.MOUSE_MODE_CONFINED_HIDDEN
+	_warp_to(screen_position)
+
+func _warp_to(target: Vector2) -> void:
+	var to_window := get_viewport().get_screen_transform()
+	var window_pixel := (to_window * target).round()
+	Input.warp_mouse(window_pixel)
+	_anchor = to_window.affine_inverse() * window_pixel
 
 func _release(warp := true) -> void:
 	_capturing = false

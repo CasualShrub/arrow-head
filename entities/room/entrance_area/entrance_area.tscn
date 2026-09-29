@@ -1,0 +1,31 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/classes/entrance_area.gd" id="1_script"]
+[ext_resource type="PackedScene" path="res://entities/room/direction_marker/direction_marker.tscn" id="2_marker"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_entrance"]
+resource_local_to_scene = true
+size = Vector3(3, 2.5, 2)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_entrance"]
+transparency = 1
+no_depth_test = true
+shading_mode = 0
+albedo_color = Color(0.3, 0.9, 0.45, 0.85)
+
+[node name="EntranceArea" type="Area3D"]
+collision_layer = 0
+collision_mask = 0
+monitoring = false
+monitorable = false
+script = ExtResource("1_script")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+shape = SubResource("BoxShape3D_entrance")
+
+[node name="DirectionMarker" parent="." instance=ExtResource("2_marker")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.2, 0)
+
+[node name="Mesh" parent="DirectionMarker" index="0"]
+material_override = SubResource("StandardMaterial3D_entrance")

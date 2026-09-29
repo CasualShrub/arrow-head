@@ -2,6 +2,8 @@ extends Node
 
 @export var pool_size := 500
 
+var max_bounces_override := -1
+
 var _pooled := 0
 var _pool: Dictionary[PackedScene, Array] = {}
 

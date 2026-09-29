@@ -13,10 +13,14 @@ var main_menu_intro_played := false
 var current_campaign: CampaignState
 var current_level: Level
 var game_parent : Node
+var level_wipe_transition := LevelWipeTransition.new()
 var player: Player:
 	get():
 		if current_level: return current_level.player 
 		else: return get_tree().get_first_node_in_group("player")
+
+func _ready() -> void:
+	add_child(level_wipe_transition)
 
 func start(host: Node) -> void:
 	start_campaign(MAIN_GAME, host)
@@ -33,19 +37,21 @@ func end_campaign() -> void:
 	current_level = null
 	game_parent = null
 	get_tree().change_scene_to_file(MAIN_MENU)
+	level_wipe_transition.reveal()
 
 func abort() -> void:
+	level_wipe_transition.reveal()
 	current_campaign = null
 	current_level = null
 	game_parent = null
 
-func load_level(data: LevelData = current_campaign.get_current_level()) -> void:
+func load_level(data: LevelData = current_campaign.get_current_level(), entry_direction := Vector3.ZERO) -> void:
 	var level := Level.new(data)
 	level.ended.connect(_on_level_ended)
 	current_level = level
 	game_parent.add_child(level)
 	level_loaded.emit(level)
-	level.start()
+	level.start(entry_direction)
 
 func unload_level() -> void:
 	if not current_level: return
@@ -57,10 +63,10 @@ func restart_room() -> void:
 	if current_level:
 		current_level.reload_room()
 
-func _on_level_ended() -> void:
+func _on_level_ended(exit_direction: Vector3) -> void:
 	unload_level()
 	if not current_campaign.has_next_level():
 		end_campaign()
 		return
 	current_campaign.advance()
-	load_level()
+	load_level(current_campaign.get_current_level(), exit_direction)

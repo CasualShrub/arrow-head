@@ -48,6 +48,12 @@ func _process_wall_stick(delta: float) -> void:
 	if simulation.is_lifetime_over():
 		deactivate()
 
+func get_max_bounces() -> int:
+	var override := ArrowManager.max_bounces_override
+	if override >= 0 and (max_bounces < 0 or override < max_bounces):
+		return override
+	return max_bounces
+
 func is_active() -> bool:
 	return simulation != null
 
@@ -101,7 +107,8 @@ func create_simulation() -> ArrowSimulation:
 
 func apply_simulation(sim: ArrowSimulation = simulation) -> void:
 	simulation = sim
-	var max_bounces_reached := sim.enabled and max_bounces >= 0 and sim.bounces > max_bounces
+	var bounce_limit := get_max_bounces()
+	var max_bounces_reached := sim.enabled and bounce_limit >= 0 and sim.bounces > bounce_limit
 	global_position = sim.position
 	look_at(global_position + sim.facing)
 	if not sim.alive or max_bounces_reached or sim.is_lifetime_over():
@@ -169,7 +176,8 @@ func simulate(
 		else:
 			collider.simulate_collision(sim, normal, point)
 		var bounced := sim.bounces > bounces_before
-		if bounced and max_bounces >= 0 and sim.bounces >= max_bounces:
+		var bounce_limit := get_max_bounces()
+		if bounced and bounce_limit >= 0 and sim.bounces >= bounce_limit:
 			if wall_stick_decay_time > 0.0:
 				sim.position = _project_onto_axis(
 					sim.position,

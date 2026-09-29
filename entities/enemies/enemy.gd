@@ -63,7 +63,8 @@ func _physics_process(delta: float) -> void:
 
 func _ready() -> void:
 	if Engine.is_editor_hint(): return
-	
+
+	_sprite.set_layer_mask_value(ScreenShaderManager.UNFILTERED_LAYER, true)
 	if fixed_facing:
 		face(global_position - global_basis.z)
 	suspicion.state = suspicion.SuspicionState.HIGH

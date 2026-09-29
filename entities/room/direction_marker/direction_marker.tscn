@@ -1,0 +1,18 @@
+[gd_scene format=3]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_marker"]
+transparency = 1
+no_depth_test = true
+shading_mode = 0
+albedo_color = Color(1, 0.55, 0.1, 0.85)
+
+[sub_resource type="PrismMesh" id="PrismMesh_marker"]
+material = SubResource("StandardMaterial3D_marker")
+size = Vector3(1, 1.4, 0.05)
+
+[node name="DirectionMarker" type="Node3D"]
+
+[node name="Mesh" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0, 1, 0, -1, 0, 0, 0, 0)
+cast_shadow = 0
+mesh = SubResource("PrismMesh_marker")

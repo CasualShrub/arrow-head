@@ -5,7 +5,7 @@ var _data: LevelData
 
 signal started()
 signal ending()
-signal ended()
+signal ended(exit_direction: Vector3)
 signal room_loaded(room: Room)
 signal room_unloading(room: Room)
 
@@ -28,26 +28,26 @@ func get_data() -> LevelData:
 func has_next_room() -> bool:
 	return current_room_index < _data.get_room_count() - 1
 
-func start() -> void:
-	load_room(0)
+func start(entry_direction := Vector3.ZERO) -> void:
+	load_room(0, entry_direction)
 	started.emit()
 
-func end() -> void:
+func end(exit_direction := Vector3.ZERO) -> void:
 	ending.emit()
 	_unload_room()
-	ended.emit()
+	ended.emit(exit_direction)
 
 func restart() -> void:
 	_unload_room()
 	start()
 
-func advance_room() -> void:
+func advance_room(direction := Vector3.ZERO) -> void:
 	if not has_next_room():
-		end()
+		end(direction)
 		return
-	load_room(current_room_index + 1)
+	load_room(current_room_index + 1, direction)
 
-func load_room(index: int) -> void:
+func load_room(index: int, entry_direction := Vector3.ZERO) -> void:
 	if current_room:
 		_unload_room()
 	assert(
@@ -64,7 +64,10 @@ func load_room(index: int) -> void:
 	current_room_index = index
 	current_room = room
 	add_child(room)
+	if entry_direction != Vector3.ZERO:
+		room.play_entrance(entry_direction)
 	room_loaded.emit(room)
+	GameManager.level_wipe_transition.reveal()
 
 func _unload_room() -> void:
 	if not current_room: return
@@ -94,4 +97,8 @@ func _get_scene_type(scene: PackedScene) -> String:
 func _on_room_ended(won: bool) -> void:
 	if not won:
 		return #do the death thing
-	advance_room()
+	var direction := current_room.exit.get_exit_direction()
+	await GameManager.level_wipe_transition.cover(Vector2(direction.x, direction.z))
+	if not is_inside_tree() or not current_room:
+		return
+	advance_room(direction)
