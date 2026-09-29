@@ -25,6 +25,7 @@ func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
 	add_child(_aim)
 	DarkenManager.register_camera(self)
+	ScreenShaderManager.register_camera(self)
 
 func _process(delta: float) -> void:
 	var real_delta := delta / Engine.time_scale
@@ -52,6 +53,7 @@ func _process(delta: float) -> void:
 		position += Vector3(offset.x, 0.0, offset.y)
 
 	DarkenManager.sync_mask_camera(self)
+	ScreenShaderManager.sync_camera(self)
 
 ## Takes normalized input.
 func set_lookahead(input: Vector2) -> void:

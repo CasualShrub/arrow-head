@@ -22,6 +22,7 @@ SettingsManager="*uid://sh0osek64eid"
 SoundManager="*res://scripts/singletons/sound_manager.gd"
 ArrowManager="*uid://bk7ogpk8resli"
 DarkenManager="*uid://32eh6c8miqqw"
+ScreenShaderManager="*res://scripts/singletons/screen_shader_manager.gd"
 DebugManager="*uid://dbiurbp18km0n"
 ControllerManager="*res://scripts/singletons/controller_manager.gd"
 

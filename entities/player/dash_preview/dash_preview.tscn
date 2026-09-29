@@ -41,7 +41,7 @@ metadata/_custom_type_script = "uid://8jd6wlvsiper"
 [node name="PreviewSprite" type="Sprite3D" parent="." unique_id=2125678008]
 unique_name_in_owner = true
 transform = Transform3D(0.6, 0, 0, 0, -2.6226834e-08, 0.6, 0, -0.6, -2.6226834e-08, 0, 0, -2.202)
-layers = 524289
+layers = 786433
 modulate = Color(0.101960786, 0.6, 1, 0.59607846)
 double_sided = false
 render_priority = 5
@@ -50,7 +50,7 @@ texture = ExtResource("2_x6rtf")
 [node name="PreviewEyes" type="Sprite3D" parent="PreviewSprite" unique_id=397188224]
 unique_name_in_owner = true
 transform = Transform3D(0.99999994, 0, 0, 0, 0.99999994, 0, 0, 0, 0.99999994, 0, 0, 0.019)
-layers = 524289
+layers = 786433
 modulate = Color(0.2, 0.8, 1, 0.5019608)
 double_sided = false
 render_priority = 6
@@ -59,7 +59,7 @@ texture = ExtResource("3_i17dr")
 [node name="PreviewLine" type="MeshInstance3D" parent="." unique_id=282548725]
 unique_name_in_owner = true
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.02, -1.05)
-layers = 524289
+layers = 786433
 material_override = SubResource("StandardMaterial3D_pc74m")
 gi_mode = 0
 mesh = SubResource("QuadMesh_7dqbv")
@@ -67,6 +67,6 @@ mesh = SubResource("QuadMesh_7dqbv")
 [node name="Range" type="MeshInstance3D" parent="." unique_id=1061907551]
 unique_name_in_owner = true
 transform = Transform3D(26, 0, 0, 0, 1, 0, 0, 0, 26, 0, 0, 0)
-layers = 524289
+layers = 786433
 material_override = SubResource("ShaderMaterial_b72i6")
 mesh = SubResource("QuadMesh_ub6uw")

@@ -64,6 +64,7 @@ func _duplicate_sprite(base: SpriteBase3D) -> Node3D:
 	sprite.global_transform = xform
 	sprite.visible = base.visible
 	sprite.set_layer_mask_value(20, true)
+	sprite.set_layer_mask_value(ScreenShaderManager.UNFILTERED_LAYER, true)
 	
 	var mat := ShaderMaterial.new()
 	mat.render_priority = base.render_priority - 1
