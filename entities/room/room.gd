@@ -22,6 +22,10 @@ var _cleared := false
 @onready var _exit_indicator := %ExitIndicator
 
 func _ready() -> void:
+	if allow_ricochet:
+		ArrowManager.max_bounces_override = -1
+	else:
+		ArrowManager.max_bounces_override = 0
 	_setup_player()
 	_setup_enemies()
 	_setup_juice_bar()
