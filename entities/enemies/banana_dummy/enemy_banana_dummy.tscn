@@ -19,6 +19,8 @@ metadata/_custom_type_script = "uid://d04k7pxjd2u24"
 
 [node name="Enemy" unique_id=520769260 instance=ExtResource("1_xnfny")]
 patterns = Array[ExtResource("3_pattern")]([SubResource("Resource_brown_pattern")])
+fire_release_frame = 2
+nock_points = Array[Vector2]([Vector2(0.0245, 0.343), Vector2(0.0245, 0.6664)])
 
 [node name="SuspicionDisplay" parent="." index="4" unique_id=488316298]
 visible = false

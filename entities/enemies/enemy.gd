@@ -19,6 +19,7 @@ class_name Enemy
 @export_group("firing")
 @export var patterns: Array[ArrowPattern] = []
 @export var fire_release_frame := 3
+@export var nock_points: Array[Vector2] = []
 
 @export_group("hit")
 @export var hit_flash_time := 0.2
@@ -39,6 +40,8 @@ var _reposition_timer := 0.0
 var _reposition_interval := 2.0
 
 var _facing := Vector3.FORWARD
+
+var _nocked: Arrow
 
 @onready var _visual_root: Node3D = %VisualRoot
 @onready var _sprite: AnimatedSprite3D = %Sprite
@@ -65,6 +68,7 @@ func _ready() -> void:
 	if Engine.is_editor_hint(): return
 
 	_sprite.set_layer_mask_value(ScreenShaderManager.UNFILTERED_LAYER, true)
+	_sprite.frame_changed.connect(_update_nocked)
 	if fixed_facing:
 		face(global_position - global_basis.z)
 	suspicion.state = suspicion.SuspicionState.HIGH
@@ -362,6 +366,7 @@ func _select_behaviour(dt: float) -> void:
 func _on_died() -> void:
 	SoundManager.play("banana_death")
 	_dash_target.make_invulnerable()
+	_release_nocked()
 	_sprite.play("death")
 
 func _on_sus_alerted() -> void:
@@ -378,7 +383,9 @@ func _on_recovery_timeout() -> void:
 		_sprite.play("windup")
 	else:
 		_sprite.play("fire")
+	_nock_arrow(pattern)
 	await _await_fire_release()
+	_release_nocked()
 	perform(pattern)
 
 func _on_dash_targeted() -> void:
@@ -395,6 +402,43 @@ func _on_dash_hit() -> void:
 func _await_fire_release() -> void:
 	while not health.is_dead() and _sprite.animation == "fire" and _sprite.frame < fire_release_frame:
 		await _sprite.frame_changed
+
+# only bananas should use this!!! TODO: proper enemy inheritance mayvbe?
+func _nock_arrow(pattern: ArrowPattern) -> void:
+	_release_nocked()
+	if nock_points.is_empty():
+		return
+	if pattern.instances.is_empty():
+		return
+	var scene := pattern.instances[0].type
+	if not scene:
+		return
+	_nocked = scene.instantiate() as Arrow
+	if not _nocked:
+		return
+	_visual_root.add_child(_nocked)
+	_update_nocked()
+
+func _update_nocked() -> void:
+	if not _nocked:
+		return
+	if _sprite.animation != "fire" or _sprite.frame >= nock_points.size():
+		_nocked.hide()
+		return
+	var point := nock_points[_sprite.frame]
+	var lateral := -point.x
+	if _sprite.flip_v:
+		lateral = point.x
+	_nocked.position = Vector3(lateral, 0.0, point.y - _nocked.tail_position)
+	_nocked.show()
+
+func _release_nocked() -> void:
+	if not _nocked:
+		return
+	_nocked.queue_free()
+	_nocked = null
+
+#end banana code
 
 func highlight_on(c: Color) -> void:
 	if health.is_dead(): return

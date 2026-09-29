@@ -18,3 +18,4 @@ metadata/_custom_type_script = "uid://d04k7pxjd2u24"
 
 [node name="Enemy" unique_id=71488470 instance=ExtResource("1_8r7h4")]
 patterns = Array[ExtResource("2_josdy")]([SubResource("Resource_75j4p")])
+nock_points = Array[Vector2]([Vector2(0.0245, 0.2548), Vector2(0.0245, 0.4802), Vector2(0.0245, 0.6958)])

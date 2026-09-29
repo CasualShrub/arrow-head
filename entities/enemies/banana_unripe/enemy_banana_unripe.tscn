@@ -21,6 +21,7 @@ metadata/_custom_type_script = "uid://d04k7pxjd2u24"
 
 [node name="Enemy" unique_id=71488470 instance=ExtResource("1_7ifjg")]
 patterns = Array[ExtResource("2_1j3h3")]([SubResource("Resource_ej4yd")])
+nock_points = Array[Vector2]([Vector2(0.1029, 0.2744), Vector2(0.1029, 0.4998), Vector2(0.1029, 0.7154)])
 alwayds_alert = false
 
 [node name="Sprite" parent="." index="5" unique_id=1091610106]

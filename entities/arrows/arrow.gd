@@ -9,6 +9,8 @@ class_name Arrow
 @export var wall_stick_decay_time := -1.0
 @export var free_on_deactivate := false
 
+var tail_position := 0.293 #for nocking (z axis position)
+
 signal activated()
 signal deactivated()
 signal collided(with: ArrowCollider, normal: Vector3, point: Vector3)
