@@ -2,8 +2,8 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://c4m8genrr4nrw"
-path.s3tc="res://.godot/imported/tree var3.png-2c575fa94b1553e997a497f9d6ccaade.s3tc.ctex"
+uid="uid://byb3mu5ggny31"
+path.s3tc="res://.godot/imported/tree.png-ee2dc38535af34069f5ecb60d6276826.s3tc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
@@ -11,8 +11,8 @@ metadata={
 
 [deps]
 
-source_file="res://entities/props/trees/tree var3.png"
-dest_files=["res://.godot/imported/tree var3.png-2c575fa94b1553e997a497f9d6ccaade.s3tc.ctex"]
+source_file="res://entities/props/trees/outskirt_tree/tree.png"
+dest_files=["res://.godot/imported/tree.png-ee2dc38535af34069f5ecb60d6276826.s3tc.ctex"]
 
 [params]
 

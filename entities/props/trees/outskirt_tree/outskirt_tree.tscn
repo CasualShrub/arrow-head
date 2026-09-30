@@ -1,0 +1,9 @@
+[gd_scene format=3 uid="uid://4tldq5e4ke5b"]
+
+[ext_resource type="Texture2D" uid="uid://bx4ncbvdfq6ke" path="res://entities/props/trees/outskirt_tree/tree var1.png" id="1_4fl2t"]
+
+[node name="Tree" type="Sprite3D" unique_id=691520400]
+transform = Transform3D(1, 0, 0, 0, 0, 1, 0, -1, 0, 0, 0, 0)
+pixel_size = 0.004
+alpha_cut = 1
+texture = ExtResource("1_4fl2t")
