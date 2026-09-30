@@ -20,7 +20,7 @@ allow_ricochet = false
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.9802716, 0, -6.407107)
 
 [node name="Enemy2" parent="Enemies" parent_id_path=PackedInt32Array(1185931971) index="1" unique_id=96547157 instance=ExtResource("2_aq6pr")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.2129974, 0, -5.4187264)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8.1581545, 0, -5.2082186)
 
 [node name="Floor" parent="." index="5" unique_id=1301804466]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.00937748, -0.19232388, -0.04467964)
@@ -94,10 +94,10 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.5286853, -0.5775013, -6.31
 transform = Transform3D(4, 0, 0, 0, 4, 0, 0, 0, 4, -6.3814526, -0.33971363, 5.115307)
 
 [node name="CutDownTree2" parent="Walls" parent_id_path=PackedInt32Array(2117107331) index="19" unique_id=960190855 instance=ExtResource("6_30q7s")]
-transform = Transform3D(-0.4901361, 0, -1.523078, 0, 1.5999999, 0, 1.523078, 0, -0.4901361, 4.40912, -0.214, -4.8437853)
+transform = Transform3D(-0.86879736, 0, -1.343574, 0, 1.5999998, 0, 1.343574, 0, -0.86879736, 4.2617683, -0.214, -4.179365)
 
 [node name="CutDownTree" parent="Walls" parent_id_path=PackedInt32Array(2117107331) index="20" unique_id=569130615 instance=ExtResource("6_30q7s")]
-transform = Transform3D(-0.31609425, 0, 1.5684656, 0, 1.6, 0, -1.5684656, 0, -0.31609425, 4.9168577, -0.21441329, -7.4187927)
+transform = Transform3D(-0.052750133, -0.009251812, 1.5991033, -0.0003050265, 1.599973, 0.0092467815, -1.59913, 0, -0.052751012, 4.9988704, -0.21441329, -6.7085114)
 
 [node name="Tree12" parent="Walls" parent_id_path=PackedInt32Array(2117107331) index="21" unique_id=820399364 instance=ExtResource("5_7x1nh")]
 transform = Transform3D(-0.7029992, 0, -0.56195384, 0, 0.9, 0, 0.56195384, 0, -0.7029992, 9.7034235, -0.7717209, -2.4811723)

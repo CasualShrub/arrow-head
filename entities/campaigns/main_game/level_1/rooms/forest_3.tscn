@@ -194,80 +194,80 @@ transform = Transform3D(-1.386906, 0, -0.7978036, 0, 1.6, 0, 0.7978036, 0, -1.38
 [node name="Rock19" parent="Walls" parent_id_path=PackedInt32Array(2117107331) index="50" unique_id=726127774 instance=ExtResource("8_rock_03")]
 transform = Transform3D(-0.07382321, 0, 1.344434, 0, 1.34646, 0, -1.344434, 0, -0.07382321, 4.3416, -0.4, 0.588)
 
-[node name="Lining01" parent="Walls" parent_id_path=PackedInt32Array(2117107331) index="51" unique_id=585757003 instance=ExtResource("6_log")]
-transform = Transform3D(0.4378, 0, 1.0933, 0, 1.1776, 0, -1.0933, 0, 0.4378, 16.3646, -0.1, -0.9535)
+[node name="Tree72" parent="Walls" parent_id_path=PackedInt32Array(2117107331) index="51" unique_id=585757003 instance=ExtResource("6_log")]
+transform = Transform3D(0.4377878, 0, 1.09327, 0, 1.177666, 0, -1.09327, 0, 0.4377878, 16.3646, -0.1, -0.9535)
 
-[node name="Lining02" parent="Walls" parent_id_path=PackedInt32Array(2117107331) index="52" unique_id=1628006431 instance=ExtResource("17_lining_rock_11")]
-transform = Transform3D(-1.1077, 0, -0.9682, 0, 1.4712, 0, 0.9682, 0, -1.1077, 14.9098, -0.08, 1.1005)
+[node name="Rock20" parent="Walls" parent_id_path=PackedInt32Array(2117107331) index="52" unique_id=1628006431 instance=ExtResource("17_lining_rock_11")]
+transform = Transform3D(-1.107702, 0, -0.9682014, 0, 1.471196, 0, 0.9682014, 0, -1.107702, 14.9098, -0.08, 1.1005)
 
-[node name="Lining03" parent="Walls" parent_id_path=PackedInt32Array(2117107331) index="53" unique_id=1588401628 instance=ExtResource("16_lining_rock_09")]
-transform = Transform3D(-1.1009, 0, -0.3239, 0, 1.1476, 0, 0.3239, 0, -1.1009, 13.1891, -0.08, 2.2116)
+[node name="Rock21" parent="Walls" parent_id_path=PackedInt32Array(2117107331) index="53" unique_id=1588401628 instance=ExtResource("16_lining_rock_09")]
+transform = Transform3D(-1.100913, 0, -0.3239038, 0, 1.147573, 0, 0.3239038, 0, -1.100913, 13.1891, -0.08, 2.2116)
 
-[node name="Lining04" parent="Walls" parent_id_path=PackedInt32Array(2117107331) index="54" unique_id=961883140 instance=ExtResource("18_lining_stump")]
-transform = Transform3D(-1.0196, 0, 1.3384, 0, 1.6826, 0, -1.3384, 0, -1.0196, 11.4941, -0.05, 2.342)
+[node name="Tree73" parent="Walls" parent_id_path=PackedInt32Array(2117107331) index="54" unique_id=961883140 instance=ExtResource("18_lining_stump")]
+transform = Transform3D(-1.019615, 0, 1.338419, 0, 1.682552, 0, -1.338419, 0, -1.019615, 11.4941, -0.05, 2.342)
 
-[node name="Lining05" parent="Walls" parent_id_path=PackedInt32Array(2117107331) index="55" unique_id=1903982513 instance=ExtResource("14_lining_rock_06")]
+[node name="Rock22" parent="Walls" parent_id_path=PackedInt32Array(2117107331) index="55" unique_id=1903982513 instance=ExtResource("14_lining_rock_06")]
 transform = Transform3D(-0.1989, 0, 0.884, 0, 0.9061, 0, -0.884, 0, -0.1989, 10.4242, -0.08, 2.9172)
 
-[node name="Lining06" parent="Walls" parent_id_path=PackedInt32Array(2117107331) index="56" unique_id=43841791 instance=ExtResource("15_lining_rock_08")]
-transform = Transform3D(0.6049, 0, -0.1664, 0, 0.6274, 0, 0.1664, 0, 0.6049, 6.0102, -0.1, 3.4039)
+[node name="Rock23" parent="Walls" parent_id_path=PackedInt32Array(2117107331) index="56" unique_id=43841791 instance=ExtResource("15_lining_rock_08")]
+transform = Transform3D(0.6049097, 0, -0.1664027, 0, 0.6273799, 0, 0.1664027, 0, 0.6049097, 6.0102, -0.1, 3.4039)
 
-[node name="Lining07" parent="Walls" parent_id_path=PackedInt32Array(2117107331) index="57" unique_id=1986270634 instance=ExtResource("8_rock_03")]
-transform = Transform3D(-0.9552, 0, 0.5257, 0, 1.0903, 0, -0.5257, 0, -0.9552, 4.7885, -0.08, 2.9003)
+[node name="Rock24" parent="Walls" parent_id_path=PackedInt32Array(2117107331) index="57" unique_id=1986270634 instance=ExtResource("8_rock_03")]
+transform = Transform3D(-0.9551982, 0, 0.525699, 0, 1.090304, 0, -0.525699, 0, -0.9551982, 4.7885, -0.08, 2.9003)
 
-[node name="Lining08" parent="Walls" parent_id_path=PackedInt32Array(2117107331) index="58" unique_id=407120379 instance=ExtResource("6_log")]
-transform = Transform3D(-0.9488, 0, 0.8349, 0, 1.2638, 0, -0.8349, 0, -0.9488, 3.2121, -0.1, 1.6415)
+[node name="Tree74" parent="Walls" parent_id_path=PackedInt32Array(2117107331) index="58" unique_id=407120379 instance=ExtResource("6_log")]
+transform = Transform3D(-0.9487912, 0, 0.8348922, 0, 1.263823, 0, -0.8348922, 0, -0.9487912, 3.2121, -0.1, 1.6415)
 
-[node name="Lining09" parent="Walls" parent_id_path=PackedInt32Array(2117107331) index="59" unique_id=1115087964 instance=ExtResource("8_rock_03")]
-transform = Transform3D(-1.1725, 0, -0.0136, 0, 1.1726, 0, 0.0136, 0, -1.1725, 1.4054, -0.08, 0.9279)
+[node name="Rock25" parent="Walls" parent_id_path=PackedInt32Array(2117107331) index="59" unique_id=1115087964 instance=ExtResource("8_rock_03")]
+transform = Transform3D(-1.172507, 0, -0.01360008, 0, 1.172586, 0, 0.01360008, 0, -1.172507, 1.4054, -0.08, 0.9279)
 
-[node name="Lining10" parent="Walls" parent_id_path=PackedInt32Array(2117107331) index="60" unique_id=1827585339 instance=ExtResource("6_log")]
-transform = Transform3D(-0.8921, 0, 1.0603, 0, 1.3856, 0, -1.0603, 0, -0.8921, -0.3897, -0.1, -0.4356)
+[node name="Tree75" parent="Walls" parent_id_path=PackedInt32Array(2117107331) index="60" unique_id=1827585339 instance=ExtResource("6_log")]
+transform = Transform3D(-0.8920852, 0, 1.060282, 0, 1.385646, 0, -1.060282, 0, -0.8920852, -0.3897, -0.1, -0.4356)
 
-[node name="Lining11" parent="Walls" parent_id_path=PackedInt32Array(2117107331) index="61" unique_id=2114320143 instance=ExtResource("17_lining_rock_11")]
-transform = Transform3D(-0.1115, 0, -1.1505, 0, 1.1559, 0, 1.1505, 0, -0.1115, -1.1311, -0.08, -3.2517)
+[node name="Rock26" parent="Walls" parent_id_path=PackedInt32Array(2117107331) index="61" unique_id=2114320143 instance=ExtResource("17_lining_rock_11")]
+transform = Transform3D(-0.1115003, 0, -1.150503, 0, 1.155894, 0, 1.150503, 0, -0.1115003, -1.1311, -0.08, -3.2517)
 
-[node name="Lining12" parent="Walls" parent_id_path=PackedInt32Array(2117107331) index="62" unique_id=1414131988 instance=ExtResource("6_log")]
-transform = Transform3D(1.2389, 0, 0.2746, 0, 1.269, 0, -0.2746, 0, 1.2389, 0.5715, -0.1, -4.7076)
+[node name="Tree76" parent="Walls" parent_id_path=PackedInt32Array(2117107331) index="62" unique_id=1414131988 instance=ExtResource("6_log")]
+transform = Transform3D(1.238911, 0, 0.2746023, 0, 1.268978, 0, -0.2746023, 0, 1.238911, 0.5715, -0.1, -4.7076)
 
-[node name="Lining13" parent="Walls" parent_id_path=PackedInt32Array(2117107331) index="63" unique_id=1034105252 instance=ExtResource("18_lining_stump")]
-transform = Transform3D(-1.2967, 0, 0.2892, 0, 1.3286, 0, -0.2892, 0, -1.2967, 1.8541, -0.05, -5.5153)
+[node name="Tree77" parent="Walls" parent_id_path=PackedInt32Array(2117107331) index="63" unique_id=1034105252 instance=ExtResource("18_lining_stump")]
+transform = Transform3D(-1.296714, 0, 0.289203, 0, 1.328572, 0, -0.289203, 0, -1.296714, 1.8541, -0.05, -5.5153)
 
-[node name="Lining14" parent="Walls" parent_id_path=PackedInt32Array(2117107331) index="64" unique_id=327269288 instance=ExtResource("6_log")]
-transform = Transform3D(-0.1835, 0, 1.0908, 0, 1.1061, 0, -1.0908, 0, -0.1835, 1.8801, -0.1, -7.7229)
+[node name="Tree78" parent="Walls" parent_id_path=PackedInt32Array(2117107331) index="64" unique_id=327269288 instance=ExtResource("6_log")]
+transform = Transform3D(-0.1834985, 0, 1.090791, 0, 1.106118, 0, -1.090791, 0, -0.1834985, 1.8801, -0.1, -7.7229)
 
-[node name="Lining15" parent="Walls" parent_id_path=PackedInt32Array(2117107331) index="65" unique_id=1727420580 instance=ExtResource("15_lining_rock_08")]
-transform = Transform3D(0.5675, 0, 0.2314, 0, 0.6129, 0, -0.2314, 0, 0.5675, 2.3851, -0.1, -9.6323)
+[node name="Rock27" parent="Walls" parent_id_path=PackedInt32Array(2117107331) index="65" unique_id=1727420580 instance=ExtResource("15_lining_rock_08")]
+transform = Transform3D(0.5675111, 0, 0.2314045, 0, 0.612876, 0, -0.2314045, 0, 0.5675111, 2.3851, -0.1, -9.6323)
 
-[node name="Lining16" parent="Walls" parent_id_path=PackedInt32Array(2117107331) index="66" unique_id=1867750967 instance=ExtResource("17_lining_rock_11")]
-transform = Transform3D(1.233, 0, -0.005, 0, 1.233, 0, 0.005, 0, 1.233, 3.884, -0.08, -9.2378)
+[node name="Rock28" parent="Walls" parent_id_path=PackedInt32Array(2117107331) index="66" unique_id=1867750967 instance=ExtResource("17_lining_rock_11")]
+transform = Transform3D(1.232997, 0, -0.004999986, 0, 1.233007, 0, 0.004999986, 0, 1.232997, 3.884, -0.08, -9.2378)
 
-[node name="Lining17" parent="Walls" parent_id_path=PackedInt32Array(2117107331) index="67" unique_id=792989784 instance=ExtResource("14_lining_rock_06")]
-transform = Transform3D(-0.4712, 0, 1.1993, 0, 1.2885, 0, -1.1993, 0, -0.4712, 5.7425, -0.08, -9.9058)
+[node name="Rock29" parent="Walls" parent_id_path=PackedInt32Array(2117107331) index="67" unique_id=792989784 instance=ExtResource("14_lining_rock_06")]
+transform = Transform3D(-0.4711944, 0, 1.199286, 0, 1.28853, 0, -1.199286, 0, -0.4711944, 5.7425, -0.08, -9.9058)
 
-[node name="Lining18" parent="Walls" parent_id_path=PackedInt32Array(2117107331) index="68" unique_id=105415319 instance=ExtResource("6_log")]
-transform = Transform3D(1.2245, 0, 0.0911, 0, 1.2279, 0, -0.0911, 0, 1.2245, 7.9659, -0.1, -10.671)
+[node name="Tree79" parent="Walls" parent_id_path=PackedInt32Array(2117107331) index="68" unique_id=105415319 instance=ExtResource("6_log")]
+transform = Transform3D(1.224505, 0, 0.09110039, 0, 1.227889, 0, -0.09110039, 0, 1.224505, 7.9659, -0.1, -10.671)
 
-[node name="Lining19" parent="Walls" parent_id_path=PackedInt32Array(2117107331) index="69" unique_id=1619622229 instance=ExtResource("18_lining_stump")]
-transform = Transform3D(-0.4007, 0, -1.279, 0, 1.3403, 0, 1.279, 0, -0.4007, 9.9806, -0.05, -10.4137)
+[node name="Tree80" parent="Walls" parent_id_path=PackedInt32Array(2117107331) index="69" unique_id=1619622229 instance=ExtResource("18_lining_stump")]
+transform = Transform3D(-0.4007001, 0, -1.279, 0, 1.340299, 0, 1.279, 0, -0.4007001, 9.9806, -0.05, -10.4137)
 
-[node name="Lining20" parent="Walls" parent_id_path=PackedInt32Array(2117107331) index="70" unique_id=1704385288 instance=ExtResource("18_lining_stump")]
-transform = Transform3D(0.6011, 0, 1.17, 0, 1.3154, 0, -1.17, 0, 0.6011, 10.6977, -0.05, -10.1667)
+[node name="Tree81" parent="Walls" parent_id_path=PackedInt32Array(2117107331) index="70" unique_id=1704385288 instance=ExtResource("18_lining_stump")]
+transform = Transform3D(0.6011032, 0, 1.170006, 0, 1.315386, 0, -1.170006, 0, 0.6011032, 10.6977, -0.05, -10.1667)
 
-[node name="Lining21" parent="Walls" parent_id_path=PackedInt32Array(2117107331) index="71" unique_id=1746997411 instance=ExtResource("14_lining_rock_06")]
-transform = Transform3D(0.646, 0, 0.8506, 0, 1.0681, 0, -0.8506, 0, 0.646, 11.6988, -0.08, -9.595)
+[node name="Rock30" parent="Walls" parent_id_path=PackedInt32Array(2117107331) index="71" unique_id=1746997411 instance=ExtResource("14_lining_rock_06")]
+transform = Transform3D(0.6460001, 0, 0.8506002, 0, 1.0681, 0, -0.8506002, 0, 0.6460001, 11.6988, -0.08, -9.595)
 
-[node name="Lining22" parent="Walls" parent_id_path=PackedInt32Array(2117107331) index="72" unique_id=1305422274 instance=ExtResource("6_log")]
-transform = Transform3D(-1.0409, 0, 0.6986, 0, 1.2536, 0, -0.6986, 0, -1.0409, 13.7119, -0.1, -9.2346)
+[node name="Tree82" parent="Walls" parent_id_path=PackedInt32Array(2117107331) index="72" unique_id=1305422274 instance=ExtResource("6_log")]
+transform = Transform3D(-1.0409, 0, 0.6985999, 0, 1.2536, 0, -0.6985999, 0, -1.0409, 13.7119, -0.1, -9.2346)
 
-[node name="Lining23" parent="Walls" parent_id_path=PackedInt32Array(2117107331) index="73" unique_id=333697366 instance=ExtResource("18_lining_stump")]
-transform = Transform3D(1.0426, 0, -1.0509, 0, 1.4803, 0, 1.0509, 0, 1.0426, 14.2948, -0.05, -7.423)
+[node name="Tree83" parent="Walls" parent_id_path=PackedInt32Array(2117107331) index="73" unique_id=333697366 instance=ExtResource("18_lining_stump")]
+transform = Transform3D(1.042591, 0, -1.050891, 0, 1.480326, 0, 1.050891, 0, 1.042591, 14.2948, -0.05, -7.423)
 
-[node name="Lining24" parent="Walls" parent_id_path=PackedInt32Array(2117107331) index="74" unique_id=1962907262 instance=ExtResource("6_log")]
-transform = Transform3D(-0.1916, 0, 1.1955, 0, 1.2108, 0, -1.1955, 0, -0.1916, 13.8714, -0.1, -5.9947)
+[node name="Tree84" parent="Walls" parent_id_path=PackedInt32Array(2117107331) index="74" unique_id=1962907262 instance=ExtResource("6_log")]
+transform = Transform3D(-0.1916023, 0, 1.195514, 0, 1.210771, 0, -1.195514, 0, -0.1916023, 13.8714, -0.1, -5.9947)
 
-[node name="Lining25" parent="Walls" parent_id_path=PackedInt32Array(2117107331) index="75" unique_id=481115565 instance=ExtResource("14_lining_rock_06")]
-transform = Transform3D(-0.1926, 0, -1.2776, 0, 1.292, 0, 1.2776, 0, -0.1926, 15.1209, -0.08, -4.4971)
+[node name="Rock31" parent="Walls" parent_id_path=PackedInt32Array(2117107331) index="75" unique_id=481115565 instance=ExtResource("14_lining_rock_06")]
+transform = Transform3D(-0.1925982, 0, -1.277588, 0, 1.292024, 0, 1.277588, 0, -0.1925982, 15.1209, -0.08, -4.4971)
 
 [node name="Entrance" parent="." index="12" unique_id=591304417]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8.1239, 0, 4.2764)
