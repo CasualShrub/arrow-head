@@ -67,6 +67,7 @@ func _physics_process(delta: float) -> void:
 func _ready() -> void:
 	if Engine.is_editor_hint(): return
 
+	add_to_group("tree_fade_targets")
 	_sprite.set_layer_mask_value(ScreenShaderManager.UNFILTERED_LAYER, true)
 	_sprite.frame_changed.connect(_update_nocked)
 	if fixed_facing:

@@ -5,7 +5,7 @@
 [sub_resource type="BoxShape3D" id="BoxShape3D_col"]
 size = Vector3(0.661, 2.708, 0.717)
 
-[node name="Tree01" type="StaticBody3D" unique_id=1701819511]
+[node name="Tree01" type="StaticBody3D" groups=["fadeable"] unique_id=1701819511]
 collision_layer = 4
 collision_mask = 9
 

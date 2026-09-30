@@ -24,6 +24,7 @@ var _aim := AimCursor.new()
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
 	add_child(_aim)
+	add_child(TreeFader.new())
 	DarkenManager.register_camera(self)
 	ScreenShaderManager.register_camera(self)
 
