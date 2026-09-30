@@ -10,7 +10,8 @@
 script = ExtResource("3_ek4vn")
 type = ExtResource("4_2b6tm")
 starting_delay = 0.1
-instance_delay = 0.1
+instance_delay = 0.15
+count = 3
 metadata/_custom_type_script = "uid://r4qbgt6it8lb"
 
 [sub_resource type="Resource" id="Resource_0dieb"]
