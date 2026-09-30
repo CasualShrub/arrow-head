@@ -1,6 +1,6 @@
-[gd_scene load_steps=3 format=3 uid="uid://blof8tcycu2pg"]
+[gd_scene format=3 uid="uid://blof8tcycu2pg"]
 
-[ext_resource type="ArrayMesh" path="res://scenes/nature/meshes/tree_07_mesh.res" id="1_mesh"]
+[ext_resource type="ArrayMesh" path="res://entities/props/trees/meshes/tree_07_mesh.res" id="1_mesh"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_col"]
 size = Vector3(1.19985198974609, 2.46768021583557, 1.07078731060028)

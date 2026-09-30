@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://b111y7l4h8xau"]
 
-[ext_resource type="ArrayMesh" path="res://scenes/nature/meshes/stump_mesh.res" id="1_mesh"]
+[ext_resource type="ArrayMesh" path="res://entities/props/trees/meshes/stump_mesh.res" id="1_mesh"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_col"]
 size = Vector3(0.35015154, 0.2658016, 0.35015163)
