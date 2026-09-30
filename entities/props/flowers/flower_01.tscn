@@ -1,0 +1,10 @@
+[gd_scene format=3]
+
+[ext_resource type="Texture2D" path="res://entities/props/flowers/flower1.PNG" id="1_tex"]
+
+[node name="Flower01" type="Sprite3D"]
+offset = Vector2(67, -123)
+axis = 1
+pixel_size = 0.0025
+alpha_cut = 1
+texture = ExtResource("1_tex")
