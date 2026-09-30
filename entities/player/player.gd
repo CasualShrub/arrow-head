@@ -66,6 +66,7 @@ class_name Player
 @onready var _mouse_pivot: Node3D = %MousePivot
 @onready var _sectors: Sectors = %Sectors
 @onready var _chunks: CPUParticles3D = %AppleChunks
+@onready var _aura: AngryAura = %Aura
 
 signal force_walk_finished()
 
@@ -263,8 +264,10 @@ func _refresh_eyes_state() -> void:
 	if _eyes.get_eyes_state() == &"hit": return
 	if _dash_charges > 0:
 		_eyes.set_eyes_state(&"angry")
+		_aura.activate()
 	else:
 		_eyes.set_eyes_state(&"default")
+		_aura.deactivate()
 
 func _on_died() -> void:
 	_dash_charges = 0
@@ -277,6 +280,7 @@ func _on_died() -> void:
 	_sprite.play("death")
 	
 	_eyes.hide()
+	_aura.deactivate_instantly()
 	_status_sprite.hide()
 	_sectors.hide()
 
