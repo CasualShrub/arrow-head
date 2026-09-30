@@ -186,7 +186,8 @@ func get_hit(arrow: Arrow) -> void:
 	_eyes.set_eyes_state("hit")
 	get_tree().create_timer(0.25).timeout.connect(
 		func():
-			_eyes.set_eyes_state("default")
+			_eyes.set_eyes_state(&"default")
+			_refresh_eyes_state()
 			health.make_vulnerable()
 	)
 	#_eyes_hit.start()
@@ -258,6 +259,13 @@ func _force_walk_step(delta: float) -> void:
 			return
 	global_position += step
 
+func _refresh_eyes_state() -> void:
+	if _eyes.get_eyes_state() == &"hit": return
+	if _dash_charges > 0:
+		_eyes.set_eyes_state(&"angry")
+	else:
+		_eyes.set_eyes_state(&"default")
+
 func _on_died() -> void:
 	_dash_charges = 0
 	_dash_arrows.clear()
@@ -296,6 +304,7 @@ func _on_dash_activated(destination: Vector3, targets: Array) -> void:
 			_dash_arrows.erase(consumed_arrow)
 			arrows.remove_arrow(consumed_arrow)
 			_dash_charges = maxi(_dash_charges - 1, 0)
+			_refresh_eyes_state()
 	time.bar.consume(dash_cost * time.bar.max_value)
 	if time.is_slowed():
 		time.resume()
@@ -304,6 +313,7 @@ func _on_slot_occupied(slot: int, _arrow: Arrow) -> void:
 	_sectors.highlight_sector(slot)
 	if _dash_charges == 0 and arrows.is_full():
 		_dash_charges = arrows.slot_count
+		_refresh_eyes_state()
 		_dash_arrows.clear()
 		for i in range(arrows.slot_count):
 			var a := arrows.get_embedded_in(i)
