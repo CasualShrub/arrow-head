@@ -1,0 +1,9 @@
+[gd_scene format=3 uid="uid://c7t3chm2dtpwh"]
+
+[ext_resource type="Texture2D" uid="uid://dvkv0sdilr1lx" path="res://entities/props/tutorial/tree ground charr.png" id="1_hxehh"]
+
+[node name="Node3D" type="Node3D" unique_id=1953235081]
+
+[node name="Sprite3D" type="Sprite3D" parent="." unique_id=382266697]
+transform = Transform3D(1, 0, 0, 0, -4.371139e-08, 1, 0, -1, -4.371139e-08, 0, 0, 0)
+texture = ExtResource("1_hxehh")
