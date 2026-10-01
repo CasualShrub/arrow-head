@@ -77,6 +77,7 @@ var _force_walk_target: Variant = null
 
 func _ready() -> void:
 	if Engine.is_editor_hint(): update_configuration_warnings()
+	DarkenManager.register_highlighted(self)
 	_update_collider()
 
 func _process(_delta: float) -> void:

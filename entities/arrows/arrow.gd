@@ -34,6 +34,8 @@ func _ready() -> void:
 		_shape_cast = collision_shapes[0]
 	_shape_cast_offset = _shape_cast.position
 	
+	DarkenManager.register_highlighted(self)
+	
 	deactivate()
 
 func _physics_process(delta: float) -> void:
