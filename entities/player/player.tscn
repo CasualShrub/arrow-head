@@ -201,7 +201,6 @@ metadata/_custom_type_script = "uid://d05r0wt3n7g6i"
 [node name="Sprite" type="AnimatedSprite3D" parent="." unique_id=1733920157]
 unique_name_in_owner = true
 transform = Transform3D(0.74, 0, 0, 0, -3.2346428e-08, 0.74, 0, -0.74, -3.2346428e-08, 0, 0, 0)
-layers = 786433
 double_sided = false
 render_priority = 5
 sprite_frames = ExtResource("8_yj68g")
@@ -210,7 +209,6 @@ sprite_frames = ExtResource("8_yj68g")
 unique_name_in_owner = true
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -3.3581575e-11, 0.0007682565)
 visible = false
-layers = 786433
 render_priority = 4
 sprite_frames = SubResource("SpriteFrames_jej6c")
 animation = &"fire"

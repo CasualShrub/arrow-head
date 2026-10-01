@@ -63,7 +63,7 @@ func _duplicate_sprite(base: SpriteBase3D) -> Node3D:
 	xform.origin.y -= depth_offset
 	sprite.global_transform = xform
 	sprite.visible = base.visible
-	sprite.set_layer_mask_value(20, true)
+	DarkenManager.register_highlighted(sprite)
 	sprite.set_layer_mask_value(ScreenShaderManager.UNFILTERED_LAYER, true)
 	
 	var mat := ShaderMaterial.new()

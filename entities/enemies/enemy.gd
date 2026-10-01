@@ -390,10 +390,10 @@ func _on_recovery_timeout() -> void:
 	perform(pattern)
 
 func _on_dash_targeted() -> void:
-	_sprite.set_layer_mask_value(20, true)
+	DarkenManager.register_highlighted(self)
 
 func _on_dash_untargeted() -> void:
-	_sprite.set_layer_mask_value(20, false)
+	DarkenManager.unregister_highlighted(self)
 
 func _on_dash_hit() -> void:
 	if health.is_dead(): return

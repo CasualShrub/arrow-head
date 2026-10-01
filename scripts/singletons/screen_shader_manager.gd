@@ -16,6 +16,47 @@ func _ready() -> void:
 	get_tree().root.size_changed.connect(_on_resize)
 	_on_resize()
 
+func register_camera(cam: Camera3D) -> void:
+	_main_cam = cam
+	_mask_vp.world_3d = cam.get_world_3d()
+	_psx_layer.visible = true
+	cam.tree_exiting.connect(_on_camera_exiting.bind(cam), CONNECT_ONE_SHOT)
+	_on_resize()
+
+func register_unfiltered(excl: Node3D) -> void:
+	var parent_inst := excl as VisualInstance3D
+	if parent_inst:
+		parent_inst.set_layer_mask_value(UNFILTERED_LAYER, true)
+		parent_inst.set_layer_mask_value(PSX_LAYER, false)
+	var visual_insts: Array[Node] = excl.find_children(
+		"*",
+		"VisualInstance3D",
+		true,
+		false
+	)
+	for i in visual_insts:
+		var inst := i as VisualInstance3D
+		if inst:
+			inst.set_layer_mask_value(UNFILTERED_LAYER, true)
+			inst.set_layer_mask_value(PSX_LAYER, false)
+
+func unregister_unfiltered(excl: Node3D) -> void:
+	var parent_inst := excl as VisualInstance3D
+	if parent_inst:
+		parent_inst.set_layer_mask_value(UNFILTERED_LAYER, false)
+		parent_inst.set_layer_mask_value(PSX_LAYER, true)
+	var visual_insts: Array[Node] = excl.find_children(
+		"*",
+		"VisualInstance3D",
+		true,
+		false
+	)
+	for i in visual_insts:
+		var inst := i as VisualInstance3D
+		if inst:
+			inst.set_layer_mask_value(UNFILTERED_LAYER, false)
+			inst.set_layer_mask_value(PSX_LAYER, true)
+
 func _build_mask() -> void:
 	_mask_vp = SubViewport.new()
 	_mask_vp.transparent_bg = true
@@ -45,17 +86,10 @@ func _build_psx_layer() -> void:
 	_psx_layer.add_child(rect)
 
 func _on_resize() -> void:
-	var size: Vector2i = get_viewport().size
+	var size: Vector2i = get_viewport().get_visible_rect().size
 	if _main_cam:
-		size = _main_cam.get_viewport().size
+		size = _main_cam.get_viewport().get_visible_rect().size
 	_mask_vp.size = size
-
-func register_camera(cam: Camera3D) -> void:
-	_main_cam = cam
-	_mask_vp.world_3d = cam.get_world_3d()
-	_psx_layer.visible = true
-	cam.tree_exiting.connect(_on_camera_exiting.bind(cam), CONNECT_ONE_SHOT)
-	_on_resize()
 
 func _on_camera_exiting(cam: Camera3D) -> void:
 	if _main_cam != cam: return

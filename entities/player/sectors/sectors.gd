@@ -85,6 +85,8 @@ func _ready() -> void:
 	_update_centering()
 	radius = radius
 	if Engine.is_editor_hint(): return
+	DarkenManager.register_highlighted(self)
+	ScreenShaderManager.register_unfiltered(self)
 	_highlighted = 0
 	_primed = -1
 	show()

@@ -7,8 +7,6 @@ class_name Room
 @export var entrance_walk_distance := 4.0
 @export var allow_ricochet := true
 
-const HIGHLIGHT_LAYER := 20
-
 signal started()
 signal cleared()
 signal ended(won: bool)

@@ -32,7 +32,15 @@ func register_camera(cam: Camera3D) -> void:
 
 	_on_resize()
 
+func register_overlay(rect: ColorRect) -> void:
+	_darken_rect = rect
+	var mat := rect.material as ShaderMaterial
+	mat.set_shader_parameter("mask_tex", mask_vp.get_texture())
+
 func register_highlighted(obj: Node3D) -> void:
+	var parent_inst := obj as VisualInstance3D
+	if parent_inst:
+		parent_inst.set_layer_mask_value(EXCLUDE_LAYER, true)
 	var visual_insts: Array[Node] = obj.find_children(
 		"*",
 		"VisualInstance3D",
@@ -41,9 +49,13 @@ func register_highlighted(obj: Node3D) -> void:
 	)
 	for i in visual_insts:
 		var inst := i as VisualInstance3D
-		inst.set_layer_mask_value(EXCLUDE_LAYER, true)
+		if inst:
+			inst.set_layer_mask_value(EXCLUDE_LAYER, true)
 
 func unregister_highlighted(obj: Node3D) -> void:
+	var parent_inst := obj as VisualInstance3D
+	if parent_inst:
+		parent_inst.set_layer_mask_value(EXCLUDE_LAYER, false)
 	var visual_insts: Array[Node] = obj.find_children(
 		"*",
 		"VisualInstance3D",
@@ -52,18 +64,14 @@ func unregister_highlighted(obj: Node3D) -> void:
 	)
 	for i in visual_insts:
 		var inst := i as VisualInstance3D
-		inst.set_layer_mask_value(EXCLUDE_LAYER, false)
+		if inst:
+			inst.set_layer_mask_value(EXCLUDE_LAYER, false)
 
 func _on_resize():
 	mask_vp.size = get_viewport().get_visible_rect().size
 	
 	if _main_cam:
 		sync_mask_camera(_main_cam)
-
-func register_overlay(rect: ColorRect) -> void:
-	_darken_rect = rect
-	var mat := rect.material as ShaderMaterial
-	mat.set_shader_parameter("mask_tex", mask_vp.get_texture())
 
 func sync_mask_camera(cam: Camera3D) -> void:
 	mask_cam.global_transform = cam.global_transform
