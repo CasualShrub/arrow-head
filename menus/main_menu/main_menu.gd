@@ -177,7 +177,7 @@ func _launch(sector_center_deg: float, texture: Texture2D, on_complete: Callable
 	var out_dir := Vector2(cos(sector_angle), sin(sector_angle))
 	var start := apple_center + out_dir * launch_distance
 
-	var rest_rotation := sector_angle + PI * 0.5
+	var rest_rotation := sector_angle + PI / 2
 	_launch_arrow.texture = texture
 	_launch_arrow.position = start
 	_launch_arrow.rotation = rest_rotation

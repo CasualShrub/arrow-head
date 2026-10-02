@@ -3,6 +3,8 @@
 extends Node3D
 class_name Sectors
 
+enum SectorState {NONE, HIGHLIGHTED, USABLE, DISABLED}
+
 @export var sector_count := 4:
 	set(value):
 		if not mat: return
@@ -16,55 +18,80 @@ class_name Sectors
 @export var radius := 0.5:
 	set(value):
 		scale.x = value * 2
-		scale.y = value * 2
+		scale.z = value * 2
 		radius = value
+@export var inner_radius: float:
+	get():
+		if not mat: return 0.0
+		return mat.get_shader_parameter("inner_radius")
+	set(value):
+		if not mat: return
+		mat.set_shader_parameter("inner_radius", value)
 
-signal sector_highlighted(sector: int)
-signal sector_unhighlighted(sector: int)
+signal sector_state_changed(sector: int, state: SectorState)
 
 @onready var _display := $Display
 #@onready var _pointer := $Pointer
 @onready var mat: ShaderMaterial = _display.material_override
 
-#highlighted means an arrow is occupying the slot
+var sector_size: float:
+	get():
+		return TAU / sector_count
+
+## arrow is occupying the slot
 var _highlighted := 0:
 	set(value):
 		if not mat: return
 		mat.set_shader_parameter("occupied_mask", value) #occupied_mask
 		_highlighted = value
-
-#primed means this arrow is ready to be consumed on the next dash
-var _primed := -1:
+## slot is ready to be consumed
+var _usable := 0:
 	set(value):
 		if not mat: return
-		mat.set_shader_parameter("aimed_sector", value)
-		_primed = value
+		mat.set_shader_parameter("usable_mask", value)
+		_usable = value
+## slot cannot be interacted with
+var _disabled := 0:
+	set(value):
+		if not mat: return
+		mat.set_shader_parameter("disabled_mask", value)
+		_disabled = value
 
-func get_sector_size() -> float:
-	return TAU / sector_count
+func _ready() -> void:
+	_update_centering()
+	if Engine.is_editor_hint(): return
+	DarkenManager.register_highlighted(self)
+	ScreenShaderManager.register_unfiltered(self)
+	show()
 
-func is_sector_highlighted(sector: int) -> bool:
-	return (_highlighted >> sector) & 1
+func get_state(sector: int) -> SectorState:
+	if (_highlighted >> sector) & 1:
+		return SectorState.HIGHLIGHTED
+	elif (_usable >> sector) & 1:
+		return SectorState.USABLE
+	elif (_disabled >> sector) & 1:
+		return SectorState.DISABLED
+	else:
+		return SectorState.NONE
 
-func highlight_sector(sector: int) -> void:
-	if is_sector_highlighted(sector): return
-	_highlighted |= 1 << sector
-	sector_highlighted.emit(sector)
-
-func unhighlight_sector(sector: int) -> void:
-	if not is_sector_highlighted(sector): return
-	_highlighted &= ~(1 << sector)
-	sector_unhighlighted.emit(sector)
-
-func set_primed(sector: int) -> void:
-	_primed = sector
-
-func clear_primed() -> void:
-	_primed = -1
-
-func clear() -> void:
-	_highlighted = 0
-	_primed = -1
+func set_state(sector: int, state: SectorState) -> void:
+	var bit := 1 << sector
+	if state == SectorState.HIGHLIGHTED:
+		print("state highlighted")
+		_highlighted |= bit
+	else:
+		_highlighted &= ~bit
+	if state == SectorState.USABLE:
+		print("state usable")
+		_usable |= bit
+	else:
+		_usable &= ~bit
+	if state == SectorState.DISABLED:
+		print("state disabled")
+		_disabled |= bit
+	else:
+		_disabled &= ~bit
+	sector_state_changed.emit(sector, state)
 
 #func _update_occupied_mask() -> void:
 	#if not mat: return
@@ -74,19 +101,13 @@ func clear() -> void:
 			#mask += 1 << i
 	#mat.set_shader_parameter("occupied_mask", mask)
 
+func clear() -> void:
+	for sector in range(sector_count):
+		set_state(sector, SectorState.NONE)
+
 func _update_centering(toggle: bool = centered) -> void:
 	if not _display: return
 	if toggle:
-		_display.rotation.y = (PI + get_sector_size()) / 2
+		_display.rotation.y = TAU + sector_size / 2
 	else:
-		_display.rotation.y = PI / 2
-
-func _ready() -> void:
-	_update_centering()
-	radius = radius
-	if Engine.is_editor_hint(): return
-	DarkenManager.register_highlighted(self)
-	ScreenShaderManager.register_unfiltered(self)
-	_highlighted = 0
-	_primed = -1
-	show()
+		_display.rotation.y = TAU

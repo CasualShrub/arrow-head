@@ -293,7 +293,7 @@ func _alert(dt: float) -> void:
 	to_player.y = 0.0
 	var dist := to_player.length()
 	var forward := to_player.normalized()
-	var right := forward.rotated(Vector3.UP, PI * 0.5)
+	var right := forward.rotated(Vector3.UP, PI / 2)
 	var move := Vector3.ZERO
 
 	_reposition_timer += dt

@@ -2,9 +2,10 @@ shader_type spatial;
 
 render_mode unshaded, blend_mix, cull_back;
 
-uniform int sector_count = 8;
-uniform int aimed_sector = -1;
+uniform int sector_count = 4;
 uniform int occupied_mask = 0;
+uniform int usable_mask = 0;
+uniform int disabled_mask = 0;
 uniform float inner_radius = 0.35;
 
 uniform vec4 empty_color : source_color =
@@ -13,8 +14,11 @@ uniform vec4 empty_color : source_color =
 uniform vec4 occupied_color : source_color =
     vec4(0.9, 0.35, 0.15, 0.50);
 
-uniform vec4 highlight_color : source_color =
+uniform vec4 usable_color : source_color =
     vec4(1.0, 0.7, 0.4, 0.95);
+
+uniform vec4 disabled_color : source_color =
+	vec4(0.0, 0.0, 0.0, 0.7);
 
 uniform vec4 line_color : source_color =
     vec4(0.95, 0.45, 0.25, 0.7);
@@ -25,21 +29,22 @@ uniform float outer_ring_width = 0.02;
 bool sector_occupied(int sector) {
     return (occupied_mask & (1 << sector)) != 0;
 }
+bool sector_usable(int sector) {
+	return (usable_mask & (1 << sector)) != 0;
+}
+bool sector_disabled(int sector) {
+	return (disabled_mask & (1 << sector)) != 0;
+}
 
 void fragment() {
-
     vec2 p = UV * 2.0 - 1.0;
 
     float r = length(p);
-	if (r < inner_radius || r > 1.0) {
-    	discard;
-	}
+	if (r < inner_radius || r > 1.0) discard;
 
-    float angle = atan(p.y, p.x);
+    float angle = atan(p.y, p.x) - (TAU / 2.0);
 
-    if (angle < 0.0) {
-        angle += TAU;
-    }
+    if (angle < 0.0) angle += TAU;
 
     float sector_size =
         TAU / float(max(sector_count, 1));
@@ -50,12 +55,11 @@ void fragment() {
     vec4 color =
         sector_occupied(sector)
         ? occupied_color
-        : empty_color;
-	
-    if (sector == aimed_sector) {
-        color = highlight_color;
-    }
-	
+        : sector_usable(sector)
+		? usable_color
+		: sector_disabled(sector)
+		? disabled_color
+		: empty_color;
 
     float local_angle =
         mod(angle, sector_size);
@@ -72,13 +76,7 @@ void fragment() {
     bool outer_edge =
         abs(r - 1.0) < outer_ring_width;
 
-    if (radial_edge || outer_edge) {
-        color = line_color;
-
-        if (sector == aimed_sector) {
-            color = highlight_color;
-        }
-    }
+    if (radial_edge || outer_edge) color = line_color;
 
     ALBEDO = color.rgb;
     ALPHA = color.a;

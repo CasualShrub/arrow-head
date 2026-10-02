@@ -60,6 +60,7 @@ func unload_level() -> void:
 	current_level = null
 
 func restart_room() -> void:
+	DarkenManager.set_darken(0)
 	if current_level:
 		current_level.reload_room()
 

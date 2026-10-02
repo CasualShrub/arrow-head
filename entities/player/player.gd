@@ -70,8 +70,6 @@ class_name Player
 
 signal force_walk_finished()
 
-var _dash_charges := 0
-var _dash_arrows: Array[Arrow] = []
 var _force_walk_direction := Vector3.ZERO
 var _force_walk_target: Variant = null
 
@@ -79,6 +77,7 @@ func _ready() -> void:
 	if Engine.is_editor_hint(): update_configuration_warnings()
 	DarkenManager.register_highlighted(self)
 	ScreenShaderManager.register_unfiltered(self)
+	_sectors.centered = arrows.centered
 	_update_collider()
 
 func _process(_delta: float) -> void:
@@ -105,12 +104,6 @@ func _process(_delta: float) -> void:
 		_dash_preview.set_preview_position(dash_dest)
 		_dash_preview.set_preview_targets(dash_targets)
 
-	var target_slot := _get_target_slot()
-	if _dash_charges > 0 and target_slot >= 0:
-		_sectors.set_primed(target_slot)
-	else:
-		_sectors.clear_primed()
-
 func _physics_process(delta: float) -> void:
 	if Engine.is_editor_hint() or health.is_dead(): return
 
@@ -126,7 +119,7 @@ func _physics_process(delta: float) -> void:
 			time.resume()
 	
 	if fire_input.consume_pressed():
-		if _dash_charges > 0:
+		if arrows.can_use():
 			if not time.is_slowed():
 				time.slow()
 			dash.enable()
@@ -177,8 +170,8 @@ func get_hit(arrow: Arrow) -> void:
 	_camera.shake()
 	if arrows.try_add_arrow(arrow):
 		arrow.embed(arrow_dig_depth)
-		var slots := arrows.get_slots_of(arrow)
-		var sector := slots[0] if slots.size() > 0 else 0
+		var slots := arrows.get_embedded_slots(arrow)
+		var sector := slots[0] if not slots.is_empty() else 0
 		SoundManager.play("Q%d_fill" % clampi(sector + 1, 1, 4))
 		SoundManager.play("apple_damage1") 
 		#if arrow.kind != Arrow.Kind.NORMAL else "apple_damage2")
@@ -264,7 +257,7 @@ func _force_walk_step(delta: float) -> void:
 
 func _refresh_eyes_state() -> void:
 	if _eyes.get_eyes_state() == &"hit": return
-	if _dash_charges > 0:
+	if dash.can_activate():
 		_eyes.set_eyes_state(&"angry")
 		_aura.activate()
 	else:
@@ -272,10 +265,7 @@ func _refresh_eyes_state() -> void:
 		_aura.deactivate()
 
 func _on_died() -> void:
-	_dash_charges = 0
-	_dash_arrows.clear()
 	arrows.clear_arrows()
-	_sectors.clear()
 	time.resume()
 	
 	SoundManager.play("apple_death")
@@ -286,15 +276,6 @@ func _on_died() -> void:
 	_status_sprite.hide()
 	_sectors.hide()
 
-func _get_target_slot() -> int:
-	var start := arrows.get_facing_slot()
-	for i in range(arrows.slot_count):
-		var slot := (start + i) % arrows.slot_count
-		var arrow := arrows.get_embedded_in(slot)
-		if arrow and arrow in _dash_arrows:
-			return slot
-	return -1
-
 func _on_dash_activated(destination: Vector3, targets: Array) -> void:
 	_dash_preview.disable()
 	var from := global_position
@@ -303,39 +284,29 @@ func _on_dash_activated(destination: Vector3, targets: Array) -> void:
 	for target in targets:
 		if target is Enemy:
 			target.get_hit()
-	var consumed_slot := _get_target_slot()
-	if consumed_slot >= 0:
-		var consumed_arrow := arrows.get_embedded_in(consumed_slot)
-		if consumed_arrow:
-			_dash_arrows.erase(consumed_arrow)
-			arrows.remove_arrow(consumed_arrow)
-			_dash_charges = maxi(_dash_charges - 1, 0)
-			_refresh_eyes_state()
+	var next_used := arrows.get_using_next()
+	if next_used:
+		arrows.remove_arrow(next_used)
 	time.bar.consume(dash_cost * time.bar.max_value)
 	if time.is_slowed():
 		time.resume()
 
-func _on_slot_occupied(slot: int, _arrow: Arrow) -> void:
-	_sectors.highlight_sector(slot)
-	if _dash_charges == 0 and arrows.is_full():
-		_dash_charges = arrows.slot_count
-		_refresh_eyes_state()
-		_dash_arrows.clear()
-		for i in range(arrows.slot_count):
-			var a := arrows.get_embedded_in(i)
-			if a:
-				_dash_arrows.append(a)
-
-func _on_slot_cleared(slot: int) -> void:
-	_sectors.unhighlight_sector(slot)
-
-func _on_firing_enabled(_arrow: Arrow) -> void:
-	if time.is_slowed():
-		dash.enable()
-
-func _on_firing_disabled(_arrow: Arrow) -> void:
-	if not arrows.is_full():
-		dash.disable()
+func _on_slot_state_changed(
+	slot: int,
+	state: SectorArrowsComponent.SlotState
+) -> void:
+	var sector_state := (
+		_sectors.SectorState.HIGHLIGHTED if state == arrows.SlotState.OCCUPIED
+		else _sectors.SectorState.USABLE if state == arrows.SlotState.USABLE
+		else _sectors.SectorState.DISABLED if state == arrows.SlotState.DISABLED
+		else _sectors.SectorState.NONE
+	)
+	_sectors.set_state(slot, sector_state)
+	_refresh_eyes_state()
+	if arrows.can_use():
+		if time.is_slowed() and not dash.is_enabled(): dash.enable()
+	else:
+		if dash.is_enabled(): dash.disable()
 
 func _on_time_slowed() -> void:
 	afterimage.enable()

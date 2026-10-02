@@ -1,7 +1,9 @@
 extends Node
 
+## the visibility layer unfiltered objects are in
 const UNFILTERED_LAYER := 19
-const PSX_LAYER := 5
+## the ui layer the psx shader is on
+const PSX_LAYER := 11
 const PSX_SHADER := preload("res://shaders/psx.gdshader")
 
 var _mask_vp: SubViewport
@@ -27,7 +29,6 @@ func register_unfiltered(excl: Node3D) -> void:
 	var parent_inst := excl as VisualInstance3D
 	if parent_inst:
 		parent_inst.set_layer_mask_value(UNFILTERED_LAYER, true)
-		parent_inst.set_layer_mask_value(PSX_LAYER, false)
 	var visual_insts: Array[Node] = excl.find_children(
 		"*",
 		"VisualInstance3D",
@@ -38,13 +39,11 @@ func register_unfiltered(excl: Node3D) -> void:
 		var inst := i as VisualInstance3D
 		if inst:
 			inst.set_layer_mask_value(UNFILTERED_LAYER, true)
-			inst.set_layer_mask_value(PSX_LAYER, false)
 
 func unregister_unfiltered(excl: Node3D) -> void:
 	var parent_inst := excl as VisualInstance3D
 	if parent_inst:
 		parent_inst.set_layer_mask_value(UNFILTERED_LAYER, false)
-		parent_inst.set_layer_mask_value(PSX_LAYER, true)
 	var visual_insts: Array[Node] = excl.find_children(
 		"*",
 		"VisualInstance3D",
@@ -55,7 +54,6 @@ func unregister_unfiltered(excl: Node3D) -> void:
 		var inst := i as VisualInstance3D
 		if inst:
 			inst.set_layer_mask_value(UNFILTERED_LAYER, false)
-			inst.set_layer_mask_value(PSX_LAYER, true)
 
 func _build_mask() -> void:
 	_mask_vp = SubViewport.new()

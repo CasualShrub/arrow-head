@@ -216,6 +216,7 @@ animation = &"fire"
 [node name="Aura" parent="." unique_id=585942405 instance=ExtResource("21_aura")]
 unique_name_in_owner = true
 transform = Transform3D(1.18, 0, 0, 0, 1.18, 0, 0, 0, 1.18, 0, 0, -0.4319256)
+visible = false
 
 [node name="AppleChunks" parent="." unique_id=702073064 instance=ExtResource("2_myrg7")]
 unique_name_in_owner = true
@@ -231,4 +232,4 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.023803711, 0)
 [connection signal="firing_disabled" from="ArrowsComponent" to="." method="_on_firing_disabled"]
 [connection signal="firing_enabled" from="ArrowsComponent" to="." method="_on_firing_enabled"]
 [connection signal="slot_cleared" from="ArrowsComponent" to="." method="_on_slot_cleared"]
-[connection signal="slot_occupied" from="ArrowsComponent" to="." method="_on_slot_occupied"]
+[connection signal="slot_state_changed" from="ArrowsComponent" to="." method="_on_slot_state_changed"]
