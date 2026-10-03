@@ -305,9 +305,7 @@ func _on_slot_state_changed(
 	)
 	_sectors.set_state(slot, sector_state)
 	_refresh_eyes_state()
-	if arrows.can_use():
-		if time.is_slowed() and not dash.is_enabled(): dash.enable()
-	else:
+	if not arrows.can_use():
 		if dash.is_enabled(): dash.disable()
 
 func _on_time_slowed() -> void:

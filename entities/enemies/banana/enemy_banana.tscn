@@ -8,6 +8,8 @@
 [sub_resource type="Resource" id="Resource_lu5c6"]
 script = ExtResource("3_4ap13")
 type = ExtResource("4_0jjhd")
+instance_delay = 0.5
+count = 2
 metadata/_custom_type_script = "uid://r4qbgt6it8lb"
 
 [sub_resource type="Resource" id="Resource_75j4p"]

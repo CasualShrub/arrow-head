@@ -7,14 +7,14 @@ class_name FiringInstance
 @export_group("delay")
 @export var starting_delay: float = 0.0
 @export var max_starting_delay: float = 0.0
-@export var instance_delay: float = 0.0
-@export var max_instance_delay: float = 0.0
 @export_group("volley")
 @export var count: int = 1
 @export var max_count: int = 0
+@export var instance_delay: float = 0.0
+@export var max_instance_delay: float = 0.0
 @export_group("angle")
-@export_range(0.0, TAU) var spread: float = 0.0
-@export_range(0.0, TAU) var max_spread := 0.0
-@export_range(-PI, PI) var offset: float = 0.0
-@export_range(-PI, PI) var max_offset: float = -PI
+@export_range(0.0, 360.0) var spread: float = 0.0
+@export_range(0.0, 360.0) var max_spread := 0.0
+@export_range(-180.0, 180.0) var offset: float = 0.0
+@export_range(-180.0, 180.0) var max_offset: float = -180.0
 @export var individual_offset := false
