@@ -1,0 +1,213 @@
+[gd_scene format=3 uid="uid://biqjndvh7bu5t"]
+
+[ext_resource type="Script" uid="uid://duc4nfthp8kv0" path="res://entities/player/charge particles testing/particle_trial_1.gd" id="1_xgbq6"]
+[ext_resource type="Texture2D" uid="uid://c5w3uc4upc1av" path="res://entities/player/apple_idle.png" id="2_fvbgm"]
+[ext_resource type="Texture2D" uid="uid://cxnjm3smajfkf" path="res://systems/floor/var1.PNG" id="3_k6ieg"]
+[ext_resource type="Shader" uid="uid://tx0mew07vsvo" path="res://entities/player/charge particles testing/shiny ring.gdshader" id="4_fvbgm"]
+[ext_resource type="Script" uid="uid://yeospwac7jqe" path="res://entities/player/charge particles testing/shiny_ring.gd" id="5_k6ieg"]
+
+[sub_resource type="Curve" id="Curve_0wc37"]
+_limits = [-2.0, 1.0, 0.0, 1.0]
+_data = [Vector2(0.23809522, 1), 0.0, 0.0, 0, 0, Vector2(0.61471856, 0.417266), 0.0, 0.0, 0, 0, Vector2(0.987013, -2), 0.0, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="CurveTexture" id="CurveTexture_xgbq6"]
+curve = SubResource("Curve_0wc37")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_r0112"]
+emission_shape = 6
+emission_ring_axis = Vector3(0, 1, 0)
+emission_ring_height = 1.0
+emission_ring_radius = 0.5
+emission_ring_inner_radius = 0.45
+emission_ring_cone_angle = 90.0
+radial_velocity_min = 0.99997765
+radial_velocity_max = 4.9999776
+radial_velocity_curve = SubResource("CurveTexture_xgbq6")
+gravity = Vector3(0, -9, 0)
+linear_accel_min = -16.070002
+linear_accel_max = -10.530002
+radial_accel_min = -5.000002
+radial_accel_max = -4.0000024
+hue_variation_min = -2.2351742e-08
+hue_variation_max = 0.18999997
+sub_emitter_mode = 2
+sub_emitter_amount_at_end = 10
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_fvbgm"]
+shading_mode = 0
+vertex_color_use_as_albedo = true
+albedo_color = Color(0, 0.70607543, 0.70868075, 1)
+disable_receive_shadows = true
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_xgbq6"]
+material = SubResource("StandardMaterial3D_fvbgm")
+radius = 0.05
+height = 0.2
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_0wc37"]
+emission_shape = 6
+emission_ring_axis = Vector3(0, 1, 0)
+emission_ring_height = 1.0
+emission_ring_radius = 0.5
+emission_ring_inner_radius = 0.45
+emission_ring_cone_angle = 90.0
+radial_velocity_min = -2.2351742e-05
+radial_velocity_max = 0.99997765
+gravity = Vector3(0, 10, 0)
+radial_accel_min = -2.2351742e-06
+radial_accel_max = 21.359997
+color = Color(1.0203719e-05, 0.67645556, 0.9862698, 1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_xgbq6"]
+shading_mode = 0
+vertex_color_use_as_albedo = true
+albedo_color = Color(0.27603883, 0.69490045, 0.8875956, 1)
+disable_receive_shadows = true
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_fvbgm"]
+material = SubResource("StandardMaterial3D_xgbq6")
+radius = 0.05
+height = 0.2
+
+[sub_resource type="Curve" id="Curve_uvhb1"]
+_limits = [-360.0, 360.0, 0.0, 1.0]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_r0112"]
+curve = SubResource("Curve_uvhb1")
+
+[sub_resource type="Gradient" id="Gradient_e8ujh"]
+offsets = PackedFloat32Array(0, 0.50259066)
+colors = PackedColorArray(0.64702314, 0.6841721, 0.6826825, 1, 0.99999744, 0.5537123, 0.46745312, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_xufd8"]
+gradient = SubResource("Gradient_e8ujh")
+
+[sub_resource type="Curve" id="Curve_011ju"]
+_data = [Vector2(0.012987003, 0.8776978), 0.0, 0.0, 0, 0, Vector2(0.22943723, 0.89928055), 0.0, 0.0, 0, 0, Vector2(1, 0.5395683), 0.0, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="CurveTexture" id="CurveTexture_2m56f"]
+curve = SubResource("Curve_011ju")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_f8ewi"]
+emission_shape_scale = Vector3(0.5, 0.5, 0.1)
+emission_shape = 6
+emission_ring_axis = Vector3(0, 0, 1)
+emission_ring_height = 1.0
+emission_ring_radius = 1.0
+emission_ring_inner_radius = 0.0
+emission_ring_cone_angle = 90.0
+angular_velocity_curve = SubResource("CurveTexture_r0112")
+radial_velocity_min = -2.2351742e-05
+radial_velocity_max = 9.999977
+velocity_limit_curve = SubResource("CurveTexture_2m56f")
+color_ramp = SubResource("GradientTexture1D_xufd8")
+sub_emitter_mode = 2
+sub_emitter_amount_at_end = 32
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_k6ieg"]
+shading_mode = 0
+vertex_color_use_as_albedo = true
+vertex_color_is_srgb = true
+
+[sub_resource type="QuadMesh" id="QuadMesh_0db7h"]
+material = SubResource("StandardMaterial3D_k6ieg")
+size = Vector2(0.1, 0.1)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_0db7h"]
+render_priority = 0
+shader = ExtResource("4_fvbgm")
+shader_parameter/thickness_cutoff = 1.0
+shader_parameter/brightness = 4.0
+shader_parameter/ring_color = Color(0, 0.8, 1, 1)
+
+[sub_resource type="TorusMesh" id="TorusMesh_f1dtg"]
+inner_radius = 0.3
+outer_radius = 0.55
+rings = 32
+ring_segments = 3
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_k6ieg"]
+render_priority = 0
+shader = ExtResource("4_fvbgm")
+shader_parameter/thickness_cutoff = 1.0
+shader_parameter/brightness = 4.0
+shader_parameter/ring_color = Color(0, 0.8, 1, 1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_uvhb1"]
+transparency = 1
+shading_mode = 0
+albedo_color = Color(0.1647012, 0.6278585, 0.79201764, 1)
+
+[sub_resource type="TorusMesh" id="TorusMesh_0db7h"]
+material = SubResource("StandardMaterial3D_uvhb1")
+outer_radius = 0.77
+ring_segments = 3
+
+[node name="ParticleTrial1" type="Node3D" unique_id=181199563]
+script = ExtResource("1_xgbq6")
+
+[node name="stove fire" type="GPUParticles3D" parent="." unique_id=1239645207]
+transform = Transform3D(1, 0, 0, 0, -1, -1.509958e-07, 0, 1.509958e-07, -1, 0, 0, 0)
+visible = false
+emitting = false
+amount = 100
+lifetime = 0.2
+one_shot = true
+explosiveness = 1.0
+process_material = SubResource("ParticleProcessMaterial_r0112")
+draw_pass_1 = SubResource("CapsuleMesh_xgbq6")
+
+[node name="stove fire2" type="GPUParticles3D" parent="." unique_id=1284231995]
+transform = Transform3D(1, 0, 0, 0, -1, -1.509958e-07, 0, 1.509958e-07, -1, 0, 0, 0)
+visible = false
+emitting = false
+amount = 30
+lifetime = 0.09999999999999999
+process_material = SubResource("ParticleProcessMaterial_0wc37")
+draw_pass_1 = SubResource("CapsuleMesh_fvbgm")
+
+[node name="boom" type="GPUParticles3D" parent="." unique_id=1034491598]
+transform = Transform3D(1, 0, 0, 0, -4.371139e-08, 1, 0, -1, -4.371139e-08, 0, 0, 0)
+visible = false
+amount = 100
+sub_emitter = NodePath("boom2")
+lifetime = 0.5
+explosiveness = 1.0
+randomness = 0.08
+process_material = SubResource("ParticleProcessMaterial_f8ewi")
+draw_pass_1 = SubResource("QuadMesh_0db7h")
+
+[node name="boom2" type="GPUParticles3D" parent="boom" unique_id=242776077]
+visible = false
+amount = 100
+lifetime = 0.5
+explosiveness = 1.0
+randomness = 0.08
+process_material = SubResource("ParticleProcessMaterial_f8ewi")
+draw_pass_1 = SubResource("QuadMesh_0db7h")
+
+[node name="shiny ring" type="MeshInstance3D" parent="." unique_id=1100417668]
+material_override = SubResource("ShaderMaterial_0db7h")
+mesh = SubResource("TorusMesh_f1dtg")
+surface_material_override/0 = SubResource("ShaderMaterial_k6ieg")
+script = ExtResource("5_k6ieg")
+
+[node name="player" type="Sprite3D" parent="." unique_id=521993044]
+transform = Transform3D(1, 0, 0, 0, -4.371139e-08, 1, 0, -1, -4.371139e-08, 0, 0, 0)
+texture = ExtResource("2_fvbgm")
+
+[node name="grass" type="Sprite3D" parent="." unique_id=18168232]
+transform = Transform3D(1, 0, 0, 0, -4.371139e-08, 1, 0, -1, -4.371139e-08, 0, -0.039753675, 0)
+texture = ExtResource("3_k6ieg")
+
+[node name="Camera3D" type="Camera3D" parent="." unique_id=2105887883]
+transform = Transform3D(1, 0, 0, 0, -0.06673804, 0.99777055, 0, -0.99777055, -0.06673804, 0, 4.127708, 0)
+visible = false
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=1552525096]
+visible = false
+mesh = SubResource("TorusMesh_0db7h")
