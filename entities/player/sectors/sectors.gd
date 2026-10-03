@@ -77,16 +77,19 @@ func get_state(sector: int) -> SectorState:
 func set_state(sector: int, state: SectorState) -> void:
 	var bit := 1 << sector
 	if state == SectorState.HIGHLIGHTED:
+		if _highlighted & bit: return
 		print("state highlighted")
 		_highlighted |= bit
 	else:
 		_highlighted &= ~bit
 	if state == SectorState.USABLE:
+		if _usable & bit: return
 		print("state usable")
 		_usable |= bit
 	else:
 		_usable &= ~bit
 	if state == SectorState.DISABLED:
+		if _disabled & bit: return
 		print("state disabled")
 		_disabled |= bit
 	else:

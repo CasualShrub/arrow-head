@@ -74,7 +74,9 @@ var _force_walk_direction := Vector3.ZERO
 var _force_walk_target: Variant = null
 
 func _ready() -> void:
-	if Engine.is_editor_hint(): update_configuration_warnings()
+	if Engine.is_editor_hint():
+		update_configuration_warnings()
+		return
 	DarkenManager.register_highlighted(self)
 	ScreenShaderManager.register_unfiltered(self)
 	_sectors.centered = arrows.centered

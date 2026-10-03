@@ -150,5 +150,5 @@ func _on_filled() -> void:
 		enable_use(arrow)
 
 func _on_emptied() -> void:
-	for slot in slots:
+	for slot in range(slot_count):
 		set_state(slot, SlotState.EMPTY)
