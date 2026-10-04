@@ -109,7 +109,11 @@ func _start_movement_pattern(pattern: Dictionary[float, Vector2]) -> void:
 	_movement_pattern = _parse_movement_pattern(pattern)
 	_movement_pattern_start = Time.get_ticks_msec()
 
-func _get_arrow_angle(offset: float, spread: float, count: int, i: int) -> float:
+func _get_arrow_angle(
+	offset: float,
+	spread: float,
+	count: int,
+	i: int) -> float:
 	if count <= 1:
 		return offset
 	var i_spread := -(spread / 2) + (i as float / (count - 1) as float * spread)
@@ -158,8 +162,8 @@ func _on_instance_timer_timeout(timer: Timer,
 
 func _execute_volley(instance: FiringInstance):
 	var count: int = _get_rand(instance.count, instance.max_count)
-	var spread: float = _get_rand(instance.spread, instance.max_spread)
-	var offset: float = _get_rand(instance.offset, instance.max_offset)
+	var spread := deg_to_rad(_get_rand(instance.spread, instance.max_spread))
+	var offset := deg_to_rad(_get_rand(instance.offset, instance.max_offset))
 	if instance.instance_delay == 0.0 and instance.max_instance_delay == 0.0:
 		for i in range(count):
 			_execute_instance(instance, offset, spread, count, i)
