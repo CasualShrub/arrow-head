@@ -16,8 +16,10 @@ class_name Enemy
 @export var has_intro := false
 @export var stationary := false
 @export var fixed_facing := false
+@export var max_hits := 1
 @export_group("firing")
 @export var patterns: Array[ArrowPattern] = []
+@export var fixed_patterns := false
 @export var fire_release_frame := 3
 @export var nock_points: Array[Vector2] = []
 
@@ -42,6 +44,9 @@ var _reposition_interval := 2.0
 var _facing := Vector3.FORWARD
 
 var _nocked: Arrow
+
+var _pattern_index := 0
+var _hits_taken := 0
 
 @onready var _visual_root: Node3D = %VisualRoot
 @onready var _sprite: AnimatedSprite3D = %Sprite
@@ -70,6 +75,7 @@ func _ready() -> void:
 	add_to_group("tree_fade_targets")
 	_sprite.set_layer_mask_value(ScreenShaderManager.UNFILTERED_LAYER, true)
 	_sprite.frame_changed.connect(_update_nocked)
+	_sprite.animation_finished.connect(_on_sprite_animation_finished)
 	if fixed_facing:
 		face(global_position - global_basis.z)
 	suspicion.state = suspicion.SuspicionState.HIGH
@@ -88,6 +94,11 @@ func _ready() -> void:
 		#%CameraPivot.process_mode = Node.PROCESS_MODE_INHERIT
 		#_sprite.animation = "default"
 		#%CameraPivot.unfocus()
+
+func _on_sprite_animation_finished() -> void:
+	if health.is_dead(): return
+	if _sprite.animation != &"fire": return
+	_sprite.animation = &"default"
 
 func is_dead() -> bool:
 	return health.is_dead()
@@ -137,6 +148,8 @@ func _execute_instance(
 	count: int,
 	i: int
 ) -> void:
+	if instance.skipped_shots.has(i):
+		return
 	if instance.individual_offset:
 		offset = _get_rand(instance.offset, instance.max_offset)
 	
@@ -300,6 +313,10 @@ func face(target: Vector3) -> void:
 func _select_pattern() -> ArrowPattern:
 	if len(patterns) == 0:
 		return ArrowPattern.new()
+	if fixed_patterns:
+		var next := patterns[_pattern_index % len(patterns)]
+		_pattern_index += 1
+		return next
 	var total := 0.0
 	for p in patterns:
 		total += p.weight
@@ -448,7 +465,11 @@ func _on_dash_untargeted() -> void:
 func _on_dash_hit() -> void:
 	if health.is_dead(): return
 	await _show_hit()
-	health.take_damage(1)
+	_hits_taken += 1
+	if _hits_taken >= max_hits:
+		health.take_damage(1)
+	else:
+		_sprite.animation = &"default"
 
 func _await_fire_release() -> void:
 	while (
