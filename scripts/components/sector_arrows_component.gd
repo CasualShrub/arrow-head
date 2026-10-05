@@ -24,6 +24,8 @@ signal emptied()
 var slots: Array[SlotState] = []
 var embedded: Array[Arrow] = []
 
+var _removal_state := SlotState.DISABLED
+
 func _ready() -> void:
 	slots.resize(slot_count)
 	embedded.resize(slot_count)
@@ -140,13 +142,19 @@ func _on_arrow_added(arrow: Arrow) -> void:
 	if is_full():
 		filled.emit()
 
+func expire_arrow(arrow: Arrow) -> void:
+	_removal_state = SlotState.EMPTY
+	remove_arrow(arrow)
+	_removal_state = SlotState.DISABLED
+
 func _on_arrow_removed(arrow: Arrow) -> void:
-	_remove_from_slots(arrow, SlotState.DISABLED)
+	_remove_from_slots(arrow, _removal_state)
 	if is_empty():
 		emptied.emit()
 
 func _on_filled() -> void:
 	for arrow in embedded:
+		if arrow == null: continue
 		enable_use(arrow)
 
 func _on_emptied() -> void:
