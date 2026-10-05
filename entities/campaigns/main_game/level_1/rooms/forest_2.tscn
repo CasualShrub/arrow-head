@@ -19,6 +19,9 @@
 [ext_resource type="PackedScene" uid="uid://clnucp0syjoj8" path="res://entities/props/trees/cut_down_tree.tscn" id="17_lining_cut_down_tree"]
 [ext_resource type="PackedScene" uid="uid://d2qg0xkhvuipc" path="res://entities/props/rocks/rock_06.tscn" id="18_lining_rock_06"]
 [ext_resource type="PackedScene" uid="uid://b111y7l4h8xau" path="res://entities/props/trees/stump.tscn" id="19_lining_stump"]
+[ext_resource type="PackedScene" path="res://entities/props/flowers/flower_01.tscn" id="fl0_flower_01"]
+[ext_resource type="PackedScene" path="res://entities/props/flowers/flower_02.tscn" id="fl1_flower_02"]
+[ext_resource type="PackedScene" path="res://entities/props/flowers/flower_cluster.tscn" id="fl2_flower_cluster"]
 
 [node name="Room2" unique_id=628704845 instance=ExtResource("1_room")]
 allow_ricochet = false
@@ -243,3 +246,17 @@ transform = Transform3D(-0.7847, 0, 0.9317, 0, 1.2181, 0, -0.9317, 0, -0.7847, -
 
 [node name="Lining23" parent="Walls" parent_id_path=PackedInt32Array(2117107331) index="64" unique_id=1016760037 instance=ExtResource("19_lining_stump")]
 transform = Transform3D(1.1645, 0, 1.2054, 0, 1.676, 0, -1.2054, 0, 1.1645, -7.2483, -0.2, -5.2544)
+
+[node name="Flowers" type="Node3D" parent="."]
+
+[node name="Flower011" parent="Flowers" instance=ExtResource("fl0_flower_01")]
+transform = Transform3D(0.5228, 0, 0.8525, 0, 1, 0, -0.8525, 0, 0.5228, 0.348, -0.17, -6.074)
+
+[node name="Flower012" parent="Flowers" instance=ExtResource("fl0_flower_01")]
+transform = Transform3D(-0.4062, 0, 0.9138, 0, 1, 0, -0.9138, 0, -0.4062, -0.331, -0.17, -10.509)
+
+[node name="FlowerCluster3" parent="Flowers" instance=ExtResource("fl2_flower_cluster")]
+transform = Transform3D(0.9934, 0, -0.1150, 0, 1, 0, 0.1150, 0, 0.9934, -4.527, -0.17, -3.128)
+
+[node name="Flower014" parent="Flowers" instance=ExtResource("fl0_flower_01")]
+transform = Transform3D(-0.9943, 0, 0.1062, 0, 1, 0, -0.1062, 0, -0.9943, 4.076, -0.17, -3.288)

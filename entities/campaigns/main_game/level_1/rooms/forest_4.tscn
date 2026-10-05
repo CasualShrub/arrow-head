@@ -19,6 +19,9 @@
 [ext_resource type="PackedScene" uid="uid://b5ulwds7q2mu7" path="res://entities/props/rocks/rock_11.tscn" id="19_lining_rock_11"]
 [ext_resource type="PackedScene" uid="uid://dpodljr37dshm" path="res://entities/props/fences/fence_normal/fence_normal.tscn" id="19_o4qsx"]
 [ext_resource type="PackedScene" uid="uid://b111y7l4h8xau" path="res://entities/props/trees/stump.tscn" id="20_lining_stump"]
+[ext_resource type="PackedScene" path="res://entities/props/flowers/flower_01.tscn" id="fl0_flower_01"]
+[ext_resource type="PackedScene" path="res://entities/props/flowers/flower_02.tscn" id="fl1_flower_02"]
+[ext_resource type="PackedScene" path="res://entities/props/flowers/flower_cluster.tscn" id="fl2_flower_cluster"]
 
 [node name="Room" unique_id=923960097 instance=ExtResource("1_room")]
 entrance_walk_distance = 3.2
@@ -388,3 +391,20 @@ is_circle = true
 
 [node name="fence_normal" parent="." index="14" unique_id=1564354922 instance=ExtResource("19_o4qsx")]
 transform = Transform3D(0.98953843, 0, 0.1442694, 0, 1, 0, -0.1442694, 0, 0.98953843, -3.441687, -0.25076663, -9.761488)
+
+[node name="Flowers" type="Node3D" parent="."]
+
+[node name="Flower011" parent="Flowers" instance=ExtResource("fl0_flower_01")]
+transform = Transform3D(0.9855, 0, 0.1699, 0, 1, 0, -0.1699, 0, 0.9855, 4.072, -0.17, -7.044)
+
+[node name="Flower012" parent="Flowers" instance=ExtResource("fl0_flower_01")]
+transform = Transform3D(-0.9997, 0, -0.0240, 0, 1, 0, 0.0240, 0, -0.9997, -2.780, -0.17, -12.964)
+
+[node name="FlowerCluster3" parent="Flowers" instance=ExtResource("fl2_flower_cluster")]
+transform = Transform3D(0.0201, 0, 0.9998, 0, 1, 0, -0.9998, 0, 0.0201, 2.114, -0.17, -13.978)
+
+[node name="Flower024" parent="Flowers" instance=ExtResource("fl1_flower_02")]
+transform = Transform3D(0.6818, 0, -0.7316, 0, 1, 0, 0.7316, 0, 0.6818, -3.470, -0.17, -7.257)
+
+[node name="Flower025" parent="Flowers" instance=ExtResource("fl1_flower_02")]
+transform = Transform3D(-0.8637, 0, 0.5040, 0, 1, 0, -0.5040, 0, -0.8637, 1.404, -0.17, -3.461)

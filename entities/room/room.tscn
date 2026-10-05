@@ -17,6 +17,7 @@
 [ext_resource type="PackedScene" path="res://entities/room/exit_area/exit_area.tscn" id="11_exit"]
 [ext_resource type="PackedScene" uid="uid://dxtind5e6f7g8" path="res://ui/exit_indicator/exit_indicator.tscn" id="12_exind"]
 [ext_resource type="PackedScene" path="res://entities/room/entrance_area/entrance_area.tscn" id="13_entr"]
+[ext_resource type="PackedScene" path="res://entities/props/leaf/falling_leaves.tscn" id="14_leaves"]
 
 [sub_resource type="Environment" id="Environment_ub6uw"]
 
@@ -55,6 +56,8 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.2, 0)
 mesh = SubResource("QuadMesh_8wtow")
 script = ExtResource("4_tk5fv")
 floor_tiles = Array[Texture2D]([ExtResource("4_t3ekj"), ExtResource("5_81v6v"), ExtResource("6_qg0iu"), ExtResource("7_rnxti"), ExtResource("8_xyui2"), ExtResource("9_bys4u")])
+
+[node name="FallingLeaves" parent="." instance=ExtResource("14_leaves")]
 
 [node name="Darken" type="CanvasLayer" parent="." unique_id=1976756876]
 layer = 10

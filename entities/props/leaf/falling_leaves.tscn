@@ -1,0 +1,13 @@
+[gd_scene format=3 uid="uid://bigpf7qqgk160"]
+
+[ext_resource type="Script" uid="uid://bshcysjd0qxos" path="res://entities/props/leaf/falling_leaves.gd" id="1_script"]
+[ext_resource type="Texture2D" uid="uid://fbnlywa5wl5c" path="res://entities/props/leaf/leaf1.PNG" id="2_l1"]
+[ext_resource type="Texture2D" uid="uid://cn0scedifgwke" path="res://entities/props/leaf/leaf1.2.PNG" id="3_l12"]
+[ext_resource type="Texture2D" uid="uid://wa3vklikvmk1" path="res://entities/props/leaf/leaf2.PNG" id="4_l2"]
+[ext_resource type="Texture2D" uid="uid://csnujhqpicb4j" path="res://entities/props/leaf/leaf2.1.PNG" id="5_l21"]
+[ext_resource type="Texture2D" uid="uid://xuoldjenws7b" path="res://entities/props/leaf/leaf3.PNG" id="6_l3"]
+[ext_resource type="Texture2D" uid="uid://be7322rway5eu" path="res://entities/props/leaf/leaf3.1.PNG" id="7_l31"]
+
+[node name="FallingLeaves" type="Node3D" unique_id=1467558948]
+script = ExtResource("1_script")
+textures = Array[Texture2D]([ExtResource("2_l1"), ExtResource("3_l12"), ExtResource("4_l2"), ExtResource("5_l21"), ExtResource("6_l3"), ExtResource("7_l31")])
