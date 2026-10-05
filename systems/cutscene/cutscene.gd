@@ -13,7 +13,6 @@ const WARM_SCENES: Array[String] = [
 @export var overlay_step_time: float = 0.08
 @export var overlay_loops: int = 3
 @export var prompt_visible_time: float = 3.0
-@export var skip_fade_time: float = 0.4
 
 var _steps: Array[Dictionary] = [
 	{"logo": true, "hold": 2.0, "fade_in": 0.8, "fade_out": 0.8},
@@ -197,9 +196,6 @@ func _fade_to(alpha: float, time: float) -> void:
 
 func _skip() -> void:
 	_skipping = true
-	_active_fade = _fade
-	_fade.color = Color.BLACK
-	await _fade_to(1.0, skip_fade_time)
 	_finish()
 
 func _finish() -> void:
