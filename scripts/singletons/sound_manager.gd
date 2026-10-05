@@ -76,7 +76,6 @@ func _ready() -> void:
 	_music = AudioStreamPlayer.new()
 	_music.bus = _MUSIC_BUS
 	add_child(_music)
-	_music.finished.connect(func(): _music.play())
 	play_music(DEFAULT_MUSIC)
 	
 	_pause_music = AudioStreamPlayer.new() #just for it to run in the background
