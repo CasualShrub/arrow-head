@@ -6,7 +6,7 @@ class_name TimeComponent
 @export var bar: BarComponent
 @export var activation_cost := 0.0
 @export var tick_regen := 0.075
-@export var tick_consumption := 0.1
+@export var tick_consumption := 0.2
 
 @export_category("slow")
 @export var slow_scale := 0.1
