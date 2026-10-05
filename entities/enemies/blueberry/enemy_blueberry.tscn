@@ -9,7 +9,7 @@
 [sub_resource type="Resource" id="Resource_mrlkp"]
 script = ExtResource("3_nt341")
 type = ExtResource("4_ul30w")
-count = 12
+count = 8
 spread = 270.0
 metadata/_custom_type_script = "uid://r4qbgt6it8lb"
 
