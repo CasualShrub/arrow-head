@@ -13,8 +13,8 @@ class_name FiringInstance
 @export var instance_delay: float = 0.0
 @export var max_instance_delay: float = 0.0
 @export_group("angle")
-@export_range(0.0, 360.0) var spread: float = 0.0
-@export_range(0.0, 360.0) var max_spread := 0.0
+@export_range(-360.0, 360.0) var spread: float = 0.0
+@export_range(-360.0, 360.0) var max_spread := 0.0
 @export_range(-180.0, 180.0) var offset: float = 0.0
 @export_range(-180.0, 180.0) var max_offset: float = -180.0
 @export var individual_offset := false

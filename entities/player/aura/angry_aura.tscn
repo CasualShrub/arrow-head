@@ -5,21 +5,6 @@
 [ext_resource type="Texture2D" uid="uid://cutvq0vrppf57" path="res://entities/player/aura/aura 2.PNG" id="3_a2"]
 [ext_resource type="Texture2D" uid="uid://ymj4w1exo8s4" path="res://entities/player/aura/aura 3.PNG" id="4_a3"]
 
-[ext_resource type="Shader" path="res://shaders/angry_vignette.gdshader" id="5_vig"]
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_vig"]
-shader = ExtResource("5_vig")
-shader_parameter/rage_tint = Color(1, 0.25, 0.15, 1)
-shader_parameter/intensity = 0.0
-shader_parameter/center_tint = 0.08
-shader_parameter/edge_tint = 0.4
-shader_parameter/edge_desaturate = 0.35
-shader_parameter/inner_radius = 0.5
-shader_parameter/outer_radius = 1.25
-shader_parameter/wobble_amount = 0.06
-shader_parameter/wobble_speed = 1.2
-shader_parameter/pulse_speed = 2.2
-shader_parameter/pulse_amount = 0.15
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_aura"]
 animations = [{
@@ -49,16 +34,3 @@ double_sided = false
 render_priority = 3
 sprite_frames = SubResource("SpriteFrames_aura")
 animation = &"flicker"
-
-[node name="Vignette" type="CanvasLayer" parent="."]
-layer = 5
-
-[node name="VignetteRect" type="ColorRect" parent="Vignette"]
-unique_name_in_owner = true
-material = SubResource("ShaderMaterial_vig")
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-mouse_filter = 2
