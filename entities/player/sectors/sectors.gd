@@ -58,6 +58,12 @@ var _disabled := 0:
 		_disabled = value
 
 func _ready() -> void:
+	mat = mat.duplicate()
+	_display.material_override = mat
+	_highlighted = 0
+	_usable = 0
+	_disabled = 0
+	mat.set_shader_parameter("sector_count", sector_count)
 	_update_centering()
 	if Engine.is_editor_hint(): return
 	DarkenManager.register_highlighted(self)
