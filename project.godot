@@ -25,7 +25,6 @@ DarkenManager="*uid://32eh6c8miqqw"
 ScreenEffectManager="*res://scripts/singletons/screen_effect_manager.gd"
 ScreenShaderManager="*res://scripts/singletons/screen_shader_manager.gd"
 DebugManager="*uid://dbiurbp18km0n"
-ControllerManager="*res://scripts/singletons/controller_manager.gd"
 
 [display]
 
