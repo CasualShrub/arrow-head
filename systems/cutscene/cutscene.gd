@@ -77,7 +77,7 @@ func _warm() -> void:
 	GameManager.scenes_warmed = true
 
 func _unhandled_input(event: InputEvent) -> void:
-	if _skipping or not event.is_action_pressed("ui_cancel"):
+	if _skipping or not _is_skip_input(event):
 		return
 	get_viewport().set_input_as_handled()
 	_skip_presses += 1
@@ -91,6 +91,15 @@ func _unhandled_input(event: InputEvent) -> void:
 	_prompt_tween.tween_interval(prompt_visible_time)
 	_prompt_tween.tween_property(_skip_prompt, "modulate:a", 0.0, 0.4)
 	_prompt_tween.tween_callback(func(): _skip_presses = 0)
+
+func _is_skip_input(event: InputEvent) -> bool:
+	if event.is_action_pressed("ui_cancel"):
+		return true
+	var key := event as InputEventKey
+	if key and key.pressed and not key.echo and key.physical_keycode == KEY_SPACE:
+		return true
+	var click := event as InputEventMouseButton
+	return click != null and click.pressed and click.button_index == MOUSE_BUTTON_LEFT
 
 func _load_frame(frame_name: String) -> Texture2D:
 	if not _textures.has(frame_name):
