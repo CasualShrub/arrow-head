@@ -19,8 +19,9 @@
 [ext_resource type="PackedScene" uid="uid://c7t3chm2dtpwh" path="res://entities/props/tutorial/tree_ground_charr.tscn" id="20_mxt2p"]
 [ext_resource type="PackedScene" uid="uid://bxgdwn6jomk30" path="res://arrow_vertical.tscn" id="21_8pwrt"]
 [ext_resource type="PackedScene" uid="uid://cdrixa0pjr1l6" path="res://entities/props/tutorial/tree_smoke.tscn" id="22_smoke"]
+[ext_resource type="PackedScene" path="res://entities/props/tutorial/kill_him_marker.tscn" id="23_killhim"]
 
-[node name="Room" unique_id=84024719 instance=ExtResource("1_muapo")]
+[node name="Room2" unique_id=84024719 instance=ExtResource("1_muapo")]
 
 [node name="BananaDummy" parent="Enemies" parent_id_path=PackedInt32Array(1185931971) index="0" unique_id=1390955125 instance=ExtResource("16_dummy")]
 transform = Transform3D(-4.3711385e-08, 0, -0.99999994, 0, 1, 0, 0.99999994, 0, -4.3711385e-08, -5.7670846, 0.1, -9.544085)
@@ -313,3 +314,7 @@ transform = Transform3D(0.5294411, -0.42110005, 0.73645544, 0, 0.86810696, 0.496
 [node name="TreeSmoke" parent="." index="33" unique_id=1969328668 instance=ExtResource("22_smoke")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.2181726, 3.5379782, -0.35315412)
 scale_amount_max = 3.0
+
+[node name="KillHimMarker" parent="." index="34" unique_id=1427739185 node_paths=PackedStringArray("target") instance=ExtResource("23_killhim")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.7670846, -0.18, -9.544085)
+target = NodePath("../Enemies/BananaDummy")
