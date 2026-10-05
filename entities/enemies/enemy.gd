@@ -148,8 +148,6 @@ func _execute_instance(
 	count: int,
 	i: int
 ) -> void:
-	if instance.skipped_shots.has(i):
-		return
 	if instance.individual_offset:
 		offset = _get_rand(instance.offset, instance.max_offset)
 	

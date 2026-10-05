@@ -321,7 +321,7 @@ func _refresh_eyes_state() -> void:
 
 func _start_angry_effect() -> void:
 	if _angry_handle or not angry_effect: return
-	_angry_handle = ScreenEffectManager.play(angry_effect)
+	_angry_handle = ScreenEffectManager.play(angry_effect, self)
 
 func _stop_angry_effect(instant := false) -> void:
 	ScreenEffectManager.stop(_angry_handle, instant)

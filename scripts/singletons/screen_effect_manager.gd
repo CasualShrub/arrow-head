@@ -5,7 +5,7 @@ var _handles: Array[ScreenEffectHandle] = []
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
 
-func play(effect: ScreenEffect) -> ScreenEffectHandle:
+func play(effect: ScreenEffect, bound_to: Node = null) -> ScreenEffectHandle:
 	var handle := ScreenEffectHandle.new()
 	handle.effect = effect
 	handle.material = ShaderMaterial.new()
@@ -26,7 +26,13 @@ func play(effect: ScreenEffect) -> ScreenEffectHandle:
 
 	_handles.append(handle)
 	_fade(handle, 1.0, effect.fade_in_time)
+	if bound_to:
+		bound_to.tree_exiting.connect(_stop_immediately.bind(handle), CONNECT_ONE_SHOT)
 	return handle
+
+func stop_all() -> void:
+	for handle in _handles.duplicate():
+		_stop_immediately(handle)
 
 func stop(handle: ScreenEffectHandle, instant := false) -> void:
 	if handle == null or not _handles.has(handle):
@@ -37,6 +43,13 @@ func stop(handle: ScreenEffectHandle, instant := false) -> void:
 		return
 	_fade(handle, 0.0, handle.effect.fade_out_time)
 	handle.tween.tween_callback(handle.layer.queue_free)
+
+func _stop_immediately(handle: ScreenEffectHandle) -> void:
+	_handles.erase(handle)
+	if handle.tween:
+		handle.tween.kill()
+	if is_instance_valid(handle.layer):
+		handle.layer.queue_free()
 
 func set_parameter(handle: ScreenEffectHandle, param: StringName, value: Variant) -> void:
 	if handle == null or not _handles.has(handle):

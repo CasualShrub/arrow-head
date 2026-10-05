@@ -13,7 +13,7 @@ func apply(target: Player) -> void:
 	super(target)
 	target.speed_multiplier = speed_multiplier
 	if screen_effect:
-		_effect_handle = ScreenEffectManager.play(screen_effect)
+		_effect_handle = ScreenEffectManager.play(screen_effect, target)
 
 func remove() -> void:
 	if is_instance_valid(owner):
