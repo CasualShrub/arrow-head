@@ -42,7 +42,8 @@ func reveal() -> void:
 	if not _covered: return
 	_covered = false
 	await _slide(_rect.position, _offscreen_offset())
-	_rect.visible = false
+	if _progress >= 1.0:
+		_rect.visible = false
 
 func _slide(from: Vector2, to: Vector2) -> void:
 	if _progress < 1.0:

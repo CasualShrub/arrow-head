@@ -10,6 +10,7 @@ signal level_unloading(level: Level)
 
 var main_menu_intro_played := false
 var scenes_warmed := false
+var _restarting := false
 
 var current_campaign: CampaignState
 var current_level: Level
@@ -61,9 +62,15 @@ func unload_level() -> void:
 	current_level = null
 
 func restart_room() -> void:
+	if _restarting: return
+	_restarting = true
+	await level_wipe_transition.cover(Vector2.RIGHT)
+	_restarting = false
 	DarkenManager.set_darken(0)
 	if current_level:
 		current_level.reload_room()
+	else:
+		level_wipe_transition.reveal()
 
 func _on_level_ended(exit_direction: Vector3) -> void:
 	unload_level()
