@@ -44,7 +44,9 @@ class_name Player
 		dash = value
 		update_configuration_warnings()
 
+@export var angry_effect: ScreenEffect = preload("res://systems/screen_effect/angry_vignette.tres")
 @export var speed := 6.0
+var speed_multiplier := 1.0
 @export var dash_cost := 0.0
 ## how far arrows dig into apples skin
 @export var arrow_dig_depth := 0.15
@@ -69,6 +71,7 @@ class_name Player
 @onready var _sectors: Sectors = %Sectors
 @onready var _chunks: CPUParticles3D = %AppleChunks
 @onready var _aura: AngryAura = %Aura
+@onready var _status: StatusComponent = $StatusComponent
 
 signal force_walk_finished()
 
@@ -78,6 +81,8 @@ var _dash_charges := 0
 var _dash_arrows: Array[Arrow] = []
 var _force_walk_direction := Vector3.ZERO
 var _force_walk_target: Variant = null
+var _status_sources: Array[Arrow] = []
+var _angry_handle: ScreenEffectHandle
 
 func _ready() -> void:
 	if Engine.is_editor_hint():
@@ -87,6 +92,7 @@ func _ready() -> void:
 	ScreenShaderManager.register_unfiltered(self)
 	_sectors.centered = arrows.centered
 	_update_collider()
+	arrows.arrow_removed.connect(_on_arrow_removed)
 
 func _process(delta: float) -> void:
 	if Engine.is_editor_hint(): return
@@ -178,6 +184,27 @@ func _update_collider() -> void:
 		#s.radius = hurt_radius
 		#_collider.shape = s
 
+func _apply_arrow_effects(arrow: Arrow) -> void:
+	if arrow.embedded_lifetime >= 0.0:
+		arrow.expired.connect(arrows.expire_arrow.bind(arrow), CONNECT_ONE_SHOT)
+		arrow.blinked.connect(_on_embedded_arrow_blinked.bind(arrow))
+		arrow.begin_embedded_decay()
+	if arrow.status:
+		_status_sources.append(arrow)
+		_status.add_status(arrow.status)
+
+func _on_embedded_arrow_blinked(is_shown: bool, arrow: Arrow) -> void:
+	for slot in arrows.get_embedded_slots(arrow):
+		_sectors.set_highlight_shown(slot, is_shown)
+
+func _on_arrow_removed(arrow: Arrow) -> void:
+	if not _status_sources.has(arrow): return
+	_status_sources.erase(arrow)
+	for source in _status_sources:
+		if source.status.get_script() == arrow.status.get_script():
+			return
+	_status.remove_status(arrow.status)
+
 func get_camera() -> PlayerCamera:
 	return _camera
 
@@ -187,8 +214,15 @@ func get_hit(arrow: Arrow) -> void:
 		return
 	_chunks.emitting = true
 	_camera.shake()
-	if arrows.try_add_arrow(arrow):
-		arrow.embed(arrow_dig_depth)
+	if arrow.instakill:
+		arrow.deactivate()
+		health.die()
+	elif arrows.try_add_arrow(arrow):
+		var dig := arrow_dig_depth
+		if arrow.dig_depth >= 0.0:
+			dig = arrow.dig_depth
+		arrow.embed(dig)
+		_apply_arrow_effects(arrow)
 		var slots := arrows.get_embedded_slots(arrow)
 		var sector := slots[0] if not slots.is_empty() else 0
 		SoundManager.play("Q%d_fill" % clampi(sector + 1, 1, 4))
@@ -222,7 +256,7 @@ func face(target: Vector3) -> void:
 	_eyes.make_eyes_look_at(target)
 
 func _move(dir: Vector2, _dt: float) -> void:
-	var v = dir * speed
+	var v = dir * speed * speed_multiplier
 	velocity.x = v.x
 	velocity.z = v.y
 	velocity.y = 0
@@ -279,11 +313,22 @@ func _refresh_eyes_state() -> void:
 	if arrows.can_use():
 		_eyes.set_eyes_state(&"angry")
 		_aura.activate()
+		_start_angry_effect()
 	else:
 		_eyes.set_eyes_state(&"default")
 		_aura.deactivate()
+		_stop_angry_effect()
+
+func _start_angry_effect() -> void:
+	if _angry_handle or not angry_effect: return
+	_angry_handle = ScreenEffectManager.play(angry_effect)
+
+func _stop_angry_effect(instant := false) -> void:
+	ScreenEffectManager.stop(_angry_handle, instant)
+	_angry_handle = null
 
 func _on_died() -> void:
+	_status.clear()
 	arrows.clear_arrows()
 	time.resume()
 	
@@ -292,6 +337,7 @@ func _on_died() -> void:
 	
 	_eyes.hide()
 	_aura.deactivate_instantly()
+	_stop_angry_effect(true)
 	_status_sprite.hide()
 	_sectors.hide()
 
