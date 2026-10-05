@@ -6,17 +6,14 @@
 [sub_resource type="BoxShape3D" id="BoxShape3D_ub6uw"]
 size = Vector3(0.10839844, 0.88946533, 0.99487305)
 
-[node name="fence_normal" unique_id=1564354922 instance=ExtResource("1_sdbsp")]
-
-[node name="fence2" parent="." index="0" unique_id=2087557718]
-transform = Transform3D(0.4, 0, 0, 0, 0.4, 0, 0, 0, 0.4, 0, 0, 0)
-
-[node name="StaticBody3D" type="StaticBody3D" parent="." index="1" unique_id=2143998143]
-script = ExtResource("shake_script")
-shake_target = NodePath("../fence2")
+[node name="fence_normal" type="StaticBody3D"]
 collision_layer = 4
 collision_mask = 9
+script = ExtResource("shake_script")
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="StaticBody3D" index="0" unique_id=1668029884]
+[node name="Mesh" parent="." instance=ExtResource("1_sdbsp")]
+transform = Transform3D(0.4, 0, 0, 0, 0.4, 0, 0, 0, 0.4, 0, 0, 0)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0014648438, 0.396698, 0.021606445)
 shape = SubResource("BoxShape3D_ub6uw")
