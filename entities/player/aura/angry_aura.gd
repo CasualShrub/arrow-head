@@ -4,6 +4,7 @@ class_name AngryAura
 @export var fade_time := 0.2
 
 @onready var _arc: AnimatedSprite3D = %ArcA
+@onready var _vignette: ColorRect = %VignetteRect
 
 var _active := false
 var _tween: Tween
@@ -42,3 +43,4 @@ func _fade_to(alpha: float) -> void:
 
 func _set_alpha(alpha: float) -> void:
 	_arc.modulate.a = alpha
+	(_vignette.material as ShaderMaterial).set_shader_parameter(&"intensity", alpha)
