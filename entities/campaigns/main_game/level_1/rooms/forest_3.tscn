@@ -30,16 +30,60 @@ allow_ricochet = false
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8.307211, 0, 4.0411587)
 
 [node name="Enemy" parent="Enemies" parent_id_path=PackedInt32Array(1185931971) index="0" unique_id=752436489 instance=ExtResource("4_rotten")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.6, 0, -1.5)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.93858, 0, -0.24462354)
+combat_speed = 1.0
+combat_retreat_speed = null
+combat_acceleration = null
+orbit_radius = null
+orbit_radius_tolerance = null
+orbit_speed = null
+orbit_flip_interval_min = null
+orbit_flip_interval_max = null
+orbit_spacing_angle = null
+separation_radius = null
+wall_probe_distance = null
 
 [node name="Enemy2" parent="Enemies" parent_id_path=PackedInt32Array(1185931971) index="1" unique_id=1271969931 instance=ExtResource("3_banana")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.6, 0, -6.7)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.6, 0, -5.2719088)
+combat_speed = 1.0
+combat_retreat_speed = null
+combat_acceleration = null
+orbit_radius = null
+orbit_radius_tolerance = null
+orbit_speed = null
+orbit_flip_interval_min = null
+orbit_flip_interval_max = null
+orbit_spacing_angle = null
+separation_radius = null
+wall_probe_distance = null
 
 [node name="Enemy3" parent="Enemies" parent_id_path=PackedInt32Array(1185931971) index="2" unique_id=361434566 instance=ExtResource("5_unripe")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8.593922, 0, -8.272512)
+combat_speed = 1.0
+combat_retreat_speed = null
+combat_acceleration = null
+orbit_radius = null
+orbit_radius_tolerance = null
+orbit_speed = null
+orbit_flip_interval_min = null
+orbit_flip_interval_max = null
+orbit_spacing_angle = null
+separation_radius = null
+wall_probe_distance = null
 
 [node name="Enemy4" parent="Enemies" parent_id_path=PackedInt32Array(1185931971) index="3" unique_id=1799901060 instance=ExtResource("3_banana")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 13.2, 0, -3.9)
+combat_speed = 1.0
+combat_retreat_speed = null
+combat_acceleration = null
+orbit_radius = null
+orbit_radius_tolerance = null
+orbit_speed = null
+orbit_flip_interval_min = null
+orbit_flip_interval_max = null
+orbit_spacing_angle = null
+separation_radius = null
+wall_probe_distance = null
 
 [node name="fence_normal" parent="Enemies" parent_id_path=PackedInt32Array(1185931971) index="4" unique_id=1564354922 instance=ExtResource("5_k6hdl")]
 transform = Transform3D(0.74926054, 0, -0.6622754, 0, 1, 0, 0.6622754, 0, 0.74926054, 2.1438172, -0.20701969, -7.4516754)
@@ -225,10 +269,10 @@ transform = Transform3D(0.479019, 0, 0.861523, 0, 0.985739, 0, -0.861523, 0, 0.4
 transform = Transform3D(-0.8734711, 0, -0.872534, 0, 1.234612, 0, 0.872534, 0, -0.8734711, 0.4314242, -0.4, -6.3719773)
 
 [node name="Tree71" parent="Walls" parent_id_path=PackedInt32Array(2117107331) index="48" unique_id=1653728944 instance=ExtResource("11_tree_03")]
-transform = Transform3D(0.771801, 0, -0.614954, 0, 0.986836, 0, 0.614954, 0, 0.771801, 14.9656, -0.444, -6.0104)
+transform = Transform3D(0.771801, 0, -0.614954, 0, 0.986836, 0, 0.614954, 0, 0.771801, 14.995634, -0.23128831, -5.7046347)
 
 [node name="CutDownTree01" parent="Walls" parent_id_path=PackedInt32Array(2117107331) index="49" unique_id=2108634088 instance=ExtResource("6_log")]
-transform = Transform3D(-1.386906, 0, -0.7978036, 0, 1.6, 0, 0.7978036, 0, -1.386906, 8.703245, -0.22, -3.3584)
+transform = Transform3D(-1.386906, 0, -0.7978036, 0, 1.6, 0, 0.7978036, 0, -1.386906, 8.703245, -0.45664072, -3.3584)
 
 [node name="Rock19" parent="Walls" parent_id_path=PackedInt32Array(2117107331) index="50" unique_id=726127774 instance=ExtResource("8_rock_03")]
 transform = Transform3D(-0.07382321, 0, 1.344434, 0, 1.34646, 0, -1.344434, 0, -0.07382321, 4.0373864, -0.4, 2.6622767)
@@ -240,10 +284,10 @@ transform = Transform3D(0.4377878, 0, 1.09327, 0, 1.177666, 0, -1.09327, 0, 0.43
 transform = Transform3D(-1.107702, 0, -0.9682014, 0, 1.471196, 0, 0.9682014, 0, -1.107702, 14.9098, -0.08, 1.1005)
 
 [node name="Rock21" parent="Walls" parent_id_path=PackedInt32Array(2117107331) index="53" unique_id=1588401628 instance=ExtResource("16_lining_rock_09")]
-transform = Transform3D(-1.100913, 0, -0.3239038, 0, 1.147573, 0, 0.3239038, 0, -1.100913, 13.1891, -0.08, 2.2116)
+transform = Transform3D(-1.100913, 0, -0.3239038, 0, 1.147573, 0, 0.3239038, 0, -1.100913, 13.85188, -0.08, 2.2116)
 
 [node name="Tree73" parent="Walls" parent_id_path=PackedInt32Array(2117107331) index="54" unique_id=961883140 instance=ExtResource("18_lining_stump")]
-transform = Transform3D(-1.019615, 0, 1.338419, 0, 1.682552, 0, -1.338419, 0, -1.019615, 11.4941, -0.05, 2.342)
+transform = Transform3D(-1.019615, 0, 1.338419, 0, 1.682552, 0, -1.338419, 0, -1.019615, 12.045581, -0.2887233, 3.250331)
 
 [node name="Rock22" parent="Walls" parent_id_path=PackedInt32Array(2117107331) index="55" unique_id=1903982513 instance=ExtResource("14_lining_rock_06")]
 transform = Transform3D(-0.1989, 0, 0.884, 0, 0.9061, 0, -0.884, 0, -0.1989, 10.4242, -0.08, 2.9172)
@@ -303,10 +347,10 @@ transform = Transform3D(-1.0409, 0, 0.6985999, 0, 1.2536, 0, -0.6985999, 0, -1.0
 transform = Transform3D(1.042591, 0, -1.050891, 0, 1.480326, 0, 1.050891, 0, 1.042591, 14.636292, -0.05, -7.499189)
 
 [node name="Tree84" parent="Walls" parent_id_path=PackedInt32Array(2117107331) index="74" unique_id=1962907262 instance=ExtResource("6_log")]
-transform = Transform3D(-0.1916023, 0, 1.195514, 0, 1.210771, 0, -1.195514, 0, -0.1916023, 13.8714, -0.1, -5.9947)
+transform = Transform3D(-0.1916023, 0, 1.195514, 0, 1.210771, 0, -1.195514, 0, -0.1916023, 14.0697775, -0.1, -6.1523705)
 
 [node name="Rock31" parent="Walls" parent_id_path=PackedInt32Array(2117107331) index="75" unique_id=481115565 instance=ExtResource("14_lining_rock_06")]
-transform = Transform3D(-0.1925982, 0, -1.277588, 0, 1.292024, 0, 1.277588, 0, -0.1925982, 15.1209, -0.08, -4.4971)
+transform = Transform3D(-0.1925982, 0, -1.277588, 0, 1.292024, 0, 1.277588, 0, -0.1925982, 16.346191, -0.08, -5.4031925)
 
 [node name="OutskirtFiller" parent="." index="13" unique_id=1811631420 instance=ExtResource("2_outskirt")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8, 1.095, -3.5)
