@@ -398,7 +398,7 @@ transform = Transform3D(0.468824, 0, -0.947841, 0, 1.18482, 0, 0.947841, 0, 0.46
 transform = Transform3D(0.732337, 0, 0.750382, 0, 1.08389, 0, -0.750382, 0, 0.732337, -7.6372, -0.4, -5.106)
 
 [node name="Tree81" parent="Walls" parent_id_path=PackedInt32Array(2117107331) index="120" unique_id=1565099746 instance=ExtResource("20_stump")]
-transform = Transform3D(0.54355, 0, 1.29018, 0, 1.5, 0, -1.29018, 0, 0.54355, -6.9583, -0.2, -5.492)
+transform = Transform3D(0.5734493, 0.011155012, 1.2771292, 0.0019080434, 1.4999411, -0.012269364, -1.2771701, 0.007249459, 0.5734126, -6.723144, -0.2, -5.1347094)
 
 [node name="Tree82" parent="Walls" parent_id_path=PackedInt32Array(2117107331) index="121" unique_id=1864876926 instance=ExtResource("13_tree_04")]
 transform = Transform3D(0.848627, 0, -0.642372, 0, 1.03292, 0, 0.642372, 0, 0.848627, -9.105981, -0.4, 3.2833743)
@@ -489,16 +489,16 @@ size = Vector3(0.2, 2.2, 1.8)
 material = ExtResource("23_wood")
 
 [node name="fence_normal1" parent="." index="16" unique_id=1328550734 instance=ExtResource("21_fence")]
-transform = Transform3D(0.955336, 0, 0.29552, 0, 1, 0, -0.29552, 0, 0.955336, -6.50684, -0.2508, 0.56)
+transform = Transform3D(0.955336, 0, 0.29552, 0, 1, 0, -0.29552, 0, 0.955336, -4.947611, -0.2508, 1.4745958)
 
 [node name="fence_normal4" parent="." index="17" unique_id=1564354922 instance=ExtResource("21_fence")]
-transform = Transform3D(0.99693006, 0, 0.07829194, 0, 1, 0, -0.07829194, 0, 0.99693006, -6.3930864, -0.2508, 1.6217864)
+transform = Transform3D(0.9338063, 0, 0.35777783, 0, 1, 0, -0.35777783, 0, 0.9338063, -3.5035262, -0.2508, 2.705631)
 
 [node name="fence_normal2" parent="." index="18" unique_id=835841403 instance=ExtResource("21_fence")]
-transform = Transform3D(0.98608255, 0, -0.16625607, 0, 1, 0, 0.16625607, 0, 0.98608255, -6.480733, -0.2508, -0.5191418)
+transform = Transform3D(0.98608255, 0, -0.16625607, 0, 1, 0, 0.16625607, 0, 0.98608255, -6.753154, -0.2508, -0.5191418)
 
 [node name="fence_normal3" parent="." index="19" unique_id=270417613 instance=ExtResource("21_fence")]
-transform = Transform3D(0.9873638, 0, 0.15846974, 0, 1, 0, -0.15846974, 0, 0.9873638, -6.480733, -0.2508, -1.5316488)
+transform = Transform3D(0.962449, 0, -0.27146286, 0, 1, 0, 0.27146286, 0, 0.962449, -3.901906, -0.2508, -1.5316488)
 
 [node name="Flowers" type="Node3D" parent="." index="20" unique_id=1480669166]
 
