@@ -9,6 +9,7 @@ signal level_loaded(level: Level)
 signal level_unloading(level: Level)
 
 var main_menu_intro_played := false
+var scenes_warmed := false
 
 var current_campaign: CampaignState
 var current_level: Level

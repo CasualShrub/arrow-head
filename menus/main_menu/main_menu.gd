@@ -57,21 +57,8 @@ func _ready() -> void:
 		GameManager.main_menu_intro_played = true
 		_prepare_intro()
 
-	var viewport = SubViewport.new()
-	viewport.size = Vector2i(1, 1)  # tiny, barely renders
-	viewport.render_target_update_mode = SubViewport.UPDATE_ALWAYS
-	add_child(viewport)
-	
-	for scene_path in scenes_to_warm:
-		var instance = load(scene_path).instantiate()
-		viewport.add_child(instance)
-	
-	# Wait 2 frames for shaders to compile
-	await get_tree().process_frame
-	await get_tree().process_frame
-	
-	viewport.queue_free()
-	
+	if not GameManager.scenes_warmed:
+		await _warm_scenes()
 
 	SoundManager.play_music("TITLE_SCREEN")
 	for key in _labels:
@@ -86,6 +73,22 @@ func _ready() -> void:
 		_play_intro()
 	else:
 		_show_menu_instant()
+
+func _warm_scenes() -> void:
+	var viewport = SubViewport.new()
+	viewport.size = Vector2i(1, 1)  # tiny, barely renders
+	viewport.render_target_update_mode = SubViewport.UPDATE_ALWAYS
+	add_child(viewport)
+
+	for scene_path in scenes_to_warm:
+		var instance = load(scene_path).instantiate()
+		viewport.add_child(instance)
+
+	await get_tree().process_frame
+	await get_tree().process_frame
+
+	viewport.queue_free()
+	GameManager.scenes_warmed = true
 
 func _prepare_intro() -> void:
 	_title.visible = false
