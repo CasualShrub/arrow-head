@@ -39,6 +39,8 @@ var sector_size: float:
 		return TAU / sector_count
 
 ## arrow is occupying the slot
+var _blanked := 0
+
 var _highlighted := 0:
 	set(value):
 		if not mat: return
@@ -80,8 +82,18 @@ func get_state(sector: int) -> SectorState:
 	else:
 		return SectorState.NONE
 
+func set_highlight_shown(sector: int, shown: bool) -> void:
+	var bit := 1 << sector
+	if shown and _blanked & bit:
+		_blanked &= ~bit
+		_highlighted |= bit
+	elif not shown and _highlighted & bit:
+		_blanked |= bit
+		_highlighted &= ~bit
+
 func set_state(sector: int, state: SectorState) -> void:
 	var bit := 1 << sector
+	_blanked &= ~bit
 	if state == SectorState.HIGHLIGHTED:
 		if _highlighted & bit: return
 		print("state highlighted")
