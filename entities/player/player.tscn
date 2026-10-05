@@ -209,7 +209,7 @@ sprite_frames = ExtResource("8_yj68g")
 unique_name_in_owner = true
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -3.3581575e-11, 0.0007682565)
 visible = false
-render_priority = 11
+render_priority = 14
 sprite_frames = SubResource("SpriteFrames_jej6c")
 animation = &"fire"
 
