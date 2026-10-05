@@ -118,6 +118,7 @@ func apply_simulation(sim: ArrowSimulation = simulation) -> void:
 	if not sim.alive or max_bounces_reached or sim.is_lifetime_over():
 		deactivate()
 		return
+	_notify_stuck(sim)
 	if not sim.enabled:
 		return
 	for i in range(sim.get_collision_count()):
@@ -129,6 +130,14 @@ func apply_simulation(sim: ArrowSimulation = simulation) -> void:
 		collider.collide(self, normal, point)
 		collided.emit(collider, normal, point)
 	sim.clear_collisions()
+
+func _notify_stuck(sim: ArrowSimulation) -> void:
+	if not sim.state.get(&"wall_stuck", false): return
+	if sim.state.get(&"stuck_notified", false): return
+	sim.state[&"stuck_notified"] = true
+	var collider = sim.state.get(&"stuck_collider")
+	if is_instance_valid(collider) and collider.has_method(&"on_arrow_stuck"):
+		collider.on_arrow_stuck(sim.facing)
 
 func _on_collided(_sim: ArrowSimulation, _collider: ArrowCollider) -> void:
 	pass
@@ -191,6 +200,7 @@ func simulate(
 				sim.facing = incoming_facing
 				sim.lifetime_remaining = wall_stick_decay_time
 				sim.state[&"wall_stuck"] = true
+				sim.state[&"stuck_collider"] = collider
 				sim.disable()
 			else:
 				sim.kill()

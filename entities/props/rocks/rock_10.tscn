@@ -1,5 +1,6 @@
 [gd_scene format=3 uid="uid://bf8vvbmp8h044"]
 
+[ext_resource type="Script" path="res://entities/props/shake_on_hit_prop.gd" id="shake_script"]
 [ext_resource type="ArrayMesh" path="res://entities/props/rocks/meshes/rock_10_mesh.res" id="1_mesh"]
 
 [sub_resource type="ConcavePolygonShape3D" id="ConcavePolygonShape3D_col"]
@@ -8,6 +9,7 @@ data = PackedVector3Array(-0.0211, 0, 0.15799999, -0.1428, 0, 0.2638, -0.1451, 0
 [node name="Rock10" type="StaticBody3D"]
 collision_layer = 4
 collision_mask = 9
+script = ExtResource("shake_script")
 
 [node name="Mesh" type="MeshInstance3D" parent="."]
 mesh = ExtResource("1_mesh")
