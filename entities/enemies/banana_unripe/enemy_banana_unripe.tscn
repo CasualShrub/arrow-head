@@ -4,11 +4,11 @@
 [ext_resource type="Script" uid="uid://d04k7pxjd2u24" path="res://systems/arrow/firing_data/arrow_pattern.gd" id="2_1j3h3"]
 [ext_resource type="SpriteFrames" uid="uid://dq7pl0h6fmit4" path="res://entities/enemies/banana_unripe/banana_unripe_frames.tres" id="2_o72bl"]
 [ext_resource type="Script" uid="uid://r4qbgt6it8lb" path="res://systems/arrow/firing_data/firing_instance.gd" id="3_77x10"]
-[ext_resource type="PackedScene" uid="uid://5ljerioubp6c" path="res://entities/arrows/ice/arrow_frost.tscn" id="4_8hwpc"]
+[ext_resource type="PackedScene" uid="uid://bxgfy1nvmlb7v" path="res://entities/arrows/arrow.tscn" id="4_00x7q"]
 
 [sub_resource type="Resource" id="Resource_3bk7b"]
 script = ExtResource("3_77x10")
-type = ExtResource("4_8hwpc")
+type = ExtResource("4_00x7q")
 starting_delay = 0.1
 count = 5
 spread = 57.2958
@@ -23,7 +23,6 @@ metadata/_custom_type_script = "uid://d04k7pxjd2u24"
 [node name="Enemy" unique_id=71488470 instance=ExtResource("1_7ifjg")]
 patterns = Array[ExtResource("2_1j3h3")]([SubResource("Resource_ej4yd")])
 nock_points = Array[Vector2]([Vector2(0.1029, 0.2744), Vector2(0.1029, 0.4998), Vector2(0.1029, 0.7154)])
-alwayds_alert = false
 
-[node name="Sprite" parent="." index="5" unique_id=1091610106]
+[node name="Sprite" parent="VisualRoot" parent_id_path=PackedInt32Array(2109639598) index="0" unique_id=1091610106]
 sprite_frames = ExtResource("2_o72bl")
