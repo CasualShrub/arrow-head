@@ -14,8 +14,8 @@ class_name Enemy
 		return patrol.path if patrol else null
 
 @export var has_intro := false
-@export var stationary := false #ignores other movement patterns, stands still
-@export var fixed_facing := false #will just face whatever is in editor. never looks at player/rotates
+@export var stationary := false
+@export var fixed_facing := false
 @export_group("firing")
 @export var patterns: Array[ArrowPattern] = []
 @export var fire_release_frame := 3
@@ -92,7 +92,9 @@ func _ready() -> void:
 func is_dead() -> bool:
 	return health.is_dead()
 
-func _parse_movement_pattern(pattern: Dictionary[float, Vector2]) -> Dictionary[float, Vector3]:
+func _parse_movement_pattern(
+	pattern: Dictionary[float, Vector2]
+) -> Dictionary[float, Vector3]:
 	var parsed := {}
 	var curr_tick = Time.get_ticks_msec()
 	for t in pattern:
@@ -107,7 +109,11 @@ func _start_movement_pattern(pattern: Dictionary[float, Vector2]) -> void:
 	_movement_pattern = _parse_movement_pattern(pattern)
 	_movement_pattern_start = Time.get_ticks_msec()
 
-func _get_arrow_angle(offset: float, spread: float, count: int, i: int) -> float:
+func _get_arrow_angle(
+	offset: float,
+	spread: float,
+	count: int,
+	i: int) -> float:
 	if count <= 1:
 		return offset
 	var i_spread := -(spread / 2) + (i as float / (count - 1) as float * spread)
@@ -124,7 +130,13 @@ func _get_rand(min_val: Variant, max_val: Variant) -> Variant:
 	else:
 		return randf_range(min_val, max_val)
 
-func _execute_instance(instance: FiringInstance, offset: float, spread: float, count: int, i: int) -> void:
+func _execute_instance(
+	instance: FiringInstance,
+	offset: float,
+	spread: float,
+	count: int,
+	i: int
+) -> void:
 	if instance.individual_offset:
 		offset = _get_rand(instance.offset, instance.max_offset)
 	
@@ -150,15 +162,14 @@ func _on_instance_timer_timeout(timer: Timer,
 
 func _execute_volley(instance: FiringInstance):
 	var count: int = _get_rand(instance.count, instance.max_count)
-	var spread: float = _get_rand(instance.spread, instance.max_spread)
-	var offset: float = _get_rand(instance.offset, instance.max_offset)
+	var spread := deg_to_rad(_get_rand(instance.spread, instance.max_spread))
+	var offset := deg_to_rad(_get_rand(instance.offset, instance.max_offset))
 	if instance.instance_delay == 0.0 and instance.max_instance_delay == 0.0:
-			for i in range(count):
-				_execute_instance(instance, offset, spread, count, i)
+		for i in range(count):
+			_execute_instance(instance, offset, spread, count, i)
 	else:
 		var instance_deb := Timer.new()
 		instance_deb.set_meta("fired", 0)
-		instance_deb.autostart = true
 		instance_deb.wait_time = instance.instance_delay
 		instance_deb.one_shot = false
 		instance_deb.timeout.connect(_on_instance_timer_timeout.bind(
@@ -169,6 +180,15 @@ func _execute_volley(instance: FiringInstance):
 			count
 		))
 		_inst_timers.add_child(instance_deb)
+		# no timeout on first instance
+		_on_instance_timer_timeout(
+			instance_deb,
+			instance,
+			offset,
+			spread,
+			count
+		)
+		instance_deb.start()
 
 func perform(pattern: ArrowPattern) -> void:
 	if pattern.has_movement_pattern:
@@ -374,7 +394,10 @@ func _on_sus_alerted() -> void:
 	_recovery.start()
 	var p = get_parent()
 	for e in p.get_children():
-		if e.global_position.distance_to(global_position) < 10.0 and not e.sus.is_alert(): 
+		if (
+			e.global_position.distance_to(global_position) < 10.0
+			and not e.sus.is_alert()
+		): 
 			e.sus.baka(1.1)
 
 func _on_recovery_timeout() -> void:
@@ -401,7 +424,11 @@ func _on_dash_hit() -> void:
 	health.take_damage(1)
 
 func _await_fire_release() -> void:
-	while not health.is_dead() and _sprite.animation == "fire" and _sprite.frame < fire_release_frame:
+	while (
+		not health.is_dead()
+		and _sprite.animation == "fire"
+		and _sprite.frame < fire_release_frame
+	):
 		await _sprite.frame_changed
 
 # only bananas should use this!!! TODO: proper enemy inheritance mayvbe?
