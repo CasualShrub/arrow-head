@@ -154,11 +154,28 @@ func _on_instance_timer_timeout(timer: Timer,
 		var nfired = timer.get_meta("fired")
 		if nfired >= count:
 			return
+		if nfired > 0:
+			await _play_shooting_anim(instance.type)
+			if not is_instance_valid(timer):
+				return
+			if health.is_dead():
+				timer.queue_free()
+				return
 		_execute_instance(instance, offset, spread, count, nfired)
 		nfired += 1
 		timer.set_meta("fired", nfired)
 		if nfired >= count:
 			timer.queue_free()
+		else:
+			timer.start()
+
+func _play_shooting_anim(scene: PackedScene) -> void:
+	_sprite.play("fire")
+	_sprite.frame = 0
+	_sprite.frame_progress = 0.0
+	_nock_scene(scene)
+	await _await_fire_release()
+	_release_nocked()
 
 func _execute_volley(instance: FiringInstance):
 	var count: int = _get_rand(instance.count, instance.max_count)
@@ -171,7 +188,7 @@ func _execute_volley(instance: FiringInstance):
 		var instance_deb := Timer.new()
 		instance_deb.set_meta("fired", 0)
 		instance_deb.wait_time = instance.instance_delay
-		instance_deb.one_shot = false
+		instance_deb.one_shot = true
 		instance_deb.timeout.connect(_on_instance_timer_timeout.bind(
 			instance_deb,
 			instance,
@@ -407,6 +424,8 @@ func _on_recovery_timeout() -> void:
 		_sprite.play("windup")
 	else:
 		_sprite.play("fire")
+	_sprite.frame = 0
+	_sprite.frame_progress = 0.0
 	_nock_arrow(pattern)
 	await _await_fire_release()
 	_release_nocked()
@@ -438,7 +457,12 @@ func _nock_arrow(pattern: ArrowPattern) -> void:
 		return
 	if pattern.instances.is_empty():
 		return
-	var scene := pattern.instances[0].type
+	_nock_scene(pattern.instances[0].type)
+
+func _nock_scene(scene: PackedScene) -> void:
+	_release_nocked()
+	if nock_points.is_empty():
+		return
 	if not scene:
 		return
 	_nocked = scene.instantiate() as Arrow
