@@ -5,6 +5,7 @@
 [ext_resource type="Texture2D" uid="uid://c8r5phlgt4yy0" path="res://entities/arrows/pea/arrow_pea.png" id="4_gq1gh"]
 
 [ext_resource type="Script" path="res://systems/status/status_slow.gd" id="5_slow"]
+[ext_resource type="Script" path="res://entities/arrows/pea/arrow_pea.gd" id="6_pea"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_gq1gh"]
 resource_local_to_scene = true
@@ -24,6 +25,7 @@ lifetime = -1.0
 speed_multiplier = 0.5
 
 [node name="Arrow" unique_id=935612140 instance=ExtResource("1_2sdfy")]
+script = ExtResource("6_pea")
 speed = 15.0
 status = SubResource("Resource_slow")
 dig_depth = 0.02
