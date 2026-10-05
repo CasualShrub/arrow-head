@@ -151,6 +151,9 @@ func _on_instance_timer_timeout(timer: Timer,
 	spread: float,
 	count: int
 ) -> void:
+		if health.is_dead():
+			timer.queue_free()
+			return
 		var nfired = timer.get_meta("fired")
 		if nfired >= count:
 			return
@@ -178,6 +181,7 @@ func _play_shooting_anim(scene: PackedScene) -> void:
 	_release_nocked()
 
 func _execute_volley(instance: FiringInstance):
+	if health.is_dead(): return
 	var count: int = _get_rand(instance.count, instance.max_count)
 	var spread := deg_to_rad(_get_rand(instance.spread, instance.max_spread))
 	var offset := deg_to_rad(_get_rand(instance.offset, instance.max_offset))
@@ -238,6 +242,7 @@ func perform(pattern: ArrowPattern) -> void:
 	_recovery.start()
 
 func fire(scene: PackedScene, dir: Vector3) -> void:
+	if health.is_dead(): return
 	var arrow := ArrowManager.make_arrow(scene, global_position, dir)
 	if not arrow:
 		push_error("Tried to fire invalid arrow.")
@@ -405,6 +410,8 @@ func _on_died() -> void:
 	SoundManager.play("banana_death")
 	_dash_target.make_invulnerable()
 	_release_nocked()
+	for t in _inst_timers.get_children():
+		t.queue_free()
 	_sprite.play("death")
 
 func _on_sus_alerted() -> void:
@@ -429,6 +436,7 @@ func _on_recovery_timeout() -> void:
 	_nock_arrow(pattern)
 	await _await_fire_release()
 	_release_nocked()
+	if health.is_dead(): return
 	perform(pattern)
 
 func _on_dash_targeted() -> void:
