@@ -5,18 +5,21 @@ class_name StatusBurn
 @export var drift_speed := 7.2
 @export var redrift := 0.14
 
-var spin_dir := -1
+var spin_dir := 1.0
 
 func _init() -> void:
 	lifetime = 2.5
 
 func apply(target: Player) -> void:
-	#_sprite.modulate = Color(1, 0.5, 0.2)
-	pass
+	super(target)
+	if randf() < 0.5:
+		spin_dir = -1.0
+	else:
+		spin_dir = 1.0
+	target.start_aim_spin(spin_speed * spin_dir)
+	target.show_status_sprite(&"fire")
 
-func tick(delta: float) -> void:
-	_spin(delta)
-
-func _spin(delta: float) -> void:
-	#_face_dir(global_position + get_facing().rotated(Vector3.UP, spin_speed * spin_dir * delta))
-	pass
+func remove() -> void:
+	if is_instance_valid(owner):
+		owner.stop_aim_spin()
+		owner.hide_status_sprite()
