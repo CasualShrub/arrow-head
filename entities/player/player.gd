@@ -276,7 +276,7 @@ func _force_walk_step(delta: float) -> void:
 
 func _refresh_eyes_state() -> void:
 	if _eyes.get_eyes_state() == &"hit": return
-	if dash.can_activate():
+	if arrows.can_use():
 		_eyes.set_eyes_state(&"angry")
 		_aura.activate()
 	else:
