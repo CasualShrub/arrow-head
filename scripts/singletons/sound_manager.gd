@@ -11,10 +11,9 @@ extends Node
 const _POOL_SIZE := 12
 const _BUS := "SFX"
 const _MUSIC_BUS := "Music"
-const DEFAULT_MUSIC := "TITLE_SCREEN"
 
 const MUSIC := {
-	"TITLE_SCREEN": preload("uid://dmd00wsbb5p48"),
+	"TITLE_SCREEN": preload("uid://bilk8fubu6cf4"),
 	"complete_ost": preload("uid://bv51oh71drs8l"),
 	"paused": preload("uid://dqqae78uymnjn")
 	# archived music
@@ -40,6 +39,7 @@ const SOUNDS := {
 	"banana_shooting": preload("uid://clhwj7ds06on6"),
 	"big_win_kill_boss_jingle": preload("uid://ce55ed6pdob1c"),
 	"enemy_death_small_win_jingle": preload("uid://dustcpx3l8mok"),
+	"logo": preload("uid://bhm7x2koeoa21"),
 }
 
 # per-asset base level in dB — balance the individual effects against each other
@@ -58,6 +58,7 @@ const BASE_VOLUMES := {
 	"banana_shooting": 0.0,
 	"big_win_kill_boss_jingle": 0.0,
 	"enemy_death_small_win_jingle": 0.0,
+	"logo": 0.0,
 }
 
 var _pool: Array[AudioStreamPlayer] = []
@@ -76,7 +77,6 @@ func _ready() -> void:
 	_music = AudioStreamPlayer.new()
 	_music.bus = _MUSIC_BUS
 	add_child(_music)
-	play_music(DEFAULT_MUSIC)
 	
 	_pause_music = AudioStreamPlayer.new() #just for it to run in the background
 	_pause_music.bus = _MUSIC_BUS
@@ -84,7 +84,22 @@ func _ready() -> void:
 	_pause_music.stream = MUSIC.get('paused')
 	GameManager.level_loaded.connect(_on_scene_changed)
 	GameManager.level_unloading.connect(_on_scene_changed)
-	
+	if OS.has_feature("editor"):
+		_pick_editor_music.call_deferred()
+
+func _pick_editor_music() -> void:
+	var scene := get_tree().current_scene
+	if scene == null or GameManager.current_level != null:
+		return
+	var path := scene.scene_file_path
+	var menu_scenes := [
+		ProjectSettings.get_setting("application/run/main_scene"),
+		ResourceUID.uid_to_path(GameManager.MAIN_MENU),
+	]
+	if path in menu_scenes:
+		return
+	play_music("complete_ost")
+
 
 func play_music(key: String) -> void:
 	var stream: AudioStream = MUSIC.get(key)

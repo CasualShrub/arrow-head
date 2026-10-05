@@ -117,6 +117,8 @@ func _play_step(index: int) -> void:
 	var step := _steps[index]
 	_overlay.visible = false
 	_logo.visible = step.get("logo", false)
+	if _logo.visible:
+		SoundManager.play("logo")
 	var texture: Texture2D = null
 	if not _logo.visible:
 		texture = _load_frame(str(step["frame"]))
