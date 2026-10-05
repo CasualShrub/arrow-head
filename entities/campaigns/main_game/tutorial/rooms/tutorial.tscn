@@ -18,6 +18,7 @@
 [ext_resource type="PackedScene" uid="uid://g31is4fphgrd" path="res://entities/props/trees/tree_charred.tscn" id="19_gewl3"]
 [ext_resource type="PackedScene" uid="uid://c7t3chm2dtpwh" path="res://entities/props/tutorial/tree_ground_charr.tscn" id="20_mxt2p"]
 [ext_resource type="PackedScene" uid="uid://bxgdwn6jomk30" path="res://arrow_vertical.tscn" id="21_8pwrt"]
+[ext_resource type="PackedScene" uid="uid://cdrixa0pjr1l6" path="res://entities/props/tutorial/tree_smoke.tscn" id="22_smoke"]
 
 [node name="Room" unique_id=84024719 instance=ExtResource("1_muapo")]
 
@@ -27,14 +28,26 @@ transform = Transform3D(-4.3711385e-08, 0, -0.99999994, 0, 1, 0, 0.99999994, 0, 
 [node name="DirectionalLight3D" parent="." index="4" unique_id=492064517]
 transform = Transform3D(0.8239569, 7.3667486e-08, 0.5666525, -0.29468933, 0.8541341, 0.4285011, -0.4839972, -0.52005285, 0.7037697, -0.8318329, 21.925713, -1.5631456)
 
-[node name="Exit" parent="." index="10" unique_id=771002501]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.7595444, 0, -14.764055)
-
 [node name="OutskirtFiller" parent="." index="11" unique_id=1988876291 instance=ExtResource("2_kk06n")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.435, 0.12, -4.855)
 border_size = Vector2(18.455, 23.515)
 position_jitter = 1.54
 y_base = 2.37
+
+[node name="Exit" parent="." index="12" unique_id=771002501]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.7595444, 0, -14.764055)
+
+[node name="Wasd" parent="." index="13" unique_id=1085715354 instance=ExtResource("13_wasd")]
+transform = Transform3D(0.705, 0, 0, 0, -3.081653e-08, 0.705, 0, -0.705, -3.081653e-08, 0.21739244, -0.18951291, -3.3810534)
+
+[node name="TutorialArrow" parent="." index="14" unique_id=1718344981 instance=ExtResource("14_tarrow")]
+transform = Transform3D(0.28, 0, 0, 0, -1.2239188e-08, 0.28, 0, -0.28, -1.2239188e-08, -1.8892794, -0.18951291, -9.572298)
+
+[node name="AppleOrbit" parent="." index="15" unique_id=1169932969 instance=ExtResource("15_orbit")]
+transform = Transform3D(0.705, 0, 0, 0, 0.705, 0, 0, 0, 0.705, -0.4554429, -0.18951291, -9.5)
+
+[node name="Stump" parent="." index="16" unique_id=1185279031 instance=ExtResource("12_drje7")]
+transform = Transform3D(1.79, 0, 0, 0, 1.79, 0, 0, 0, 1.79, 2.3702168, -0.29794943, -9.483786)
 
 [node name="Tree25" parent="Walls" parent_id_path=PackedInt32Array(2117107331) index="0" unique_id=1210238497 instance=ExtResource("4_ufm5d")]
 transform = Transform3D(0.96362823, 0, -0.2672482, 0, 1, 0, 0.2672482, 0, 0.96362823, 7.446937, -0.6784792, -1.5446807)
@@ -255,18 +268,6 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.7503333, -0.25432205, -14.
 [node name="Rock19" parent="Walls" parent_id_path=PackedInt32Array(2117107331) index="72" unique_id=257886077 instance=ExtResource("7_5jrp4")]
 transform = Transform3D(4, 0, 0, 0, 4, 0, 0, 0, 4, -7.2664113, -0.33971363, -13.6856985)
 
-[node name="Wasd" parent="." index="13" unique_id=1085715354 instance=ExtResource("13_wasd")]
-transform = Transform3D(0.705, 0, 0, 0, -3.081653e-08, 0.705, 0, -0.705, -3.081653e-08, 0.21739244, -0.18951291, -3.3810534)
-
-[node name="TutorialArrow" parent="." index="14" unique_id=1718344981 instance=ExtResource("14_tarrow")]
-transform = Transform3D(0.28, 0, 0, 0, -1.2239188e-08, 0.28, 0, -0.28, -1.2239188e-08, -1.8892794, -0.18951291, -9.572298)
-
-[node name="AppleOrbit" parent="." index="15" unique_id=1169932969 instance=ExtResource("15_orbit")]
-transform = Transform3D(0.705, 0, 0, 0, 0.705, 0, 0, 0, 0.705, -0.4554429, -0.18951291, -9.5)
-
-[node name="Stump" parent="." index="16" unique_id=1185279031 instance=ExtResource("12_drje7")]
-transform = Transform3D(1.79, 0, 0, 0, 1.79, 0, 0, 0, 1.79, 2.3702168, -0.29794943, -9.483786)
-
 [node name="TreeCharred" parent="." index="18" unique_id=1621762540 instance=ExtResource("19_gewl3")]
 transform = Transform3D(-1.3730854, -0.05480095, 1.9001732, -0.09351641, 2.3431346, -1.20793615e-08, -1.8986617, -0.07577714, -1.3741786, -4.6366453, -0.43243307, -0.99579585)
 
@@ -308,3 +309,7 @@ transform = Transform3D(-0.60704297, -0.18088451, 0.7738083, 0.2109958, 0.902110
 
 [node name="Node3D3" parent="." index="31" unique_id=730476863 instance=ExtResource("21_8pwrt")]
 transform = Transform3D(0.5294411, -0.42110005, 0.73645544, 0, 0.86810696, 0.49637744, -0.8483466, -0.2628026, 0.4596115, -5.9832797, -0.08090365, -1.4208794)
+
+[node name="TreeSmoke" parent="." index="33" unique_id=1969328668 instance=ExtResource("22_smoke")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.2181726, 3.5379782, -0.35315412)
+scale_amount_max = 3.0
