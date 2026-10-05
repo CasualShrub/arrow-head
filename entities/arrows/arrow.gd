@@ -8,11 +8,21 @@ class_name Arrow
 ## Time after sticking into a wall the arrow is cleaned up.
 @export var wall_stick_decay_time := -1.0
 @export var free_on_deactivate := false
+@export var instakill := false
+@export var status: Status
+@export var dig_depth := -1.0 #negative uses player deefualt
+@export_group("embedded decay")
+@export var embedded_lifetime := -1.0 #negative means will stay embedded forever
+@export var embedded_blink_time := 1.5 #seconds spent blinking for temporary arrows like peas
+
+const RENDER_PRIORITY := 10
 
 var tail_position := 0.293 #for nocking (z axis position)
 
 signal activated()
 signal deactivated()
+signal expired()
+signal blinked(is_shown: bool)
 signal collided(with: ArrowCollider, normal: Vector3, point: Vector3)
 
 var _shape_cast: ShapeCast3D
@@ -21,6 +31,8 @@ var _shape_cast_offset: Vector3
 var scene: PackedScene
 
 var simulation: ArrowSimulation
+
+var _decay_tween: Tween
 
 func _ready() -> void:
 	var collision_shapes := find_children("*", "ShapeCast3D", true, false)
@@ -34,9 +46,17 @@ func _ready() -> void:
 		_shape_cast = collision_shapes[0]
 	_shape_cast_offset = _shape_cast.position
 	
+	_raise_render_priority()
 	DarkenManager.register_highlighted(self)
 	
 	deactivate()
+
+func _raise_render_priority() -> void:
+	for node in find_children("*", "Sprite3D", true, false):
+		var sprite := node as Sprite3D
+		sprite.render_priority = RENDER_PRIORITY
+		if sprite.material_override:
+			sprite.material_override.render_priority = RENDER_PRIORITY
 
 func _physics_process(delta: float) -> void:
 	if not simulation: return
@@ -216,6 +236,22 @@ func _on_collision_simulated(
 
 func change_direction(dir: Vector3) -> void:
 	simulation.change_direction(dir)
+
+func begin_embedded_decay() -> void:
+	if embedded_lifetime < 0.0: return
+	if _decay_tween:
+		_decay_tween.kill()
+	var solid_time := maxf(embedded_lifetime - embedded_blink_time, 0.0)
+	_decay_tween = create_tween()
+	_decay_tween.tween_interval(solid_time)
+	_decay_tween.tween_method(_blink, 0.0, 1.0, embedded_blink_time)
+	_decay_tween.tween_callback(expired.emit)
+
+func _blink(progress: float) -> void:
+	var shown := fposmod(progress * progress * 12.0, 1.0) < 0.6
+	if shown == visible: return
+	visible = shown
+	blinked.emit(shown)
 
 func embed(dig := 0.0) -> void:
 	if not simulation: return
