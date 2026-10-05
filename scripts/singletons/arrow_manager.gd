@@ -39,7 +39,12 @@ func _destroy_arrow(arrow: Arrow) -> void:
 func _consume_pool(scene: PackedScene) -> Variant:
 	var scene_pool = _pool.get(scene)
 	if not scene_pool: return null
-	return scene_pool.pop_front()
+	while not scene_pool.is_empty():
+		var arrow = scene_pool.pop_front()
+		_pooled -= 1
+		if is_instance_valid(arrow) and arrow.get_parent() == self:
+			return arrow
+	return null
 
 func pool(arrow: Arrow) -> void:
 	if not _pool.get(arrow.scene):

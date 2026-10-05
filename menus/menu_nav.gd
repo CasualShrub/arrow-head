@@ -11,6 +11,7 @@ static func restart(tree: SceneTree) -> void:
 	if GameManager.current_level:
 		GameManager.restart_room()
 	else:
+		ArrowManager.deactivate_all()
 		tree.reload_current_scene()
 
 static func to_menu(tree: SceneTree) -> void:

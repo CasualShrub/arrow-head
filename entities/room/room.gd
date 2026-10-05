@@ -43,6 +43,7 @@ func _input(event: InputEvent) -> void:
 		if GameManager.current_level:
 			GameManager.restart_room()
 		else:
+			ArrowManager.deactivate_all()
 			get_tree().reload_current_scene()
 
 func _setup_player() -> void:
