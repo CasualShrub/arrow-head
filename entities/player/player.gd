@@ -57,6 +57,8 @@ class_name Player
 		
 @export var hurt_reaction_duration := 0.35
 
+@export var idle_face_camera_delay := 0.5
+
 @onready var _collider: CollisionShape3D = %Collider
 @onready var _camera: PlayerCamera = %Camera
 @onready var _sprite: AnimatedSprite3D = %Sprite
@@ -70,6 +72,8 @@ class_name Player
 
 signal force_walk_finished()
 
+var _idle_time := 0.0
+var _last_aim_target := Vector3.ZERO
 var _dash_charges := 0
 var _dash_arrows: Array[Arrow] = []
 var _force_walk_direction := Vector3.ZERO
@@ -79,7 +83,7 @@ func _ready() -> void:
 	if Engine.is_editor_hint(): update_configuration_warnings()
 	_update_collider()
 
-func _process(_delta: float) -> void:
+func _process(delta: float) -> void:
 	if Engine.is_editor_hint(): return
 
 	if is_force_walking():
@@ -88,7 +92,18 @@ func _process(_delta: float) -> void:
 		return
 
 	var aim_target := _get_aim_target()
-	face(aim_target)
+	var is_active := movement_input.get_vector() != Vector2.ZERO
+	if aim_target.distance_squared_to(_last_aim_target) > 0.0001:
+		is_active = true
+	_last_aim_target = aim_target
+	if is_active:
+		_idle_time = 0.0
+	else:
+		_idle_time += delta
+	if _idle_time >= idle_face_camera_delay and not health.is_dead():
+		_eyes.set_eyes_direction(PlayerEyes.EyeDirection.CENTERED)
+	else:
+		face(aim_target)
 	var lookahead_offset := Vector2.ZERO
 	if input_mode.is_keyboard_mouse():
 		lookahead_offset = _camera.get_mouse_screen_offset()
