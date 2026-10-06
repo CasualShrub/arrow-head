@@ -3,6 +3,8 @@
 extends CharacterBody3D
 class_name Player
 
+signal death_animation_finished()
+
 @export var health: HealthComponent:
 	set(value):
 		health = value
@@ -120,6 +122,8 @@ func _ready() -> void:
 	_update_collider()
 	arrows.arrow_removed.connect(_on_arrow_removed)
 	_last_leak_position = global_position
+	if not Engine.is_editor_hint():
+		_sprite.animation_finished.connect(_on_animation_finished)
 
 func _process(delta: float) -> void:
 	if Engine.is_editor_hint(): return
@@ -489,6 +493,10 @@ func _on_died() -> void:
 	_stop_angry_effect(true)
 	_status_sprite.hide()
 	_sectors.hide()
+
+func _on_animation_finished() -> void:
+	if _sprite.animation == &"death":
+		death_animation_finished.emit()
 
 func _on_dash_activated(destination: Vector3, targets: Array) -> void:
 	_dash_preview.disable()
