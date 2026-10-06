@@ -43,6 +43,11 @@ class_name JuiceSplatStyle
 @export var grow_start_scale := 0.3
 @export var max_splats := 300
 
+@export_group("airborne")
+@export var air_drop_radius := 0.04
+@export var air_time_range := Vector2(0.22, 0.35)
+@export var air_arc_height := 0.25
+
 @export_group("preview")
 @export_tool_button("Generate Preview", "Reload")
 var preview_button := func():

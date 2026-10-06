@@ -69,6 +69,15 @@ var _aim_facing := Vector3.FORWARD
 
 @export var idle_face_camera_delay := 0.5
 
+@export_group("juice leak")
+@export var leak_style: JuiceSplatStyle = preload("res://systems/blood/juice_splat_drip.tres")
+@export var leak_step_distance := 0.7
+@export var leak_interval := 0.5
+@export var leak_spurt_range := Vector2(0.15, 0.6)
+@export var leak_drops_range := Vector2i(1, 3)
+@export var leak_extra_drop_size := 0.6
+@export var leak_max_step := 0.5
+
 @onready var _collider: CollisionShape3D = %Collider
 @onready var _camera: PlayerCamera = %Camera
 @onready var _sprite: AnimatedSprite3D = %Sprite
@@ -91,6 +100,9 @@ var _force_walk_direction := Vector3.ZERO
 var _force_walk_target: Variant = null
 var _status_sources: Array[Arrow] = []
 var _angry_handle: ScreenEffectHandle
+var _leak_distance := 0.0
+var _leak_timer := 0.0
+var _last_leak_position := Vector3.ZERO
 
 func _ready() -> void:
 	if Engine.is_editor_hint():
@@ -101,6 +113,7 @@ func _ready() -> void:
 	_sectors.centered = arrows.centered
 	_update_collider()
 	arrows.arrow_removed.connect(_on_arrow_removed)
+	_last_leak_position = global_position
 
 func _process(delta: float) -> void:
 	if Engine.is_editor_hint(): return
@@ -164,6 +177,7 @@ func _physics_process(delta: float) -> void:
 		dash.try_activate(global_position, _get_dash_aim_target())
 	
 	_move(movement_input.get_vector(), delta)
+	_tick_leak(delta)
 	
 	# keep on same plane
 	global_position.y = 0
@@ -298,6 +312,49 @@ func get_hit(arrow: Arrow) -> void:
 			health.make_vulnerable()
 	)
 	#_eyes_hit.start()
+
+func _get_wound_arrows() -> Array[Arrow]:
+	var wounds: Array[Arrow] = []
+	for arrow in arrows.embedded:
+		if arrow and not wounds.has(arrow):
+			wounds.append(arrow)
+	return wounds
+
+func _tick_leak(delta: float) -> void:
+	var moved := global_position - _last_leak_position
+	moved.y = 0.0
+	_last_leak_position = global_position
+	var wounds := _get_wound_arrows()
+	if wounds.is_empty():
+		_leak_distance = 0.0
+		_leak_timer = 0.0
+		return
+	_leak_distance += minf(moved.length(), leak_max_step)
+	var step := leak_step_distance / wounds.size()
+	while _leak_distance >= step:
+		_leak_distance -= step
+		_leak_from(wounds.pick_random())
+	_leak_timer += delta
+	var interval := leak_interval / wounds.size()
+	while _leak_timer >= interval:
+		_leak_timer -= interval
+		_leak_from(wounds.pick_random())
+
+func _leak_from(arrow: Arrow) -> void:
+	var outward := arrow.global_position - global_position
+	outward.y = 0.0
+	if outward.length_squared() < 0.0001:
+		outward = Vector3.FORWARD.rotated(Vector3.UP, randf() * TAU)
+	outward = outward.normalized().rotated(Vector3.UP, randf_range(-0.5, 0.5))
+	var wound := global_position + outward * hurt_radius
+	wound.y = arrow.global_position.y
+	for i in randi_range(leak_drops_range.x, leak_drops_range.y):
+		var drop_dir := outward.rotated(Vector3.UP, randf_range(-0.3, 0.3))
+		var landing := wound + drop_dir * randf_range(leak_spurt_range.x, leak_spurt_range.y)
+		var size := 1.0
+		if i > 0:
+			size = leak_extra_drop_size
+		JuiceSplatter.spurt(wound, landing, juice_color, size, leak_style)
 
 func _get_aim_target() -> Vector3:
 	if input_mode.is_keyboard_mouse():

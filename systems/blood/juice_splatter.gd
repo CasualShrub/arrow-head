@@ -8,10 +8,14 @@ const FALLBACK_FLOOR_HEIGHT := -0.2
 const FLOOR_OFFSET := 0.01
 const LAYER_STEP := 0.0005
 const LAYER_COUNT := 16
+const DROP_RENDER_PRIORITY := 0
 
 var _floor_height := FALLBACK_FLOOR_HEIGHT
 var _layer := 0
 var _materials: Dictionary[String, StandardMaterial3D] = {}
+var _style_roots: Dictionary[JuiceSplatStyle, Node3D] = {}
+var _drop_meshes: Dictionary[JuiceSplatStyle, SphereMesh] = {}
+var _drop_materials: Dictionary[String, StandardMaterial3D] = {}
 
 static func splat(
 	at: Vector3,
@@ -23,6 +27,17 @@ static func splat(
 	var splatter := _get_splatter()
 	if not splatter: return
 	splatter.add_splat(at, direction, color, size, style)
+
+static func spurt(
+	from: Vector3,
+	landing: Vector3,
+	color: Color,
+	size := 1.0,
+	style: JuiceSplatStyle = DEFAULT_STYLE
+) -> void:
+	var splatter := _get_splatter()
+	if not splatter: return
+	splatter.add_spurt(from, landing, color, size, style)
 
 static func _get_splatter() -> JuiceSplatter:
 	var room := _get_room()
@@ -67,7 +82,8 @@ func add_splat(
 	splat.mesh = _make_mesh(style, size)
 	splat.material_override = _get_material(style, style.get_random_variant(), _random_shade(style, color))
 	splat.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
-	add_child(splat)
+	var root := _get_style_root(style)
+	root.add_child(splat)
 
 	splat.global_position = Vector3(at.x, _next_height(), at.z)
 	splat.global_basis = Basis(Vector3.UP, _random_yaw(style, direction))
@@ -75,7 +91,75 @@ func add_splat(
 		splat.scale = Vector3(1.0, 1.0, -1.0)
 
 	_grow_in(style, splat)
-	_trim_oldest(style)
+	_trim_oldest(style, root)
+
+func _get_style_root(style: JuiceSplatStyle) -> Node3D:
+	if _style_roots.has(style):
+		return _style_roots[style]
+	var root := Node3D.new()
+	root.name = style.resource_path.get_file().get_basename()
+	add_child(root)
+	_style_roots[style] = root
+	return root
+
+func add_spurt(
+	from: Vector3,
+	landing: Vector3,
+	color: Color,
+	size := 1.0,
+	style: JuiceSplatStyle = DEFAULT_STYLE
+) -> void:
+	landing.y = _floor_height
+	var drop := MeshInstance3D.new()
+	drop.mesh = _get_drop_mesh(style)
+	drop.material_override = _get_drop_material(color)
+	drop.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
+	add_child(drop)
+	drop.global_position = from
+	drop.scale = Vector3.ONE * size
+
+	var flight_time := randf_range(style.air_time_range.x, style.air_time_range.y)
+	var tween := drop.create_tween()
+	tween.tween_method(_move_drop.bind(drop, from, landing, style.air_arc_height), 0.0, 1.0, flight_time)
+	tween.tween_callback(_land_drop.bind(drop, from, landing, color, size, style))
+
+func _move_drop(t: float, drop: Node3D, from: Vector3, landing: Vector3, arc_height: float) -> void:
+	var arc := Vector3.UP * arc_height * 4.0 * t * (1.0 - t)
+	drop.global_position = from.lerp(landing, t) + arc
+
+func _land_drop(
+	drop: Node3D,
+	from: Vector3,
+	landing: Vector3,
+	color: Color,
+	size: float,
+	style: JuiceSplatStyle
+) -> void:
+	drop.queue_free()
+	add_splat(landing, landing - from, color, size, style)
+
+func _get_drop_mesh(style: JuiceSplatStyle) -> SphereMesh:
+	if _drop_meshes.has(style):
+		return _drop_meshes[style]
+	var mesh := SphereMesh.new()
+	mesh.radius = style.air_drop_radius
+	mesh.height = style.air_drop_radius * 2.0
+	mesh.radial_segments = 6
+	mesh.rings = 3
+	_drop_meshes[style] = mesh
+	return mesh
+
+func _get_drop_material(color: Color) -> StandardMaterial3D:
+	var key := color.to_html(false)
+	if _drop_materials.has(key):
+		return _drop_materials[key]
+	var mat := StandardMaterial3D.new()
+	mat.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
+	mat.transparency = BaseMaterial3D.TRANSPARENCY_ALPHA
+	mat.render_priority = DROP_RENDER_PRIORITY
+	mat.albedo_color = color
+	_drop_materials[key] = mat
+	return mat
 
 func _make_mesh(style: JuiceSplatStyle, size: float) -> QuadMesh:
 	var tex_size := Vector2(style.texture_size)
@@ -111,10 +195,10 @@ func _grow_in(style: JuiceSplatStyle, splat: Node3D) -> void:
 	tween.set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_CUBIC)
 	tween.tween_property(splat, "scale", final_scale, style.grow_time)
 
-func _trim_oldest(style: JuiceSplatStyle) -> void:
-	while get_child_count() > style.max_splats:
-		var oldest := get_child(0)
-		remove_child(oldest)
+func _trim_oldest(style: JuiceSplatStyle, root: Node3D) -> void:
+	while root.get_child_count() > style.max_splats:
+		var oldest := root.get_child(0)
+		root.remove_child(oldest)
 		oldest.queue_free()
 
 func _get_material(style: JuiceSplatStyle, variant: int, tint: Color) -> StandardMaterial3D:
