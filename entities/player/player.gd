@@ -267,8 +267,9 @@ func start_aim_spin(rate: float) -> void:
 func stop_aim_spin() -> void:
 	aim_spin = 0.0
 
-func show_status_sprite(anim: StringName) -> void:
+func show_status_sprite(anim: StringName, alpha := 1.0) -> void:
 	if health.is_dead(): return
+	_status_sprite.modulate.a = alpha
 	_status_sprite.play(anim)
 	_status_sprite.show()
 

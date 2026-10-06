@@ -4,6 +4,7 @@ class_name StatusBurn
 @export var spin_speed := 24.0
 @export var drift_speed := 7.2
 @export var redrift := 0.14
+@export var sprite_alpha := 0.7
 
 var spin_dir := 1.0
 
@@ -17,7 +18,7 @@ func apply(target: Player) -> void:
 	else:
 		spin_dir = 1.0
 	target.start_aim_spin(spin_speed * spin_dir)
-	target.show_status_sprite(&"fire")
+	target.show_status_sprite(&"fire", sprite_alpha)
 
 func remove() -> void:
 	if is_instance_valid(owner):
