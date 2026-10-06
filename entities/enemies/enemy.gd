@@ -26,20 +26,23 @@ class_name Enemy
 @export_group("hit")
 @export var hit_flash_time := 0.2
 @export_group("combat")
-@export var combat_speed := 1.0
-@export var combat_strafe_radius := 4.0
-@export var combat_strafe_speed := 2.0
-@export var combat_reposition_chance := 0.3
-
-enum CombatState { STRAFE, CHARGE, RETREAT, STOP }
+@export var combat_speed := 1.5
+@export var combat_retreat_speed := 2.5
+@export var combat_acceleration := 8.0
+@export var orbit_radius := 3.0
+@export var orbit_radius_tolerance := 0.75
+@export var orbit_speed := 1.5
+@export var orbit_flip_interval_min := 2.5
+@export var orbit_flip_interval_max := 6.0
+@export var orbit_spacing_angle := 60.0
+@export var separation_radius := 1.5
+@export var wall_probe_distance := 0.6
 
 signal fired(arrow: Arrow, dir: Vector3)
 
-var _combat_state := CombatState.STRAFE
-
-var _strafe_dir := 1.0
-var _reposition_timer := 0.0
-var _reposition_interval := 2.0
+var _orbit_dir := 1.0
+var _orbit_flip_timer := 0.0
+var _wall_flip_cooldown := 0.0
 
 var _facing := Vector3.FORWARD
 
@@ -52,9 +55,6 @@ var _hits_taken := 0
 @onready var _sprite: AnimatedSprite3D = %Sprite
 @onready var _recovery: Timer = %Recovery
 @onready var _inst_timers: Node = %InstanceTimers
-@onready var _ray_left: RayCast3D = %RayLeft
-@onready var _ray_right: RayCast3D = %RayRight
-@onready var _ray_forward: RayCast3D = %RayForward
 @onready var _dash_target: TargetArea = %DashTarget
 
 @onready var _init_flip := _sprite.flip_v
@@ -73,6 +73,10 @@ func _ready() -> void:
 	if Engine.is_editor_hint(): return
 
 	add_to_group("tree_fade_targets")
+	add_to_group("enemies")
+	if randf() < 0.5:
+		_orbit_dir = -1.0
+	_reset_orbit_flip_timer()
 	_sprite.set_layer_mask_value(ScreenShaderManager.UNFILTERED_LAYER, true)
 	_sprite.frame_changed.connect(_update_nocked)
 	_sprite.animation_finished.connect(_on_sprite_animation_finished)
@@ -168,7 +172,7 @@ func _on_instance_timer_timeout(timer: Timer,
 		var nfired = timer.get_meta("fired")
 		if nfired >= count:
 			return
-		if nfired > 0:
+		if nfired > 0 and instance.reload_anim:
 			await _play_shooting_anim(instance.type)
 			if not is_instance_valid(timer):
 				return
@@ -346,68 +350,101 @@ func _alert(dt: float) -> void:
 	if not player:
 		return
 
-	var to_player := (player.global_position - global_position)
-	to_player.y = 0.0
-	var dist := to_player.length()
-	var forward := to_player.normalized()
-	var right := forward.rotated(Vector3.UP, PI / 2)
-	var move := Vector3.ZERO
-
-	_reposition_timer += dt
-	if _reposition_timer >= _reposition_interval:
-		_reposition_timer = 0.0
-		_reposition_interval = randf_range(1.5, 3.5)
-		_pick_combat_state(dist)
-
-	match _combat_state:
-		CombatState.STRAFE:
-			if dist > combat_strafe_radius + 1.0:
-				move += forward
-			elif dist < combat_strafe_radius - 1.0:
-				move -= forward
-			move += right * _strafe_dir
-		CombatState.CHARGE:
-			move += forward * 2.0  # faster, aggressive
-		CombatState.RETREAT:
-			move -= forward
-			move += right * _strafe_dir  # sidestep while backing off
-
-	# Wall avoidance
-	if _ray_forward.is_colliding():
-		move -= forward * 2.0
-	if _ray_left.is_colliding():
-		move += right
-	if _ray_right.is_colliding():
-		move -= right
-
-	if not stationary and move.length() > 0.001:
-		velocity = move.normalized() * combat_speed
-		move_and_slide()
+	if not stationary:
+		_orbit(player, dt)
 
 	_face_player()
 
-func _pick_combat_state(dist: float) -> void:
-	_strafe_dir = 1.0 if randf() > 0.5 else -1.0
-	var roll := randf()
-	if dist > combat_strafe_radius * 2.0:
-		# far away — charge or strafe toward them
-		_combat_state = CombatState.CHARGE if roll < 0.6 else CombatState.STRAFE
-	elif dist < combat_strafe_radius * 0.5:
-		# too close — retreat or strafe
-		_combat_state = CombatState.RETREAT if roll < 0.6 else CombatState.STRAFE
-	else:
-		# comfortable range — mostly strafe, occasional charge
-		if roll < 0.45:
-			_combat_state = CombatState.STRAFE
-		elif roll < 0.7:
-			_combat_state = CombatState.CHARGE
-		elif roll < 0.85:
-			_combat_state = CombatState.STOP
-		else:
-			_combat_state = CombatState.RETREAT
-	
-	if _combat_state == CombatState.STOP:
-		_reposition_interval = randf_range(0.5, 1.2)
+func _orbit(player: Player, dt: float) -> void:
+	var to_player := player.global_position - global_position
+	to_player.y = 0.0
+	var dist := to_player.length()
+	var forward := Vector3.FORWARD
+	if dist > 0.001:
+		forward = to_player / dist
+	var tangent := forward.cross(Vector3.UP)
+
+	_tick_orbit_flip(dt)
+
+	var radial_error := dist - orbit_radius
+	var radial_weight := clampf(radial_error / orbit_radius_tolerance, -1.0, 1.0)
+	var radial := forward * radial_weight * combat_speed
+	if radial_weight < 0.0:
+		radial = forward * radial_weight * combat_retreat_speed
+
+	var orbit_weight := _orbit_dir + _get_orbit_spacing(player)
+	var orbital := tangent * orbit_weight * orbit_speed
+
+	var desired := radial + orbital + _get_separation() * combat_speed
+	desired.y = 0.0
+
+	if _is_blocked(orbital):
+		_flip_orbit()
+
+	velocity = velocity.move_toward(desired, combat_acceleration * dt)
+	move_and_slide()
+
+func _tick_orbit_flip(dt: float) -> void:
+	_wall_flip_cooldown = maxf(_wall_flip_cooldown - dt, 0.0)
+	_orbit_flip_timer -= dt
+	if _orbit_flip_timer <= 0.0:
+		_orbit_dir = -_orbit_dir
+		_reset_orbit_flip_timer()
+
+func _reset_orbit_flip_timer() -> void:
+	_orbit_flip_timer = randf_range(orbit_flip_interval_min, orbit_flip_interval_max)
+
+func _flip_orbit() -> void:
+	if _wall_flip_cooldown > 0.0:
+		return
+	_orbit_dir = -_orbit_dir
+	_wall_flip_cooldown = 0.5
+	_reset_orbit_flip_timer()
+
+func _is_blocked(dir: Vector3) -> bool:
+	if dir.length_squared() < 0.001:
+		return false
+	return test_move(global_transform, dir.normalized() * wall_probe_distance)
+
+func _get_living_enemies() -> Array[Enemy]:
+	var result: Array[Enemy] = []
+	for node in get_tree().get_nodes_in_group("enemies"):
+		var other := node as Enemy
+		if not other or other == self:
+			continue
+		if other.is_dead():
+			continue
+		result.append(other)
+	return result
+
+func _get_orbit_spacing(player: Player) -> float:
+	var spacing := deg_to_rad(orbit_spacing_angle)
+	if spacing <= 0.0:
+		return 0.0
+	var center := player.global_position
+	var my_angle := atan2(global_position.z - center.z, global_position.x - center.x)
+	var push := 0.0
+	for other in _get_living_enemies():
+		var other_angle := atan2(other.global_position.z - center.z, other.global_position.x - center.x)
+		var diff := wrapf(my_angle - other_angle, -PI, PI)
+		if absf(diff) >= spacing:
+			continue
+		var strength := 1.0 - absf(diff) / spacing
+		if diff < 0.0:
+			strength = -strength
+		push -= strength
+	return clampf(push, -1.5, 1.5)
+
+func _get_separation() -> Vector3:
+	var push := Vector3.ZERO
+	for other in _get_living_enemies():
+		var away := global_position - other.global_position
+		away.y = 0.0
+		var d := away.length()
+		if d >= separation_radius or d < 0.001:
+			continue
+		push += away / d * (1.0 - d / separation_radius)
+	return push
 
 func _select_behaviour(dt: float) -> void:
 	if suspicion.is_alert():
