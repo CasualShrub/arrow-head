@@ -11,6 +11,9 @@ class_name JuiceSplatStyle
 @export_group("pool")
 @export var pool_blob_count := 9
 @export var pool_radius_range := Vector2(18.0, 24.0)
+@export var pool_offset_back := 0.6
+@export var pool_offset_forward := 0.9
+@export var pool_offset_side := 0.6
 
 @export_group("streaks")
 @export var streak_count_range := Vector2i(4, 7)
@@ -77,16 +80,17 @@ func build_texture() -> ImageTexture:
 
 func _paint_pool(img: Image, origin: Vector2, pool_radius: float) -> void:
 	for i in pool_blob_count:
-		var offset := Vector2(randf_range(-0.6, 0.9), randf_range(-0.6, 0.6)) * pool_radius
+		var offset := Vector2(
+			randf_range(-pool_offset_back, pool_offset_forward),
+			randf_range(-pool_offset_side, pool_offset_side)
+		) * pool_radius
 		_draw_circle(img, origin + offset, pool_radius * randf_range(0.45, 0.8))
 
 func _paint_streaks(img: Image, origin: Vector2) -> void:
-	var max_reach := texture_size.x - origin.x - 12.0
 	for i in randi_range(streak_count_range.x, streak_count_range.y):
-		var reach := randf_range(streak_min_reach, max_reach)
-		var max_angle := minf(streak_max_angle, asin(minf((origin.y - 14.0) / reach, 1.0)))
-		var angle := randf_range(-max_angle, max_angle)
-		var dir := Vector2.from_angle(angle)
+		var dir := Vector2.from_angle(randf_range(-streak_max_angle, streak_max_angle))
+		var max_reach := _distance_to_edge(origin, dir) - 12.0
+		var reach := randf_range(minf(streak_min_reach, max_reach), max_reach)
 		var side := Vector2(-dir.y, dir.x)
 		var start_width := randf_range(streak_width_range.x, streak_width_range.y)
 		var steps := int(reach / 2.0)
@@ -97,11 +101,11 @@ func _paint_streaks(img: Image, origin: Vector2) -> void:
 		_draw_circle(img, origin + dir * reach, randf_range(streak_end_drop_range.x, streak_end_drop_range.y))
 
 func _paint_droplets(img: Image, origin: Vector2, pool_radius: float) -> void:
-	var max_dist := texture_size.x - origin.x
 	for i in randi_range(droplet_count_range.x, droplet_count_range.y):
-		var angle := randf_range(-droplet_spread, droplet_spread)
+		var dir := Vector2.from_angle(randf_range(-droplet_spread, droplet_spread))
+		var max_dist := _distance_to_edge(origin, dir)
 		var dist := randf_range(pool_radius, max_dist - 6.0)
-		var pos := origin + Vector2.from_angle(angle) * dist
+		var pos := origin + dir * dist
 		var radius := lerpf(droplet_near_radius, droplet_far_radius, dist / max_dist) * randf_range(0.6, 1.2)
 		if _fits(img, pos, radius):
 			_draw_circle(img, pos, radius)
@@ -110,6 +114,18 @@ func _paint_back_spatter(img: Image, origin: Vector2, pool_radius: float) -> voi
 	for i in randi_range(back_count_range.x, back_count_range.y):
 		var pos := origin + Vector2.from_angle(randf() * TAU) * randf_range(pool_radius, pool_radius * 2.0)
 		_draw_circle(img, pos, randf_range(back_radius_range.x, back_radius_range.y))
+
+func _distance_to_edge(origin: Vector2, dir: Vector2) -> float:
+	var dist := INF
+	if dir.x > 0.001:
+		dist = minf(dist, (texture_size.x - origin.x) / dir.x)
+	elif dir.x < -0.001:
+		dist = minf(dist, origin.x / -dir.x)
+	if dir.y > 0.001:
+		dist = minf(dist, (texture_size.y - origin.y) / dir.y)
+	elif dir.y < -0.001:
+		dist = minf(dist, origin.y / -dir.y)
+	return dist
 
 func _fits(img: Image, center: Vector2, radius: float) -> bool:
 	return (

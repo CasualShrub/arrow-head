@@ -26,6 +26,7 @@ class_name Enemy
 @export_group("hit")
 @export var hit_flash_time := 0.2
 @export var juice_color := Color(0.95, 0.85, 0.35)
+@export var death_juice_style: JuiceSplatStyle = preload("res://systems/blood/juice_splat_death.tres")
 @export_group("combat")
 @export var combat_speed := 1.5
 @export var combat_retreat_speed := 3.5
@@ -522,6 +523,7 @@ func _select_behaviour(dt: float) -> void:
 
 func _on_died() -> void:
 	SoundManager.play("banana_death")
+	JuiceSplatter.splat(global_position, Vector3.ZERO, juice_color, 1.0, death_juice_style)
 	_dash_target.make_invulnerable()
 	_release_nocked()
 	for t in _inst_timers.get_children():
@@ -574,10 +576,7 @@ func _splat_juice() -> void:
 	var player := _get_player()
 	if player:
 		dir = global_position - player.global_position
-	var size := 1.0
-	if _hits_taken + 1 >= max_hits:
-		size = 1.4
-	JuiceSplatter.splat(global_position, dir, juice_color, size)
+	JuiceSplatter.splat(global_position, dir, juice_color)
 
 func _await_fire_release() -> void:
 	while (
