@@ -28,12 +28,9 @@ entrance_walk_distance = 3.2
 allow_ricochet = false
 
 [node name="Player" parent="." index="0" unique_id=508579643]
-speed = null
 dash_cost = 0.15
-arrow_dig_depth = null
 hurt_radius = 0.35
 hurt_reaction_duration = 0.5
-idle_face_camera_delay = null
 
 [node name="Enemy" parent="Enemies" parent_id_path=PackedInt32Array(1185931971) index="0" unique_id=1813099079 instance=ExtResource("3_banana")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -16.24)
