@@ -39,6 +39,7 @@ class_name JuiceSplatStyle
 @export var length_jitter := 0.15
 @export var angle_jitter := 0.25
 @export var shades: Array[float] = [0.78, 0.86, 0.93, 1.0]
+@export_range(0.0, 1.0) var opacity := 0.7
 @export var grow_time := 0.12
 @export var grow_start_scale := 0.3
 @export var max_splats := 300

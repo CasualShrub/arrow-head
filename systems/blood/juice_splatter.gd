@@ -175,7 +175,7 @@ func _make_mesh(style: JuiceSplatStyle, size: float) -> QuadMesh:
 
 func _random_shade(style: JuiceSplatStyle, color: Color) -> Color:
 	var shade: float = style.shades.pick_random()
-	return Color(color.r * shade, color.g * shade, color.b * shade, 1.0)
+	return Color(color.r * shade, color.g * shade, color.b * shade, style.opacity)
 
 func _random_yaw(style: JuiceSplatStyle, direction: Vector3) -> float:
 	direction.y = 0.0
@@ -209,8 +209,7 @@ func _get_material(style: JuiceSplatStyle, variant: int, tint: Color) -> Standar
 		return _materials[key]
 	var mat := StandardMaterial3D.new()
 	mat.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
-	mat.transparency = BaseMaterial3D.TRANSPARENCY_ALPHA_SCISSOR
-	mat.alpha_scissor_threshold = 0.5
+	mat.transparency = BaseMaterial3D.TRANSPARENCY_ALPHA
 	mat.cull_mode = BaseMaterial3D.CULL_DISABLED
 	mat.texture_filter = BaseMaterial3D.TEXTURE_FILTER_NEAREST
 	mat.albedo_texture = style.get_texture(variant)
