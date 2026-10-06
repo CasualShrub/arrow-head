@@ -65,6 +65,7 @@ var _aim_facing := Vector3.FORWARD
 		
 @export var hurt_reaction_duration := 0.35
 @export var juice_color := Color(0.97, 0.9, 0.68)
+@export var death_juice_style: JuiceSplatStyle = preload("res://systems/blood/juice_splat_death.tres")
 
 @export var idle_face_camera_delay := 0.5
 
@@ -393,7 +394,7 @@ func _stop_angry_effect(instant := false) -> void:
 	_angry_handle = null
 
 func _on_died() -> void:
-	JuiceSplatter.splat(global_position, Vector3.ZERO, juice_color, 1.6)
+	JuiceSplatter.splat(global_position, Vector3.ZERO, juice_color, 1.0, death_juice_style)
 	_status.clear()
 	arrows.clear_arrows()
 	time.resume()
