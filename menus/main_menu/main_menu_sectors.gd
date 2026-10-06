@@ -46,16 +46,20 @@ signal sector_hovered(sector: StringName)
 var _hovered: StringName = &""
 var _darkened: StringName = &""
 var _hover_fill: Polygon2D
+var _materials: Dictionary = {}
 
 func _ready() -> void:
 	if Engine.is_editor_hint():
 		return
-	var mat := ShaderMaterial.new()
-	mat.shader = pattern_shader
-	mat.set_shader_parameter("pan_speed", pattern_pan_speed)
-	mat.set_shader_parameter("tiling", pattern_tiling)
+	for s in _sectors():
+		var mat := ShaderMaterial.new()
+		mat.shader = pattern_shader
+		mat.set_shader_parameter("pan_speed", pattern_pan_speed)
+		mat.set_shader_parameter("tiling", pattern_tiling)
+		mat.set_shader_parameter("pattern", s["tex"])
+		_materials[s["name"]] = mat
 	_hover_fill = Polygon2D.new()
-	_hover_fill.material = mat
+	_hover_fill.texture_repeat = CanvasItem.TEXTURE_REPEAT_ENABLED
 	_hover_fill.show_behind_parent = true
 	_hover_fill.hide()
 	add_child(_hover_fill)
@@ -75,7 +79,7 @@ func _update_hover_fill() -> void:
 			var poly := _wedge(s["c"] - s["h"], s["c"] + s["h"])
 			_hover_fill.polygon = poly
 			_hover_fill.texture = tex
-			(_hover_fill.material as ShaderMaterial).set_shader_parameter("pattern", tex)
+			_hover_fill.material = _materials[s["name"]]
 			var tex_size := tex.get_size()
 			var uv := PackedVector2Array()
 			for p in poly:
