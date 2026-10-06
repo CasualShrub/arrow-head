@@ -24,6 +24,7 @@ static func splat(
 	size := 1.0,
 	style: JuiceSplatStyle = DEFAULT_STYLE
 ) -> void:
+	if not VisualFeatureManager.blood: return
 	var splatter := _get_splatter()
 	if not splatter: return
 	splatter.add_splat(at, direction, color, size, style)
@@ -35,6 +36,7 @@ static func spurt(
 	size := 1.0,
 	style: JuiceSplatStyle = DEFAULT_STYLE
 ) -> void:
+	if not VisualFeatureManager.blood: return
 	var splatter := _get_splatter()
 	if not splatter: return
 	splatter.add_spurt(from, landing, color, size, style)

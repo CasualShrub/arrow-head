@@ -87,6 +87,7 @@ func sync_mask_camera(cam: Camera3D) -> void:
 
 func set_darken(amount: float, duration: float = 0.0) -> void:
 	if not _darken_rect: return
+	if not VisualFeatureManager.darken: amount = 0.0
 	var mat := _darken_rect.material as ShaderMaterial
 	if duration <= 0.0:
 		mat.set_shader_parameter("darken_amount", amount)

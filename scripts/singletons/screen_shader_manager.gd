@@ -21,7 +21,7 @@ func _ready() -> void:
 func register_camera(cam: Camera3D) -> void:
 	_main_cam = cam
 	_mask_vp.world_3d = cam.get_world_3d()
-	_psx_layer.visible = true
+	_psx_layer.visible = VisualFeatureManager.psx_filter
 	cam.tree_exiting.connect(_on_camera_exiting.bind(cam), CONNECT_ONE_SHOT)
 	_on_resize()
 

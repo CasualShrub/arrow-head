@@ -6,6 +6,7 @@ func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
 
 func play(effect: ScreenEffect, bound_to: Node = null) -> ScreenEffectHandle:
+	if not VisualFeatureManager.screen_effects: return null
 	var handle := ScreenEffectHandle.new()
 	handle.effect = effect
 	handle.material = ShaderMaterial.new()

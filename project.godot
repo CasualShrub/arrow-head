@@ -17,6 +17,7 @@ config/icon="res://icon.svg"
 
 [autoload]
 
+FeatureManager="*res://scripts/singletons/feature_manager.gd"
 GameManager="*uid://bgq8eao47q3p6"
 SettingsManager="*uid://sh0osek64eid"
 SoundManager="*res://scripts/singletons/sound_manager.gd"
