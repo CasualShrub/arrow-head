@@ -28,7 +28,7 @@ class_name Enemy
 @export var juice_color := Color(0.95, 0.85, 0.35)
 @export_group("combat")
 @export var combat_speed := 1.5
-@export var combat_retreat_speed := 2.5
+@export var combat_retreat_speed := 3.5
 @export var combat_acceleration := 8.0
 @export var orbit_radius := 3.0
 @export var orbit_radius_tolerance := 0.75
@@ -38,8 +38,21 @@ class_name Enemy
 @export var orbit_spacing_angle := 60.0
 @export var separation_radius := 1.5
 @export var wall_probe_distance := 0.6
+@export_group("maneuver")
+@export_range(0.0, 1.0) var maneuver_chance := 0.35
+@export var maneuver_duration_min := 0.7
+@export var maneuver_duration_max := 1.4
+@export var push_radius_scale := 0.4
+@export var push_speed_scale := 1.8
+@export var retreat_radius_scale := 1.7
+@export var maneuver_orbit_scale := 0.5
+
+enum Maneuver { ORBIT, PUSH, RETREAT, HOLD }
 
 signal fired(arrow: Arrow, dir: Vector3)
+
+var _maneuver := Maneuver.ORBIT
+var _maneuver_timer := 0.0
 
 var _orbit_dir := 1.0
 var _orbit_flip_timer := 0.0
@@ -365,15 +378,17 @@ func _orbit(player: Player, dt: float) -> void:
 		forward = to_player / dist
 	var tangent := forward.cross(Vector3.UP)
 
-	_tick_orbit_flip(dt)
+	_tick_orbit_flip(dt, dist)
 
-	var radial_error := dist - orbit_radius
+	var radial_error := dist - _get_target_radius()
 	var radial_weight := clampf(radial_error / orbit_radius_tolerance, -1.0, 1.0)
 	var radial := forward * radial_weight * combat_speed
 	if radial_weight < 0.0:
 		radial = forward * radial_weight * combat_retreat_speed
+	if _maneuver == Maneuver.PUSH:
+		radial *= push_speed_scale
 
-	var orbit_weight := _orbit_dir + _get_orbit_spacing(player)
+	var orbit_weight := _orbit_dir * _get_orbit_scale() + _get_orbit_spacing(player)
 	var orbital := tangent * orbit_weight * orbit_speed
 
 	var desired := radial + orbital + _get_separation() * combat_speed
@@ -385,12 +400,58 @@ func _orbit(player: Player, dt: float) -> void:
 	velocity = velocity.move_toward(desired, combat_acceleration * dt)
 	move_and_slide()
 
-func _tick_orbit_flip(dt: float) -> void:
+func _tick_orbit_flip(dt: float, dist: float) -> void:
 	_wall_flip_cooldown = maxf(_wall_flip_cooldown - dt, 0.0)
+	if _maneuver != Maneuver.ORBIT:
+		_maneuver_timer -= dt
+		if _maneuver_timer <= 0.0:
+			_maneuver = Maneuver.ORBIT
+		return
 	_orbit_flip_timer -= dt
-	if _orbit_flip_timer <= 0.0:
+	if _orbit_flip_timer > 0.0:
+		return
+	_reset_orbit_flip_timer()
+	if randf() < maneuver_chance:
+		_start_maneuver(dist)
+	else:
 		_orbit_dir = -_orbit_dir
-		_reset_orbit_flip_timer()
+
+func _start_maneuver(dist: float) -> void:
+	var roll := randf()
+	if dist > orbit_radius * 1.5:
+		if roll < 0.7:
+			_maneuver = Maneuver.PUSH
+		else:
+			_maneuver = Maneuver.HOLD
+	elif dist < orbit_radius * 0.6:
+		if roll < 0.7:
+			_maneuver = Maneuver.RETREAT
+		else:
+			_maneuver = Maneuver.HOLD
+	else:
+		if roll < 0.4:
+			_maneuver = Maneuver.PUSH
+		elif roll < 0.75:
+			_maneuver = Maneuver.RETREAT
+		else:
+			_maneuver = Maneuver.HOLD
+	_maneuver_timer = randf_range(maneuver_duration_min, maneuver_duration_max)
+
+func _get_target_radius() -> float:
+	match _maneuver:
+		Maneuver.PUSH:
+			return orbit_radius * push_radius_scale
+		Maneuver.RETREAT:
+			return orbit_radius * retreat_radius_scale
+	return orbit_radius
+
+func _get_orbit_scale() -> float:
+	match _maneuver:
+		Maneuver.PUSH, Maneuver.RETREAT:
+			return maneuver_orbit_scale
+		Maneuver.HOLD:
+			return 0.0
+	return 1.0
 
 func _reset_orbit_flip_timer() -> void:
 	_orbit_flip_timer = randf_range(orbit_flip_interval_min, orbit_flip_interval_max)
