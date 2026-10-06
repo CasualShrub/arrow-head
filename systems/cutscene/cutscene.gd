@@ -28,7 +28,7 @@ var _steps: Array[Dictionary] = [
 	{"frame": 10, "hold": 0.0, "enter": "crossfade", "overlays": true},
 	{"frame": 11, "hold": 1.5},
 	{"frame": 12, "hold": 2, "enter": "cut", "shake": 1.0, "sound": true, "fade_color": Color.WHITE, "fade_out": 1.2},
-	{"frame": 13, "hold": 2, "fade_in": 0.7, "fade_out": 0.6},
+	{"frame": 13, "hold": 2.4, "fade_in": 0.7, "fade_out": 0.6},
 ]
 
 @onready var _frame: TextureRect = $Frame
