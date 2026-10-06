@@ -75,8 +75,14 @@ var _aim_facing := Vector3.FORWARD
 @export var leak_interval := 0.5
 @export var leak_spurt_range := Vector2(0.15, 0.6)
 @export var leak_drops_range := Vector2i(1, 3)
-@export var leak_extra_drop_size := 0.6
+@export var leak_extra_drop_size := 0.85
 @export var leak_max_step := 0.5
+
+@export_group("juice burst")
+@export var burst_drops_range := Vector2i(6, 10)
+@export var burst_distance_range := Vector2(0.3, 1.2)
+@export var burst_spread := 1.1
+@export var burst_size_range := Vector2(1.0, 1.4)
 
 @onready var _collider: CollisionShape3D = %Collider
 @onready var _camera: PlayerCamera = %Camera
@@ -294,6 +300,7 @@ func get_hit(arrow: Arrow) -> void:
 		if arrow.dig_depth >= 0.0:
 			dig = arrow.dig_depth
 		arrow.embed(dig)
+		_burst_from(arrow)
 		_apply_arrow_effects(arrow)
 		var slots := arrows.get_embedded_slots(arrow)
 		var sector := slots[0] if not slots.is_empty() else 0
@@ -340,21 +347,38 @@ func _tick_leak(delta: float) -> void:
 		_leak_timer -= interval
 		_leak_from(wounds.pick_random())
 
-func _leak_from(arrow: Arrow) -> void:
+func _get_wound_outward(arrow: Arrow) -> Vector3:
 	var outward := arrow.global_position - global_position
 	outward.y = 0.0
 	if outward.length_squared() < 0.0001:
-		outward = Vector3.FORWARD.rotated(Vector3.UP, randf() * TAU)
-	outward = outward.normalized().rotated(Vector3.UP, randf_range(-0.5, 0.5))
+		return Vector3.FORWARD.rotated(Vector3.UP, randf() * TAU)
+	return outward.normalized()
+
+func _get_wound_position(arrow: Arrow, outward: Vector3) -> Vector3:
 	var wound := global_position + outward * hurt_radius
 	wound.y = arrow.global_position.y
+	return wound
+
+func _spurt_drop(wound: Vector3, dir: Vector3, distance: float, size: float) -> void:
+	JuiceSplatter.spurt(wound, wound + dir * distance, juice_color, size, leak_style)
+
+func _leak_from(arrow: Arrow) -> void:
+	var outward := _get_wound_outward(arrow).rotated(Vector3.UP, randf_range(-0.5, 0.5))
+	var wound := _get_wound_position(arrow, outward)
 	for i in randi_range(leak_drops_range.x, leak_drops_range.y):
-		var drop_dir := outward.rotated(Vector3.UP, randf_range(-0.3, 0.3))
-		var landing := wound + drop_dir * randf_range(leak_spurt_range.x, leak_spurt_range.y)
+		var dir := outward.rotated(Vector3.UP, randf_range(-0.3, 0.3))
 		var size := 1.0
 		if i > 0:
 			size = leak_extra_drop_size
-		JuiceSplatter.spurt(wound, landing, juice_color, size, leak_style)
+		_spurt_drop(wound, dir, randf_range(leak_spurt_range.x, leak_spurt_range.y), size)
+
+func _burst_from(arrow: Arrow) -> void:
+	var outward := _get_wound_outward(arrow)
+	var wound := _get_wound_position(arrow, outward)
+	for i in randi_range(burst_drops_range.x, burst_drops_range.y):
+		var dir := outward.rotated(Vector3.UP, randf_range(-burst_spread, burst_spread))
+		var distance := randf_range(burst_distance_range.x, burst_distance_range.y)
+		_spurt_drop(wound, dir, distance, randf_range(burst_size_range.x, burst_size_range.y))
 
 func _get_aim_target() -> Vector3:
 	if input_mode.is_keyboard_mouse():

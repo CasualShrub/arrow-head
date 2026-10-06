@@ -9,26 +9,26 @@ class_name JuiceSplatStyle
 @export var variant_count := 8
 
 @export_group("pool")
-@export var pool_blob_count := 9
-@export var pool_radius_range := Vector2(18.0, 24.0)
-@export var pool_offset_back := 0.6
-@export var pool_offset_forward := 0.9
-@export var pool_offset_side := 0.6
+@export var pool_blob_count := 5
+@export var pool_radius_range := Vector2(22.0, 28.0)
+@export var pool_offset_back := 0.35
+@export var pool_offset_forward := 0.5
+@export var pool_offset_side := 0.3
 
 @export_group("streaks")
-@export var streak_count_range := Vector2i(4, 7)
+@export var streak_count_range := Vector2i(3, 5)
 @export var streak_min_reach := 70.0
 @export var streak_max_angle := 0.45
-@export var streak_width_range := Vector2(5.0, 9.0)
-@export var streak_tip_width := 1.2
-@export var streak_wobble := 2.0
-@export var streak_end_drop_range := Vector2(2.5, 4.5)
+@export var streak_width_range := Vector2(8.0, 11.0)
+@export var streak_tip_width := 4.0
+@export var streak_wobble := 1.0
+@export var streak_end_drop_range := Vector2(6.0, 8.0)
 
 @export_group("droplets")
-@export var droplet_count_range := Vector2i(18, 30)
+@export var droplet_count_range := Vector2i(4, 7)
 @export var droplet_spread := 0.8
-@export var droplet_near_radius := 5.0
-@export var droplet_far_radius := 1.5
+@export var droplet_near_radius := 7.0
+@export var droplet_far_radius := 4.0
 
 @export_group("back spatter")
 @export var back_count_range := Vector2i(3, 6)
@@ -38,7 +38,7 @@ class_name JuiceSplatStyle
 @export var world_length := 1.6
 @export var length_jitter := 0.15
 @export var angle_jitter := 0.25
-@export var shades: Array[float] = [0.78, 0.86, 0.93, 1.0]
+@export var shades: Array[float] = [1.0]
 @export_range(0.0, 1.0) var opacity := 0.7
 @export var grow_time := 0.12
 @export var grow_start_scale := 0.3
@@ -90,12 +90,12 @@ func _paint_pool(img: Image, origin: Vector2, pool_radius: float) -> void:
 			randf_range(-pool_offset_back, pool_offset_forward),
 			randf_range(-pool_offset_side, pool_offset_side)
 		) * pool_radius
-		_draw_circle(img, origin + offset, pool_radius * randf_range(0.45, 0.8))
+		_draw_circle(img, origin + offset, pool_radius * randf_range(0.6, 0.85))
 
 func _paint_streaks(img: Image, origin: Vector2) -> void:
 	for i in randi_range(streak_count_range.x, streak_count_range.y):
 		var dir := Vector2.from_angle(randf_range(-streak_max_angle, streak_max_angle))
-		var max_reach := _distance_to_edge(origin, dir) - 12.0
+		var max_reach := _distance_to_edge(origin, dir) - streak_end_drop_range.y - 2.0
 		var reach := randf_range(minf(streak_min_reach, max_reach), max_reach)
 		var side := Vector2(-dir.y, dir.x)
 		var start_width := randf_range(streak_width_range.x, streak_width_range.y)
@@ -110,7 +110,7 @@ func _paint_droplets(img: Image, origin: Vector2, pool_radius: float) -> void:
 	for i in randi_range(droplet_count_range.x, droplet_count_range.y):
 		var dir := Vector2.from_angle(randf_range(-droplet_spread, droplet_spread))
 		var max_dist := _distance_to_edge(origin, dir)
-		var dist := randf_range(pool_radius, max_dist - 6.0)
+		var dist := randf_range(pool_radius, max_dist - droplet_near_radius)
 		var pos := origin + dir * dist
 		var radius := lerpf(droplet_near_radius, droplet_far_radius, dist / max_dist) * randf_range(0.6, 1.2)
 		if _fits(img, pos, radius):

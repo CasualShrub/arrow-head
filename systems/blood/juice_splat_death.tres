@@ -1,24 +1,26 @@
-[gd_resource type="Resource" script_class="JuiceSplatStyle" format=3]
+[gd_resource type="Resource" script_class="JuiceSplatStyle" format=3 uid="uid://ds4g4b02gb8op"]
 
-[ext_resource type="Script" path="res://systems/blood/juice_splat_style.gd" id="1_style"]
+[ext_resource type="Script" uid="uid://b8gjctcc4hf85" path="res://systems/blood/juice_splat_style.gd" id="1_style"]
 
 [resource]
 script = ExtResource("1_style")
 texture_size = Vector2i(256, 256)
 origin_x = 128
 variant_count = 6
-pool_blob_count = 18
-pool_radius_range = Vector2(38, 46)
-pool_offset_back = 0.75
-pool_offset_forward = 0.75
-pool_offset_side = 0.75
-streak_count_range = Vector2i(7, 11)
+pool_blob_count = 7
+pool_radius_range = Vector2(46, 52)
+pool_offset_forward = 0.35
+pool_offset_side = 0.35
+streak_count_range = Vector2i(5, 7)
 streak_min_reach = 60.0
 streak_max_angle = 3.1416
-streak_width_range = Vector2(6, 10)
-droplet_count_range = Vector2i(30, 45)
+streak_width_range = Vector2(12, 16)
+streak_tip_width = 6.0
+streak_end_drop_range = Vector2(10, 13)
+droplet_count_range = Vector2i(6, 10)
 droplet_spread = 3.1416
-droplet_near_radius = 6.0
+droplet_near_radius = 10.0
+droplet_far_radius = 6.0
 back_count_range = Vector2i(0, 0)
 world_length = 2.6
 length_jitter = 0.1
