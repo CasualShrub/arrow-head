@@ -31,7 +31,7 @@ func _ready() -> void:
 	_reset_presentation()
 	var font := _restart.get_theme_font("font").duplicate() as FontFile
 	font.multichannel_signed_distance_field = true
-	for control in [_restart, _main_menu, _restart.get_node("Keycap")]:
+	for control in [_restart, _main_menu, _restart.get_node("Keycap"), _main_menu.get_node("Keycap")]:
 		control.add_theme_font_override("font", font)
 
 func _layout() -> void:
