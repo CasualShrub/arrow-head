@@ -15,7 +15,8 @@ const _MUSIC_BUS := "Music"
 const MUSIC := {
 	"TITLE_SCREEN": preload("uid://bilk8fubu6cf4"),
 	"complete_ost": preload("uid://bv51oh71drs8l"),
-	"paused": preload("uid://dqqae78uymnjn")
+	"paused": preload("uid://dqqae78uymnjn"),
+	"cutscene": preload("uid://dsniqyppxolpc"),
 	# archived music
 	#"Lvl_1": preload("uid://bhbv3bkkngiks"),
 	#"Lvl_2_3": preload("uid://d0guesfdkuk1p"),

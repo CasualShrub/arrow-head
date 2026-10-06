@@ -16,19 +16,19 @@ const WARM_SCENES: Array[String] = [
 
 var _steps: Array[Dictionary] = [
 	{"logo": true, "hold": 2.0, "fade_in": 0.8, "fade_out": 0.8},
-	{"frame": 1, "hold": 3.0},
-	{"frame": 2, "hold": 1.3, "shake": 1.0},
-	{"frame": 3, "hold": 2.5, "fade_out": 1.5},
-	{"frame": 4, "hold": 2.0, "fade_in": 0.9},
-	{"frame": 5, "hold": 1.0, "enter": "cut", "shake": 0.7},
-	{"frame": 6, "hold": 1.3, "enter": "crossfade"},
-	{"frame": 7, "hold": 2.5, "enter": "crossfade"},
-	{"frame": 8, "hold": 2.5},
-	{"frame": 9, "hold": 2.0, "enter": "crossfade"},
+	{"frame": 1, "hold": 4.06, "fade_out": 0.07},
+	{"frame": 2, "hold": 1.3, "shake": 1.0, "fade_in": 0.05, "fade_color": Color(1.0, 0.5, 0.1), "fade_out": 0.25},
+	{"frame": 3, "hold": 2.5, "fade_in": 0.8, "fade_out": 1.8},
+	{"frame": 4, "hold": 2.20, "fade_in": 1.7},
+	{"frame": 5, "hold": 1.75, "enter": "cut", "shake": 0.7},
+	{"frame": 6, "hold": 0.75, "enter": "crossfade"},
+	{"frame": 7, "hold": 2.1, "enter": "crossfade"},
+	{"frame": 8, "hold": 2.55},
+	{"frame": 9, "hold": 2.7, "enter": "crossfade"},
 	{"frame": 10, "hold": 0.0, "enter": "crossfade", "overlays": true},
-	{"frame": 11, "hold": 1.1},
-	{"frame": 12, "hold": 2.0, "enter": "cut", "shake": 1.0, "sound": true, "fade_color": Color.WHITE, "fade_out": 1.2},
-	{"frame": 13, "hold": 2.5, "fade_in": 1.2, "fade_out": 1.2},
+	{"frame": 11, "hold": 1.5},
+	{"frame": 12, "hold": 2, "enter": "cut", "shake": 1.0, "sound": true, "fade_color": Color.WHITE, "fade_out": 1.2},
+	{"frame": 13, "hold": 2, "fade_in": 0.7, "fade_out": 0.6},
 ]
 
 @onready var _frame: TextureRect = $Frame
@@ -119,6 +119,8 @@ func _play_step(index: int) -> void:
 	_logo.visible = step.get("logo", false)
 	if _logo.visible:
 		SoundManager.play("logo")
+	else:
+		SoundManager.play_music("cutscene")
 	var texture: Texture2D = null
 	if not _logo.visible:
 		texture = _load_frame(str(step["frame"]))

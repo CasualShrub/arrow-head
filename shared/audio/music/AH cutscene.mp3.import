@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://dsniqyppxolpc"
+path="res://.godot/imported/AH cutscene.mp3-a0326216f9119ae92226739f0f6d406d.mp3str"
+
+[deps]
+
+source_file="res://shared/audio/music/AH cutscene.mp3"
+dest_files=["res://.godot/imported/AH cutscene.mp3-a0326216f9119ae92226739f0f6d406d.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4
