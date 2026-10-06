@@ -45,6 +45,9 @@ class_name Player
 		update_configuration_warnings()
 
 @export var angry_effect: ScreenEffect = preload("res://systems/screen_effect/angry_vignette.tres")
+@export var angry_flash: ScreenEffect = preload("res://systems/screen_effect/angry_flash.tres")
+@export var angry_flash_hold := 0.06
+@export var angry_shake := 0.7
 @export var speed := 6.0
 var speed_multiplier := 1.0
 @export var dash_cost := 0.0
@@ -322,6 +325,14 @@ func _refresh_eyes_state() -> void:
 func _start_angry_effect() -> void:
 	if _angry_handle or not angry_effect: return
 	_angry_handle = ScreenEffectManager.play(angry_effect, self)
+	_camera.add_shake(angry_shake)
+	_play_angry_flash()
+
+func _play_angry_flash() -> void:
+	if not angry_flash: return
+	var handle := ScreenEffectManager.play(angry_flash, self)
+	await get_tree().create_timer(angry_flash_hold, true, false, true).timeout
+	ScreenEffectManager.stop(handle)
 
 func _stop_angry_effect(instant := false) -> void:
 	ScreenEffectManager.stop(_angry_handle, instant)

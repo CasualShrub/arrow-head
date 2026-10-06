@@ -1,10 +1,9 @@
-[gd_scene format=3]
+[gd_scene format=3 uid="uid://b7hf4ucpavfn3"]
 
-[ext_resource type="Script" path="res://entities/player/aura/angry_aura.gd" id="1_aura"]
+[ext_resource type="Script" uid="uid://du6f1f851itgy" path="res://entities/player/aura/angry_aura.gd" id="1_aura"]
 [ext_resource type="Texture2D" uid="uid://dgy5v5xmoiwb5" path="res://entities/player/aura/aura 1.PNG" id="2_a1"]
 [ext_resource type="Texture2D" uid="uid://cutvq0vrppf57" path="res://entities/player/aura/aura 2.PNG" id="3_a2"]
 [ext_resource type="Texture2D" uid="uid://ymj4w1exo8s4" path="res://entities/player/aura/aura 3.PNG" id="4_a3"]
-
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_aura"]
 animations = [{
@@ -18,15 +17,15 @@ animations = [{
 "duration": 1.0,
 "texture": ExtResource("4_a3")
 }],
-"loop": true,
+"loop": 1,
 "name": &"flicker",
 "speed": 8.0
 }]
 
-[node name="Aura" type="Node3D"]
+[node name="Aura" type="Node3D" unique_id=367219110]
 script = ExtResource("1_aura")
 
-[node name="ArcA" type="AnimatedSprite3D" parent="."]
+[node name="ArcA" type="AnimatedSprite3D" parent="." unique_id=1303676255]
 unique_name_in_owner = true
 transform = Transform3D(0.8, 0, 0, 0, -3.4968913e-08, 0.8, 0, -0.8, -3.4968913e-08, 0, -0.01, 0)
 layers = 786433
