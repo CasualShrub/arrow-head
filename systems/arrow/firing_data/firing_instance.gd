@@ -12,6 +12,7 @@ class_name FiringInstance
 @export var max_count: int = 0
 @export var instance_delay: float = 0.0
 @export var max_instance_delay: float = 0.0
+@export var reload_anim: bool = true
 @export_group("angle")
 @export_range(-360.0, 360.0) var spread: float = 0.0
 @export_range(-360.0, 360.0) var max_spread := 0.0
