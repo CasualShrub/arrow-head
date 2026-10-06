@@ -73,8 +73,8 @@ var _aim_facing := Vector3.FORWARD
 
 @export_group("juice leak")
 @export var leak_style: JuiceSplatStyle = preload("res://systems/blood/juice_splat_drip.tres")
-@export var leak_step_distance := 0.7
-@export var leak_interval := 0.5
+@export var leak_step_distance := 0.9
+@export var leak_interval := 0.65
 @export var leak_spurt_range := Vector2(0.15, 0.6)
 @export var leak_drops_range := Vector2i(1, 3)
 @export var leak_extra_drop_size := 0.85
