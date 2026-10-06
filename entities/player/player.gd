@@ -50,6 +50,9 @@ class_name Player
 @export var angry_shake := 0.7
 @export var speed := 6.0
 var speed_multiplier := 1.0
+var frozen := false
+var aim_spin := 0.0
+var _aim_facing := Vector3.FORWARD
 @export var dash_cost := 0.0
 ## how far arrows dig into apples skin
 @export var arrow_dig_depth := 0.15
@@ -110,6 +113,9 @@ func _process(delta: float) -> void:
 	if aim_target.distance_squared_to(_last_aim_target) > 0.0001:
 		is_active = true
 	_last_aim_target = aim_target
+	if _is_aim_overridden():
+		_aim_facing = _aim_facing.rotated(Vector3.UP, aim_spin * delta)
+		aim_target = _get_overridden_aim_target()
 	if is_active:
 		_idle_time = 0.0
 	else:
@@ -153,7 +159,7 @@ func _physics_process(delta: float) -> void:
 			dash.enable()
 	
 	if fire_input.consume_released():
-		dash.try_activate(global_position, _camera.get_mouse_position())
+		dash.try_activate(global_position, _get_dash_aim_target())
 	
 	_move(movement_input.get_vector(), delta)
 	
@@ -207,6 +213,49 @@ func _on_arrow_removed(arrow: Arrow) -> void:
 		if source.status.get_script() == arrow.status.get_script():
 			return
 	_status.remove_status(arrow.status)
+
+func _is_aim_overridden() -> bool:
+	return frozen or aim_spin != 0.0
+
+func _get_overridden_aim_target() -> Vector3:
+	return global_position + _aim_facing * 100.0
+
+func _get_dash_aim_target() -> Vector3:
+	if _is_aim_overridden():
+		return _get_overridden_aim_target()
+	return _camera.get_mouse_position()
+
+func _capture_aim_facing() -> void:
+	if _is_aim_overridden(): return
+	_aim_facing = -_mouse_pivot.global_basis.z
+	_aim_facing.y = 0.0
+	_aim_facing = _aim_facing.normalized()
+
+func freeze_aim() -> void:
+	_capture_aim_facing()
+	frozen = true
+
+func unfreeze_aim() -> void:
+	frozen = false
+
+func start_aim_spin(rate: float) -> void:
+	_capture_aim_facing()
+	aim_spin = rate
+
+func stop_aim_spin() -> void:
+	aim_spin = 0.0
+
+func show_status_sprite(anim: StringName) -> void:
+	if health.is_dead(): return
+	_status_sprite.play(anim)
+	_status_sprite.show()
+
+func set_status_sprite_visible(shown: bool) -> void:
+	if health.is_dead(): return
+	_status_sprite.visible = shown
+
+func hide_status_sprite() -> void:
+	_status_sprite.hide()
 
 func get_camera() -> PlayerCamera:
 	return _camera
