@@ -22,6 +22,7 @@ instances = Array[ExtResource("3_ek4vn")]([SubResource("Resource_asjij")])
 metadata/_custom_type_script = "uid://d04k7pxjd2u24"
 
 [node name="Enemy" unique_id=71488470 instance=ExtResource("1_tn6su")]
+juice_color = Color(0.55, 0.4, 0.15, 1)
 patterns = Array[ExtResource("2_t6ai2")]([SubResource("Resource_0dieb")])
 nock_points = Array[Vector2]([Vector2(0.1029, 0.2744), Vector2(0.1029, 0.4998), Vector2(0.1029, 0.7154)])
 

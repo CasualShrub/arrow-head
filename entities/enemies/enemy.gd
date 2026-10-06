@@ -25,6 +25,7 @@ class_name Enemy
 
 @export_group("hit")
 @export var hit_flash_time := 0.2
+@export var juice_color := Color(0.95, 0.85, 0.35)
 @export_group("combat")
 @export var combat_speed := 1.5
 @export var combat_retreat_speed := 2.5
@@ -499,12 +500,23 @@ func _on_dash_untargeted() -> void:
 
 func _on_dash_hit() -> void:
 	if health.is_dead(): return
+	_splat_juice()
 	await _show_hit()
 	_hits_taken += 1
 	if _hits_taken >= max_hits:
 		health.take_damage(1)
 	else:
 		_sprite.animation = &"default"
+
+func _splat_juice() -> void:
+	var dir := Vector3.ZERO
+	var player := _get_player()
+	if player:
+		dir = global_position - player.global_position
+	var size := 1.0
+	if _hits_taken + 1 >= max_hits:
+		size = 1.4
+	JuiceSplatter.splat(global_position, dir, juice_color, size)
 
 func _await_fire_release() -> void:
 	while (

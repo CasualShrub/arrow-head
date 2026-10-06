@@ -64,6 +64,7 @@ var _aim_facing := Vector3.FORWARD
 		_update_collider()
 		
 @export var hurt_reaction_duration := 0.35
+@export var juice_color := Color(0.97, 0.9, 0.68)
 
 @export var idle_face_camera_delay := 0.5
 
@@ -266,6 +267,10 @@ func get_hit(arrow: Arrow) -> void:
 		return
 	_chunks.emitting = true
 	_camera.shake()
+	var juice_dir := Vector3.ZERO
+	if arrow.simulation:
+		juice_dir = arrow.simulation.facing
+	JuiceSplatter.splat(global_position, juice_dir, juice_color)
 	if arrow.instakill:
 		arrow.deactivate()
 		health.die()
@@ -388,6 +393,7 @@ func _stop_angry_effect(instant := false) -> void:
 	_angry_handle = null
 
 func _on_died() -> void:
+	JuiceSplatter.splat(global_position, Vector3.ZERO, juice_color, 1.6)
 	_status.clear()
 	arrows.clear_arrows()
 	time.resume()

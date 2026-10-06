@@ -49,6 +49,7 @@ instances = Array[ExtResource("4_ins")]([SubResource("Resource_ball_inst")])
 metadata/_custom_type_script = "uid://d04k7pxjd2u24"
 
 [node name="Enemy" unique_id=520769260 instance=ExtResource("1_e5b04")]
+juice_color = Color(0.4, 0.7, 0.2, 1)
 patterns = Array[ExtResource("3_pat")]([SubResource("Resource_sweep"), SubResource("Resource_fan"), SubResource("Resource_sweep"), SubResource("Resource_ball")])
 fixed_patterns = true
 
