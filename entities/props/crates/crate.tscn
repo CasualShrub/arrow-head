@@ -1,21 +1,15 @@
 [gd_scene format=3 uid="uid://6pmssibpr3f4"]
 
 [ext_resource type="PackedScene" uid="uid://dg7uu1d6jwnr5" path="res://entities/props/crates/assets/crate.glb" id="1_hsj46"]
-[ext_resource type="PackedScene" uid="uid://boryk37cbh1nx" path="res://entities/player/player.tscn" id="2_2xkvw"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_ub6uw"]
 size = Vector3(0.863, 0.863, 0.863)
 
-[node name="crate2" unique_id=1983312266 instance=ExtResource("1_hsj46")]
+[node name="StaticBody3D" type="StaticBody3D" unique_id=799608760]
 
-[node name="crate" parent="." index="0" unique_id=1425571269]
-transform = Transform3D(0.86, 0, 0, 0, 0.86, 0, 0, 0, 0.86, 0, 0.43079627, 0)
-
-[node name="StaticBody3D" type="StaticBody3D" parent="." index="1" unique_id=799608760]
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="StaticBody3D" index="0" unique_id=258608838]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=258608838]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.44483948, 0)
 shape = SubResource("BoxShape3D_ub6uw")
 
-[node name="Player" parent="StaticBody3D" index="1" unique_id=775136311 instance=ExtResource("2_2xkvw")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.4597697, 0, -0.09480834)
+[node name="crate" parent="." unique_id=1983312266 instance=ExtResource("1_hsj46")]
+transform = Transform3D(0.86, 0, 0, 0, 0.86, 0, 0, 0, 0.86, 0, 0, 0)

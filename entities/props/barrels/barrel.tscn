@@ -6,13 +6,11 @@
 height = 0.7873535
 radius = 0.4
 
-[node name="barrel2" unique_id=14130031 instance=ExtResource("1_ofi53")]
+[node name="StaticBody3D" type="StaticBody3D" unique_id=1643885068]
 
-[node name="barrel" parent="." index="0" unique_id=1506563655]
-transform = Transform3D(0.39, 0, 0, 0, 0.39, 0, 0, 0, 0.39, 0, 0.372, 0)
-
-[node name="StaticBody3D" type="StaticBody3D" parent="." index="1" unique_id=1643885068]
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="StaticBody3D" index="0" unique_id=2110037519]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=2110037519]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.37390137, 0)
 shape = SubResource("CylinderShape3D_8wtow")
+
+[node name="Mesh" parent="." unique_id=14130031 instance=ExtResource("1_ofi53")]
+transform = Transform3D(0.39, 0, 0, 0, 0.39, 0, 0, 0, 0.39, 0, 0, 0)
