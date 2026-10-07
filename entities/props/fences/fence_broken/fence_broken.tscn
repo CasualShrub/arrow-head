@@ -1,20 +1,19 @@
 [gd_scene format=3 uid="uid://h1gx57ppoh5v"]
 
-[ext_resource type="Script" path="res://entities/props/shake_on_hit_prop.gd" id="shake_script"]
-[ext_resource type="PackedScene" uid="uid://c8g1wng52f2x7" path="res://entities/props/fences/fence_broken/fence1.glb" id="1_tbdw5"]
+[ext_resource type="PackedScene" uid="uid://c8g1wng52f2x7" path="res://entities/props/fences/fence_broken/assets/fence1.glb" id="1_tbdw5"]
+[ext_resource type="Script" uid="uid://dur7o34o4qnwv" path="res://entities/props/shake_on_hit_prop.gd" id="shake_script"]
 
-[sub_resource type="BoxShape3D" id="BoxShape3D_ub6uw"]
-size = Vector3(0.28857422, 1.6492462, 1.0842209)
+[sub_resource type="BoxShape3D" id="BoxShape3D_jikse"]
+size = Vector3(0.10839844, 0.88946533, 0.99487305)
 
-[node name="fence_broken" type="StaticBody3D"]
-transform = Transform3D(0.415, 0, 0, 0, 0.836, 0, 0, 0, 0.872, 0, 0, 0)
+[node name="fence_broken" type="StaticBody3D" unique_id=1815813027]
 collision_layer = 4
 collision_mask = 9
 script = ExtResource("shake_script")
 
-[node name="Mesh" parent="." instance=ExtResource("1_tbdw5")]
-transform = Transform3D(1, 0, 0, 0, 0.43666428, 0, 0, 0, 0.43666428, 0, 0, 0)
+[node name="Mesh" parent="." unique_id=487589190 instance=ExtResource("1_tbdw5")]
+transform = Transform3D(0.4, 0, 0, 0, 0.4, 0, 0, 0, 0.4, 0, 0, 0)
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0031738281, 0.11237031, 0.034781322)
-shape = SubResource("BoxShape3D_ub6uw")
+[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=451429824]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0014648438, 0.396698, 0.021606445)
+shape = SubResource("BoxShape3D_jikse")
