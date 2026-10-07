@@ -4,16 +4,19 @@
 
 [resource]
 script = ExtResource("1_style")
-pool_blob_count = 9
-pool_radius_range = Vector2(18, 24)
-pool_offset_back = 0.6
-pool_offset_forward = 0.9
-pool_offset_side = 0.6
-streak_width_range = Vector2(8, 12)
-streak_tip_width = 3.0
-streak_wobble = 2.0
-streak_end_drop_range = Vector2(4, 6)
-droplet_count_range = Vector2i(18, 30)
-droplet_near_radius = 6.5
-droplet_far_radius = 3.0
+texture_size = Vector2i(256, 160)
+pool_blob_count = 3
+pool_radius_range = Vector2(16, 19)
+pool_offset_back = 0.15
+pool_offset_forward = 0.15
+pool_offset_side = 0.15
+streak_count_range = Vector2i(3, 4)
+streak_min_reach = 100.0
+streak_max_angle = 0.4
+streak_width_range = Vector2(15, 18)
+streak_tip_width = 12.0
+streak_wobble = 0.0
+streak_end_drop_range = Vector2(12, 13)
+droplet_count_range = Vector2i(0, 0)
+back_count_range = Vector2i(0, 0)
 shades = Array[float]([0.78, 0.86, 0.93, 1.0])

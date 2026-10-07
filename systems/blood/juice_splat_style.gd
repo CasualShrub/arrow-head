@@ -93,12 +93,16 @@ func _paint_pool(img: Image, origin: Vector2, pool_radius: float) -> void:
 		_draw_circle(img, origin + offset, pool_radius * randf_range(0.6, 0.85))
 
 func _paint_streaks(img: Image, origin: Vector2) -> void:
-	for i in randi_range(streak_count_range.x, streak_count_range.y):
-		var dir := Vector2.from_angle(randf_range(-streak_max_angle, streak_max_angle))
-		var max_reach := _distance_to_edge(origin, dir) - streak_end_drop_range.y - 2.0
+	var count := randi_range(streak_count_range.x, streak_count_range.y)
+	var slice := streak_max_angle * 2.0 / maxi(count, 1)
+	for i in count:
+		var slice_center := -streak_max_angle + slice * (i + 0.5)
+		var dir := Vector2.from_angle(slice_center + randf_range(-0.35, 0.35) * slice)
+		var start_width := randf_range(streak_width_range.x, streak_width_range.y)
+		var margin := maxf(maxf(start_width, streak_tip_width), streak_end_drop_range.y) + 2.0
+		var max_reach := _distance_to_edge(origin, dir) - margin
 		var reach := randf_range(minf(streak_min_reach, max_reach), max_reach)
 		var side := Vector2(-dir.y, dir.x)
-		var start_width := randf_range(streak_width_range.x, streak_width_range.y)
 		var steps := int(reach / 2.0)
 		for s in steps:
 			var t := float(s) / steps
