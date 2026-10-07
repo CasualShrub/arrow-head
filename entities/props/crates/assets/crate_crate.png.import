@@ -2,20 +2,20 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://bi00v2m8un58h"
-path.s3tc="res://.godot/imported/fence3_fence.png-e3a21bf1cb7e7b29306652f210f84530.s3tc.ctex"
+uid="uid://cij5nd2y0gs6y"
+path.s3tc="res://.godot/imported/crate_crate.png-f4215c9d53712c738453983591fc7755.s3tc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
 }
 generator_parameters={
-"md5": "ea0c67f9c344fbfdcac36cc62b2e3c7f"
+"md5": "2d869fa7ccacbcbe6b6f2770192912bc"
 }
 
 [deps]
 
-source_file="res://entities/props/fences/fence_straight/fence3_fence.png"
-dest_files=["res://.godot/imported/fence3_fence.png-e3a21bf1cb7e7b29306652f210f84530.s3tc.ctex"]
+source_file="res://entities/props/crates/assets/crate_crate.png"
+dest_files=["res://.godot/imported/crate_crate.png-f4215c9d53712c738453983591fc7755.s3tc.ctex"]
 
 [params]
 
