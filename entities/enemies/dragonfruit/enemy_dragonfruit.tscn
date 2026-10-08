@@ -20,7 +20,6 @@ metadata/_custom_type_script = "uid://r4qbgt6it8lb"
 
 [sub_resource type="Resource" id="Resource_1585h"]
 script = ExtResource("2_l1ure")
-weight = 0.0
 recovery = 2.0
 instances = Array[ExtResource("3_3kxgl")]([SubResource("Resource_e5ay6")])
 metadata/_custom_type_script = "uid://d04k7pxjd2u24"
@@ -85,7 +84,6 @@ metadata/_custom_type_script = "uid://r4qbgt6it8lb"
 
 [sub_resource type="Resource" id="Resource_54hkm"]
 script = ExtResource("2_l1ure")
-weight = 0.0
 recovery = 1.5
 uses_windup = true
 instances = Array[ExtResource("3_3kxgl")]([SubResource("Resource_mjiwy"), SubResource("Resource_vnqk6")])
