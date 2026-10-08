@@ -238,73 +238,141 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="Buttons" type="VBoxContainer" parent="LevelSelect" unique_id=735805230]
+[node name="Buttons" type="GridContainer" parent="LevelSelect" unique_id=735805230]
 layout_mode = 1
 offset_left = 177.0
 offset_top = 228.175
-offset_right = 517.0
+offset_right = 1137.0
 offset_bottom = 860.175
 scale = Vector2(0.64, 0.64)
-theme_override_constants/separation = 10
+columns = 3
+theme_override_constants/h_separation = 10
+theme_override_constants/v_separation = 10
 
-[node name="Tutorial" type="Button" parent="LevelSelect/Buttons" unique_id=1585556067]
-custom_minimum_size = Vector2(340, 64)
+[node name="Tutorial" type="Button" parent="LevelSelect/Buttons" unique_id=727469390]
+custom_minimum_size = Vector2(300, 64)
 layout_mode = 2
 theme_override_fonts/font = ExtResource("5_t7kvd")
-theme_override_font_sizes/font_size = 42
+theme_override_font_sizes/font_size = 36
 text = "Tutorial"
 
-[node name="Level1" type="Button" parent="LevelSelect/Buttons" unique_id=771563180]
-custom_minimum_size = Vector2(340, 64)
+[node name="Forest1" type="Button" parent="LevelSelect/Buttons" unique_id=197400152]
+custom_minimum_size = Vector2(300, 64)
 layout_mode = 2
 theme_override_fonts/font = ExtResource("5_t7kvd")
-theme_override_font_sizes/font_size = 42
-text = "Level 1"
+theme_override_font_sizes/font_size = 36
+text = "Forest 1"
 
-[node name="Level2" type="Button" parent="LevelSelect/Buttons" unique_id=719703129]
-custom_minimum_size = Vector2(340, 64)
+[node name="Forest2" type="Button" parent="LevelSelect/Buttons" unique_id=1041857850]
+custom_minimum_size = Vector2(300, 64)
 layout_mode = 2
 theme_override_fonts/font = ExtResource("5_t7kvd")
-theme_override_font_sizes/font_size = 42
-text = "Level 2"
+theme_override_font_sizes/font_size = 36
+text = "Forest 2"
 
-[node name="Level3" type="Button" parent="LevelSelect/Buttons" unique_id=917836742]
-custom_minimum_size = Vector2(340, 64)
+[node name="Forest3" type="Button" parent="LevelSelect/Buttons" unique_id=615617821]
+custom_minimum_size = Vector2(300, 64)
 layout_mode = 2
 theme_override_fonts/font = ExtResource("5_t7kvd")
-theme_override_font_sizes/font_size = 42
-text = "Level 3"
+theme_override_font_sizes/font_size = 36
+text = "Forest 3"
 
-[node name="Level4" type="Button" parent="LevelSelect/Buttons" unique_id=1646546205]
-custom_minimum_size = Vector2(340, 64)
+[node name="Forest4" type="Button" parent="LevelSelect/Buttons" unique_id=429186180]
+custom_minimum_size = Vector2(300, 64)
 layout_mode = 2
 theme_override_fonts/font = ExtResource("5_t7kvd")
-theme_override_font_sizes/font_size = 42
-text = "Level 4"
+theme_override_font_sizes/font_size = 36
+text = "Forest 4"
 
-[node name="Level5" type="Button" parent="LevelSelect/Buttons" unique_id=1166170549]
-custom_minimum_size = Vector2(340, 64)
+[node name="ForestBoss" type="Button" parent="LevelSelect/Buttons" unique_id=700879767]
+custom_minimum_size = Vector2(300, 64)
 layout_mode = 2
 theme_override_fonts/font = ExtResource("5_t7kvd")
-theme_override_font_sizes/font_size = 42
-text = "Level 5"
+theme_override_font_sizes/font_size = 36
+text = "Forest Boss"
 
-[node name="Boss" type="Button" parent="LevelSelect/Buttons" unique_id=1780378946]
-custom_minimum_size = Vector2(340, 64)
+[node name="Outdoor1" type="Button" parent="LevelSelect/Buttons" unique_id=286240326]
+custom_minimum_size = Vector2(300, 64)
 layout_mode = 2
 theme_override_fonts/font = ExtResource("5_t7kvd")
-theme_override_font_sizes/font_size = 42
-text = "Boss"
+theme_override_font_sizes/font_size = 36
+text = "Outdoor 1"
 
-[node name="Spacer" type="Control" parent="LevelSelect/Buttons" unique_id=1308263388]
-custom_minimum_size = Vector2(0, 40)
-layout_mode = 2
-
-[node name="Back" type="Button" parent="LevelSelect/Buttons" unique_id=2026175752]
-custom_minimum_size = Vector2(340, 64)
+[node name="Outdoor2" type="Button" parent="LevelSelect/Buttons" unique_id=1635357765]
+custom_minimum_size = Vector2(300, 64)
 layout_mode = 2
 theme_override_fonts/font = ExtResource("5_t7kvd")
-theme_override_font_sizes/font_size = 42
+theme_override_font_sizes/font_size = 36
+text = "Outdoor 2"
+
+[node name="Outdoor3" type="Button" parent="LevelSelect/Buttons" unique_id=561304915]
+custom_minimum_size = Vector2(300, 64)
+layout_mode = 2
+theme_override_fonts/font = ExtResource("5_t7kvd")
+theme_override_font_sizes/font_size = 36
+text = "Outdoor 3"
+
+[node name="Indoor1" type="Button" parent="LevelSelect/Buttons" unique_id=766479906]
+custom_minimum_size = Vector2(300, 64)
+layout_mode = 2
+theme_override_fonts/font = ExtResource("5_t7kvd")
+theme_override_font_sizes/font_size = 36
+text = "Indoor 1"
+
+[node name="Indoor2" type="Button" parent="LevelSelect/Buttons" unique_id=1779917305]
+custom_minimum_size = Vector2(300, 64)
+layout_mode = 2
+theme_override_fonts/font = ExtResource("5_t7kvd")
+theme_override_font_sizes/font_size = 36
+text = "Indoor 2"
+
+[node name="Indoor3" type="Button" parent="LevelSelect/Buttons" unique_id=1549372198]
+custom_minimum_size = Vector2(300, 64)
+layout_mode = 2
+theme_override_fonts/font = ExtResource("5_t7kvd")
+theme_override_font_sizes/font_size = 36
+text = "Indoor 3"
+
+[node name="Indoor4" type="Button" parent="LevelSelect/Buttons" unique_id=1623385089]
+custom_minimum_size = Vector2(300, 64)
+layout_mode = 2
+theme_override_fonts/font = ExtResource("5_t7kvd")
+theme_override_font_sizes/font_size = 36
+text = "Indoor 4"
+
+[node name="Indoor5" type="Button" parent="LevelSelect/Buttons" unique_id=569406030]
+custom_minimum_size = Vector2(300, 64)
+layout_mode = 2
+theme_override_fonts/font = ExtResource("5_t7kvd")
+theme_override_font_sizes/font_size = 36
+text = "Indoor 5"
+
+[node name="Castle1" type="Button" parent="LevelSelect/Buttons" unique_id=979725393]
+custom_minimum_size = Vector2(300, 64)
+layout_mode = 2
+theme_override_fonts/font = ExtResource("5_t7kvd")
+theme_override_font_sizes/font_size = 36
+text = "Castle 1"
+
+[node name="Castle2" type="Button" parent="LevelSelect/Buttons" unique_id=361505244]
+custom_minimum_size = Vector2(300, 64)
+layout_mode = 2
+theme_override_fonts/font = ExtResource("5_t7kvd")
+theme_override_font_sizes/font_size = 36
+text = "Castle 2"
+
+[node name="Castle3" type="Button" parent="LevelSelect/Buttons" unique_id=1317075881]
+custom_minimum_size = Vector2(300, 64)
+layout_mode = 2
+theme_override_fonts/font = ExtResource("5_t7kvd")
+theme_override_font_sizes/font_size = 36
+text = "Castle 3"
+
+[node name="Back" type="Button" parent="LevelSelect/Buttons" unique_id=1704483170]
+custom_minimum_size = Vector2(300, 64)
+layout_mode = 2
+theme_override_fonts/font = ExtResource("5_t7kvd")
+theme_override_font_sizes/font_size = 36
 text = "Back"
 
 [node name="Settings" parent="." unique_id=351075051 instance=ExtResource("17_settings")]
@@ -321,11 +389,21 @@ ignore_texture_size = true
 stretch_mode = 6
 
 [connection signal="pressed" from="LevelSelect/Buttons/Tutorial" to="." method="_load_level" binds= ["uid://lseyvxmqjacu", 0, 0]]
-[connection signal="pressed" from="LevelSelect/Buttons/Level1" to="." method="_load_level" binds= ["uid://lseyvxmqjacu", 0, 1]]
-[connection signal="pressed" from="LevelSelect/Buttons/Level2" to="." method="_load_level" binds= ["uid://lseyvxmqjacu", 0, 2]]
-[connection signal="pressed" from="LevelSelect/Buttons/Level3" to="." method="_load_level" binds= ["uid://lseyvxmqjacu", 0, 3]]
-[connection signal="pressed" from="LevelSelect/Buttons/Level4" to="." method="_load_level" binds= ["uid://lseyvxmqjacu", 0, 4]]
-[connection signal="pressed" from="LevelSelect/Buttons/Level5" to="." method="_load_level" binds= ["uid://lseyvxmqjacu", 0, 5]]
-[connection signal="pressed" from="LevelSelect/Buttons/Boss" to="." method="_load_level" binds= ["uid://lseyvxmqjacu", 0, 6]]
+[connection signal="pressed" from="LevelSelect/Buttons/Forest1" to="." method="_load_level" binds= ["uid://lseyvxmqjacu", 0, 1]]
+[connection signal="pressed" from="LevelSelect/Buttons/Forest2" to="." method="_load_level" binds= ["uid://lseyvxmqjacu", 0, 2]]
+[connection signal="pressed" from="LevelSelect/Buttons/Forest3" to="." method="_load_level" binds= ["uid://lseyvxmqjacu", 0, 3]]
+[connection signal="pressed" from="LevelSelect/Buttons/Forest4" to="." method="_load_level" binds= ["uid://lseyvxmqjacu", 0, 4]]
+[connection signal="pressed" from="LevelSelect/Buttons/ForestBoss" to="." method="_load_level" binds= ["uid://lseyvxmqjacu", 0, 5]]
+[connection signal="pressed" from="LevelSelect/Buttons/Outdoor1" to="." method="_load_level" binds= ["uid://lseyvxmqjacu", 0, 6]]
+[connection signal="pressed" from="LevelSelect/Buttons/Outdoor2" to="." method="_load_level" binds= ["uid://lseyvxmqjacu", 0, 7]]
+[connection signal="pressed" from="LevelSelect/Buttons/Outdoor3" to="." method="_load_level" binds= ["uid://lseyvxmqjacu", 0, 8]]
+[connection signal="pressed" from="LevelSelect/Buttons/Indoor1" to="." method="_load_level" binds= ["uid://lseyvxmqjacu", 0, 9]]
+[connection signal="pressed" from="LevelSelect/Buttons/Indoor2" to="." method="_load_level" binds= ["uid://lseyvxmqjacu", 0, 10]]
+[connection signal="pressed" from="LevelSelect/Buttons/Indoor3" to="." method="_load_level" binds= ["uid://lseyvxmqjacu", 0, 11]]
+[connection signal="pressed" from="LevelSelect/Buttons/Indoor4" to="." method="_load_level" binds= ["uid://lseyvxmqjacu", 0, 12]]
+[connection signal="pressed" from="LevelSelect/Buttons/Indoor5" to="." method="_load_level" binds= ["uid://lseyvxmqjacu", 0, 13]]
+[connection signal="pressed" from="LevelSelect/Buttons/Castle1" to="." method="_load_level" binds= ["uid://lseyvxmqjacu", 1, 0]]
+[connection signal="pressed" from="LevelSelect/Buttons/Castle2" to="." method="_load_level" binds= ["uid://lseyvxmqjacu", 1, 1]]
+[connection signal="pressed" from="LevelSelect/Buttons/Castle3" to="." method="_load_level" binds= ["uid://lseyvxmqjacu", 1, 2]]
 [connection signal="pressed" from="LevelSelect/Buttons/Back" to="." method="_close_levels"]
 [connection signal="pressed" from="Gear" to="Settings" method="open"]
