@@ -71,6 +71,7 @@ func _warm() -> void:
 		var scene := ResourceLoader.load_threaded_get(path) as PackedScene
 		viewport.add_child(scene.instantiate())
 	await get_tree().process_frame
+	if not is_inside_tree(): return
 	await get_tree().process_frame
 	viewport.queue_free()
 	GameManager.scenes_warmed = true

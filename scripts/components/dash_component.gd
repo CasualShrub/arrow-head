@@ -45,7 +45,7 @@ func try_activate(origin: Vector3, target: Vector3) -> bool:
 
 func activate(origin: Vector3, wish_pos: Vector3) -> void:
 	var dest := get_dash_destination(origin, wish_pos)
-	if dest.direction_to(origin).is_zero_approx():
+	if dest.is_equal_approx(origin):
 		return
 	var targets := get_dash_targets(origin, dest)
 	for t in targets:

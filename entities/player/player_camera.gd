@@ -149,6 +149,7 @@ func get_mouse_screen_offset() -> Vector2:
 	var viewport := get_viewport()
 	var mouse := _aim.aim_position()
 	var viewport_size := viewport.get_visible_rect().size
+	#var center := viewport_size * 0.5
 	var center := unproject_position(_anchor.global_position)
 
 	var screen_offset := mouse - center
