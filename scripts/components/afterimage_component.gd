@@ -12,6 +12,7 @@ const MIX_SHADER = preload("uid://cy4u35x3om2q4")
 @export var color := Color(1.0, 0.2, 0.2, 0.5)
 @export var duration := 1.0
 @export var depth_offset := 0.01 #just a little offset to spawn afterimages below apple
+@export var render_priority_offset := -1
 
 signal enabled()
 signal disabled()
@@ -58,7 +59,7 @@ func _duplicate_sprite(base: SpriteBase3D) -> Node3D:
 	var sprite := Sprite3D.new()
 	sprite.pixel_size = base.pixel_size
 	sprite.texture = texture
-	sprite.render_priority = base.render_priority - 1
+	sprite.render_priority = base.render_priority + render_priority_offset
 	var xform := base.global_transform
 	xform.origin.y -= depth_offset
 	sprite.global_transform = xform
@@ -67,7 +68,7 @@ func _duplicate_sprite(base: SpriteBase3D) -> Node3D:
 	sprite.set_layer_mask_value(ScreenShaderManager.UNFILTERED_LAYER, true)
 	
 	var mat := ShaderMaterial.new()
-	mat.render_priority = base.render_priority - 1
+	mat.render_priority = base.render_priority + render_priority_offset
 	mat.shader = MIX_SHADER
 	mat.set_shader_parameter("albedo_texture", texture)
 	mat.set_shader_parameter("strength", 1.0)

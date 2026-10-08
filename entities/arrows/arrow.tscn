@@ -28,6 +28,7 @@ transform = Transform3D(-0.385, 3.365777e-08, 1.4712277e-15, 0, -1.6828885e-08, 
 layers = 786433
 material_override = SubResource("ShaderMaterial_outline")
 double_sided = false
+render_priority = 11
 texture = ExtResource("2_d85th")
 
 [node name="ShapeCast3D" type="ShapeCast3D" parent="." unique_id=1469456788]
