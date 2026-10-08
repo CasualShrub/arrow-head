@@ -12,7 +12,7 @@
 [ext_resource type="PackedScene" uid="uid://cj55cs0tmf3g8" path="res://entities/props/rocks/rock_01.tscn" id="9_rdjd4"]
 [ext_resource type="PackedScene" uid="uid://b4b773yb4v3ic" path="res://entities/props/trees/tree_01.tscn" id="10_t01"]
 [ext_resource type="PackedScene" uid="uid://h30mj3gkb6xm" path="res://entities/props/trees/tree_05.tscn" id="11_t05"]
-[ext_resource type="PackedScene" uid="uid://h1gx57ppoh5v" path="res://entities/props/fences/fence_broken/fence_broken.tscn" id="16_0p1co"]
+[ext_resource type="PackedScene" uid="uid://h1gx57ppoh5v" path="res://entities/props/trunk/trunk.tscn" id="16_0p1co"]
 [ext_resource type="PackedScene" uid="uid://bcclf8r0t088h" path="res://entities/props/rocks/rock_04.tscn" id="16_w8uo4"]
 [ext_resource type="PackedScene" uid="uid://d2qg0xkhvuipc" path="res://entities/props/rocks/rock_06.tscn" id="17_15vui"]
 [ext_resource type="PackedScene" uid="uid://dpodljr37dshm" path="res://entities/props/fences/fence_normal/fence_normal.tscn" id="17_wqmk6"]
@@ -203,181 +203,184 @@ transform = Transform3D(0.091967195, 0, 0.9575938, 0, 0.96199995, 0, -0.9575938,
 [node name="Tree52" parent="Walls" parent_id_path=PackedInt32Array(2117107331) index="52" unique_id=370881139 instance=ExtResource("3_2o8us")]
 transform = Transform3D(-1.1819226, 0, -0.2900827, 0, 1.217, 0, 0.2900827, 0, -1.1819226, 15.711834, -0.641, -1.9456921)
 
-[node name="Rock31" parent="Walls" parent_id_path=PackedInt32Array(2117107331) index="53" unique_id=864478760 instance=ExtResource("7_kxf5g")]
+[node name="Tree88" parent="Walls" parent_id_path=PackedInt32Array(2117107331) index="53" unique_id=1214901105 instance=ExtResource("3_2o8us")]
+transform = Transform3D(-1.1819226, 0, -0.2900827, 0, 1.217, 0, 0.2900827, 0, -1.1819226, 17.966131, -0.641, -11.199219)
+
+[node name="Rock31" parent="Walls" parent_id_path=PackedInt32Array(2117107331) index="54" unique_id=864478760 instance=ExtResource("7_kxf5g")]
 transform = Transform3D(-0.0624577, 0, 0.8527157, 0, 0.855, 0, -0.8527157, 0, -0.0624577, 11.133179, -1.414, -11.586984)
 
-[node name="Rock38" parent="Walls" parent_id_path=PackedInt32Array(2117107331) index="54" unique_id=931709273 instance=ExtResource("7_kxf5g")]
+[node name="Rock38" parent="Walls" parent_id_path=PackedInt32Array(2117107331) index="55" unique_id=931709273 instance=ExtResource("7_kxf5g")]
 transform = Transform3D(-0.48734817, 0, 0.70250744, 0, 0.85500014, 0, -0.70250744, 0, -0.48734817, 14.698344, -1.414, -4.0217776)
 
-[node name="Tree53" parent="Walls" parent_id_path=PackedInt32Array(2117107331) index="55" unique_id=2066712110 instance=ExtResource("5_7x1nh")]
+[node name="Tree53" parent="Walls" parent_id_path=PackedInt32Array(2117107331) index="56" unique_id=2066712110 instance=ExtResource("5_7x1nh")]
 transform = Transform3D(0.7280788, 0, 0.6484799, 0, 0.975, 0, -0.6484799, 0, 0.7280788, -0.7810397, -0.51, -14.4391)
 
-[node name="Rock32" parent="Walls" parent_id_path=PackedInt32Array(2117107331) index="56" unique_id=401578343 instance=ExtResource("9_rdjd4")]
+[node name="Rock32" parent="Walls" parent_id_path=PackedInt32Array(2117107331) index="57" unique_id=401578343 instance=ExtResource("9_rdjd4")]
 transform = Transform3D(2.4329638, 0, 4.3544035, 0, 4.988, 0, -4.3544035, 0, 2.4329638, 0.93967485, -0.399, -15.515305)
 
-[node name="Tree54" parent="Walls" parent_id_path=PackedInt32Array(2117107331) index="57" unique_id=1492823830 instance=ExtResource("5_7x1nh")]
+[node name="Tree54" parent="Walls" parent_id_path=PackedInt32Array(2117107331) index="58" unique_id=1492823830 instance=ExtResource("5_7x1nh")]
 transform = Transform3D(0.9195722, 0, 0.27912, 0, 0.961, 0, -0.27912, 0, 0.9195722, 3.1147554, -0.429, -16.292633)
 
-[node name="Tree55" parent="Walls" parent_id_path=PackedInt32Array(2117107331) index="58" unique_id=2054160091 instance=ExtResource("3_2o8us")]
+[node name="Tree55" parent="Walls" parent_id_path=PackedInt32Array(2117107331) index="59" unique_id=2054160091 instance=ExtResource("3_2o8us")]
 transform = Transform3D(0.8585195, 0, 0.9030284, 0, 1.246, 0, -0.9030284, 0, 0.8585195, 6.12256, -0.472, -17.057602)
 
-[node name="Tree56" parent="Walls" parent_id_path=PackedInt32Array(2117107331) index="59" unique_id=143676180 instance=ExtResource("8_irmv7")]
+[node name="Tree56" parent="Walls" parent_id_path=PackedInt32Array(2117107331) index="60" unique_id=143676180 instance=ExtResource("8_irmv7")]
 transform = Transform3D(-0.6713001, 0, 0.7546232, 0, 1.01, 0, -0.7546232, 0, -0.6713001, 8.548237, -0.61, -17.045431)
 
-[node name="Tree57" parent="Walls" parent_id_path=PackedInt32Array(2117107331) index="60" unique_id=1227158539 instance=ExtResource("5_7x1nh")]
+[node name="Tree57" parent="Walls" parent_id_path=PackedInt32Array(2117107331) index="61" unique_id=1227158539 instance=ExtResource("5_7x1nh")]
 transform = Transform3D(0.7065224, 0, -0.5296367, 0, 0.883, 0, 0.5296367, 0, 0.7065224, 10.860138, -0.416, -15.628767)
 
-[node name="Rock33" parent="Walls" parent_id_path=PackedInt32Array(2117107331) index="61" unique_id=329009742 instance=ExtResource("7_kxf5g")]
+[node name="Rock33" parent="Walls" parent_id_path=PackedInt32Array(2117107331) index="62" unique_id=329009742 instance=ExtResource("7_kxf5g")]
 transform = Transform3D(-0.6076972, 0, 0.5294716, 0, 0.806, 0, -0.5294716, 0, -0.6076972, 12.273921, -1.238, -14.39279)
 
-[node name="Tree58" parent="Walls" parent_id_path=PackedInt32Array(2117107331) index="62" unique_id=2109858897 instance=ExtResource("3_2o8us")]
+[node name="Tree58" parent="Walls" parent_id_path=PackedInt32Array(2117107331) index="63" unique_id=2109858897 instance=ExtResource("3_2o8us")]
 transform = Transform3D(-1.1367978, 0, -0.0853864, 0, 1.14, 0, 0.0853864, 0, -1.1367978, 14.891494, -0.605, -12.869147)
 
-[node name="Tree59" parent="Walls" parent_id_path=PackedInt32Array(2117107331) index="63" unique_id=1789953373 instance=ExtResource("10_t01")]
+[node name="Tree59" parent="Walls" parent_id_path=PackedInt32Array(2117107331) index="64" unique_id=1789953373 instance=ExtResource("10_t01")]
 transform = Transform3D(-0.0898099, 0, -0.9658334, 0, 0.97, 0, 0.9658334, 0, -0.0898099, 15.889116, -0.516, -11.090897)
 
-[node name="Tree60" parent="Walls" parent_id_path=PackedInt32Array(2117107331) index="64" unique_id=1973113121 instance=ExtResource("5_7x1nh")]
+[node name="Tree60" parent="Walls" parent_id_path=PackedInt32Array(2117107331) index="65" unique_id=1973113121 instance=ExtResource("5_7x1nh")]
 transform = Transform3D(-0.4177409, 0, 1.0564036, 0, 1.136, 0, -1.0564036, 0, -0.4177409, 17.112175, -0.509, -4.3543253)
 
-[node name="Tree61" parent="Walls" parent_id_path=PackedInt32Array(2117107331) index="65" unique_id=570740612 instance=ExtResource("3_2o8us")]
+[node name="Tree61" parent="Walls" parent_id_path=PackedInt32Array(2117107331) index="66" unique_id=570740612 instance=ExtResource("3_2o8us")]
 transform = Transform3D(-0.4447471, 0, 1.2651012, 0, 1.341, 0, -1.2651012, 0, -0.4447471, -5.128408, -0.313, 3.0479867)
 
-[node name="Rock34" parent="Walls" parent_id_path=PackedInt32Array(2117107331) index="66" unique_id=1089533637 instance=ExtResource("7_kxf5g")]
+[node name="Rock34" parent="Walls" parent_id_path=PackedInt32Array(2117107331) index="67" unique_id=1089533637 instance=ExtResource("7_kxf5g")]
 transform = Transform3D(-0.8588518, 0, 0.229553, 0, 0.889, 0, -0.229553, 0, -0.8588518, -6.046704, -1.433, 2.1828187)
 
-[node name="Tree62" parent="Walls" parent_id_path=PackedInt32Array(2117107331) index="67" unique_id=1741040585 instance=ExtResource("5_7x1nh")]
+[node name="Tree62" parent="Walls" parent_id_path=PackedInt32Array(2117107331) index="68" unique_id=1741040585 instance=ExtResource("5_7x1nh")]
 transform = Transform3D(0.6569664, 0, 0.873524, 0, 1.093, 0, -0.873524, 0, 0.6569664, -5.7106705, -0.266, -2.2576654)
 
-[node name="Tree63" parent="Walls" parent_id_path=PackedInt32Array(2117107331) index="68" unique_id=1579819130 instance=ExtResource("8_irmv7")]
+[node name="Tree63" parent="Walls" parent_id_path=PackedInt32Array(2117107331) index="69" unique_id=1579819130 instance=ExtResource("8_irmv7")]
 transform = Transform3D(-1.0688998, 0, -0.0485111, 0, 1.07, 0, 0.0485111, 0, -1.0688998, -5.2284584, -0.572, -6.1895785)
 
-[node name="Tree64" parent="Walls" parent_id_path=PackedInt32Array(2117107331) index="69" unique_id=2064100484 instance=ExtResource("3_2o8us")]
+[node name="Tree64" parent="Walls" parent_id_path=PackedInt32Array(2117107331) index="70" unique_id=2064100484 instance=ExtResource("3_2o8us")]
 transform = Transform3D(-0.3752533, 0, 0.9934933, 0, 1.062, 0, -0.9934933, 0, -0.3752533, -5.967038, -0.549, -7.805482)
 
-[node name="Rock35" parent="Walls" parent_id_path=PackedInt32Array(2117107331) index="70" unique_id=182954317 instance=ExtResource("4_kqjh4")]
+[node name="Rock35" parent="Walls" parent_id_path=PackedInt32Array(2117107331) index="71" unique_id=182954317 instance=ExtResource("4_kqjh4")]
 transform = Transform3D(1.8441027, 0, 0.2978408, 0, 1.868, 0, -0.2978408, 0, 1.8441027, -6.2635975, -0.426, -8.932157)
 
-[node name="Rock39" parent="Walls" parent_id_path=PackedInt32Array(2117107331) index="71" unique_id=988353043 instance=ExtResource("4_kqjh4")]
+[node name="Rock39" parent="Walls" parent_id_path=PackedInt32Array(2117107331) index="72" unique_id=988353043 instance=ExtResource("4_kqjh4")]
 transform = Transform3D(1.8441027, 0, 0.2978408, 0, 1.868, 0, -0.2978408, 0, 1.8441027, -2.2720609, -0.8637208, -7.0307508)
 
-[node name="Rock40" parent="Walls" parent_id_path=PackedInt32Array(2117107331) index="72" unique_id=1304243821 instance=ExtResource("4_kqjh4")]
+[node name="Rock40" parent="Walls" parent_id_path=PackedInt32Array(2117107331) index="73" unique_id=1304243821 instance=ExtResource("4_kqjh4")]
 transform = Transform3D(1.8441027, 0, 0.2978408, 0, 1.868, 0, -0.2978408, 0, 1.8441027, -3.1776721, -1.3706888, -4.6951323)
 
-[node name="Tree65" parent="Walls" parent_id_path=PackedInt32Array(2117107331) index="73" unique_id=1943397434 instance=ExtResource("5_7x1nh")]
+[node name="Tree65" parent="Walls" parent_id_path=PackedInt32Array(2117107331) index="74" unique_id=1943397434 instance=ExtResource("5_7x1nh")]
 transform = Transform3D(-0.6465194, 0, 0.6389786, 0, 0.909, 0, -0.6389786, 0, -0.6465194, -0.8904729, -0.6480146, -7.5731363)
 
-[node name="CutDownTree8" parent="Walls" parent_id_path=PackedInt32Array(2117107331) index="74" unique_id=748749191 instance=ExtResource("6_30q7s")]
+[node name="CutDownTree8" parent="Walls" parent_id_path=PackedInt32Array(2117107331) index="75" unique_id=748749191 instance=ExtResource("6_30q7s")]
 transform = Transform3D(-0.5087443, 0, -1.5169636, 0, 1.5999999, 0, 1.5169636, 0, -0.5087443, -0.23970509, -0.23399247, -9.466375)
 
-[node name="Tree66" parent="Walls" parent_id_path=PackedInt32Array(2117107331) index="75" unique_id=860056703 instance=ExtResource("3_2o8us")]
+[node name="Tree66" parent="Walls" parent_id_path=PackedInt32Array(2117107331) index="76" unique_id=860056703 instance=ExtResource("3_2o8us")]
 transform = Transform3D(1.0658726, 0, 0.1918456, 0, 1.083, 0, -0.1918456, 0, 1.0658726, 14.2859535, -0.338, 0.32874966)
 
-[node name="Rock36" parent="Walls" parent_id_path=PackedInt32Array(2117107331) index="76" unique_id=1278759747 instance=ExtResource("9_rdjd4")]
+[node name="Rock36" parent="Walls" parent_id_path=PackedInt32Array(2117107331) index="77" unique_id=1278759747 instance=ExtResource("9_rdjd4")]
 transform = Transform3D(4.1746693, 0, -0.7299169, 0, 4.238, 0, 0.7299169, 0, 4.1746693, -9.07344, -0.301, 0.0127643)
 
-[node name="Tree67" parent="Walls" parent_id_path=PackedInt32Array(2117107331) index="77" unique_id=762494409 instance=ExtResource("5_7x1nh")]
+[node name="Tree67" parent="Walls" parent_id_path=PackedInt32Array(2117107331) index="78" unique_id=762494409 instance=ExtResource("5_7x1nh")]
 transform = Transform3D(-0.6041625, 0, 0.9168379, 0, 1.098, 0, -0.9168379, 0, -0.6041625, -1.8574896, -0.268, -5.6124487)
 
-[node name="Tree68" parent="Walls" parent_id_path=PackedInt32Array(2117107331) index="78" unique_id=1619530890 instance=ExtResource("8_irmv7")]
+[node name="Tree68" parent="Walls" parent_id_path=PackedInt32Array(2117107331) index="79" unique_id=1619530890 instance=ExtResource("8_irmv7")]
 transform = Transform3D(0.8545632, 0, -0.6439113, 0, 1.07, 0, 0.6439113, 0, 0.8545632, -5.674625, -0.367, -10.028484)
 
-[node name="Tree69" parent="Walls" parent_id_path=PackedInt32Array(2117107331) index="79" unique_id=639141096 instance=ExtResource("5_7x1nh")]
+[node name="Tree69" parent="Walls" parent_id_path=PackedInt32Array(2117107331) index="80" unique_id=639141096 instance=ExtResource("5_7x1nh")]
 transform = Transform3D(-0.012658, 0, -1.097927, 0, 1.098, 0, 1.097927, 0, -0.012658, -2.9946032, -0.568, -9.106293)
 
-[node name="Tree70" parent="Walls" parent_id_path=PackedInt32Array(2117107331) index="80" unique_id=1178988663 instance=ExtResource("5_7x1nh")]
+[node name="Tree70" parent="Walls" parent_id_path=PackedInt32Array(2117107331) index="81" unique_id=1178988663 instance=ExtResource("5_7x1nh")]
 transform = Transform3D(-0.4595202, 0, -0.8881673, 0, 1, 0, 0.8881673, 0, -0.4595202, -0.55, -0.352, 5.45)
 
-[node name="Rock37" parent="Walls" parent_id_path=PackedInt32Array(2117107331) index="81" unique_id=769745400 instance=ExtResource("7_kxf5g")]
+[node name="Rock37" parent="Walls" parent_id_path=PackedInt32Array(2117107331) index="82" unique_id=769745400 instance=ExtResource("7_kxf5g")]
 transform = Transform3D(0.7641687, 0, 0.4848414, 0, 0.905, 0, -0.4848414, 0, 0.7641687, 0.45, -1.461, 5.75)
 
-[node name="Tree71" parent="Walls" parent_id_path=PackedInt32Array(2117107331) index="82" unique_id=1119735450 instance=ExtResource("3_2o8us")]
+[node name="Tree71" parent="Walls" parent_id_path=PackedInt32Array(2117107331) index="83" unique_id=1119735450 instance=ExtResource("3_2o8us")]
 transform = Transform3D(0.5202216, 0, 1.2011871, 0, 1.309, 0, -1.2011871, 0, 0.5202216, 1.25, -0.392, 5.3)
 
-[node name="Tree72" parent="Walls" parent_id_path=PackedInt32Array(2117107331) index="83" unique_id=1152085419 instance=ExtResource("8_irmv7")]
+[node name="Tree72" parent="Walls" parent_id_path=PackedInt32Array(2117107331) index="84" unique_id=1152085419 instance=ExtResource("8_irmv7")]
 transform = Transform3D(-1.0129457, 0, 0.0104951, 0, 1.013, 0, -0.0104951, 0, -1.0129457, -1.5, -0.292, 5.85)
 
-[node name="Tree73" parent="Walls" parent_id_path=PackedInt32Array(2117107331) index="84" unique_id=1996132998 instance=ExtResource("5_7x1nh")]
+[node name="Tree73" parent="Walls" parent_id_path=PackedInt32Array(2117107331) index="85" unique_id=1996132998 instance=ExtResource("5_7x1nh")]
 transform = Transform3D(0.1838399, 0, 0.9844525, 0, 1.001471, 0, -0.9844525, 0, 0.1838399, 12.09, -0.549, 2.82)
 
-[node name="Tree74" parent="Walls" parent_id_path=PackedInt32Array(2117107331) index="85" unique_id=1281368787 instance=ExtResource("5_7x1nh")]
+[node name="Tree74" parent="Walls" parent_id_path=PackedInt32Array(2117107331) index="86" unique_id=1281368787 instance=ExtResource("5_7x1nh")]
 transform = Transform3D(-0.3604453, 0, -0.9677701, 0, 1.032715, 0, 0.9677701, 0, -0.3604453, 17.51, -0.407, 2.9)
 
-[node name="Tree75" parent="Walls" parent_id_path=PackedInt32Array(2117107331) index="86" unique_id=584198346 instance=ExtResource("5_7x1nh")]
+[node name="Tree75" parent="Walls" parent_id_path=PackedInt32Array(2117107331) index="87" unique_id=584198346 instance=ExtResource("5_7x1nh")]
 transform = Transform3D(-0.9186924, 0, -0.3335328, 0, 0.9773637, 0, 0.3335328, 0, -0.9186924, 14.57, -0.437, 2.99)
 
-[node name="Tree76" parent="Walls" parent_id_path=PackedInt32Array(2117107331) index="87" unique_id=237418003 instance=ExtResource("8_irmv7")]
+[node name="Tree76" parent="Walls" parent_id_path=PackedInt32Array(2117107331) index="88" unique_id=237418003 instance=ExtResource("8_irmv7")]
 transform = Transform3D(0.9857095, 0, -0.5894367, 0, 1.148503, 0, 0.5894367, 0, 0.9857095, 15.61, -0.426, 4.66)
 
-[node name="Tree77" parent="Walls" parent_id_path=PackedInt32Array(2117107331) index="88" unique_id=1357902066 instance=ExtResource("5_7x1nh")]
+[node name="Tree77" parent="Walls" parent_id_path=PackedInt32Array(2117107331) index="89" unique_id=1357902066 instance=ExtResource("5_7x1nh")]
 transform = Transform3D(-0.1015952, 0, 1.020605, 0, 1.025649, 0, -1.020605, 0, -0.1015952, 13.27, -0.317, 4.79)
 
-[node name="Tree78" parent="Walls" parent_id_path=PackedInt32Array(2117107331) index="89" unique_id=1275133055 instance=ExtResource("3_2o8us")]
+[node name="Tree78" parent="Walls" parent_id_path=PackedInt32Array(2117107331) index="90" unique_id=1275133055 instance=ExtResource("3_2o8us")]
 transform = Transform3D(-0.6533419, 0, -0.7036204, 0, 0.9601757, 0, 0.7036204, 0, -0.6533419, 10.89, -0.365, 5.92)
 
-[node name="Tree79" parent="Walls" parent_id_path=PackedInt32Array(2117107331) index="90" unique_id=1224465865 instance=ExtResource("11_t05")]
+[node name="Tree79" parent="Walls" parent_id_path=PackedInt32Array(2117107331) index="91" unique_id=1224465865 instance=ExtResource("11_t05")]
 transform = Transform3D(0.06323689, 0, 1.027094, 0, 1.029039, 0, -1.027094, 0, 0.06323689, 12.65, -0.472, 6.73)
 
-[node name="Tree80" parent="Walls" parent_id_path=PackedInt32Array(2117107331) index="91" unique_id=2102992265 instance=ExtResource("8_irmv7")]
+[node name="Tree80" parent="Walls" parent_id_path=PackedInt32Array(2117107331) index="92" unique_id=2102992265 instance=ExtResource("8_irmv7")]
 transform = Transform3D(-0.3660825, 0, -0.8549256, 0, 0.9300076, 0, 0.8549256, 0, -0.3660825, 7.09, -0.442, 7.55)
 
-[node name="Tree81" parent="Walls" parent_id_path=PackedInt32Array(2117107331) index="92" unique_id=1278324660 instance=ExtResource("5_7x1nh")]
+[node name="Tree81" parent="Walls" parent_id_path=PackedInt32Array(2117107331) index="93" unique_id=1278324660 instance=ExtResource("5_7x1nh")]
 transform = Transform3D(0.2929343, 0, 1.098103, 0, 1.136503, 0, -1.098103, 0, 0.2929343, -0.79, -0.349, 7.95)
 
-[node name="Tree82" parent="Walls" parent_id_path=PackedInt32Array(2117107331) index="93" unique_id=1155868677 instance=ExtResource("5_7x1nh")]
+[node name="Tree82" parent="Walls" parent_id_path=PackedInt32Array(2117107331) index="94" unique_id=1155868677 instance=ExtResource("5_7x1nh")]
 transform = Transform3D(-0.5276669, 0, -1.061654, 0, 1.185556, 0, 1.061654, 0, -0.5276669, 11.39, -0.359, 8.25)
 
-[node name="Tree83" parent="Walls" parent_id_path=PackedInt32Array(2117107331) index="94" unique_id=186796180 instance=ExtResource("10_t01")]
+[node name="Tree83" parent="Walls" parent_id_path=PackedInt32Array(2117107331) index="95" unique_id=186796180 instance=ExtResource("10_t01")]
 transform = Transform3D(0.7438206, 0, -0.5305134, 0, 0.9136266, 0, 0.5305134, 0, 0.7438206, 9.02, -0.383, 8.26)
 
-[node name="Tree84" parent="Walls" parent_id_path=PackedInt32Array(2117107331) index="95" unique_id=612542976 instance=ExtResource("3_2o8us")]
+[node name="Tree84" parent="Walls" parent_id_path=PackedInt32Array(2117107331) index="96" unique_id=612542976 instance=ExtResource("3_2o8us")]
 transform = Transform3D(0.4363249, 0, 0.9172966, 0, 1.015782, 0, -0.9172966, 0, 0.4363249, 1.11, -0.411, 8.54)
 
-[node name="Tree85" parent="Walls" parent_id_path=PackedInt32Array(2117107331) index="96" unique_id=1174271634 instance=ExtResource("3_2o8us")]
+[node name="Tree85" parent="Walls" parent_id_path=PackedInt32Array(2117107331) index="97" unique_id=1174271634 instance=ExtResource("3_2o8us")]
 transform = Transform3D(-0.3955796, 0, -1.103386, 0, 1.172154, 0, 1.103386, 0, -0.3955796, 4.6, -0.465, 8.69)
 
-[node name="Tree86" parent="Walls" parent_id_path=PackedInt32Array(2117107331) index="97" unique_id=331120237 instance=ExtResource("8_irmv7")]
+[node name="Tree86" parent="Walls" parent_id_path=PackedInt32Array(2117107331) index="98" unique_id=331120237 instance=ExtResource("8_irmv7")]
 transform = Transform3D(0.9182025, 0, -0.7320946, 0, 1.174333, 0, 0.7320946, 0, 0.9182025, 6.78, -0.512, 9.52)
 
-[node name="Tree87" parent="Walls" parent_id_path=PackedInt32Array(2117107331) index="98" unique_id=521157792 instance=ExtResource("5_7x1nh")]
+[node name="Tree87" parent="Walls" parent_id_path=PackedInt32Array(2117107331) index="99" unique_id=521157792 instance=ExtResource("5_7x1nh")]
 transform = Transform3D(-0.4484813, 0, -0.8373135, 0, 0.9498575, 0, 0.8373135, 0, -0.4484813, 2.86, -0.524, 9.55)
 
-[node name="Rock10" parent="Walls" parent_id_path=PackedInt32Array(2117107331) index="99" unique_id=1405341513 instance=ExtResource("4_kqjh4")]
+[node name="Rock10" parent="Walls" parent_id_path=PackedInt32Array(2117107331) index="100" unique_id=1405341513 instance=ExtResource("4_kqjh4")]
 transform = Transform3D(0.94985175, 0, 0.31270063, 0, 1, 0, -0.31270063, 0, 0.94985175, -2.1746337, -0.45928243, -4.5319653)
 
-[node name="fence_straight" parent="Walls" parent_id_path=PackedInt32Array(2117107331) index="100" unique_id=506490811 instance=ExtResource("18_w8uo4")]
+[node name="fence_straight" parent="Walls" parent_id_path=PackedInt32Array(2117107331) index="101" unique_id=506490811 instance=ExtResource("18_w8uo4")]
 transform = Transform3D(0.15750848, 0, -0.9875176, 0, 1, 0, 0.9875176, 0, 0.15750848, 1.2052937, -0.21652323, -12.379143)
 
-[node name="fence_normal" parent="Walls" parent_id_path=PackedInt32Array(2117107331) index="101" unique_id=695142570 instance=ExtResource("17_wqmk6")]
+[node name="fence_normal" parent="Walls" parent_id_path=PackedInt32Array(2117107331) index="102" unique_id=695142570 instance=ExtResource("17_wqmk6")]
 transform = Transform3D(0.36066288, 0, 0.9326964, 0, 1, 0, -0.9326964, 0, 0.36066288, 2.3131003, -0.23827362, -12.305141)
 
-[node name="fence_broken" parent="Walls" parent_id_path=PackedInt32Array(2117107331) index="102" unique_id=995492134 instance=ExtResource("16_0p1co")]
+[node name="fence_broken" parent="Walls" parent_id_path=PackedInt32Array(2117107331) index="103" unique_id=995492134 instance=ExtResource("16_0p1co")]
 transform = Transform3D(0.016760478, 2.7162989e-10, 0.87128854, 0.013535982, 0.83555436, -0.0011496114, -0.41444042, 0.02728993, 0.035198424, 3.4199147, -0.15012705, -11.981526)
 
-[node name="fence_broken2" parent="Walls" parent_id_path=PackedInt32Array(2117107331) index="103" unique_id=259145364 instance=ExtResource("16_0p1co")]
+[node name="fence_broken2" parent="Walls" parent_id_path=PackedInt32Array(2117107331) index="104" unique_id=259145364 instance=ExtResource("16_0p1co")]
 transform = Transform3D(0.19445027, 0, -0.77035475, 0, 0.836, 0, 0.36662528, 0, 0.40857986, 4.4943204, -0.1904831, -12.275079)
 
-[node name="fence_normal2" parent="Walls" parent_id_path=PackedInt32Array(2117107331) index="104" unique_id=49592596 instance=ExtResource("17_wqmk6")]
+[node name="fence_normal2" parent="Walls" parent_id_path=PackedInt32Array(2117107331) index="105" unique_id=49592596 instance=ExtResource("17_wqmk6")]
 transform = Transform3D(0.90610766, 0, -0.4230472, 0, 1, 0, 0.4230472, 0, 0.90610766, 5.189992, -0.24823505, -13.03059)
 
-[node name="fence_normal4" parent="Walls" parent_id_path=PackedInt32Array(2117107331) index="105" unique_id=950951480 instance=ExtResource("17_wqmk6")]
+[node name="fence_normal4" parent="Walls" parent_id_path=PackedInt32Array(2117107331) index="106" unique_id=950951480 instance=ExtResource("17_wqmk6")]
 transform = Transform3D(0.10558787, 0, -0.99441, 0, 1, 0, 0.99441, 0, 0.10558787, 13.616411, -0.24823505, -4.021842)
 
-[node name="fence_normal5" parent="Walls" parent_id_path=PackedInt32Array(2117107331) index="106" unique_id=213194761 instance=ExtResource("17_wqmk6")]
+[node name="fence_normal5" parent="Walls" parent_id_path=PackedInt32Array(2117107331) index="107" unique_id=213194761 instance=ExtResource("17_wqmk6")]
 transform = Transform3D(0.29510367, 0, -0.95546526, 0, 1, 0, 0.95546526, 0, 0.29510367, 12.510734, -0.24823505, -3.8470383)
 
-[node name="fence_normal6" parent="Walls" parent_id_path=PackedInt32Array(2117107331) index="107" unique_id=1719355593 instance=ExtResource("17_wqmk6")]
+[node name="fence_normal6" parent="Walls" parent_id_path=PackedInt32Array(2117107331) index="108" unique_id=1719355593 instance=ExtResource("17_wqmk6")]
 transform = Transform3D(-0.07228929, 0, 0.9973838, 0, 1, 0, -0.9973838, 0, -0.07228929, 11.409866, -0.24823505, -3.5812004)
 
-[node name="fence_broken3" parent="Walls" parent_id_path=PackedInt32Array(2117107331) index="108" unique_id=971593486 instance=ExtResource("16_0p1co")]
+[node name="fence_broken3" parent="Walls" parent_id_path=PackedInt32Array(2117107331) index="109" unique_id=971593486 instance=ExtResource("16_0p1co")]
 transform = Transform3D(0.27159512, 0, -0.6593268, 0, 0.836, 0, 0.3137851, 0, 0.570677, 5.8641768, -0.1698125, -13.85185)
 
-[node name="fence_normal3" parent="Walls" parent_id_path=PackedInt32Array(2117107331) index="109" unique_id=579893436 instance=ExtResource("17_wqmk6")]
+[node name="fence_normal3" parent="Walls" parent_id_path=PackedInt32Array(2117107331) index="110" unique_id=579893436 instance=ExtResource("17_wqmk6")]
 transform = Transform3D(-0.05309035, 0, -0.99858975, 0, 1, 0, 0.99858975, 0, -0.05309035, 6.8598776, -0.24285185, -14.17627)
 
-[node name="Rock11" parent="Walls" parent_id_path=PackedInt32Array(2117107331) index="110" unique_id=144681648 instance=ExtResource("16_w8uo4")]
+[node name="Rock11" parent="Walls" parent_id_path=PackedInt32Array(2117107331) index="111" unique_id=144681648 instance=ExtResource("16_w8uo4")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9.580811, -0.25531897, -13.798181)
 
-[node name="Rock12" parent="Walls" parent_id_path=PackedInt32Array(2117107331) index="111" unique_id=1882036753 instance=ExtResource("17_15vui")]
+[node name="Rock12" parent="Walls" parent_id_path=PackedInt32Array(2117107331) index="112" unique_id=1882036753 instance=ExtResource("17_15vui")]
 transform = Transform3D(0.82685757, 0, 0.5624114, 0, 1, 0, -0.5624114, 0, 0.82685757, 9.900958, -0.6283109, -14.188849)
 
 [node name="Entrance" parent="." index="14" unique_id=591304417]
