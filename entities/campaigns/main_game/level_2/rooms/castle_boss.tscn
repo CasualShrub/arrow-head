@@ -1,0 +1,138 @@
+[gd_scene format=3 uid="uid://vmp73ddtretd"]
+
+[ext_resource type="PackedScene" uid="uid://bindrmcstl8e" path="res://entities/room/indoor_room.tscn" id="1_lv1u5"]
+[ext_resource type="PackedScene" uid="uid://6pmssibpr3f4" path="res://entities/props/crates/crate.tscn" id="3_hwgce"]
+[ext_resource type="PackedScene" uid="uid://dhg4gbfiiobuo" path="res://entities/enemies/dragonfruit/enemy_dragonfruit.tscn" id="4_eai7u"]
+[ext_resource type="PackedScene" uid="uid://112e4d8ju53x" path="res://entities/props/barrels/barrel.tscn" id="5_eai7u"]
+[ext_resource type="PackedScene" uid="uid://cwall3d8prfb0" path="res://scenes/wall.tscn" id="6_fnafs"]
+
+[node name="Room" unique_id=712797157 instance=ExtResource("1_lv1u5")]
+entrance_walk_distance = 3.5
+
+[node name="Player" parent="." index="0" unique_id=508579643]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9.543056, 0, -5.666637)
+
+[node name="Enemy" parent="Enemies" parent_id_path=PackedInt32Array(1185931971) index="0" unique_id=71488470 instance=ExtResource("4_eai7u")]
+transform = Transform3D(0.01923462, 0, -0.999815, 0, 1, 0, 0.999815, 0, 0.01923462, 8.779485, 0, -0.3877555)
+
+[node name="Floor" parent="." index="5" unique_id=1301804466]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.069648266, -0.2, 0)
+
+[node name="Exit" parent="." index="11" unique_id=771002501]
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 11.637334, 0, 5.279295)
+size = Vector3(4, 2.5, 2)
+
+[node name="Outer01" parent="Walls" parent_id_path=PackedInt32Array(2117107331) index="0" unique_id=1506413859 instance=ExtResource("6_fnafs")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.08180332, 4.825, 23.957031)
+size = Vector3(78.5132, 10.35, 32.085938)
+
+[node name="Outer07" parent="Walls" parent_id_path=PackedInt32Array(2117107331) index="1" unique_id=1493220070 instance=ExtResource("6_fnafs")]
+transform = Transform3D(-0.98248136, 0, 0.1863608, 0, 1, 0, -0.1863608, 0, -0.98248136, -16.246943, 4.825, -20.748802)
+size = Vector3(25.969948, 10.35, 29)
+
+[node name="Outer10" parent="Walls" parent_id_path=PackedInt32Array(2117107331) index="2" unique_id=1493994685 instance=ExtResource("6_fnafs")]
+transform = Transform3D(0.17743975, 0, -0.9841317, 0, 1, 0, 0.9841317, 0, 0.17743975, -26.813965, 4.825, -0.4693005)
+size = Vector3(24.109888, 10.35, 26.37207)
+
+[node name="Outer11" parent="Walls" parent_id_path=PackedInt32Array(2117107331) index="3" unique_id=659255651 instance=ExtResource("6_fnafs")]
+transform = Transform3D(0.17743975, 0, -0.9841317, 0, 1, 0, 0.9841317, 0, 0.17743975, -12.929279, 4.825, 3.3084762)
+size = Vector3(2.04935, 10.35, 8.954102)
+
+[node name="Outer12" parent="Walls" parent_id_path=PackedInt32Array(2117107331) index="4" unique_id=536500779 instance=ExtResource("6_fnafs")]
+transform = Transform3D(-0.23853563, 0, -0.9711337, 0, 1, 0, 0.9711337, 0, -0.23853563, -12.57631, 4.825, 1.055954)
+size = Vector3(2.6510704, 10.35, 9.46875)
+
+[node name="Outer15" parent="Walls" parent_id_path=PackedInt32Array(2117107331) index="5" unique_id=980921283 instance=ExtResource("6_fnafs")]
+transform = Transform3D(-0.9553875, 0, -0.2953554, 0, 1, 0, 0.2953554, 0, -0.9553875, 0.685359, 4.825, -14.974216)
+size = Vector3(8, 10.35, 6)
+
+[node name="Outer21" parent="Walls" parent_id_path=PackedInt32Array(2117107331) index="6" unique_id=636399334 instance=ExtResource("6_fnafs")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.235635, 4.825, -13.751346)
+size = Vector3(13, 10.35, 6)
+
+[node name="Outer22" parent="Walls" parent_id_path=PackedInt32Array(2117107331) index="7" unique_id=1744786117 instance=ExtResource("6_fnafs")]
+transform = Transform3D(0.8876158, 0, -0.46058464, 0, 1, 0, 0.46058464, 0, 0.8876158, 8.322099, 4.825, -15.376238)
+size = Vector3(8, 10.35, 6)
+
+[node name="Outer17" parent="Walls" parent_id_path=PackedInt32Array(2117107331) index="8" unique_id=23001699 instance=ExtResource("6_fnafs")]
+transform = Transform3D(-1, 0, 0, 0, 1, 0, 0, 0, -1, 13.328491, 4.825, -28)
+size = Vector3(50.656982, 10.35, 24)
+
+[node name="Outer19" parent="Walls" parent_id_path=PackedInt32Array(2117107331) index="9" unique_id=1514641584 instance=ExtResource("6_fnafs")]
+transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, 25.351612, 4.80346, -8.151716)
+size = Vector3(23.822254, 10.35, 24.400452)
+
+[node name="Outer25" parent="Walls" parent_id_path=PackedInt32Array(2117107331) index="10" unique_id=847129227 instance=ExtResource("6_fnafs")]
+transform = Transform3D(0.66934466, 0, 0.74295205, 0, 1, 0, -0.74295205, 0, 0.66934466, 14.918013, 4.80346, 3.3227725)
+size = Vector3(1.3315372, 10.35, 1.8989563)
+
+[node name="Outer26" parent="Walls" parent_id_path=PackedInt32Array(2117107331) index="11" unique_id=474624334 instance=ExtResource("6_fnafs")]
+transform = Transform3D(0.66913056, 0, -0.74314487, 0, 1, 0, 0.74314487, 0, 0.66913056, 14.918013, 4.80346, 7.485162)
+size = Vector3(1.3315372, 10.35, 1.8989563)
+
+[node name="Outer20" parent="Walls" parent_id_path=PackedInt32Array(2117107331) index="12" unique_id=1585505280 instance=ExtResource("6_fnafs")]
+transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, 25.351612, 4.80346, 12.661512)
+size = Vector3(11.168995, 10.35, 24.400452)
+
+[node name="Outer23" parent="Walls" parent_id_path=PackedInt32Array(2117107331) index="13" unique_id=1822970737 instance=ExtResource("6_fnafs")]
+transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, 1.8811102, 4.80346, -4.669691)
+size = Vector3(1.6235847, 10.35, 1.5630188)
+
+[node name="Outer27" parent="Walls" parent_id_path=PackedInt32Array(2117107331) index="14" unique_id=1406033510 instance=ExtResource("6_fnafs")]
+transform = Transform3D(0.21922563, 0, 0.9756742, 0, 1, 0, -0.9756742, 0, 0.21922563, 8.824652, 0.6483331, -3.6957502)
+size = Vector3(0.6817751, 2.0397463, 5.982979)
+
+[node name="Outer24" parent="Walls" parent_id_path=PackedInt32Array(2117107331) index="15" unique_id=1380726393 instance=ExtResource("6_fnafs")]
+transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, 3.300224, 4.80346, 2.9077387)
+size = Vector3(1.6235847, 10.35, 1.5630188)
+
+[node name="StaticBody3D" parent="Walls" parent_id_path=PackedInt32Array(2117107331) index="16" unique_id=799608760 instance=ExtResource("3_hwgce")]
+transform = Transform3D(0.9932582, 0, -0.11592326, 0, 1, 0, 0.11592326, 0, 0.9932582, 6.3739166, 1.9073486e-06, -10.004739)
+
+[node name="StaticBody3D3" parent="Walls" parent_id_path=PackedInt32Array(2117107331) index="17" unique_id=293547559 instance=ExtResource("3_hwgce")]
+transform = Transform3D(1.5, 0, 0, 0, 1.5, 0, 0, 0, 1.5, 7.740595, 1.9073486e-06, -10.004739)
+
+[node name="StaticBody3D4" parent="Walls" parent_id_path=PackedInt32Array(2117107331) index="18" unique_id=1643885068 instance=ExtResource("5_eai7u")]
+transform = Transform3D(1.2, 0, 0, 0, 1.2, 0, 0, 0, 1.2, 9.201232, -0.043105125, -9.837114)
+
+[node name="pillar3" type="Node3D" parent="Walls" parent_id_path=PackedInt32Array(2117107331) index="19" unique_id=254528110]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.27931404, 0, 0)
+
+[node name="Outer23" parent="Walls/pillar3" index="0" unique_id=194268733 instance=ExtResource("6_fnafs")]
+transform = Transform3D(-8.742278e-08, 0, 1.363, 0, 1.363, 0, -2, 0, -5.9578625e-08, 13.386894, 4.80346, -0.19352847)
+size = Vector3(0.35587275, 10.35, 1.9412394)
+
+[node name="Outer28" parent="Walls/pillar3" index="1" unique_id=1397439960 instance=ExtResource("6_fnafs")]
+transform = Transform3D(0.6840403, 0, 1.280801, 0, 1.363, 0, -1.8793852, 0, 0.46617347, 13.386894, 4.80346, -0.19352847)
+size = Vector3(0.35587275, 10.35, 1.9412394)
+
+[node name="Outer29" parent="Walls/pillar3" index="2" unique_id=1534933006 instance=ExtResource("6_fnafs")]
+transform = Transform3D(1.2855753, 0, 1.0441186, 0, 1.363, 0, -1.5320889, 0, 0.87611955, 13.386894, 4.80346, -0.19352847)
+size = Vector3(0.35587275, 10.35, 1.9412394)
+
+[node name="Outer30" parent="Walls/pillar3" index="3" unique_id=926793250 instance=ExtResource("6_fnafs")]
+transform = Transform3D(1.7320508, 0, 0.6815, 0, 1.363, 0, -1, 0, 1.1803926, 13.386894, 4.80346, -0.19352847)
+size = Vector3(0.35587275, 10.35, 1.9412394)
+
+[node name="Outer31" parent="Walls/pillar3" index="4" unique_id=1286213693 instance=ExtResource("6_fnafs")]
+transform = Transform3D(1.9696155, 0, 0.23668249, 0, 1.363, 0, -0.3472964, 0, 1.342293, 13.386894, 4.80346, -0.19352847)
+size = Vector3(0.35587275, 10.35, 1.9412394)
+
+[node name="Outer24" parent="Walls/pillar3" index="5" unique_id=1143591969 instance=ExtResource("6_fnafs")]
+transform = Transform3D(-0.68404025, 0, 1.280801, 0, 1.363, 0, -1.8793852, 0, -0.46617344, 13.386894, 4.80346, -0.19352847)
+size = Vector3(0.35587275, 10.35, 1.9412394)
+
+[node name="Outer25" parent="Walls/pillar3" index="6" unique_id=534245670 instance=ExtResource("6_fnafs")]
+transform = Transform3D(-1.2855753, 0, 1.0441186, 0, 1.363, 0, -1.5320889, 0, -0.87611955, 13.386894, 4.80346, -0.19352847)
+size = Vector3(0.35587275, 10.35, 1.9412394)
+
+[node name="Outer26" parent="Walls/pillar3" index="7" unique_id=1229837006 instance=ExtResource("6_fnafs")]
+transform = Transform3D(-1.7320508, 0, 0.6815001, 0, 1.363, 0, -1.0000001, 0, -1.1803926, 13.386894, 4.80346, -0.19352847)
+size = Vector3(0.35587275, 10.35, 1.9412394)
+
+[node name="Outer27" parent="Walls/pillar3" index="8" unique_id=749327596 instance=ExtResource("6_fnafs")]
+transform = Transform3D(-1.9696155, 0, 0.23668264, 0, 1.363, 0, -0.3472966, 0, -1.342293, 13.386894, 4.80346, -0.19352847)
+size = Vector3(0.35587275, 10.35, 1.9412394)
+
+[node name="Entrance" parent="." index="13" unique_id=591304417]
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, -11.150794, 0, -1.9219255)
