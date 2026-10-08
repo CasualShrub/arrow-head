@@ -25,6 +25,8 @@ extends Control
 @export var labels_fade_time: float = 0.5
 
 @onready var _level_select: Control = $LevelSelect
+@onready var _level_columns: HBoxContainer = $LevelSelect/Buttons/Levels
+@onready var _back_button: Button = $LevelSelect/Buttons/Back
 @onready var _sectors: Control = $"Sectors (Buttons)"
 @onready var _apple: Control = $Apple
 @onready var _title: Control = $Title
@@ -68,6 +70,7 @@ func _ready() -> void:
 	_on_sector_hovered(&"")
 	if _level_select:
 		_level_select.hide()
+		_build_level_select(GameManager.MAIN_GAME)
 
 	if first_load:
 		_play_intro()
@@ -237,6 +240,45 @@ func _open_levels() -> void:
 	if _level_select:
 		_set_menu_shown(false)
 		_level_select.show()
+
+func _build_level_select(campaign: CampaignData) -> void:
+	_back_button.size_flags_horizontal = Control.SIZE_SHRINK_BEGIN
+	for level_index in campaign.levels.size():
+		var level := campaign.levels[level_index]
+		var column := VBoxContainer.new()
+		column.add_theme_constant_override("separation", 10)
+		_level_columns.add_child(column)
+
+		var header := Label.new()
+		header.text = _level_display_name(level, level_index)
+		header.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		header.add_theme_font_override("font", _back_button.get_theme_font("font"))
+		header.add_theme_font_size_override("font_size", _back_button.get_theme_font_size("font_size") + 8)
+		column.add_child(header)
+
+		for room_index in level.get_room_count():
+			var button := Button.new()
+			button.text = _room_display_name(level.rooms[room_index], room_index)
+			button.custom_minimum_size = _back_button.custom_minimum_size
+			button.add_theme_font_override("font", _back_button.get_theme_font("font"))
+			button.add_theme_font_size_override("font_size", _back_button.get_theme_font_size("font_size"))
+			button.pressed.connect(_load_level.bind(campaign.resource_path, level_index, room_index))
+			column.add_child(button)
+
+func _level_display_name(level: LevelData, index: int) -> String:
+	if level.resource_path.is_empty():
+		return "Level %d" % (index + 1)
+	return level.resource_path.get_file().get_basename().capitalize()
+
+func _room_display_name(path: String, index: int) -> String:
+	var resolved := path
+	if path.begins_with("uid://"):
+		var id := ResourceUID.text_to_id(path)
+		if ResourceUID.has_id(id):
+			resolved = ResourceUID.get_id_path(id)
+		else:
+			return "Room %d" % (index + 1)
+	return resolved.get_file().get_basename().capitalize()
 
 func _load_level(path: String, level: int = 0, room: int = 0) -> void:
 	var campaign_data = ResourceLoader.load(path) as CampaignData
