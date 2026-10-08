@@ -14,6 +14,7 @@ class_name Enemy
 		return patrol.path if patrol else null
 
 @export var has_intro := false
+@export var camera_focus := false
 @export var stationary := false
 @export var fixed_facing := false
 @export var max_hits := 1

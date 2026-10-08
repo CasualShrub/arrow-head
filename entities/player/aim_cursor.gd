@@ -9,6 +9,7 @@ static var _parked := Vector2.INF
 var screen_position := Vector2.ZERO
 
 var _anchor := Vector2.ZERO
+var _follow := Vector2.INF
 var _capturing := false
 var _reticle := Control.new()
 
@@ -53,6 +54,13 @@ func _notification(what: int) -> void:
 		_release(false)
 	elif what == NOTIFICATION_EXIT_TREE:
 		_release()
+
+func anchor_to(p: Vector2) -> void:
+	if _capturing and _follow.is_finite() and p != _follow:
+		var rect := get_viewport().get_visible_rect()
+		screen_position = (screen_position + p - _follow).clamp(rect.position, rect.end)
+		_warp_to(screen_position)
+	_follow = p
 
 func aim_position() -> Vector2:
 	return screen_position if _capturing else get_viewport().get_mouse_position()

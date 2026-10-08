@@ -117,6 +117,7 @@ metadata/_custom_type_script = "uid://d04k7pxjd2u24"
 radius = 1.4
 
 [node name="Enemy" instance=ExtResource("1_peacock")]
+camera_focus = true
 patterns = Array[ExtResource("2_pat")]([SubResource("Resource_sweep"), SubResource("Resource_fans"), SubResource("Resource_ring"), SubResource("Resource_ball")])
 stationary = true
 max_hits = 3
