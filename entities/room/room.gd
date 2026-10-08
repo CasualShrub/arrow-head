@@ -31,6 +31,7 @@ func _ready() -> void:
 	_setup_exit_indicator()
 
 	DarkenManager.register_overlay(%DarkenOverlay)
+	JuiceSplatter.prepare(self)
 
 	start()
 

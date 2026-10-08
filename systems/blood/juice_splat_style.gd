@@ -56,13 +56,22 @@ var preview_button := func():
 	notify_property_list_changed()
 @export var preview: Texture2D
 
-var _textures: Array[ImageTexture] = []
+@export_group("bake")
+@export_tool_button("Bake Textures", "Bake")
+var bake_button := func():
+	bake_textures()
+	notify_property_list_changed()
+@export var baked_textures: Array[Texture2D] = []
+
+var _textures: Array[Texture2D] = []
 
 func _validate_property(property: Dictionary) -> void:
 	if property.name == "preview":
 		property.usage = property.usage & ~PROPERTY_USAGE_STORAGE
 
-func get_texture(variant: int) -> ImageTexture:
+func get_texture(variant: int) -> Texture2D:
+	if not baked_textures.is_empty():
+		return baked_textures[variant % baked_textures.size()]
 	if _textures.is_empty():
 		for i in variant_count:
 			_textures.append(build_texture())
@@ -70,6 +79,20 @@ func get_texture(variant: int) -> ImageTexture:
 
 func get_random_variant() -> int:
 	return randi() % variant_count
+
+func bake_textures() -> void:
+	var dir := resource_path.get_base_dir().path_join("baked")
+	DirAccess.make_dir_recursive_absolute(dir)
+	var base := resource_path.get_file().get_basename()
+	var baked: Array[Texture2D] = []
+	for i in variant_count:
+		var path := dir.path_join("%s_%d.res" % [base, i])
+		var tex := build_texture()
+		ResourceSaver.save(tex, path, ResourceSaver.FLAG_COMPRESS)
+		tex.take_over_path(path)
+		baked.append(tex)
+	baked_textures = baked
+	ResourceSaver.save(self)
 
 func build_texture() -> ImageTexture:
 	var img := Image.create(texture_size.x, texture_size.y, false, Image.FORMAT_RGBA8)
