@@ -75,27 +75,23 @@ transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, 25.351612, 4.80346, 12.66151
 size = Vector3(11.168995, 10.35, 24.400452)
 
 [node name="Outer23" parent="Walls" parent_id_path=PackedInt32Array(2117107331) index="13" unique_id=1822970737 instance=ExtResource("6_fnafs")]
-transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, 1.8811102, 4.80346, -4.669691)
+transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, 3.0912852, 4.80346, -3.4281898)
 size = Vector3(1.6235847, 10.35, 1.5630188)
 
-[node name="Outer27" parent="Walls" parent_id_path=PackedInt32Array(2117107331) index="14" unique_id=1406033510 instance=ExtResource("6_fnafs")]
-transform = Transform3D(0.21922563, 0, 0.9756742, 0, 1, 0, -0.9756742, 0, 0.21922563, 8.824652, 0.6483331, -3.6957502)
-size = Vector3(0.6817751, 2.0397463, 5.982979)
-
-[node name="Outer24" parent="Walls" parent_id_path=PackedInt32Array(2117107331) index="15" unique_id=1380726393 instance=ExtResource("6_fnafs")]
-transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, 3.300224, 4.80346, 2.9077387)
+[node name="Outer24" parent="Walls" parent_id_path=PackedInt32Array(2117107331) index="14" unique_id=1380726393 instance=ExtResource("6_fnafs")]
+transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, 2.1738188, 4.80346, 2.4379706)
 size = Vector3(1.6235847, 10.35, 1.5630188)
 
-[node name="StaticBody3D" parent="Walls" parent_id_path=PackedInt32Array(2117107331) index="16" unique_id=799608760 instance=ExtResource("3_hwgce")]
+[node name="StaticBody3D" parent="Walls" parent_id_path=PackedInt32Array(2117107331) index="15" unique_id=799608760 instance=ExtResource("3_hwgce")]
 transform = Transform3D(0.9932582, 0, -0.11592326, 0, 1, 0, 0.11592326, 0, 0.9932582, 6.3739166, 1.9073486e-06, -10.004739)
 
-[node name="StaticBody3D3" parent="Walls" parent_id_path=PackedInt32Array(2117107331) index="17" unique_id=293547559 instance=ExtResource("3_hwgce")]
+[node name="StaticBody3D3" parent="Walls" parent_id_path=PackedInt32Array(2117107331) index="16" unique_id=293547559 instance=ExtResource("3_hwgce")]
 transform = Transform3D(1.5, 0, 0, 0, 1.5, 0, 0, 0, 1.5, 7.740595, 1.9073486e-06, -10.004739)
 
-[node name="StaticBody3D4" parent="Walls" parent_id_path=PackedInt32Array(2117107331) index="18" unique_id=1643885068 instance=ExtResource("5_eai7u")]
+[node name="StaticBody3D4" parent="Walls" parent_id_path=PackedInt32Array(2117107331) index="17" unique_id=1643885068 instance=ExtResource("5_eai7u")]
 transform = Transform3D(1.2, 0, 0, 0, 1.2, 0, 0, 0, 1.2, 9.201232, -0.043105125, -9.837114)
 
-[node name="pillar3" type="Node3D" parent="Walls" parent_id_path=PackedInt32Array(2117107331) index="19" unique_id=254528110]
+[node name="pillar3" type="Node3D" parent="Walls" parent_id_path=PackedInt32Array(2117107331) index="18" unique_id=254528110]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.27931404, 0, 0)
 
 [node name="Outer23" parent="Walls/pillar3" index="0" unique_id=194268733 instance=ExtResource("6_fnafs")]
@@ -133,6 +129,42 @@ size = Vector3(0.35587275, 10.35, 1.9412394)
 [node name="Outer27" parent="Walls/pillar3" index="8" unique_id=749327596 instance=ExtResource("6_fnafs")]
 transform = Transform3D(-1.9696155, 0, 0.23668264, 0, 1.363, 0, -0.3472966, 0, -1.342293, 13.386894, 4.80346, -0.19352847)
 size = Vector3(0.35587275, 10.35, 1.9412394)
+
+[node name="Outer27" parent="Walls" parent_id_path=PackedInt32Array(2117107331) index="19" unique_id=821878453 instance=ExtResource("6_fnafs")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.739442, 0.45290494, -10.004338)
+size = Vector3(1.2024078, 1.6058106, 1.220623)
+
+[node name="StaticBody3D5" parent="Walls" parent_id_path=PackedInt32Array(2117107331) index="20" unique_id=832878798 instance=ExtResource("3_hwgce")]
+transform = Transform3D(1.3736975, 0, -0.60245764, 0, 1.5, 0, 0.60245764, 0, 1.3736975, -0.90458494, 1.9073486e-06, -6.496352)
+
+[node name="Outer28" parent="Walls" parent_id_path=PackedInt32Array(2117107331) index="21" unique_id=1136363461 instance=ExtResource("6_fnafs")]
+transform = Transform3D(0.9157983, 0, -0.40163845, 0, 1, 0, 0.40163845, 0, 0.9157983, -0.9058017, 0.45290494, -6.4964485)
+size = Vector3(1.2024078, 1.6058106, 1.220623)
+
+[node name="StaticBody3D6" parent="Walls" parent_id_path=PackedInt32Array(2117107331) index="22" unique_id=1034276734 instance=ExtResource("3_hwgce")]
+transform = Transform3D(1.284733, 0, 0.7742487, 0, 1.4999999, 0, -0.7742487, 0, 1.284733, -4.7076306, 1.9073486e-06, 0.7025181)
+
+[node name="Outer29" parent="Walls" parent_id_path=PackedInt32Array(2117107331) index="23" unique_id=1996196097 instance=ExtResource("6_fnafs")]
+transform = Transform3D(0.8564887, 0, 0.5161658, 0, 1, 0, -0.5161658, 0, 0.8564887, -4.708411, 0.45290494, 0.7034559)
+size = Vector3(1.2024078, 1.6058106, 1.220623)
+
+[node name="StaticBody3D7" parent="Walls" parent_id_path=PackedInt32Array(2117107331) index="24" unique_id=955608131 instance=ExtResource("3_hwgce")]
+transform = Transform3D(1.9753058, 0, -0.31331617, 0, 2, 0, 0.31331617, 0, 1.9753058, -6.0640783, 1.9073486e-06, 4.7024803)
+
+[node name="Outer30" parent="Walls" parent_id_path=PackedInt32Array(2117107331) index="25" unique_id=733684914 instance=ExtResource("6_fnafs")]
+transform = Transform3D(1.9753058, 0, -0.31331623, 0, 2, 0, 0.31331623, 0, 1.9753058, -6.0712943, 0.2569332, 4.718777)
+size = Vector3(0.8117714, 1.4098389, 0.7873335)
+
+[node name="StaticBody3D8" parent="Walls" parent_id_path=PackedInt32Array(2117107331) index="26" unique_id=1491758293 instance=ExtResource("3_hwgce")]
+transform = Transform3D(2.4691322, 0, -0.3916452, 0, 2.5, 0, 0.3916452, 0, 2.4691322, -3.4421253, 1.9073486e-06, -8.997117)
+
+[node name="Outer31" parent="Walls" parent_id_path=PackedInt32Array(2117107331) index="27" unique_id=1557330542 instance=ExtResource("6_fnafs")]
+transform = Transform3D(1.9753058, 0, -0.31331623, 0, 2, 0, 0.31331623, 0, 1.9753058, -3.4295988, 0.45290494, -9.030486)
+size = Vector3(1.0207558, 1.6058106, 1.0428877)
+
+[node name="Outer32" parent="Walls" parent_id_path=PackedInt32Array(2117107331) index="28" unique_id=463819439 instance=ExtResource("6_fnafs")]
+transform = Transform3D(1.9753058, 0, -0.31331623, 0, 2, 0, 0.31331623, 0, 1.9753058, 6.389732, -0.23000526, -10.035733)
+size = Vector3(0.37573338, 0.92290044, 0.37560022)
 
 [node name="Entrance" parent="." index="13" unique_id=591304417]
 transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, -11.150794, 0, -1.9219255)

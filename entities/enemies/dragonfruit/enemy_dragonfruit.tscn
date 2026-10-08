@@ -12,6 +12,7 @@
 script = ExtResource("3_3kxgl")
 type = ExtResource("4_2bsge")
 count = 10
+reload_anim = false
 spread = 35.0
 offset = 3.1399999999999864
 max_offset = 0.0
@@ -56,37 +57,90 @@ count = 2
 spread = 35.0
 metadata/_custom_type_script = "uid://r4qbgt6it8lb"
 
+[sub_resource type="Resource" id="Resource_l1ure"]
+script = ExtResource("3_3kxgl")
+type = ExtResource("4_2bsge")
+starting_delay = 1.0
+count = 3
+spread = 5.0
+offset = 180.0
+metadata/_custom_type_script = "uid://r4qbgt6it8lb"
+
+[sub_resource type="Resource" id="Resource_3kxgl"]
+script = ExtResource("3_3kxgl")
+type = ExtResource("4_2bsge")
+starting_delay = 1.0
+count = 2
+spread = 10.0
+offset = 180.0
+metadata/_custom_type_script = "uid://r4qbgt6it8lb"
+
+[sub_resource type="Resource" id="Resource_7gqcw"]
+script = ExtResource("3_3kxgl")
+type = ExtResource("4_2bsge")
+starting_delay = 1.0
+count = 2
+spread = 20.0
+offset = 180.0
+metadata/_custom_type_script = "uid://r4qbgt6it8lb"
+
+[sub_resource type="Resource" id="Resource_fl2a3"]
+script = ExtResource("3_3kxgl")
+type = ExtResource("4_2bsge")
+starting_delay = 1.0
+count = 2
+spread = 35.0
+offset = 180.0
+metadata/_custom_type_script = "uid://r4qbgt6it8lb"
+
 [sub_resource type="Resource" id="Resource_o6djv"]
 script = ExtResource("2_l1ure")
 recovery = 3.0
 uses_windup = true
-instances = Array[ExtResource("3_3kxgl")]([SubResource("Resource_q8c7o"), SubResource("Resource_55ika"), SubResource("Resource_svtcy"), SubResource("Resource_2bsge")])
+instances = Array[ExtResource("3_3kxgl")]([SubResource("Resource_q8c7o"), SubResource("Resource_55ika"), SubResource("Resource_svtcy"), SubResource("Resource_2bsge"), SubResource("Resource_l1ure"), SubResource("Resource_3kxgl"), SubResource("Resource_7gqcw"), SubResource("Resource_fl2a3")])
 metadata/_custom_type_script = "uid://d04k7pxjd2u24"
 
 [sub_resource type="Resource" id="Resource_mjiwy"]
 script = ExtResource("3_3kxgl")
 type = ExtResource("5_2bsge")
-starting_delay = 1.5
-count = 5
-spread = 288.0
+starting_delay = 1.0
+count = 8
+spread = 315.0
 max_offset = 0.0
 metadata/_custom_type_script = "uid://r4qbgt6it8lb"
 
 [sub_resource type="Resource" id="Resource_vnqk6"]
 script = ExtResource("3_3kxgl")
 type = ExtResource("6_7gqcw")
-starting_delay = 1.5
-count = 5
-spread = 288.0
-offset = 36.0
+starting_delay = 1.0
+count = 8
+spread = 315.0
+offset = 22.5
 max_offset = 0.0
+metadata/_custom_type_script = "uid://r4qbgt6it8lb"
+
+[sub_resource type="Resource" id="Resource_lr4wb"]
+script = ExtResource("3_3kxgl")
+type = ExtResource("5_2bsge")
+starting_delay = 2.0
+count = 8
+spread = 315.0
+offset = 22.5
+metadata/_custom_type_script = "uid://r4qbgt6it8lb"
+
+[sub_resource type="Resource" id="Resource_b0eiw"]
+script = ExtResource("3_3kxgl")
+type = ExtResource("6_7gqcw")
+starting_delay = 2.0
+count = 8
+spread = 315.0
 metadata/_custom_type_script = "uid://r4qbgt6it8lb"
 
 [sub_resource type="Resource" id="Resource_54hkm"]
 script = ExtResource("2_l1ure")
-recovery = 1.5
+recovery = 3.0
 uses_windup = true
-instances = Array[ExtResource("3_3kxgl")]([SubResource("Resource_mjiwy"), SubResource("Resource_vnqk6")])
+instances = Array[ExtResource("3_3kxgl")]([SubResource("Resource_mjiwy"), SubResource("Resource_vnqk6"), SubResource("Resource_lr4wb"), SubResource("Resource_b0eiw")])
 metadata/_custom_type_script = "uid://d04k7pxjd2u24"
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_u24cr"]
