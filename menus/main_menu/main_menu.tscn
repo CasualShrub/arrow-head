@@ -291,62 +291,6 @@ theme_override_fonts/font = ExtResource("5_t7kvd")
 theme_override_font_sizes/font_size = 36
 text = "Forest Boss"
 
-[node name="Outdoor1" type="Button" parent="LevelSelect/Buttons" unique_id=286240326]
-custom_minimum_size = Vector2(300, 64)
-layout_mode = 2
-theme_override_fonts/font = ExtResource("5_t7kvd")
-theme_override_font_sizes/font_size = 36
-text = "Outdoor 1"
-
-[node name="Outdoor2" type="Button" parent="LevelSelect/Buttons" unique_id=1635357765]
-custom_minimum_size = Vector2(300, 64)
-layout_mode = 2
-theme_override_fonts/font = ExtResource("5_t7kvd")
-theme_override_font_sizes/font_size = 36
-text = "Outdoor 2"
-
-[node name="Outdoor3" type="Button" parent="LevelSelect/Buttons" unique_id=561304915]
-custom_minimum_size = Vector2(300, 64)
-layout_mode = 2
-theme_override_fonts/font = ExtResource("5_t7kvd")
-theme_override_font_sizes/font_size = 36
-text = "Outdoor 3"
-
-[node name="Indoor1" type="Button" parent="LevelSelect/Buttons" unique_id=766479906]
-custom_minimum_size = Vector2(300, 64)
-layout_mode = 2
-theme_override_fonts/font = ExtResource("5_t7kvd")
-theme_override_font_sizes/font_size = 36
-text = "Indoor 1"
-
-[node name="Indoor2" type="Button" parent="LevelSelect/Buttons" unique_id=1779917305]
-custom_minimum_size = Vector2(300, 64)
-layout_mode = 2
-theme_override_fonts/font = ExtResource("5_t7kvd")
-theme_override_font_sizes/font_size = 36
-text = "Indoor 2"
-
-[node name="Indoor3" type="Button" parent="LevelSelect/Buttons" unique_id=1549372198]
-custom_minimum_size = Vector2(300, 64)
-layout_mode = 2
-theme_override_fonts/font = ExtResource("5_t7kvd")
-theme_override_font_sizes/font_size = 36
-text = "Indoor 3"
-
-[node name="Indoor4" type="Button" parent="LevelSelect/Buttons" unique_id=1623385089]
-custom_minimum_size = Vector2(300, 64)
-layout_mode = 2
-theme_override_fonts/font = ExtResource("5_t7kvd")
-theme_override_font_sizes/font_size = 36
-text = "Indoor 4"
-
-[node name="Indoor5" type="Button" parent="LevelSelect/Buttons" unique_id=569406030]
-custom_minimum_size = Vector2(300, 64)
-layout_mode = 2
-theme_override_fonts/font = ExtResource("5_t7kvd")
-theme_override_font_sizes/font_size = 36
-text = "Indoor 5"
-
 [node name="Castle1" type="Button" parent="LevelSelect/Buttons" unique_id=979725393]
 custom_minimum_size = Vector2(300, 64)
 layout_mode = 2
@@ -394,14 +338,6 @@ stretch_mode = 6
 [connection signal="pressed" from="LevelSelect/Buttons/Forest3" to="." method="_load_level" binds= ["uid://lseyvxmqjacu", 0, 3]]
 [connection signal="pressed" from="LevelSelect/Buttons/Forest4" to="." method="_load_level" binds= ["uid://lseyvxmqjacu", 0, 4]]
 [connection signal="pressed" from="LevelSelect/Buttons/ForestBoss" to="." method="_load_level" binds= ["uid://lseyvxmqjacu", 0, 5]]
-[connection signal="pressed" from="LevelSelect/Buttons/Outdoor1" to="." method="_load_level" binds= ["uid://lseyvxmqjacu", 0, 6]]
-[connection signal="pressed" from="LevelSelect/Buttons/Outdoor2" to="." method="_load_level" binds= ["uid://lseyvxmqjacu", 0, 7]]
-[connection signal="pressed" from="LevelSelect/Buttons/Outdoor3" to="." method="_load_level" binds= ["uid://lseyvxmqjacu", 0, 8]]
-[connection signal="pressed" from="LevelSelect/Buttons/Indoor1" to="." method="_load_level" binds= ["uid://lseyvxmqjacu", 0, 9]]
-[connection signal="pressed" from="LevelSelect/Buttons/Indoor2" to="." method="_load_level" binds= ["uid://lseyvxmqjacu", 0, 10]]
-[connection signal="pressed" from="LevelSelect/Buttons/Indoor3" to="." method="_load_level" binds= ["uid://lseyvxmqjacu", 0, 11]]
-[connection signal="pressed" from="LevelSelect/Buttons/Indoor4" to="." method="_load_level" binds= ["uid://lseyvxmqjacu", 0, 12]]
-[connection signal="pressed" from="LevelSelect/Buttons/Indoor5" to="." method="_load_level" binds= ["uid://lseyvxmqjacu", 0, 13]]
 [connection signal="pressed" from="LevelSelect/Buttons/Castle1" to="." method="_load_level" binds= ["uid://lseyvxmqjacu", 1, 0]]
 [connection signal="pressed" from="LevelSelect/Buttons/Castle2" to="." method="_load_level" binds= ["uid://lseyvxmqjacu", 1, 1]]
 [connection signal="pressed" from="LevelSelect/Buttons/Castle3" to="." method="_load_level" binds= ["uid://lseyvxmqjacu", 1, 2]]
