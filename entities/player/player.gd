@@ -182,9 +182,10 @@ func _physics_process(delta: float) -> void:
 			if not time.is_slowed():
 				time.slow()
 			dash.enable()
-	
 	if fire_input.consume_released():
 		dash.try_activate(global_position, _get_dash_aim_target())
+		if time.is_slowed():
+			time.resume()
 	
 	_move(movement_input.get_vector(), delta)
 	_tick_leak(delta)
