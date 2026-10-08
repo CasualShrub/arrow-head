@@ -23,8 +23,8 @@ transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 13.8
 size = Vector3(4, 2.5, 2)
 
 [node name="Outer01" parent="Walls" parent_id_path=PackedInt32Array(2117107331) index="0" unique_id=1506413859 instance=ExtResource("6_fnafs")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.08180332, 4.825, 23.957031)
-size = Vector3(78.5132, 10.35, 32.085938)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.53481007, 4.825, 23.957031)
+size = Vector3(77.607185, 10.35, 32.085938)
 
 [node name="Outer07" parent="Walls" parent_id_path=PackedInt32Array(2117107331) index="1" unique_id=1493220070 instance=ExtResource("6_fnafs")]
 transform = Transform3D(-0.98248136, 0, 0.1863608, 0, 1, 0, -0.1863608, 0, -0.98248136, -16.246943, 4.825, -20.748802)
