@@ -7,8 +7,11 @@ var current_level_index := 0
 func _init(campaign_data: CampaignData) -> void:
 	data = campaign_data
 
+func get_level(idx: int) -> LevelData:
+	return data.levels[idx]
+
 func get_current_level() -> LevelData:
-	return data.levels[current_level_index]
+	return get_level(current_level_index)
 
 func get_level_count() -> int:
 	return data.levels.size()

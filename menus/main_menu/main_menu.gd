@@ -238,11 +238,13 @@ func _open_levels() -> void:
 		_set_menu_shown(false)
 		_level_select.show()
 
-func _load_level(path: String) -> void:
-	if ResourceLoader.exists(path):
-		get_tree().change_scene_to_file(path)
-	# just a fallback incase resource isn't valid
-	else:
+func _load_level(path: String, level: int = 0, room: int = 0) -> void:
+	var campaign_data = ResourceLoader.load(path) as CampaignData
+	if campaign_data:
+		print("has data")
+		GameManager.pending_campaign = campaign_data
+		GameManager.pending_level = level
+		GameManager.pending_room = room
 		get_tree().change_scene_to_packed(game_scene)
 
 func _close_levels() -> void:

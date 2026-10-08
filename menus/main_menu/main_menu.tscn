@@ -21,7 +21,7 @@
 [ext_resource type="Script" uid="uid://it1hcnvfi1hr" path="res://scripts/classes/screen_shake.gd" id="14_shake"]
 [ext_resource type="PackedScene" uid="uid://c8ghost4gme01" path="res://scenes/game.tscn" id="15_game"]
 [ext_resource type="Shader" uid="uid://blt3jorw6dqxv" path="res://menus/main_menu/dots_wave.gdshader" id="16_dots_wave"]
-[ext_resource type="PackedScene" uid="uid://db87rtso8n8l0" path="res://menus/Settings/settings.tscn" id="17_settings"]
+[ext_resource type="PackedScene" uid="uid://db87rtso8n8l0" path="res://menus/settings/settings.tscn" id="17_settings"]
 [ext_resource type="Texture2D" uid="uid://dk1tp5akt6x78" path="res://shared/art/settings/gear.png" id="18_gear"]
 [ext_resource type="Texture2D" uid="uid://dy4n0ixkhnjmj" path="res://shared/art/settings/gear_dark.png" id="19_gear_dark"]
 
@@ -320,12 +320,12 @@ texture_pressed = ExtResource("19_gear_dark")
 ignore_texture_size = true
 stretch_mode = 6
 
-[connection signal="pressed" from="LevelSelect/Buttons/Tutorial" to="." method="_load_level" binds= ["res://scenes/levels/tutorial.tscn"]]
-[connection signal="pressed" from="LevelSelect/Buttons/Level1" to="." method="_load_level" binds= ["res://scenes/levels/level_1.tscn"]]
-[connection signal="pressed" from="LevelSelect/Buttons/Level2" to="." method="_load_level" binds= ["res://scenes/levels/level_2.tscn"]]
-[connection signal="pressed" from="LevelSelect/Buttons/Level3" to="." method="_load_level" binds= ["res://scenes/levels/level_3.tscn"]]
-[connection signal="pressed" from="LevelSelect/Buttons/Level4" to="." method="_load_level" binds= ["res://scenes/levels/level_4.tscn"]]
-[connection signal="pressed" from="LevelSelect/Buttons/Level5" to="." method="_load_level" binds= ["res://scenes/levels/level_5.tscn"]]
-[connection signal="pressed" from="LevelSelect/Buttons/Boss" to="." method="_load_level" binds= ["res://scenes/levels/level_boss.tscn"]]
+[connection signal="pressed" from="LevelSelect/Buttons/Tutorial" to="." method="_load_level" binds= ["uid://lseyvxmqjacu", 0, 0]]
+[connection signal="pressed" from="LevelSelect/Buttons/Level1" to="." method="_load_level" binds= ["uid://lseyvxmqjacu", 0, 1]]
+[connection signal="pressed" from="LevelSelect/Buttons/Level2" to="." method="_load_level" binds= ["uid://lseyvxmqjacu", 0, 2]]
+[connection signal="pressed" from="LevelSelect/Buttons/Level3" to="." method="_load_level" binds= ["uid://lseyvxmqjacu", 0, 3]]
+[connection signal="pressed" from="LevelSelect/Buttons/Level4" to="." method="_load_level" binds= ["uid://lseyvxmqjacu", 0, 4]]
+[connection signal="pressed" from="LevelSelect/Buttons/Level5" to="." method="_load_level" binds= ["uid://lseyvxmqjacu", 0, 5]]
+[connection signal="pressed" from="LevelSelect/Buttons/Boss" to="." method="_load_level" binds= ["uid://lseyvxmqjacu", 0, 6]]
 [connection signal="pressed" from="LevelSelect/Buttons/Back" to="." method="_close_levels"]
 [connection signal="pressed" from="Gear" to="Settings" method="open"]
