@@ -14,6 +14,8 @@ var master_volume := 1.0
 var music_volume := 1.0
 var sfx_volume := 1.0
 var mouse_sensitivity := 1.0
+var controller_vibration := 1.0
+var trigger_resistance := 1.0
 var fullscreen := false
 var grayscale := false
 var contrast := 1.0
@@ -57,6 +59,14 @@ func set_mouse_sensitivity(v: float) -> void:
 	mouse_sensitivity_changed.emit(mouse_sensitivity)
 	_changed()
 
+func set_controller_vibration(v: float) -> void:
+	controller_vibration = clampf(v, 0.0, 1.0)
+	_changed()
+
+func set_trigger_resistance(v: float) -> void:
+	trigger_resistance = clampf(v, 0.0, 1.0)
+	_changed()
+
 func set_fullscreen(on: bool) -> void:
 	fullscreen = on
 	_apply_window()
@@ -77,6 +87,8 @@ func reset_to_defaults() -> void:
 	music_volume = 1.0
 	sfx_volume = 1.0
 	mouse_sensitivity = 1.0
+	controller_vibration = 1.0
+	trigger_resistance = 1.0
 	fullscreen = false
 	grayscale = false
 	contrast = 1.0
@@ -96,6 +108,8 @@ func save() -> void:
 	cfg.set_value("video", "grayscale", grayscale)
 	cfg.set_value("video", "contrast", contrast)
 	cfg.set_value("controls", "mouse_sensitivity", mouse_sensitivity)
+	cfg.set_value("controls", "vibration", controller_vibration)
+	cfg.set_value("controls", "trigger_resistance", trigger_resistance)
 	cfg.save(PATH)
 
 func _load() -> void:
@@ -109,6 +123,8 @@ func _load() -> void:
 	grayscale = bool(cfg.get_value("video", "grayscale", false))
 	contrast = clampf(float(cfg.get_value("video", "contrast", 1.0)), CONTRAST_MIN, CONTRAST_MAX)
 	mouse_sensitivity = clampf(float(cfg.get_value("controls", "mouse_sensitivity", 1.0)), SENSITIVITY_MIN, SENSITIVITY_MAX)
+	controller_vibration = clampf(float(cfg.get_value("controls", "vibration", 1.0)), 0.0, 1.0)
+	trigger_resistance = clampf(float(cfg.get_value("controls", "trigger_resistance", 1.0)), 0.0, 1.0)
 
 func _changed() -> void:
 	changed.emit()

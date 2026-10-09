@@ -1,0 +1,7 @@
+[configuration]
+entry_symbol = "arrowhead_dualsense_init"
+compatibility_minimum = "4.4"
+reloadable = false
+
+[libraries]
+macos = "res://native/dualsense/build/libdualsense.dylib"
