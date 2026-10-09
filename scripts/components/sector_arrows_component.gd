@@ -83,7 +83,7 @@ func _get_slot_from_angle(angle: float) -> int:
 
 func _get_slot_from_offset(dir: Vector3) -> int:
 	dir.y = 0.0
-	if dir.length() < 0.0001:
+	if dir.is_zero_approx():
 		return 0
 	dir = dir.normalized()
 

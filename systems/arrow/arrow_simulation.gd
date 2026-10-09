@@ -16,7 +16,7 @@ var velocity := Vector3.ZERO:
 var facing := Vector3.FORWARD:
 	set(value):
 		value.y = 0.0
-		if value.length_squared() < 0.001:
+		if value.is_zero_approx():
 			value = Vector3.FORWARD
 		facing = value.normalized()
 
@@ -36,14 +36,14 @@ func _init(arrow: Arrow) -> void:
 	simulating = arrow
 
 func change_direction(dir: Vector3) -> void:
-	if dir.length_squared() < 0.001:
+	if dir.is_zero_approx():
 		return
 	dir = dir.normalized()
 	var speed := velocity.length()
 	velocity = dir * speed
 
 func change_speed(speed: float) -> void:
-	if velocity.length_squared() < 0.001:
+	if velocity.is_zero_approx():
 		velocity = Vector3.FORWARD
 	else:
 		velocity = velocity.normalized()

@@ -235,7 +235,7 @@ func face(target: Vector3) -> void:
 	target.y = global_position.y
 	var direction := target - global_position
 	direction.y = 0
-	if direction.length_squared() < 0.001:
+	if direction.is_zero_approx():
 		direction = Vector3.FORWARD
 	else:
 		direction = direction.normalized()
