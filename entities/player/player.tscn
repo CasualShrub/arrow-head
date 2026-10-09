@@ -233,7 +233,4 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.023803711, 0)
 [connection signal="activated" from="DashComponent" to="." method="_on_dash_activated"]
 [connection signal="disabled" from="DashComponent" to="." method="_on_dash_disabled"]
 [connection signal="enabled" from="DashComponent" to="." method="_on_dash_enabled"]
-[connection signal="firing_disabled" from="ArrowsComponent" to="." method="_on_firing_disabled"]
-[connection signal="firing_enabled" from="ArrowsComponent" to="." method="_on_firing_enabled"]
-[connection signal="slot_cleared" from="ArrowsComponent" to="." method="_on_slot_cleared"]
 [connection signal="slot_state_changed" from="ArrowsComponent" to="." method="_on_slot_state_changed"]

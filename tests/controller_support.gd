@@ -76,11 +76,19 @@ func _test_player() -> void:
 	await _axis(JOY_AXIS_RIGHT_Y, 1.0)
 	_check(is_equal_approx((player._get_aim_target() - player.global_position).length(), player.dash.max_distance), "Diagonal stick exceeds max range")
 	await _axis(JOY_AXIS_RIGHT_Y, 0.0)
-	for direction in [Vector3.FORWARD, Vector3.BACK, Vector3.LEFT, Vector3.RIGHT]:
+	var directions := [Vector3.FORWARD, Vector3.BACK, Vector3.LEFT, Vector3.RIGHT]
+	for i in directions.size():
+		if i == 3:
+			await _axis(JOY_AXIS_TRIGGER_RIGHT, 0.6)
+			await _wait()
+			_check(player.time.is_slowed() and not player.dash.is_enabled(), "R2 showed the aim preview before the sectors were full")
 		var arrow := preload("res://entities/arrows/arrow.tscn").instantiate() as Arrow
 		add_child(arrow)
-		arrow.global_position = player.global_position + direction
+		arrow.global_position = player.global_position + directions[i]
 		_check(player.arrows.try_add_arrow(arrow), "Could not fill a test arrow sector")
+	await _wait()
+	_check(player.dash.is_enabled(), "Final arrow while slowed did not show the aim preview")
+	await _axis(JOY_AXIS_TRIGGER_RIGHT, 0.0)
 	await _wait()
 	_check(_attacks(player) == 4 and ControllerManager._attack_available, "Full sectors did not prepare four attacks")
 	var shots := [0]

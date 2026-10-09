@@ -573,6 +573,8 @@ func _on_slot_state_changed(
 	_refresh_eyes_state()
 	if not arrows.can_use():
 		if dash.is_enabled(): dash.disable()
+	elif time.is_slowed() and not dash.is_enabled():
+		dash.enable()
 
 func _on_time_slowed() -> void:
 	afterimage.enable()
