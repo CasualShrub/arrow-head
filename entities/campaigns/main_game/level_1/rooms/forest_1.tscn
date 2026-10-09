@@ -27,6 +27,9 @@ allow_ricochet = false
 [node name="Enemy" parent="Enemies" parent_id_path=PackedInt32Array(1185931971) index="0" unique_id=71488470 instance=ExtResource("2_aq6pr")]
 transform = Transform3D(0.9999677, 0.004717955, -0.0065059043, -0.004702388, 0.99998605, 0.00240473, 0.006517165, -0.002374043, 0.9999759, 1.3897176, 0, -6.625906)
 
+[node name="Enemy2" parent="Enemies" parent_id_path=PackedInt32Array(1185931971) index="1" unique_id=1005410547 instance=ExtResource("2_aq6pr")]
+transform = Transform3D(0.9999677, 0.004717955, -0.0065059043, -0.004702388, 0.99998605, 0.00240473, 0.006517165, -0.002374043, 0.9999759, 8.271574, 0, -10.198956)
+
 [node name="Floor" parent="." index="5" unique_id=1301804466]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.00937748, -0.19232388, -0.04467964)
 

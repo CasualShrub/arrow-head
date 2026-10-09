@@ -28,11 +28,11 @@ allow_ricochet = false
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8.307211, 0, 4.0411587)
 
 [node name="Enemy" parent="Enemies" parent_id_path=PackedInt32Array(1185931971) index="0" unique_id=752436489 instance=ExtResource("4_rotten")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.485461, 0, -0.24462354)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.485461, 0, -1.2446235)
 combat_speed = 1.0
 
 [node name="Enemy2" parent="Enemies" parent_id_path=PackedInt32Array(1185931971) index="1" unique_id=71488470 instance=ExtResource("4_rotten")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11.828186, 0, -1.1129118)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11.828186, 0, -7.1129117)
 combat_speed = 1.0
 
 [node name="fence_normal" parent="Enemies" parent_id_path=PackedInt32Array(1185931971) index="2" unique_id=1564354922 instance=ExtResource("5_k6hdl")]

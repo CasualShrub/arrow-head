@@ -1,6 +1,7 @@
 [gd_scene format=3 uid="uid://hcstlone7k31"]
 
 [ext_resource type="PackedScene" uid="uid://bindrmcstl8e" path="res://entities/room/indoor_room.tscn" id="1_room"]
+[ext_resource type="PackedScene" uid="uid://tmhabgv3ovyb" path="res://entities/enemies/banana/enemy_banana.tscn" id="2_banana"]
 [ext_resource type="PackedScene" uid="uid://cwall3d8prfb0" path="res://scenes/wall.tscn" id="9_wall"]
 [ext_resource type="PackedScene" uid="uid://b15vpncjfa5df" path="res://entities/enemies/blueberry/enemy_blueberry.tscn" id="bb_blue"]
 
@@ -113,3 +114,9 @@ size = Vector3(22.8, 10.35, 18.4)
 
 [node name="Entrance" parent="." index="13" unique_id=591304417]
 transform = Transform3D(0, 0, -1, 0, 1, 0, 1, 0, 0, -10.2, 0, 3)
+
+[node name="Enemy" parent="." index="14" unique_id=71488470 instance=ExtResource("2_banana")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7, 0, -2)
+
+[node name="Enemy2" parent="." index="15" unique_id=1556154042 instance=ExtResource("2_banana")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8, 0, 2)
