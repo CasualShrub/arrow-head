@@ -4,5 +4,5 @@
 
 [resource]
 script = ExtResource("1_3j4a6")
-rooms = Array[String](["uid://cr14fi3mb5h0r", "res://entities/campaigns/main_game/level_2/rooms/castle_2.tscn", "res://entities/campaigns/main_game/level_2/rooms/castle_3.tscn", "uid://dkq34bpm26635", "uid://ql7ewpd1lio2", "uid://vmp73ddtretd"])
+rooms = Array[String](["uid://cr14fi3mb5h0r", "uid://yvad07vwpofu", "uid://cdiej8wh0rugu", "uid://3kdyxpto1bap", "uid://b487dnwrw1m5o", "uid://vmp73ddtretd"])
 metadata/_custom_type_script = "uid://bxgdem1c8rvxa"
