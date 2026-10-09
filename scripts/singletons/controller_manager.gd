@@ -301,7 +301,8 @@ func button_label(action: StringName) -> String:
 		&"ui_accept": return "Cross" if playstation else "A / South"
 		&"ui_cancel": return "Circle" if playstation else "B / East"
 		&"fire": return "R1" if playstation else "RB"
-		&"slow": return "R2" if playstation else "RT"
+		&"slow": return "L2" if playstation else "LT"
+		&"release": return "R2" if playstation else "RT"
 		&"pause": return "Options" if playstation else "Start"
 		&"restart": return "Triangle" if playstation else "Y / North"
 	return String(action)

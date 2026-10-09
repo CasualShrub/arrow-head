@@ -17,6 +17,7 @@ signal death_animation_finished()
 	set(value):
 		slow_input = value
 		update_configuration_warnings()
+@export var release_input: InputComponent
 @export var movement_input: VectorInputComponent:
 	set(value):
 		movement_input = value
@@ -140,6 +141,7 @@ func _cancel_attack() -> void:
 	ControllerManager.set_attack_available(false)
 	fire_input.reset()
 	slow_input.reset()
+	release_input.reset()
 	dash.disable()
 	time.resume()
 	Engine.time_scale = time.normal_scale
@@ -210,11 +212,9 @@ func _physics_process(delta: float) -> void:
 	global_position.y = 0
 
 func _update_attack() -> void:
-	if input_mode.is_controller():
-		if fire_input.consume_pressed() and dash.is_enabled():
-			dash.try_activate(global_position, _get_dash_aim_target())
-		fire_input.consume_released()
-		return
+	if release_input.consume_pressed() and dash.is_enabled():
+		dash.try_activate(global_position, _get_dash_aim_target())
+	release_input.consume_released()
 	if fire_input.consume_cancelled():
 		_cancel_attack()
 		return
@@ -485,6 +485,8 @@ func _force_walk_step(delta: float) -> void:
 	fire_input.consume_released()
 	slow_input.consume_pressed()
 	slow_input.consume_released()
+	release_input.consume_pressed()
+	release_input.consume_released()
 	var step := _force_walk_direction * speed * delta
 	if _force_walk_target != null:
 		var remaining: Vector3 = _force_walk_target - global_position
