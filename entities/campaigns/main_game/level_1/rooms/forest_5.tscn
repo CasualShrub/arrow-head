@@ -43,6 +43,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.5345316, 0, -10.188223)
 
 [node name="Enemy3" parent="Enemies" parent_id_path=PackedInt32Array(1185931971) index="1" unique_id=1387798829 instance=ExtResource("4_vg7eh")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.88, 0, -9.6)
+orbit_radius = 5.0
 
 [node name="Enemy4" parent="Enemies" parent_id_path=PackedInt32Array(1185931971) index="2" unique_id=1347666375 instance=ExtResource("2_chh0o")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.368474, 0, -14.507404)

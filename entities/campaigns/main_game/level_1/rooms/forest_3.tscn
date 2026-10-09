@@ -34,6 +34,7 @@ combat_speed = 1.0
 [node name="Enemy2" parent="Enemies" parent_id_path=PackedInt32Array(1185931971) index="1" unique_id=71488470 instance=ExtResource("4_rotten")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11.828186, 0, -7.1129117)
 combat_speed = 1.0
+orbit_radius = 5.0
 
 [node name="fence_normal" parent="Enemies" parent_id_path=PackedInt32Array(1185931971) index="2" unique_id=1564354922 instance=ExtResource("5_k6hdl")]
 transform = Transform3D(0.74926054, 0, -0.6622754, 0, 1, 0, 0.6622754, 0, 0.74926054, 2.1438172, -0.20701969, -7.4516754)
