@@ -1,8 +1,7 @@
-[gd_scene format=3 uid="uid://jr6m38vq535m"]
+[gd_scene format=3 uid="uid://hcstlone7k31"]
 
 [ext_resource type="PackedScene" uid="uid://bindrmcstl8e" path="res://entities/room/indoor_room.tscn" id="1_room"]
 [ext_resource type="PackedScene" uid="uid://tmhabgv3ovyb" path="res://entities/enemies/banana/enemy_banana.tscn" id="2_banana"]
-[ext_resource type="PackedScene" uid="uid://kwovebw0p15w" path="res://entities/enemies/banana_unripe/enemy_banana_unripe.tscn" id="4_unripe"]
 [ext_resource type="PackedScene" uid="uid://cwall3d8prfb0" path="res://scenes/wall.tscn" id="9_wall"]
 [ext_resource type="PackedScene" uid="uid://b15vpncjfa5df" path="res://entities/enemies/blueberry/enemy_blueberry.tscn" id="bb_blue"]
 
@@ -12,15 +11,6 @@ entrance_walk_distance = 3.5
 [node name="EnemyBlueberry" parent="Enemies" parent_id_path=PackedInt32Array(1185931971) index="0" unique_id=428592300 instance=ExtResource("bb_blue")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.4396782, 0, 0.08337128)
 stationary = true
-
-[node name="Enemy" parent="Enemies" parent_id_path=PackedInt32Array(1185931971) index="1" unique_id=71488470 instance=ExtResource("2_banana")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.0045414, 0, -4.6071444)
-
-[node name="Enemy2" parent="Enemies" parent_id_path=PackedInt32Array(1185931971) index="2" unique_id=1242579671 instance=ExtResource("4_unripe")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7.196, 0, -2.0047455)
-
-[node name="Enemy3" parent="Enemies" parent_id_path=PackedInt32Array(1185931971) index="3" unique_id=71388645 instance=ExtResource("4_unripe")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.735139, 0, 5.403262)
 
 [node name="Exit" parent="." index="11" unique_id=771002501]
 transform = Transform3D(-1, 0, 0, 0, 1, 0, 0, 0, -1, 5, 0, 8.4)
@@ -124,3 +114,10 @@ size = Vector3(22.8, 10.35, 18.4)
 
 [node name="Entrance" parent="." index="13" unique_id=591304417]
 transform = Transform3D(0, 0, -1, 0, 1, 0, 1, 0, 0, -10.2, 0, 3)
+
+[node name="Enemy" parent="." index="14" unique_id=71488470 instance=ExtResource("2_banana")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7, 0, -2)
+
+[node name="Enemy2" parent="." index="15" unique_id=1556154042 instance=ExtResource("2_banana")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8, 0, 2)
+orbit_radius = 5.0

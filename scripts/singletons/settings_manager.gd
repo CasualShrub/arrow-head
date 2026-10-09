@@ -17,6 +17,8 @@ var mouse_sensitivity := 1.0
 var fullscreen := false
 var grayscale := false
 var contrast := 1.0
+enum Difficulty { EASY, HARD, EXPERT }
+var current_difficulty: Difficulty = Difficulty.HARD
 
 var _filter: ColorRect
 var _save_timer := Timer.new()
@@ -71,6 +73,12 @@ func set_contrast(v: float) -> void:
 	contrast = clampf(v, CONTRAST_MIN, CONTRAST_MAX)
 	_apply_filter()
 	_changed()
+	
+func set_difficulty(d: Difficulty) -> void:
+	print("attempt set")
+	current_difficulty = d
+	_apply_difficulty()
+	_changed()
 
 func reset_to_defaults() -> void:
 	master_volume = 1.0
@@ -80,6 +88,7 @@ func reset_to_defaults() -> void:
 	fullscreen = false
 	grayscale = false
 	contrast = 1.0
+	current_difficulty = Difficulty.HARD
 	_apply()
 	_apply_window()
 	mouse_sensitivity_changed.emit(mouse_sensitivity)
@@ -96,6 +105,7 @@ func save() -> void:
 	cfg.set_value("video", "grayscale", grayscale)
 	cfg.set_value("video", "contrast", contrast)
 	cfg.set_value("controls", "mouse_sensitivity", mouse_sensitivity)
+	cfg.set_value("difficulty", "difficulty", current_difficulty)
 	cfg.save(PATH)
 
 func _load() -> void:
@@ -109,6 +119,7 @@ func _load() -> void:
 	grayscale = bool(cfg.get_value("video", "grayscale", false))
 	contrast = clampf(float(cfg.get_value("video", "contrast", 1.0)), CONTRAST_MIN, CONTRAST_MAX)
 	mouse_sensitivity = clampf(float(cfg.get_value("controls", "mouse_sensitivity", 1.0)), SENSITIVITY_MIN, SENSITIVITY_MAX)
+	current_difficulty = cfg.get_value("difficulty", "difficulty", Difficulty.HARD)
 
 func _changed() -> void:
 	changed.emit()
@@ -122,6 +133,7 @@ func _apply() -> void:
 	_apply_filter()
 	if fullscreen:
 		_apply_window()
+	_apply_difficulty()
 
 func _apply_bus(bus: StringName, v: float) -> void:
 	var idx := AudioServer.get_bus_index(bus)
@@ -151,3 +163,14 @@ func _build_filter() -> void:
 	_filter.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	_filter.material = mat
 	layer.add_child(_filter)
+	
+func _apply_difficulty():
+	print("attempt apply")
+	if current_difficulty == Difficulty.EASY:
+		print("EASY MODE")
+	if current_difficulty == Difficulty.HARD:
+		print("HARD MODE")
+	if current_difficulty == Difficulty.EXPERT:
+		print("EXPERT MODE")
+	
+	#actual changing levels shit

@@ -44,6 +44,9 @@ const NAV_ACTIONS: Array[StringName] = [&"ui_left", &"ui_right", &"ui_up", &"ui_
 @onready var _website_popup: Control = %WebsitePopup
 @onready var _website_no: TextureButton = %WebsiteNo
 @onready var _website_yes: TextureButton = %WebsiteYes
+@onready var _difficulty_easy: Button = %Easy
+@onready var _difficulty_hard: Button = %Hard
+@onready var _difficulty_expert: Button = %Expert
 
 var _showing_licenses := false
 var _page_opener: Control
@@ -74,6 +77,10 @@ func _ready() -> void:
 	_logo_button.pressed.connect(_show_page.bind(_website_popup, _logo_button, _website_no))
 	_website_no.pressed.connect(_hide_pages)
 	_website_yes.pressed.connect(_on_website_yes)
+	_difficulty_easy.pressed.connect(func(): SettingsManager.set_difficulty(SettingsManager.Difficulty.EASY))
+	_difficulty_hard.pressed.connect(func(): SettingsManager.set_difficulty(SettingsManager.Difficulty.HARD))
+	_difficulty_expert.pressed.connect(func(): SettingsManager.set_difficulty(SettingsManager.Difficulty.EXPERT))
+
 	SettingsManager.changed.connect(_sync)
 	_sync()
 	_link_focus()

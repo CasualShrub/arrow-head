@@ -17,6 +17,7 @@
 [ext_resource type="PackedScene" uid="uid://d2qg0xkhvuipc" path="res://entities/props/rocks/rock_06.tscn" id="17_15vui"]
 [ext_resource type="PackedScene" uid="uid://dpodljr37dshm" path="res://entities/props/fences/fence_normal/fence_normal.tscn" id="17_wqmk6"]
 [ext_resource type="PackedScene" uid="uid://0aqo3vtqj75r" path="res://entities/props/fences/fence_straight/fence_straight.tscn" id="18_w8uo4"]
+[ext_resource type="PackedScene" uid="uid://cwall3d8prfb0" path="res://scenes/wall.tscn" id="21_15vui"]
 [ext_resource type="PackedScene" path="res://entities/props/flowers/flower_01.tscn" id="fl0_flower_01"]
 [ext_resource type="PackedScene" path="res://entities/props/flowers/flower_02.tscn" id="fl1_flower_02"]
 [ext_resource type="PackedScene" path="res://entities/props/flowers/flower_cluster.tscn" id="fl2_flower_cluster"]
@@ -442,3 +443,8 @@ transform = Transform3D(-0.96069175, 0, 0.27761662, 0, 1, 0, -0.27761662, 0, -0.
 
 [node name="fence_straight" parent="." index="19" unique_id=1899252000 instance=ExtResource("18_w8uo4")]
 transform = Transform3D(0.99994737, 0, 0.01026226, 0, 1, 0, -0.01026226, 0, 0.99994737, -1.2339609, -0.20218623, -4.4496107)
+
+[node name="Wall" parent="." index="20" unique_id=659255651 instance=ExtResource("21_15vui")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 18.264101, 0, -7.27328)
+visible = false
+size = Vector3(1.4522705, 2.5, 5.5637207)
