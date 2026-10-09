@@ -1,7 +1,7 @@
-[gd_resource type="Resource" script_class="JuiceSplatStyle" format=3]
+[gd_resource type="Resource" script_class="JuiceSplatStyle" format=3 uid="uid://dcryf7q686gps"]
 
 [ext_resource type="Texture2D" path="res://systems/blood/baked/juice_splat_drip_0.res" id="1_lyhuk"]
-[ext_resource type="Script" path="res://systems/blood/juice_splat_style.gd" id="1_style"]
+[ext_resource type="Script" uid="uid://b8gjctcc4hf85" path="res://systems/blood/juice_splat_style.gd" id="1_style"]
 [ext_resource type="Texture2D" path="res://systems/blood/baked/juice_splat_drip_1.res" id="2_74swm"]
 [ext_resource type="Texture2D" path="res://systems/blood/baked/juice_splat_drip_2.res" id="3_71ig3"]
 [ext_resource type="Texture2D" path="res://systems/blood/baked/juice_splat_drip_3.res" id="4_w2c7k"]

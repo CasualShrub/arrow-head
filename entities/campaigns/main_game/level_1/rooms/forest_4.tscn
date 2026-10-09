@@ -34,13 +34,14 @@ hurt_radius = 0.35
 hurt_reaction_duration = 0.5
 
 [node name="Enemy" parent="Enemies" parent_id_path=PackedInt32Array(1185931971) index="0" unique_id=1813099079 instance=ExtResource("3_banana")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -16.24)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.790283, 0, -8.793647)
 
 [node name="Enemy2" parent="Enemies" parent_id_path=PackedInt32Array(1185931971) index="1" unique_id=1589535158 instance=ExtResource("5_rotten")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.2, 0, -3.6)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.9136617, 0, -3.6)
 
 [node name="Enemy3" parent="Enemies" parent_id_path=PackedInt32Array(1185931971) index="2" unique_id=1387798829 instance=ExtResource("6_unripe")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.88, 0, -9.6)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.53375244, 0, -14.626232)
+orbit_radius = 4.0
 
 [node name="Enemy4" parent="Enemies" parent_id_path=PackedInt32Array(1185931971) index="3" unique_id=1347666375 instance=ExtResource("3_banana")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.64, 0, -14.8)

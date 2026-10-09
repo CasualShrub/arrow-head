@@ -4,8 +4,12 @@
 [ext_resource type="Script" uid="uid://dq3x6bxvuaeyx" path="res://systems/campaign/campaign_data.gd" id="1_vakto"]
 [ext_resource type="Resource" uid="uid://cbfa80ccg46cc" path="res://entities/campaigns/main_game/level_1/level_1.tres" id="2_lvl1"]
 [ext_resource type="Resource" uid="uid://clvl2cstl5x1" path="res://entities/campaigns/main_game/level_2/level_2.tres" id="3_lvl2"]
+[ext_resource type="Resource" uid="uid://dpq0h0a7m0cs6" path="res://entities/campaigns/main_game/level_1/level_1_easy.tres" id="4_duuve"]
+[ext_resource type="Resource" uid="uid://dennhlt5tswu4" path="res://entities/campaigns/main_game/level_2/level_2_easy.tres" id="5_40qns"]
+[ext_resource type="Resource" uid="uid://b66hey7usj38e" path="res://entities/campaigns/main_game/level_1/level_1_expert.tres" id="6_wthst"]
+[ext_resource type="Resource" uid="uid://ib6e8g6tkjjx" path="res://entities/campaigns/main_game/level_2/level_2_expert.tres" id="7_lsol4"]
 
 [resource]
 script = ExtResource("1_vakto")
-levels = Array[ExtResource("1_pakn1")]([ExtResource("2_lvl1"), ExtResource("3_lvl2")])
+levels = Array[ExtResource("1_pakn1")]([ExtResource("2_lvl1"), ExtResource("3_lvl2"), ExtResource("4_duuve"), ExtResource("5_40qns"), ExtResource("6_wthst"), ExtResource("7_lsol4")])
 metadata/_custom_type_script = "uid://dq3x6bxvuaeyx"

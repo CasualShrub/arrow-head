@@ -261,7 +261,7 @@ transform = Transform3D(1.04817, 0, 0.4813489, 0, 1.153411, 0, -0.4813489, 0, 1.
 transform = Transform3D(-0.2641774, 0, 1.347411, 0, 1.373064, 0, -1.347411, 0, -0.2641774, -5.7552, -0.4, -8.0392)
 
 [node name="Rock33" parent="Walls" parent_id_path=PackedInt32Array(2117107331) index="73" unique_id=72941877 instance=ExtResource("5_1rq0v")]
-transform = Transform3D(0.7518238, 0, -1.031678, 0, 1.276557, 0, 1.031678, 0, 0.7518238, 3.504, -0.4, -14.9688)
+transform = Transform3D(0.7518238, 0, -1.031678, 0, 1.276557, 0, 1.031678, 0, 0.7518238, -4.1615605, -0.4, -13.329027)
 
 [node name="Rock34" parent="Walls" parent_id_path=PackedInt32Array(2117107331) index="74" unique_id=519843731 instance=ExtResource("5_1rq0v")]
 transform = Transform3D(0.917939, 0, -0.8466708, 0, 1.248785, 0, 0.8466708, 0, 0.917939, 5.7552, -0.4, -11.9608)
