@@ -17,6 +17,7 @@ signal death_animation_finished()
 	set(value):
 		slow_input = value
 		update_configuration_warnings()
+@export var release_input: InputComponent
 @export var movement_input: VectorInputComponent:
 	set(value):
 		movement_input = value
@@ -104,6 +105,7 @@ var _idle_time := 0.0
 var _last_aim_target := Vector3.ZERO
 var _dash_charges := 0
 var _dash_arrows: Array[Arrow] = []
+var _controller_aim := Vector2.UP
 var _force_walk_direction := Vector3.ZERO
 var _force_walk_target: Variant = null
 var _status_sources: Array[Arrow] = []
@@ -124,9 +126,30 @@ func _ready() -> void:
 	_last_leak_position = global_position
 	if not Engine.is_editor_hint():
 		_sprite.animation_finished.connect(_on_animation_finished)
+		ControllerManager.disconnected.connect(_cancel_attack)
+
+func _notification(what: int) -> void:
+	if Engine.is_editor_hint() or not is_node_ready():
+		return
+	if what == NOTIFICATION_PAUSED or what == NOTIFICATION_APPLICATION_FOCUS_OUT:
+		_cancel_attack()
+	elif what == NOTIFICATION_EXIT_TREE:
+		ControllerManager.set_attack_available(false)
+		ControllerManager.stop_feedback()
+
+func _cancel_attack() -> void:
+	ControllerManager.set_attack_available(false)
+	fire_input.reset()
+	slow_input.reset()
+	release_input.reset()
+	dash.disable()
+	time.resume()
+	Engine.time_scale = time.normal_scale
+	ControllerManager.stop_feedback()
 
 func _process(delta: float) -> void:
 	if Engine.is_editor_hint(): return
+	ControllerManager.set_attack_available(not health.is_dead() and not is_force_walking() and arrows.can_use())
 
 	if is_force_walking():
 		face(global_position + _force_walk_direction)
@@ -157,6 +180,7 @@ func _process(delta: float) -> void:
 	_camera.set_lookahead(lookahead_offset)
 
 	if health.is_dead(): return
+	_update_attack()
 	if _dash_preview.is_enabled():
 		var dash_dest := dash.get_dash_destination(global_position, aim_target)
 		var dash_targets := dash.get_dash_targets(global_position, dash_dest)
@@ -173,24 +197,39 @@ func _physics_process(delta: float) -> void:
 	if slow_input.consume_pressed():
 		if not time.is_slowed():
 			time.slow()
+		if input_mode.is_controller() and arrows.can_use():
+			dash.enable()
 	if slow_input.consume_released():
 		if time.is_slowed():
 			time.resume()
-	
-	if fire_input.consume_pressed():
-		if arrows.can_use():
-			if not time.is_slowed():
-				time.slow()
-			dash.enable()
-	
-	if fire_input.consume_released():
-		dash.try_activate(global_position, _get_dash_aim_target())
+		if input_mode.is_controller():
+			dash.disable()
 	
 	_move(movement_input.get_vector(), delta)
 	_tick_leak(delta)
 	
 	# keep on same plane
 	global_position.y = 0
+
+func _update_attack() -> void:
+	if release_input.consume_pressed() and dash.is_enabled():
+		dash.try_activate(global_position, _get_dash_aim_target())
+	release_input.consume_released()
+	if fire_input.consume_cancelled():
+		_cancel_attack()
+		return
+	if fire_input.consume_pressed():
+		if not arrows.can_use():
+			fire_input.reset()
+			return
+		if not time.is_slowed():
+			time.slow()
+		dash.enable()
+	var activated := fire_input.consume_activated()
+	var released := fire_input.consume_released()
+	if activated or released:
+		if not arrows.can_use() or not dash.try_activate(global_position, _get_dash_aim_target()):
+			_cancel_attack()
 
 func _get_component_warning(comp: Variant, comp_name: StringName) -> Variant:
 	if not comp: return "Player has no %s." % comp_name
@@ -249,7 +288,7 @@ func _get_overridden_aim_target() -> Vector3:
 func _get_dash_aim_target() -> Vector3:
 	if _is_aim_overridden():
 		return _get_overridden_aim_target()
-	return _camera.get_mouse_position()
+	return _get_aim_target()
 
 func _capture_aim_facing() -> void:
 	if _is_aim_overridden(): return
@@ -311,6 +350,7 @@ func get_hit(arrow: Arrow) -> void:
 		var sector := slots[0] if not slots.is_empty() else 0
 		SoundManager.play("Q%d_fill" % clampi(sector + 1, 1, 4))
 		SoundManager.play("apple_damage1") 
+		ControllerManager.pulse(0.2, 0.35, 0.1)
 		#if arrow.kind != Arrow.Kind.NORMAL else "apple_damage2")
 	else:
 		arrow.queue_free()
@@ -390,11 +430,14 @@ func _get_aim_target() -> Vector3:
 		return _camera.get_mouse_position()
 	elif input_mode.is_controller():
 		var aim_vec := aim_input.get_vector()
-		return global_position + Vector3(aim_vec.x, 0, aim_vec.y)
+		if not aim_vec.is_zero_approx():
+			_controller_aim = aim_vec.limit_length(1.0)
+		return global_position + Vector3(_controller_aim.x, 0, _controller_aim.y) * dash.max_distance
 	return Vector3.ZERO
 
 func face(target: Vector3) -> void:
 	target.y = global_position.y
+	if global_position.is_equal_approx(target): return
 	_mouse_pivot.look_at(target)
 	if health.is_dead(): return
 	_eyes.make_eyes_look_at(target)
@@ -442,6 +485,8 @@ func _force_walk_step(delta: float) -> void:
 	fire_input.consume_released()
 	slow_input.consume_pressed()
 	slow_input.consume_released()
+	release_input.consume_pressed()
+	release_input.consume_released()
 	var step := _force_walk_direction * speed * delta
 	if _force_walk_target != null:
 		var remaining: Vector3 = _force_walk_target - global_position
@@ -482,6 +527,8 @@ func _stop_angry_effect(instant := false) -> void:
 func _on_died() -> void:
 	JuiceSplatter.splat(global_position, Vector3.ZERO, juice_color, 1.0, death_juice_style)
 	_status.clear()
+	_cancel_attack()
+	ControllerManager.pulse(0.5, 0.85, 0.3)
 	arrows.clear_arrows()
 	time.resume()
 	
@@ -512,6 +559,7 @@ func _on_dash_activated(destination: Vector3, targets: Array) -> void:
 	time.bar.consume(dash_cost * time.bar.max_value)
 	if time.is_slowed():
 		time.resume()
+	ControllerManager.attack_released()
 
 func _on_slot_state_changed(
 	slot: int,
@@ -527,6 +575,8 @@ func _on_slot_state_changed(
 	_refresh_eyes_state()
 	if not arrows.can_use():
 		if dash.is_enabled(): dash.disable()
+	elif time.is_slowed() and not dash.is_enabled():
+		dash.enable()
 
 func _on_time_slowed() -> void:
 	afterimage.enable()
@@ -537,8 +587,10 @@ func _on_time_resumed() -> void:
 	dash.disable()
 
 func _on_dash_enabled() -> void:
+	ControllerManager.set_charging(true)
 	_dash_preview.max_range = dash.max_distance
 	_dash_preview.enable()
 
 func _on_dash_disabled() -> void:
+	ControllerManager.set_charging(false)
 	_dash_preview.disable()

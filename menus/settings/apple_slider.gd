@@ -17,6 +17,8 @@ signal drag_ended
 var _value := 1.0
 var _dragging := false
 var _grab_offset := 0.0
+var _repeat_direction := 0
+var _repeat_at := 0
 
 @onready var _bar: TextureRect = $Bar
 @onready var _knob: TextureButton = $Knob
@@ -39,12 +41,28 @@ func _input(event: InputEvent) -> void:
 		_end_drag()
 
 func _gui_input(event: InputEvent) -> void:
-	if event.is_action_pressed("ui_left", true):
-		value -= step
+	var direction := 0
+	if event.is_action_pressed("ui_left", false, true):
+		direction = -1
+	elif event.is_action_pressed("ui_right", false, true):
+		direction = 1
+	if direction != 0:
+		if _repeat_direction != direction:
+			value += step * direction
+			_repeat_direction = direction
+			_repeat_at = Time.get_ticks_msec() + 350
 		accept_event()
-	elif event.is_action_pressed("ui_right", true):
-		value += step
-		accept_event()
+
+func _process(_delta: float) -> void:
+	if _repeat_direction == 0:
+		return
+	var held := Input.is_action_pressed("ui_left" if _repeat_direction < 0 else "ui_right")
+	if not has_focus() or not is_visible_in_tree() or not held:
+		_repeat_direction = 0
+		drag_ended.emit()
+	elif Time.get_ticks_msec() >= _repeat_at:
+		value += step * _repeat_direction
+		_repeat_at = Time.get_ticks_msec() + 65
 
 func set_value_no_signal(v: float) -> void:
 	_assign(v)

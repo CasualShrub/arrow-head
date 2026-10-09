@@ -9,13 +9,16 @@ const FLOOR_OFFSET := 0.01
 const LAYER_STEP := 0.0005
 const LAYER_COUNT := 16
 const DROP_RENDER_PRIORITY := 0
+const WARM_UP_TIME := 0.2
 
 var _floor_height := FALLBACK_FLOOR_HEIGHT
 var _layer := 0
-var _materials: Dictionary[String, StandardMaterial3D] = {}
 var _style_roots: Dictionary[JuiceSplatStyle, Node3D] = {}
-var _drop_meshes: Dictionary[JuiceSplatStyle, SphereMesh] = {}
-var _drop_materials: Dictionary[String, StandardMaterial3D] = {}
+
+static var _materials: Dictionary[String, StandardMaterial3D] = {}
+static var _drop_meshes: Dictionary[JuiceSplatStyle, SphereMesh] = {}
+static var _drop_materials: Dictionary[String, StandardMaterial3D] = {}
+static var _warm_materials: Array[StandardMaterial3D] = []
 
 static func splat(
 	at: Vector3,
@@ -45,9 +48,16 @@ static func spurt(
 	if not splatter: return
 	splatter.add_spurt(from, landing, color, size, style)
 
+static func prepare(room: Node3D) -> void:
+	if not VisualFeatureManager.blood: return
+	_get_splatter_in(room)
+
 static func _get_splatter() -> JuiceSplatter:
 	var room := _get_room()
 	if not room: return null
+	return _get_splatter_in(room)
+
+static func _get_splatter_in(room: Node3D) -> JuiceSplatter:
 	var existing := room.get_node_or_null(NodePath(NODE_NAME)) as JuiceSplatter
 	if existing: return existing
 	var splatter := JuiceSplatter.new()
@@ -76,6 +86,26 @@ func _ready() -> void:
 	var room_floor := get_parent().get_node_or_null(^"Floor") as Node3D
 	if room_floor:
 		_floor_height = room_floor.global_position.y
+	_warm_up()
+
+func _warm_up() -> void:
+	if not _warm_materials.is_empty(): return
+	_warm_materials.append(_new_splat_material(DEFAULT_STYLE.get_texture(0), Color(1, 1, 1, 0)))
+	_warm_materials.append(_new_drop_material(Color(1, 1, 1, 0)))
+	var spot := Vector3(0.0, _floor_height + FLOOR_OFFSET, 0.0)
+	var camera := get_viewport().get_camera_3d()
+	if camera:
+		spot = camera.global_position - camera.global_basis.z
+	for mat in _warm_materials:
+		var mesh := QuadMesh.new()
+		mesh.size = Vector2(0.01, 0.01)
+		var probe := MeshInstance3D.new()
+		probe.mesh = mesh
+		probe.material_override = mat
+		probe.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
+		add_child(probe)
+		probe.global_position = spot
+		get_tree().create_timer(WARM_UP_TIME, true).timeout.connect(probe.queue_free)
 
 func add_splat(
 	at: Vector3,
@@ -159,12 +189,16 @@ func _get_drop_material(color: Color) -> StandardMaterial3D:
 	var key := color.to_html(false)
 	if _drop_materials.has(key):
 		return _drop_materials[key]
+	var mat := _new_drop_material(color)
+	_drop_materials[key] = mat
+	return mat
+
+func _new_drop_material(color: Color) -> StandardMaterial3D:
 	var mat := StandardMaterial3D.new()
 	mat.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
 	mat.transparency = BaseMaterial3D.TRANSPARENCY_ALPHA
 	mat.render_priority = DROP_RENDER_PRIORITY
 	mat.albedo_color = color
-	_drop_materials[key] = mat
 	return mat
 
 func _make_mesh(style: JuiceSplatStyle, size: float) -> QuadMesh:
@@ -211,12 +245,16 @@ func _get_material(style: JuiceSplatStyle, variant: int, tint: Color) -> Standar
 	var key := "%d_%d_%s" % [style.get_instance_id(), variant, tint.to_html(false)]
 	if _materials.has(key):
 		return _materials[key]
+	var mat := _new_splat_material(style.get_texture(variant), tint)
+	_materials[key] = mat
+	return mat
+
+func _new_splat_material(texture: Texture2D, tint: Color) -> StandardMaterial3D:
 	var mat := StandardMaterial3D.new()
 	mat.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
 	mat.transparency = BaseMaterial3D.TRANSPARENCY_ALPHA
 	mat.cull_mode = BaseMaterial3D.CULL_DISABLED
 	mat.texture_filter = BaseMaterial3D.TEXTURE_FILTER_NEAREST
-	mat.albedo_texture = style.get_texture(variant)
+	mat.albedo_texture = texture
 	mat.albedo_color = tint
-	_materials[key] = mat
 	return mat

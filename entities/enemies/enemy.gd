@@ -14,6 +14,7 @@ class_name Enemy
 		return patrol.path if patrol else null
 
 @export var has_intro := false
+@export var camera_focus := false
 @export var stationary := false
 @export var fixed_facing := false
 @export var max_hits := 1
@@ -313,7 +314,7 @@ func face(target: Vector3) -> void:
 	target.y = global_position.y
 	var direction := target - global_position
 	direction.y = 0
-	if direction.length_squared() < 0.001:
+	if direction.is_zero_approx():
 		direction = Vector3.FORWARD
 	else:
 		direction = direction.normalized()

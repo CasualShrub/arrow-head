@@ -1,6 +1,14 @@
-[gd_resource type="Resource" script_class="JuiceSplatStyle" format=3 uid="uid://crg5oapi58l11"]
+[gd_resource type="Resource" script_class="JuiceSplatStyle" format=3]
 
-[ext_resource type="Script" uid="uid://b8gjctcc4hf85" path="res://systems/blood/juice_splat_style.gd" id="1_style"]
+[ext_resource type="Texture2D" path="res://systems/blood/baked/juice_splat_drip_0.res" id="1_lyhuk"]
+[ext_resource type="Script" path="res://systems/blood/juice_splat_style.gd" id="1_style"]
+[ext_resource type="Texture2D" path="res://systems/blood/baked/juice_splat_drip_1.res" id="2_74swm"]
+[ext_resource type="Texture2D" path="res://systems/blood/baked/juice_splat_drip_2.res" id="3_71ig3"]
+[ext_resource type="Texture2D" path="res://systems/blood/baked/juice_splat_drip_3.res" id="4_w2c7k"]
+[ext_resource type="Texture2D" path="res://systems/blood/baked/juice_splat_drip_4.res" id="5_l8d3h"]
+[ext_resource type="Texture2D" path="res://systems/blood/baked/juice_splat_drip_5.res" id="6_pw8uh"]
+[ext_resource type="Texture2D" path="res://systems/blood/baked/juice_splat_drip_6.res" id="7_wvcfq"]
+[ext_resource type="Texture2D" path="res://systems/blood/baked/juice_splat_drip_7.res" id="8_353lk"]
 
 [resource]
 script = ExtResource("1_style")
@@ -22,3 +30,4 @@ angle_jitter = 3.1416
 grow_time = 0.08
 max_splats = 250
 air_drop_radius = 0.06
+baked_textures = Array[Texture2D]([ExtResource("1_lyhuk"), ExtResource("2_74swm"), ExtResource("3_71ig3"), ExtResource("4_w2c7k"), ExtResource("5_l8d3h"), ExtResource("6_pw8uh"), ExtResource("7_wvcfq"), ExtResource("8_353lk")])

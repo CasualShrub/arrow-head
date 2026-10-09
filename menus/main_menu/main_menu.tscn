@@ -21,7 +21,7 @@
 [ext_resource type="Script" uid="uid://it1hcnvfi1hr" path="res://scripts/classes/screen_shake.gd" id="14_shake"]
 [ext_resource type="PackedScene" uid="uid://c8ghost4gme01" path="res://scenes/game.tscn" id="15_game"]
 [ext_resource type="Shader" uid="uid://blt3jorw6dqxv" path="res://menus/main_menu/dots_wave.gdshader" id="16_dots_wave"]
-[ext_resource type="PackedScene" uid="uid://db87rtso8n8l0" path="res://menus/Settings/settings.tscn" id="17_settings"]
+[ext_resource type="PackedScene" uid="uid://db87rtso8n8l0" path="res://menus/settings/settings.tscn" id="17_settings"]
 [ext_resource type="Texture2D" uid="uid://dk1tp5akt6x78" path="res://shared/art/settings/gear.png" id="18_gear"]
 [ext_resource type="Texture2D" uid="uid://dy4n0ixkhnjmj" path="res://shared/art/settings/gear_dark.png" id="19_gear_dark"]
 
@@ -238,73 +238,154 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="Buttons" type="VBoxContainer" parent="LevelSelect" unique_id=735805230]
+[node name="Center" type="CenterContainer" parent="LevelSelect" unique_id=1952099019]
 layout_mode = 1
-offset_left = 177.0
-offset_top = 228.175
-offset_right = 517.0
-offset_bottom = 860.175
-scale = Vector2(0.64, 0.64)
-theme_override_constants/separation = 10
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 
-[node name="Tutorial" type="Button" parent="LevelSelect/Buttons" unique_id=1585556067]
-custom_minimum_size = Vector2(340, 64)
+[node name="Layout" type="VBoxContainer" parent="LevelSelect/Center" unique_id=992695476]
 layout_mode = 2
+theme_override_constants/separation = 36
+
+[node name="Title" type="Label" parent="LevelSelect/Center/Layout" unique_id=382947329]
+layout_mode = 2
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 18
 theme_override_fonts/font = ExtResource("5_t7kvd")
-theme_override_font_sizes/font_size = 42
+theme_override_font_sizes/font_size = 96
+text = "Select Level"
+horizontal_alignment = 1
+
+[node name="Tutorial" type="Button" parent="LevelSelect/Center/Layout" unique_id=161098808]
+custom_minimum_size = Vector2(360, 80)
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_fonts/font = ExtResource("5_t7kvd")
+theme_override_font_sizes/font_size = 40
 text = "Tutorial"
 
-[node name="Level1" type="Button" parent="LevelSelect/Buttons" unique_id=771563180]
-custom_minimum_size = Vector2(340, 64)
+[node name="Forest" type="VBoxContainer" parent="LevelSelect/Center/Layout" unique_id=1424107815]
 layout_mode = 2
-theme_override_fonts/font = ExtResource("5_t7kvd")
-theme_override_font_sizes/font_size = 42
-text = "Level 1"
+theme_override_constants/separation = 14
 
-[node name="Level2" type="Button" parent="LevelSelect/Buttons" unique_id=719703129]
-custom_minimum_size = Vector2(340, 64)
+[node name="ForestLabel" type="Label" parent="LevelSelect/Center/Layout/Forest" unique_id=938085127]
 layout_mode = 2
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 14
 theme_override_fonts/font = ExtResource("5_t7kvd")
-theme_override_font_sizes/font_size = 42
-text = "Level 2"
+theme_override_font_sizes/font_size = 56
+text = "Forest"
+horizontal_alignment = 1
 
-[node name="Level3" type="Button" parent="LevelSelect/Buttons" unique_id=917836742]
-custom_minimum_size = Vector2(340, 64)
+[node name="Buttons" type="HBoxContainer" parent="LevelSelect/Center/Layout/Forest" unique_id=913788856]
 layout_mode = 2
-theme_override_fonts/font = ExtResource("5_t7kvd")
-theme_override_font_sizes/font_size = 42
-text = "Level 3"
+theme_override_constants/separation = 16
+alignment = 1
 
-[node name="Level4" type="Button" parent="LevelSelect/Buttons" unique_id=1646546205]
-custom_minimum_size = Vector2(340, 64)
+[node name="Forest1" type="Button" parent="LevelSelect/Center/Layout/Forest/Buttons" unique_id=789317830]
+custom_minimum_size = Vector2(110, 96)
 layout_mode = 2
 theme_override_fonts/font = ExtResource("5_t7kvd")
-theme_override_font_sizes/font_size = 42
-text = "Level 4"
+theme_override_font_sizes/font_size = 44
+text = "1"
 
-[node name="Level5" type="Button" parent="LevelSelect/Buttons" unique_id=1166170549]
-custom_minimum_size = Vector2(340, 64)
+[node name="Forest2" type="Button" parent="LevelSelect/Center/Layout/Forest/Buttons" unique_id=690803523]
+custom_minimum_size = Vector2(110, 96)
 layout_mode = 2
 theme_override_fonts/font = ExtResource("5_t7kvd")
-theme_override_font_sizes/font_size = 42
-text = "Level 5"
+theme_override_font_sizes/font_size = 44
+text = "2"
 
-[node name="Boss" type="Button" parent="LevelSelect/Buttons" unique_id=1780378946]
-custom_minimum_size = Vector2(340, 64)
+[node name="Forest3" type="Button" parent="LevelSelect/Center/Layout/Forest/Buttons" unique_id=497091625]
+custom_minimum_size = Vector2(110, 96)
 layout_mode = 2
 theme_override_fonts/font = ExtResource("5_t7kvd")
-theme_override_font_sizes/font_size = 42
+theme_override_font_sizes/font_size = 44
+text = "3"
+
+[node name="Forest4" type="Button" parent="LevelSelect/Center/Layout/Forest/Buttons" unique_id=1207121707]
+custom_minimum_size = Vector2(110, 96)
+layout_mode = 2
+theme_override_fonts/font = ExtResource("5_t7kvd")
+theme_override_font_sizes/font_size = 44
+text = "4"
+
+[node name="ForestBoss" type="Button" parent="LevelSelect/Center/Layout/Forest/Buttons" unique_id=1160106688]
+custom_minimum_size = Vector2(180, 96)
+layout_mode = 2
+theme_override_fonts/font = ExtResource("5_t7kvd")
+theme_override_font_sizes/font_size = 44
 text = "Boss"
 
-[node name="Spacer" type="Control" parent="LevelSelect/Buttons" unique_id=1308263388]
-custom_minimum_size = Vector2(0, 40)
+[node name="Castle" type="VBoxContainer" parent="LevelSelect/Center/Layout" unique_id=151411011]
 layout_mode = 2
+theme_override_constants/separation = 14
 
-[node name="Back" type="Button" parent="LevelSelect/Buttons" unique_id=2026175752]
-custom_minimum_size = Vector2(340, 64)
+[node name="CastleLabel" type="Label" parent="LevelSelect/Center/Layout/Castle" unique_id=1847350149]
+layout_mode = 2
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 14
+theme_override_fonts/font = ExtResource("5_t7kvd")
+theme_override_font_sizes/font_size = 56
+text = "Castle"
+horizontal_alignment = 1
+
+[node name="Buttons" type="HBoxContainer" parent="LevelSelect/Center/Layout/Castle" unique_id=1107537441]
+layout_mode = 2
+theme_override_constants/separation = 16
+alignment = 1
+
+[node name="Castle1" type="Button" parent="LevelSelect/Center/Layout/Castle/Buttons" unique_id=437974951]
+custom_minimum_size = Vector2(110, 96)
 layout_mode = 2
 theme_override_fonts/font = ExtResource("5_t7kvd")
-theme_override_font_sizes/font_size = 42
+theme_override_font_sizes/font_size = 44
+text = "1"
+
+[node name="Castle2" type="Button" parent="LevelSelect/Center/Layout/Castle/Buttons" unique_id=434643198]
+custom_minimum_size = Vector2(110, 96)
+layout_mode = 2
+theme_override_fonts/font = ExtResource("5_t7kvd")
+theme_override_font_sizes/font_size = 44
+text = "2"
+
+[node name="Castle3" type="Button" parent="LevelSelect/Center/Layout/Castle/Buttons" unique_id=1332208055]
+custom_minimum_size = Vector2(110, 96)
+layout_mode = 2
+theme_override_fonts/font = ExtResource("5_t7kvd")
+theme_override_font_sizes/font_size = 44
+text = "3"
+
+[node name="Castle4" type="Button" parent="LevelSelect/Center/Layout/Castle/Buttons" unique_id=1738842013]
+custom_minimum_size = Vector2(110, 96)
+layout_mode = 2
+theme_override_fonts/font = ExtResource("5_t7kvd")
+theme_override_font_sizes/font_size = 44
+text = "4"
+
+[node name="Castle5" type="Button" parent="LevelSelect/Center/Layout/Castle/Buttons" unique_id=1542939279]
+custom_minimum_size = Vector2(110, 96)
+layout_mode = 2
+theme_override_fonts/font = ExtResource("5_t7kvd")
+theme_override_font_sizes/font_size = 44
+text = "5"
+
+[node name="CastleBoss" type="Button" parent="LevelSelect/Center/Layout/Castle/Buttons" unique_id=1123125168]
+custom_minimum_size = Vector2(180, 96)
+layout_mode = 2
+theme_override_fonts/font = ExtResource("5_t7kvd")
+theme_override_font_sizes/font_size = 44
+text = "Boss"
+
+[node name="Back" type="Button" parent="LevelSelect/Center/Layout" unique_id=357483575]
+custom_minimum_size = Vector2(360, 80)
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_fonts/font = ExtResource("5_t7kvd")
+theme_override_font_sizes/font_size = 40
 text = "Back"
 
 [node name="Settings" parent="." unique_id=351075051 instance=ExtResource("17_settings")]
@@ -320,12 +401,17 @@ texture_pressed = ExtResource("19_gear_dark")
 ignore_texture_size = true
 stretch_mode = 6
 
-[connection signal="pressed" from="LevelSelect/Buttons/Tutorial" to="." method="_load_level" binds= ["res://scenes/levels/tutorial.tscn"]]
-[connection signal="pressed" from="LevelSelect/Buttons/Level1" to="." method="_load_level" binds= ["res://scenes/levels/level_1.tscn"]]
-[connection signal="pressed" from="LevelSelect/Buttons/Level2" to="." method="_load_level" binds= ["res://scenes/levels/level_2.tscn"]]
-[connection signal="pressed" from="LevelSelect/Buttons/Level3" to="." method="_load_level" binds= ["res://scenes/levels/level_3.tscn"]]
-[connection signal="pressed" from="LevelSelect/Buttons/Level4" to="." method="_load_level" binds= ["res://scenes/levels/level_4.tscn"]]
-[connection signal="pressed" from="LevelSelect/Buttons/Level5" to="." method="_load_level" binds= ["res://scenes/levels/level_5.tscn"]]
-[connection signal="pressed" from="LevelSelect/Buttons/Boss" to="." method="_load_level" binds= ["res://scenes/levels/level_boss.tscn"]]
-[connection signal="pressed" from="LevelSelect/Buttons/Back" to="." method="_close_levels"]
+[connection signal="pressed" from="LevelSelect/Center/Layout/Tutorial" to="." method="_load_level" binds= ["uid://lseyvxmqjacu", 0, 0]]
+[connection signal="pressed" from="LevelSelect/Center/Layout/Forest/Buttons/Forest1" to="." method="_load_level" binds= ["uid://lseyvxmqjacu", 0, 1]]
+[connection signal="pressed" from="LevelSelect/Center/Layout/Forest/Buttons/Forest2" to="." method="_load_level" binds= ["uid://lseyvxmqjacu", 0, 2]]
+[connection signal="pressed" from="LevelSelect/Center/Layout/Forest/Buttons/Forest3" to="." method="_load_level" binds= ["uid://lseyvxmqjacu", 0, 3]]
+[connection signal="pressed" from="LevelSelect/Center/Layout/Forest/Buttons/Forest4" to="." method="_load_level" binds= ["uid://lseyvxmqjacu", 0, 4]]
+[connection signal="pressed" from="LevelSelect/Center/Layout/Forest/Buttons/ForestBoss" to="." method="_load_level" binds= ["uid://lseyvxmqjacu", 0, 5]]
+[connection signal="pressed" from="LevelSelect/Center/Layout/Castle/Buttons/Castle1" to="." method="_load_level" binds= ["uid://lseyvxmqjacu", 1, 0]]
+[connection signal="pressed" from="LevelSelect/Center/Layout/Castle/Buttons/Castle2" to="." method="_load_level" binds= ["uid://lseyvxmqjacu", 1, 1]]
+[connection signal="pressed" from="LevelSelect/Center/Layout/Castle/Buttons/Castle3" to="." method="_load_level" binds= ["uid://lseyvxmqjacu", 1, 2]]
+[connection signal="pressed" from="LevelSelect/Center/Layout/Castle/Buttons/Castle4" to="." method="_load_level" binds= ["uid://lseyvxmqjacu", 1, 3]]
+[connection signal="pressed" from="LevelSelect/Center/Layout/Castle/Buttons/Castle5" to="." method="_load_level" binds= ["uid://lseyvxmqjacu", 1, 4]]
+[connection signal="pressed" from="LevelSelect/Center/Layout/Castle/Buttons/CastleBoss" to="." method="_load_level" binds= ["uid://lseyvxmqjacu", 1, 5]]
+[connection signal="pressed" from="LevelSelect/Center/Layout/Back" to="." method="_close_levels"]
 [connection signal="pressed" from="Gear" to="Settings" method="open"]

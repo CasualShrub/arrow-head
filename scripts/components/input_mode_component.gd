@@ -8,11 +8,12 @@ signal changed(mode: InputMode)
 
 var _current_mode := InputMode.KEYBOARD_MOUSE
 
-func _input(event: InputEvent) -> void:
-	if event is InputEventJoypadButton or event is InputEventJoypadMotion:
-		set_mode(InputMode.KEYBOARD_MOUSE)
-	elif event is InputEventKey or event is InputEventMouseButton:
-		set_mode(InputMode.KEYBOARD_MOUSE)
+func _ready() -> void:
+	ControllerManager.changed.connect(_sync)
+	_sync()
+
+func _sync() -> void:
+	set_mode(InputMode.CONTROLLER if ControllerManager.using_controller else InputMode.KEYBOARD_MOUSE)
 
 func is_using(mode: InputMode) -> bool:
 	return _current_mode == mode

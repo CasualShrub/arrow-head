@@ -23,7 +23,10 @@
 [ext_resource type="Script" uid="uid://qahpn0qappgp" path="res://scripts/components/vector_input_component.gd" id="18_uf5tr"]
 [ext_resource type="Script" uid="uid://buoj7rr88dblc" path="res://systems/arrow/colliders/arrow_collider.gd" id="19_arwct"]
 [ext_resource type="Script" uid="uid://it1hcnvfi1hr" path="res://scripts/classes/screen_shake.gd" id="20_shake"]
-[ext_resource type="PackedScene" path="res://entities/player/aura/angry_aura.tscn" id="21_aura"]
+[ext_resource type="PackedScene" uid="uid://b7hf4ucpavfn3" path="res://entities/player/aura/angry_aura.tscn" id="21_aura"]
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_oprun"]
+radius = 0.3
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_oprun"]
 radius = 0.3
@@ -58,13 +61,14 @@ animations = [{
 "speed": 5.0
 }]
 
-[node name="Player" type="CharacterBody3D" unique_id=775136311 node_paths=PackedStringArray("health", "fire_input", "slow_input", "movement_input", "aim_input", "input_mode", "arrows", "time", "afterimage", "dash") groups=["player"]]
+[node name="Player" type="CharacterBody3D" unique_id=775136311 node_paths=PackedStringArray("health", "fire_input", "slow_input", "release_input", "movement_input", "aim_input", "input_mode", "arrows", "time", "afterimage", "dash") groups=["player"]]
 collision_mask = 4
 motion_mode = 1
 script = ExtResource("1_fcs02")
 health = NodePath("HealthComponent")
 fire_input = NodePath("FireInput")
 slow_input = NodePath("SlowInput")
+release_input = NodePath("ReleaseInput")
 movement_input = NodePath("MovementInput")
 aim_input = NodePath("AimInput")
 input_mode = NodePath("InputModeComponent")
@@ -113,6 +117,11 @@ script = ExtResource("4_uf5tr")
 action_name = &"slow"
 metadata/_custom_type_script = "uid://bw22qrc8y4p5b"
 
+[node name="ReleaseInput" type="Node" parent="." unique_id=1907451326]
+script = ExtResource("4_uf5tr")
+action_name = &"release"
+metadata/_custom_type_script = "uid://bw22qrc8y4p5b"
+
 [node name="MovementInput" type="Node" parent="." unique_id=742566340]
 script = ExtResource("18_uf5tr")
 left_action = &"move_left"
@@ -151,6 +160,7 @@ is_enabled = false
 frame_rate = 30.0
 color = Color(4.813075e-08, 0.65855676, 0.49459207, 0.8)
 duration = 0.2
+render_priority_offset = -3
 metadata/_custom_type_script = "uid://bocqfysv2edvs"
 
 [node name="DashComponent" type="Node" parent="." unique_id=1199737807]
@@ -229,7 +239,4 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.023803711, 0)
 [connection signal="activated" from="DashComponent" to="." method="_on_dash_activated"]
 [connection signal="disabled" from="DashComponent" to="." method="_on_dash_disabled"]
 [connection signal="enabled" from="DashComponent" to="." method="_on_dash_enabled"]
-[connection signal="firing_disabled" from="ArrowsComponent" to="." method="_on_firing_disabled"]
-[connection signal="firing_enabled" from="ArrowsComponent" to="." method="_on_firing_enabled"]
-[connection signal="slot_cleared" from="ArrowsComponent" to="." method="_on_slot_cleared"]
 [connection signal="slot_state_changed" from="ArrowsComponent" to="." method="_on_slot_state_changed"]

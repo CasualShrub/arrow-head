@@ -9,6 +9,7 @@ static var _parked := Vector2.INF
 var screen_position := Vector2.ZERO
 
 var _anchor := Vector2.ZERO
+var _follow := Vector2.INF
 var _capturing := false
 var _reticle := Control.new()
 
@@ -24,27 +25,32 @@ func _ready() -> void:
 	layer.add_child(_reticle)
 
 func _process(_delta: float) -> void:
-	var want := get_viewport() == get_window() and DisplayServer.window_is_focused() and not MenuOverlay.any_open(get_tree())
+	var want := not ControllerManager.using_controller and get_viewport() == get_window() and DisplayServer.window_is_focused() and not MenuOverlay.any_open(get_tree())
 	if want and not _capturing:
 		_capture()
 	elif _capturing and not want:
-		_release()
+		_release(not ControllerManager.using_controller)
 	if _capturing:
 		_reticle.queue_redraw()
 
 func _input(event: InputEvent) -> void:
-	if _capturing and event is InputEventMouseMotion:
-		var sensitivity := SettingsManager.mouse_sensitivity
-		if is_equal_approx(sensitivity, 1.0):
-			screen_position = event.position
-			_anchor = event.position
-			return
-		var moved: Vector2 = event.position - _anchor
-		if moved.length_squared() < 0.0001:
-			return
-		var rect := get_viewport().get_visible_rect()
-		screen_position = (screen_position + moved * sensitivity).clamp(rect.position, rect.end)
-		_warp_to(screen_position)
+	if not _capturing or not event is InputEventMouseMotion:
+		return
+
+	var moved: Vector2 = event.relative
+
+	if moved.is_zero_approx():
+		return
+
+	var sensitivity := SettingsManager.mouse_sensitivity
+	var rect := get_viewport().get_visible_rect()
+
+	screen_position = (
+		screen_position + moved * sensitivity
+	).clamp(rect.position, rect.end)
+
+	#_warp_to(screen_position)
+
 
 func _notification(what: int) -> void:
 	if not _capturing:
@@ -53,6 +59,16 @@ func _notification(what: int) -> void:
 		_release(false)
 	elif what == NOTIFICATION_EXIT_TREE:
 		_release()
+
+func anchor_to(p: Vector2) -> void:
+	if _capturing and _follow.is_finite() and not p.is_equal_approx(_follow):
+		var rect := get_viewport().get_visible_rect()
+		screen_position = (screen_position + p - _follow).clamp(
+			rect.position,
+			rect.end
+		)
+	_follow = p
+
 
 func aim_position() -> Vector2:
 	return screen_position if _capturing else get_viewport().get_mouse_position()
@@ -67,10 +83,11 @@ func _capture() -> void:
 	_owner = self
 	_capturing = true
 	_reticle.show()
-	Input.mouse_mode = Input.MOUSE_MODE_CONFINED_HIDDEN
+	Input.mouse_mode = Input.MOUSE_MODE_HIDDEN
 	_warp_to(screen_position)
 
 func _warp_to(target: Vector2) -> void:
+	#Input.warp_mouse(target)
 	var to_window := get_viewport().get_screen_transform()
 	var window_pixel := (to_window * target).round()
 	Input.warp_mouse(window_pixel)

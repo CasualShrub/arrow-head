@@ -47,7 +47,6 @@ func _ready() -> void:
 	_shape_cast_offset = _shape_cast.position
 	
 	_raise_render_priority()
-	DarkenManager.register_highlighted(self)
 	
 	deactivate()
 
@@ -100,6 +99,7 @@ func activate(
 	#look_dir = look_dir.normalized()
 	look_at(global_position + simulation.facing)
 
+	DarkenManager.register_highlighted(self)
 	show()
 
 	_on_activated()
@@ -221,6 +221,7 @@ func simulate(
 				sim.lifetime_remaining = wall_stick_decay_time
 				sim.state[&"wall_stuck"] = true
 				sim.state[&"stuck_collider"] = collider
+				DarkenManager.unregister_highlighted(self)
 				sim.disable()
 			else:
 				sim.kill()
@@ -257,6 +258,7 @@ func embed(dig := 0.0) -> void:
 	if not simulation: return
 	if dig > 0.0:
 		global_position += (-global_basis.z) * dig
+	DarkenManager.unregister_highlighted(self)
 	simulation.disable()
 
 func _project_onto_axis(from: Vector3, dir: Vector3, point: Vector3) -> Vector3:

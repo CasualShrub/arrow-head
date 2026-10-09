@@ -1,6 +1,12 @@
-[gd_resource type="Resource" script_class="JuiceSplatStyle" format=3 uid="uid://ds4g4b02gb8op"]
+[gd_resource type="Resource" script_class="JuiceSplatStyle" format=3]
 
-[ext_resource type="Script" uid="uid://b8gjctcc4hf85" path="res://systems/blood/juice_splat_style.gd" id="1_style"]
+[ext_resource type="Texture2D" path="res://systems/blood/baked/juice_splat_death_0.res" id="1_2rmxg"]
+[ext_resource type="Script" path="res://systems/blood/juice_splat_style.gd" id="1_style"]
+[ext_resource type="Texture2D" path="res://systems/blood/baked/juice_splat_death_1.res" id="2_63iul"]
+[ext_resource type="Texture2D" path="res://systems/blood/baked/juice_splat_death_2.res" id="3_mww1w"]
+[ext_resource type="Texture2D" path="res://systems/blood/baked/juice_splat_death_3.res" id="4_8pxfa"]
+[ext_resource type="Texture2D" path="res://systems/blood/baked/juice_splat_death_4.res" id="5_stger"]
+[ext_resource type="Texture2D" path="res://systems/blood/baked/juice_splat_death_5.res" id="6_0ah70"]
 
 [resource]
 script = ExtResource("1_style")
@@ -16,8 +22,8 @@ streak_count_range = Vector2i(5, 6)
 streak_min_reach = 95.0
 streak_max_angle = 3.1416
 streak_width_range = Vector2(14, 16)
-streak_wobble = 0.0
 streak_tip_width = 12.0
+streak_wobble = 0.0
 streak_end_drop_range = Vector2(12, 13)
 droplet_count_range = Vector2i(2, 4)
 droplet_spread = 3.1416
@@ -29,3 +35,4 @@ length_jitter = 0.1
 angle_jitter = 3.1416
 grow_time = 0.25
 grow_start_scale = 0.2
+baked_textures = Array[Texture2D]([ExtResource("1_2rmxg"), ExtResource("2_63iul"), ExtResource("3_mww1w"), ExtResource("4_8pxfa"), ExtResource("5_stger"), ExtResource("6_0ah70")])

@@ -147,6 +147,7 @@ metadata/_custom_type_script = "uid://d04k7pxjd2u24"
 radius = 0.8
 
 [node name="Enemy" unique_id=71488470 instance=ExtResource("1_2bsge")]
+camera_focus = true
 stationary = true
 patterns = Array[ExtResource("2_l1ure")]([SubResource("Resource_1585h"), SubResource("Resource_o6djv"), SubResource("Resource_54hkm")])
 juice_color = Color(0.9, 0.1, 0.55, 1)

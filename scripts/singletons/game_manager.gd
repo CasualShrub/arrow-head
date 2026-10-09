@@ -12,6 +12,10 @@ var main_menu_intro_played := false
 var scenes_warmed := false
 var _restarting := false
 
+var pending_campaign: CampaignData
+var pending_level: int
+var pending_room: int
+
 var current_campaign: CampaignState
 var current_level: Level
 var game_parent : Node
@@ -48,6 +52,7 @@ func abort() -> void:
 	game_parent = null
 
 func load_level(data: LevelData = current_campaign.get_current_level(), entry_direction := Vector3.ZERO) -> void:
+	if current_level: unload_level()
 	var level := Level.new(data)
 	level.ended.connect(_on_level_ended)
 	current_level = level

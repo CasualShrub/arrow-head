@@ -31,15 +31,17 @@ func _ready() -> void:
 	_setup_exit_indicator()
 
 	DarkenManager.register_overlay(%DarkenOverlay)
+	JuiceSplatter.prepare(self)
 
 	start()
 
 	if not any_enemy_alive():
 		_clear()
 
-func _input(event: InputEvent) -> void:
+func _unhandled_input(event: InputEvent) -> void:
 	if not _ongoing: return   # end screens handle their own keys
-	if event is InputEventKey and event.pressed and not event.echo and event.keycode == KEY_R:
+	if event.is_action_pressed("restart"):
+		get_viewport().set_input_as_handled()
 		if GameManager.current_level:
 			GameManager.restart_room()
 		else:
@@ -97,12 +99,18 @@ func end(won: bool) -> void:
 	
 	ended.emit(won)
 
+func _camera():
+	return player.get_node("%Camera")
+
 func get_player() -> Player:
 	return player
 
 func add_player(p: Player):
 	player = p
 	p.health.died.connect(_on_player_died)
+	for e in get_enemies():
+		if e.camera_focus:
+			_camera().focus_on(e)
 
 func get_enemies() -> Array[Enemy]:
 	var enemies: Array[Enemy] = []
@@ -117,6 +125,8 @@ func add_enemy(enemy: Enemy) -> void:
 		p.remove_child(enemy)
 	
 	enemy.health.died.connect(_on_enemy_died.bind(enemy))
+	if enemy.camera_focus and player:
+		_camera().focus_on(enemy)
 	if not enemy.get_parent():
 		_enemies.add_child(enemy)
 
@@ -126,7 +136,9 @@ func any_enemy_alive() -> bool:
 			return true
 	return false
 
-func _on_enemy_died(_enemy: Enemy) -> void:
+func _on_enemy_died(enemy: Enemy) -> void:
+	if enemy.camera_focus:
+		_camera().clear_focus()
 	if not any_enemy_alive():
 		_clear()
 

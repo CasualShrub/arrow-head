@@ -58,7 +58,7 @@ func _update_arrow(camera: Camera3D) -> bool:
 		offset_from_center = -offset_from_center
 
 	var direction: Vector2 = offset_from_center
-	if direction.length() < 0.001:
+	if direction.is_zero_approx():
 		direction = Vector2.RIGHT
 	direction = direction.normalized()
 
