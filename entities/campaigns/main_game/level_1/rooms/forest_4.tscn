@@ -2,7 +2,6 @@
 
 [ext_resource type="PackedScene" uid="uid://b6c1h2si8ob6l" path="res://entities/room/room.tscn" id="1_room"]
 [ext_resource type="PackedScene" uid="uid://coutskfill01x" path="res://scenes/outskirt_filler.tscn" id="2_outskirt"]
-[ext_resource type="PackedScene" uid="uid://tmhabgv3ovyb" path="res://entities/enemies/banana/enemy_banana.tscn" id="3_banana"]
 [ext_resource type="PackedScene" uid="uid://db0ry36fopb12" path="res://entities/enemies/banana_rotten/enemy_banana_rotten.tscn" id="5_rotten"]
 [ext_resource type="PackedScene" uid="uid://kwovebw0p15w" path="res://entities/enemies/banana_unripe/enemy_banana_unripe.tscn" id="6_unripe"]
 [ext_resource type="PackedScene" uid="uid://dsbdsdhimm882" path="res://entities/props/rocks/rock_02.tscn" id="8_rock_02"]
@@ -32,17 +31,11 @@ dash_cost = 0.15
 hurt_radius = 0.35
 hurt_reaction_duration = 0.5
 
-[node name="Enemy" parent="Enemies" parent_id_path=PackedInt32Array(1185931971) index="0" unique_id=1813099079 instance=ExtResource("3_banana")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -16.24)
-
-[node name="Enemy2" parent="Enemies" parent_id_path=PackedInt32Array(1185931971) index="1" unique_id=1589535158 instance=ExtResource("5_rotten")]
+[node name="Enemy2" parent="Enemies" parent_id_path=PackedInt32Array(1185931971) index="0" unique_id=1589535158 instance=ExtResource("5_rotten")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.2, 0, -3.6)
 
-[node name="Enemy3" parent="Enemies" parent_id_path=PackedInt32Array(1185931971) index="2" unique_id=1387798829 instance=ExtResource("6_unripe")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.88, 0, -9.6)
-
-[node name="Enemy4" parent="Enemies" parent_id_path=PackedInt32Array(1185931971) index="3" unique_id=1347666375 instance=ExtResource("3_banana")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.64, 0, -14.8)
+[node name="Enemy3" parent="Enemies" parent_id_path=PackedInt32Array(1185931971) index="1" unique_id=1387798829 instance=ExtResource("6_unripe")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.7797327, 0, -12.516927)
 
 [node name="Exit" parent="." index="11" unique_id=771002501]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -19.68)

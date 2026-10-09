@@ -2,10 +2,8 @@
 
 [ext_resource type="PackedScene" uid="uid://b6c1h2si8ob6l" path="res://entities/room/room.tscn" id="1_room"]
 [ext_resource type="PackedScene" uid="uid://coutskfill01x" path="res://scenes/outskirt_filler.tscn" id="2_outskirt"]
-[ext_resource type="PackedScene" uid="uid://tmhabgv3ovyb" path="res://entities/enemies/banana/enemy_banana.tscn" id="3_banana"]
 [ext_resource type="PackedScene" uid="uid://db0ry36fopb12" path="res://entities/enemies/banana_rotten/enemy_banana_rotten.tscn" id="4_rotten"]
 [ext_resource type="PackedScene" uid="uid://dpodljr37dshm" path="res://entities/props/fences/fence_normal/fence_normal.tscn" id="5_k6hdl"]
-[ext_resource type="PackedScene" uid="uid://kwovebw0p15w" path="res://entities/enemies/banana_unripe/enemy_banana_unripe.tscn" id="5_unripe"]
 [ext_resource type="PackedScene" uid="uid://0aqo3vtqj75r" path="res://entities/props/fences/fence_straight/fence_straight.tscn" id="6_exsv7"]
 [ext_resource type="PackedScene" uid="uid://clnucp0syjoj8" path="res://entities/props/trees/cut_down_tree.tscn" id="6_log"]
 [ext_resource type="PackedScene" uid="uid://dsbdsdhimm882" path="res://entities/props/rocks/rock_02.tscn" id="7_rock_02"]
@@ -20,7 +18,7 @@
 [ext_resource type="PackedScene" uid="uid://4vq35qcex81n" path="res://entities/props/rocks/rock_09.tscn" id="16_lining_rock_09"]
 [ext_resource type="PackedScene" uid="uid://b5ulwds7q2mu7" path="res://entities/props/rocks/rock_11.tscn" id="17_lining_rock_11"]
 [ext_resource type="PackedScene" uid="uid://b111y7l4h8xau" path="res://entities/props/trees/stump.tscn" id="18_lining_stump"]
-[ext_resource type="PackedScene" uid="uid://h1gx57ppoh5v" path="res://entities/props/fences/fence_broken/fence_broken.tscn" id="21_exsv7"]
+[ext_resource type="PackedScene" uid="uid://h1gx57ppoh5v" path="res://entities/props/trunk/trunk.tscn" id="21_exsv7"]
 
 [node name="Room" unique_id=1133612393 instance=ExtResource("1_room")]
 entrance_walk_distance = 5.0
@@ -30,55 +28,47 @@ allow_ricochet = false
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8.307211, 0, 4.0411587)
 
 [node name="Enemy" parent="Enemies" parent_id_path=PackedInt32Array(1185931971) index="0" unique_id=752436489 instance=ExtResource("4_rotten")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.93858, 0, -0.24462354)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.485461, 0, -0.24462354)
 combat_speed = 1.0
 
-[node name="Enemy2" parent="Enemies" parent_id_path=PackedInt32Array(1185931971) index="1" unique_id=1271969931 instance=ExtResource("3_banana")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.6, 0, -5.2719088)
+[node name="Enemy2" parent="Enemies" parent_id_path=PackedInt32Array(1185931971) index="1" unique_id=71488470 instance=ExtResource("4_rotten")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11.828186, 0, -1.1129118)
 combat_speed = 1.0
 
-[node name="Enemy3" parent="Enemies" parent_id_path=PackedInt32Array(1185931971) index="2" unique_id=361434566 instance=ExtResource("5_unripe")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8.593922, 0, -8.272512)
-combat_speed = 1.0
-
-[node name="Enemy4" parent="Enemies" parent_id_path=PackedInt32Array(1185931971) index="3" unique_id=1799901060 instance=ExtResource("3_banana")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 13.2, 0, -3.9)
-combat_speed = 1.0
-
-[node name="fence_normal" parent="Enemies" parent_id_path=PackedInt32Array(1185931971) index="4" unique_id=1564354922 instance=ExtResource("5_k6hdl")]
+[node name="fence_normal" parent="Enemies" parent_id_path=PackedInt32Array(1185931971) index="2" unique_id=1564354922 instance=ExtResource("5_k6hdl")]
 transform = Transform3D(0.74926054, 0, -0.6622754, 0, 1, 0, 0.6622754, 0, 0.74926054, 2.1438172, -0.20701969, -7.4516754)
 
-[node name="fence_normal3" parent="Enemies" parent_id_path=PackedInt32Array(1185931971) index="5" unique_id=1535789061 instance=ExtResource("5_k6hdl")]
+[node name="fence_normal3" parent="Enemies" parent_id_path=PackedInt32Array(1185931971) index="3" unique_id=1535789061 instance=ExtResource("5_k6hdl")]
 transform = Transform3D(0.020851582, 0, -0.99978256, 0, 1, 0, 0.99978256, 0, 0.020851582, 8.214727, -0.28238022, -10.103825)
 
-[node name="fence_normal6" parent="Enemies" parent_id_path=PackedInt32Array(1185931971) index="6" unique_id=1524671494 instance=ExtResource("5_k6hdl")]
+[node name="fence_normal6" parent="Enemies" parent_id_path=PackedInt32Array(1185931971) index="4" unique_id=1524671494 instance=ExtResource("5_k6hdl")]
 transform = Transform3D(-0.761415, 0, -0.64826465, 0, 1, 0, 0.64826465, 0, -0.761415, 13.758539, -0.28238022, -8.613181)
 
-[node name="fence_normal2" parent="Enemies" parent_id_path=PackedInt32Array(1185931971) index="7" unique_id=387405943 instance=ExtResource("5_k6hdl")]
+[node name="fence_normal2" parent="Enemies" parent_id_path=PackedInt32Array(1185931971) index="5" unique_id=387405943 instance=ExtResource("5_k6hdl")]
 transform = Transform3D(0.9413776, 0, -0.3373552, 0, 1, 0, 0.3373552, 0, 0.9413776, -0.513929, -0.23348868, -4.1239343)
 
-[node name="fence_normal5" parent="Enemies" parent_id_path=PackedInt32Array(1185931971) index="8" unique_id=1262875260 instance=ExtResource("5_k6hdl")]
+[node name="fence_normal5" parent="Enemies" parent_id_path=PackedInt32Array(1185931971) index="6" unique_id=1262875260 instance=ExtResource("5_k6hdl")]
 transform = Transform3D(-0.61535966, 0, -0.7882466, 0, 1, 0, 0.7882466, 0, -0.61535966, 0.80474055, -0.25681186, 0.08546281)
 
-[node name="fence_normal4" parent="Enemies" parent_id_path=PackedInt32Array(1185931971) index="9" unique_id=1318979288 instance=ExtResource("5_k6hdl")]
+[node name="fence_normal4" parent="Enemies" parent_id_path=PackedInt32Array(1185931971) index="7" unique_id=1318979288 instance=ExtResource("5_k6hdl")]
 transform = Transform3D(0.92299944, 0, 0.38480148, 0, 1, 0, -0.38480148, 0, 0.92299944, -0.55384886, -0.23348868, -1.7611079)
 
-[node name="fence_straight" parent="Enemies" parent_id_path=PackedInt32Array(1185931971) index="10" unique_id=1671198483 instance=ExtResource("6_exsv7")]
+[node name="fence_straight" parent="Enemies" parent_id_path=PackedInt32Array(1185931971) index="8" unique_id=1671198483 instance=ExtResource("6_exsv7")]
 transform = Transform3D(0.8846459, 0, -0.46626353, 0, 1, 0, 0.46626353, 0, 0.8846459, 1.5262303, -0.23569012, -6.547489)
 
-[node name="fence_straight4" parent="Enemies" parent_id_path=PackedInt32Array(1185931971) index="11" unique_id=634092936 instance=ExtResource("6_exsv7")]
+[node name="fence_straight4" parent="Enemies" parent_id_path=PackedInt32Array(1185931971) index="9" unique_id=634092936 instance=ExtResource("6_exsv7")]
 transform = Transform3D(-0.27527282, 0, -0.96136624, 0, 1, 0, 0.96136624, 0, -0.27527282, 10.464422, -0.2909863, -9.789638)
 
-[node name="fence_straight6" parent="Enemies" parent_id_path=PackedInt32Array(1185931971) index="12" unique_id=1673698197 instance=ExtResource("6_exsv7")]
+[node name="fence_straight6" parent="Enemies" parent_id_path=PackedInt32Array(1185931971) index="10" unique_id=1673698197 instance=ExtResource("6_exsv7")]
 transform = Transform3D(-0.32679248, 0, -0.94509614, 0, 1, 0, 0.94509614, 0, -0.32679248, 12.843415, -0.2909863, -9.24392)
 
-[node name="fence_straight2" parent="Enemies" parent_id_path=PackedInt32Array(1185931971) index="13" unique_id=681478454 instance=ExtResource("6_exsv7")]
+[node name="fence_straight2" parent="Enemies" parent_id_path=PackedInt32Array(1185931971) index="11" unique_id=681478454 instance=ExtResource("6_exsv7")]
 transform = Transform3D(-0.6977499, 0, 0.71634144, 0, 1, 0, -0.71634144, 0, -0.6977499, 0.82623565, -0.23632428, -5.6252947)
 
-[node name="fence_straight5" parent="Enemies" parent_id_path=PackedInt32Array(1185931971) index="14" unique_id=464709112 instance=ExtResource("6_exsv7")]
+[node name="fence_straight5" parent="Enemies" parent_id_path=PackedInt32Array(1185931971) index="12" unique_id=464709112 instance=ExtResource("6_exsv7")]
 transform = Transform3D(-0.81441313, 0, -0.5802855, 0, 1, 0, 0.5802855, 0, -0.81441313, 0.025430799, -0.25209102, -0.72014415)
 
-[node name="fence_straight3" parent="Enemies" parent_id_path=PackedInt32Array(1185931971) index="15" unique_id=1506283702 instance=ExtResource("6_exsv7")]
+[node name="fence_straight3" parent="Enemies" parent_id_path=PackedInt32Array(1185931971) index="13" unique_id=1506283702 instance=ExtResource("6_exsv7")]
 transform = Transform3D(0.19632351, 0, 0.98053926, 0, 1, 0, -0.98053926, 0, 0.19632351, 9.305331, -0.33323333, -10.063562)
 
 [node name="Exit" parent="." index="11" unique_id=771002501]

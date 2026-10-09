@@ -4,10 +4,8 @@
 [ext_resource type="PackedScene" uid="uid://coutskfill01x" path="res://scenes/outskirt_filler.tscn" id="2_outskirt"]
 [ext_resource type="PackedScene" uid="uid://tmhabgv3ovyb" path="res://entities/enemies/banana/enemy_banana.tscn" id="3_banana"]
 [ext_resource type="PackedScene" uid="uid://kwovebw0p15w" path="res://entities/enemies/banana_unripe/enemy_banana_unripe.tscn" id="4_unripe"]
-[ext_resource type="PackedScene" uid="uid://cj55cs0tmf3g8" path="res://entities/props/rocks/rock_01.tscn" id="5_rock_01"]
 [ext_resource type="PackedScene" uid="uid://dsbdsdhimm882" path="res://entities/props/rocks/rock_02.tscn" id="6_rock_02"]
 [ext_resource type="PackedScene" uid="uid://bseeu0yry81xg" path="res://entities/props/rocks/rock_03.tscn" id="7_rock_03"]
-[ext_resource type="PackedScene" uid="uid://b4b773yb4v3ic" path="res://entities/props/trees/tree_01.tscn" id="8_tree_01"]
 [ext_resource type="PackedScene" uid="uid://bd1ono5bjqxde" path="res://entities/props/trees/tree_02.tscn" id="9_tree_02"]
 [ext_resource type="PackedScene" uid="uid://etddcvkk4aqw" path="res://entities/props/trees/tree_03.tscn" id="10_tree_03"]
 [ext_resource type="PackedScene" uid="uid://52pn0ra7l3sd" path="res://entities/props/trees/tree_04.tscn" id="11_tree_04"]
@@ -20,7 +18,6 @@
 [ext_resource type="PackedScene" uid="uid://d2qg0xkhvuipc" path="res://entities/props/rocks/rock_06.tscn" id="18_lining_rock_06"]
 [ext_resource type="PackedScene" uid="uid://b111y7l4h8xau" path="res://entities/props/trees/stump.tscn" id="19_lining_stump"]
 [ext_resource type="PackedScene" path="res://entities/props/flowers/flower_01.tscn" id="fl0_flower_01"]
-[ext_resource type="PackedScene" path="res://entities/props/flowers/flower_02.tscn" id="fl1_flower_02"]
 [ext_resource type="PackedScene" path="res://entities/props/flowers/flower_cluster.tscn" id="fl2_flower_cluster"]
 
 [node name="Room2" unique_id=628704845 instance=ExtResource("1_room")]
@@ -30,16 +27,21 @@ allow_ricochet = false
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7.6052, 0, -8.1678)
 
 [node name="Enemy" parent="Enemies" parent_id_path=PackedInt32Array(1185931971) index="0" unique_id=181883427 instance=ExtResource("3_banana")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -3.04)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.6029158, 0, -6.976026)
 
-[node name="Enemy2" parent="Enemies" parent_id_path=PackedInt32Array(1185931971) index="1" unique_id=1238708535 instance=ExtResource("3_banana")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.44, 0, -8.16)
+[node name="Enemy3" parent="Enemies" parent_id_path=PackedInt32Array(1185931971) index="1" unique_id=1996127613 instance=ExtResource("4_unripe")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.160583, 0, -10.581971)
 
-[node name="Enemy3" parent="Enemies" parent_id_path=PackedInt32Array(1185931971) index="2" unique_id=1996127613 instance=ExtResource("4_unripe")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -12.96)
-
-[node name="Exit" parent="." index="10" unique_id=771002501]
+[node name="Exit" parent="." index="11" unique_id=771002501]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -16.48)
+
+[node name="OutskirtFiller" parent="." index="12" unique_id=914852195 instance=ExtResource("2_outskirt")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.095, -8)
+border_size = Vector2(21.28, 21.28)
+band_depth = 8.195
+position_jitter = 0.0
+y_slope = 0.0
+is_circle = true
 
 [node name="Tree01" parent="Walls" parent_id_path=PackedInt32Array(2117107331) index="0" unique_id=2107409160 instance=ExtResource("11_tree_04")]
 transform = Transform3D(-0.784256, 0, -0.584971, 0, 0.97839, 0, 0.584971, 0, -0.784256, 8.9056, -0.317, -7.9424)
@@ -167,17 +169,6 @@ transform = Transform3D(-0.388712, 0, 1.050382, 0, 1.12, 0, -1.050382, 0, -0.388
 [node name="Tree53" parent="Walls" parent_id_path=PackedInt32Array(2117107331) index="41" unique_id=627564188 instance=ExtResource("11_tree_04")]
 transform = Transform3D(-0.315279, 0, -0.911458, 0, 0.964446, 0, 0.911458, 0, -0.315279, -8.9904, -0.452, -3.6368)
 
-[node name="OutskirtFiller" parent="." index="12" unique_id=914852195 instance=ExtResource("2_outskirt")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.095, -8)
-border_size = Vector2(21.28, 21.28)
-band_depth = 8.195
-position_jitter = 0.0
-y_slope = 0.0
-is_circle = true
-
-[node name="Entrance" parent="." index="13" unique_id=591304417]
-transform = Transform3D(0, 0, -1, 0, 1, 0, 1, 0, 0, -7.2, 0, -8)
-
 [node name="Lining01" parent="Walls" parent_id_path=PackedInt32Array(2117107331) index="42" unique_id=1329151601 instance=ExtResource("18_lining_rock_06")]
 transform = Transform3D(-1.22, 0, 0.3834, 0, 1.2789, 0, -0.3834, 0, -1.22, -7.4183, -0.2, -10.4177)
 
@@ -247,16 +238,19 @@ transform = Transform3D(-0.7847, 0, 0.9317, 0, 1.2181, 0, -0.9317, 0, -0.7847, -
 [node name="Lining23" parent="Walls" parent_id_path=PackedInt32Array(2117107331) index="64" unique_id=1016760037 instance=ExtResource("19_lining_stump")]
 transform = Transform3D(1.1645, 0, 1.2054, 0, 1.676, 0, -1.2054, 0, 1.1645, -7.2483, -0.2, -5.2544)
 
-[node name="Flowers" type="Node3D" parent="."]
+[node name="Entrance" parent="." index="14" unique_id=591304417]
+transform = Transform3D(0, 0, -1, 0, 1, 0, 1, 0, 0, -7.2, 0, -8)
 
-[node name="Flower011" parent="Flowers" instance=ExtResource("fl0_flower_01")]
+[node name="Flowers" type="Node3D" parent="." index="15" unique_id=2130911085]
+
+[node name="Flower011" parent="Flowers" index="0" unique_id=317249529 instance=ExtResource("fl0_flower_01")]
 transform = Transform3D(0.5228, 0, 0.8525, 0, 1, 0, -0.8525, 0, 0.5228, 0.348, -0.17, -6.074)
 
-[node name="Flower012" parent="Flowers" instance=ExtResource("fl0_flower_01")]
+[node name="Flower012" parent="Flowers" index="1" unique_id=2088192122 instance=ExtResource("fl0_flower_01")]
 transform = Transform3D(-0.4062, 0, 0.9138, 0, 1, 0, -0.9138, 0, -0.4062, -0.331, -0.17, -10.509)
 
-[node name="FlowerCluster3" parent="Flowers" instance=ExtResource("fl2_flower_cluster")]
-transform = Transform3D(0.9934, 0, -0.1150, 0, 1, 0, 0.1150, 0, 0.9934, -4.527, -0.17, -3.128)
+[node name="FlowerCluster3" parent="Flowers" index="2" unique_id=663053090 instance=ExtResource("fl2_flower_cluster")]
+transform = Transform3D(0.9934, 0, -0.115, 0, 1, 0, 0.115, 0, 0.9934, -4.527, -0.17, -3.128)
 
-[node name="Flower014" parent="Flowers" instance=ExtResource("fl0_flower_01")]
+[node name="Flower014" parent="Flowers" index="3" unique_id=1448009160 instance=ExtResource("fl0_flower_01")]
 transform = Transform3D(-0.9943, 0, 0.1062, 0, 1, 0, -0.1062, 0, -0.9943, 4.076, -0.17, -3.288)

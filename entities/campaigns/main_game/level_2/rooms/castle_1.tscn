@@ -1,24 +1,13 @@
 [gd_scene format=3 uid="uid://hcstlone7k31"]
 
 [ext_resource type="PackedScene" uid="uid://bindrmcstl8e" path="res://entities/room/indoor_room.tscn" id="1_room"]
-[ext_resource type="PackedScene" uid="uid://tmhabgv3ovyb" path="res://entities/enemies/banana/enemy_banana.tscn" id="2_banana"]
-[ext_resource type="PackedScene" uid="uid://kwovebw0p15w" path="res://entities/enemies/banana_unripe/enemy_banana_unripe.tscn" id="4_unripe"]
 [ext_resource type="PackedScene" uid="uid://cwall3d8prfb0" path="res://scenes/wall.tscn" id="9_wall"]
 [ext_resource type="PackedScene" uid="uid://b15vpncjfa5df" path="res://entities/enemies/blueberry/enemy_blueberry.tscn" id="bb_blue"]
 
 [node name="Room2" unique_id=295808185 instance=ExtResource("1_room")]
 entrance_walk_distance = 3.5
 
-[node name="Enemy" parent="Enemies" parent_id_path=PackedInt32Array(1185931971) index="0" unique_id=1868741938 instance=ExtResource("2_banana")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.61816096, 0, 6.3252554)
-
-[node name="Enemy2" parent="Enemies" parent_id_path=PackedInt32Array(1185931971) index="1" unique_id=1926948818 instance=ExtResource("4_unripe")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.3573451, 0, -6.086519)
-
-[node name="Enemy4" parent="Enemies" parent_id_path=PackedInt32Array(1185931971) index="2" unique_id=1938137474 instance=ExtResource("2_banana")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7, 0, 1.9682021)
-
-[node name="EnemyBlueberry" parent="Enemies" parent_id_path=PackedInt32Array(1185931971) index="3" unique_id=428592300 instance=ExtResource("bb_blue")]
+[node name="EnemyBlueberry" parent="Enemies" parent_id_path=PackedInt32Array(1185931971) index="0" unique_id=428592300 instance=ExtResource("bb_blue")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.4396782, 0, 0.08337128)
 stationary = true
 

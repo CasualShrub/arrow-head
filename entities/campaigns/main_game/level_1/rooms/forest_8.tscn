@@ -32,6 +32,7 @@ allow_ricochet = false
 
 [node name="Gatekeeper" parent="Enemies" parent_id_path=PackedInt32Array(1185931971) index="0" unique_id=1347688945 instance=ExtResource("3_boss")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.963704, 0, 0)
+max_hits = 2
 
 [node name="Exit" parent="." index="11" unique_id=771002501]
 transform = Transform3D(0, 0, -1, 0, 1, 0, 1, 0, 0, 9.1, 0, 0)
