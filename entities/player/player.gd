@@ -128,9 +128,13 @@ func _physics_process(delta: float) -> void:
 	if slow_input.consume_pressed():
 		if not time.is_slowed():
 			time.slow()
+		if input_mode.is_controller() and _dash_charges > 0:
+			dash.enable()
 	if slow_input.consume_released():
 		if time.is_slowed():
 			time.resume()
+		if input_mode.is_controller():
+			dash.disable()
 	
 	_move(movement_input.get_vector(), delta)
 	
@@ -138,6 +142,11 @@ func _physics_process(delta: float) -> void:
 	global_position.y = 0
 
 func _update_attack() -> void:
+	if input_mode.is_controller():
+		if fire_input.consume_pressed() and dash.is_enabled():
+			dash.try_activate(global_position, _get_aim_target())
+		fire_input.consume_released()
+		return
 	if fire_input.consume_cancelled():
 		_cancel_attack()
 		return

@@ -330,8 +330,7 @@ func _style_controller_button(button: Button) -> void:
 		button.add_theme_color_override(color, Color(0.92, 0.94, 0.67))
 
 func _sync_controller_guide() -> void:
-	var fire_buttons := ControllerManager.button_label(&"fire").split(" / ")
-	_controller_guide.text = "Left stick: move\nRight stick: aim / outer edge = full range\n%s: pull to 95%% to attack, release to reset\n%s: hold to aim, release to attack\n%s: slow motion   /   %s: pause\n%s: select   /   %s: back\n%s: restart room" % [fire_buttons[0], fire_buttons[1], ControllerManager.button_label(&"slow"), ControllerManager.button_label(&"pause"), ControllerManager.button_label(&"ui_accept"), ControllerManager.button_label(&"ui_cancel"), ControllerManager.button_label(&"restart")]
+	_controller_guide.text = "Left stick: move\nRight stick: aim / outer edge = full range\n%s: hold for slow motion and to aim\n%s: attack while aiming\n%s: pause\n%s: select   /   %s: back\n%s: restart room" % [ControllerManager.button_label(&"slow"), ControllerManager.button_label(&"fire"), ControllerManager.button_label(&"pause"), ControllerManager.button_label(&"ui_accept"), ControllerManager.button_label(&"ui_cancel"), ControllerManager.button_label(&"restart")]
 
 func _sync_trigger_status() -> void:
 	_trigger_status.text = ControllerManager.adaptive.status

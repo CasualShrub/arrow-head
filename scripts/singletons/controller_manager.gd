@@ -57,6 +57,10 @@ var _last_joy_activity := -1000
 var adaptive := preload("res://scripts/components/adaptive_trigger.gd").new()
 var _trigger_preview_until := 0
 var _attack_available := false
+const JOY_MAPPINGS: PackedStringArray = [
+	"03003919c82d00001d30000001000000,8BitDo Ultimate 2C,a:b0,b:b1,back:b10,dpdown:h0.4,dpleft:h0.8,dpright:h0.2,dpup:h0.1,guide:b12,leftshoulder:b6,leftstick:b13,lefttrigger:a5,leftx:a0,lefty:a1,paddle1:b5,paddle2:b2,rightshoulder:b7,rightstick:b14,righttrigger:a4,rightx:a2,righty:a3,start:b11,x:b3,y:b4,platform:Mac OS X",
+]
+
 var _focused := true
 var _release_until := 0
 var _draw_rumbling := false
@@ -68,6 +72,8 @@ var _release_preview := false
 
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
+	for mapping in JOY_MAPPINGS:
+		Input.add_joy_mapping(mapping, true)
 	add_child(adaptive)
 	Input.joy_connection_changed.connect(_on_connection_changed)
 	SettingsManager.changed.connect(_on_settings_changed)
@@ -294,8 +300,8 @@ func button_label(action: StringName) -> String:
 	match action:
 		&"ui_accept": return "Cross" if playstation else "A / South"
 		&"ui_cancel": return "Circle" if playstation else "B / East"
-		&"fire": return "R2 / R1" if playstation else "RT / RB"
-		&"slow": return "L2 / L1" if playstation else "LT / LB"
+		&"fire": return "R1" if playstation else "RB"
+		&"slow": return "R2" if playstation else "RT"
 		&"pause": return "Options" if playstation else "Start"
 		&"restart": return "Triangle" if playstation else "Y / North"
 	return String(action)

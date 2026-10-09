@@ -4,9 +4,9 @@
 | --- | --- |
 | Left stick | Move |
 | Right stick | Aim directly; stick magnitude sets attack distance |
-| R2 / RT | Part-pull to aim; cross 95% to dash; release to reset |
-| R1 / RB or mouse attack | Hold to aim, release to dash |
-| L2 / LT or L1 / LB | Hold slow motion |
+| R2 / RT | Hold for slow motion; shows the aim preview when an attack is ready |
+| R1 / RB | Dash while R2 is held (does nothing otherwise) |
+| L2 / LT, L1 / LB | Unused |
 | Options / Start | Pause or resume |
 | D-pad / left stick | Navigate menus |
 | Cross / A (south) | Select |
