@@ -58,21 +58,8 @@ func _ready() -> void:
 		GameManager.main_menu_intro_played = true
 		_prepare_intro()
 
-	var viewport = SubViewport.new()
-	viewport.size = Vector2i(1, 1)  # tiny, barely renders
-	viewport.render_target_update_mode = SubViewport.UPDATE_ALWAYS
-	add_child(viewport)
-	
-	for scene_path in scenes_to_warm:
-		var instance = load(scene_path).instantiate()
-		viewport.add_child(instance)
-	
-	# Wait 2 frames for shaders to compile
-	await get_tree().process_frame
-	await get_tree().process_frame
-	
-	viewport.queue_free()
-	
+	if not GameManager.scenes_warmed:
+		await _warm_scenes()
 
 	SoundManager.play_music("TITLE_SCREEN")
 	for key in _labels:
@@ -88,6 +75,22 @@ func _ready() -> void:
 		_play_intro()
 	else:
 		_show_menu_instant()
+
+func _warm_scenes() -> void:
+	var viewport = SubViewport.new()
+	viewport.size = Vector2i(1, 1)  # tiny, barely renders
+	viewport.render_target_update_mode = SubViewport.UPDATE_ALWAYS
+	add_child(viewport)
+
+	for scene_path in scenes_to_warm:
+		var instance = load(scene_path).instantiate()
+		viewport.add_child(instance)
+
+	await get_tree().process_frame
+	await get_tree().process_frame
+
+	viewport.queue_free()
+	GameManager.scenes_warmed = true
 
 func _prepare_intro() -> void:
 	_title.visible = false
@@ -206,9 +209,8 @@ func _setup_controller_navigation() -> void:
 	_settings.opened.connect(_set_main_focus_enabled.bind(false))
 	_settings.closed.connect(func(): _set_main_focus_enabled(true); _gear.grab_focus())
 	ControllerManager.changed.connect(_refresh_controller_selection)
-	for button in $LevelSelect/Buttons.get_children():
-		if button is Button:
-			FocusFeedback.attach(button, 1.04)
+	for button in _level_select.find_children("*", "Button"):
+		FocusFeedback.attach(button, 1.04)
 	_set_main_focus_enabled(not _intro_playing and not _intro_tween)
 
 func _set_main_focus_enabled(enabled: bool) -> void:
@@ -250,7 +252,7 @@ func _launch(sector_center_deg: float, texture: Texture2D, on_complete: Callable
 	var out_dir := Vector2(cos(sector_angle), sin(sector_angle))
 	var start := apple_center + out_dir * launch_distance
 
-	var rest_rotation := sector_angle + PI * 0.5
+	var rest_rotation := sector_angle + PI / 2
 	_launch_arrow.texture = texture
 	_launch_arrow.position = start
 	_launch_arrow.rotation = rest_rotation
@@ -308,13 +310,15 @@ func _open_levels() -> void:
 	if _level_select:
 		_set_menu_shown(false)
 		_level_select.show()
-		$LevelSelect/Buttons/Tutorial.grab_focus()
+		$LevelSelect/Center/Layout/Tutorial.grab_focus()
 
-func _load_level(path: String) -> void:
-	if ResourceLoader.exists(path):
-		get_tree().change_scene_to_file(path)
-	# just a fallback incase resource isn't valid
-	else:
+func _load_level(path: String, level: int = 0, room: int = 0) -> void:
+	var campaign_data = ResourceLoader.load(path) as CampaignData
+	if campaign_data:
+		print("has data")
+		GameManager.pending_campaign = campaign_data
+		GameManager.pending_level = level
+		GameManager.pending_room = room
 		get_tree().change_scene_to_packed(game_scene)
 
 func _close_levels() -> void:

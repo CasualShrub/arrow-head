@@ -69,5 +69,5 @@ func _update_arrow(camera: Camera3D) -> bool:
 		distance_to_border = minf(distance_to_border, half_bounds.y / absf(direction.y))
 
 	_arrow.position = screen_center + direction * distance_to_border
-	_sprite.rotation = direction.angle() + PI * 0.5
+	_sprite.rotation = direction.angle() + PI / 2
 	return true

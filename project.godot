@@ -11,7 +11,7 @@ config_version=5
 [application]
 
 config/name="bullet hell"
-run/main_scene="uid://dq024rj3sseom"
+run/main_scene="res://systems/cutscene/cutscene.tscn"
 config/features=PackedStringArray("4.7", "Forward Plus")
 config/icon="res://icon.svg"
 
@@ -23,7 +23,11 @@ ControllerManager="*res://scripts/singletons/controller_manager.gd"
 SoundManager="*res://scripts/singletons/sound_manager.gd"
 ArrowManager="*uid://bk7ogpk8resli"
 DarkenManager="*uid://32eh6c8miqqw"
+ScreenEffectManager="*res://scripts/singletons/screen_effect_manager.gd"
+ScreenShaderManager="*res://scripts/singletons/screen_shader_manager.gd"
 DebugManager="*uid://dbiurbp18km0n"
+ControllerManager="*res://scripts/singletons/controller_manager.gd"
+VisualFeatureManager="*res://scripts/singletons/visual_feature_manager.gd"
 
 [display]
 
@@ -200,3 +204,5 @@ debug_teleport={
 [rendering]
 
 rendering_device/driver.windows="d3d12"
+renderer/rendering_method="gl_compatibility"
+environment/defaults/default_clear_color=Color(0, 0, 0, 1)

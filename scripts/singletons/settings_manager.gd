@@ -6,7 +6,7 @@ signal mouse_sensitivity_changed(value: float)
 const PATH := "user://settings.cfg"
 const SAVE_DELAY := 0.25
 const SENSITIVITY_MIN := 0.5
-const SENSITIVITY_MAX := 1.5
+const SENSITIVITY_MAX := 2.0
 const CONTRAST_MIN := 0.5
 const CONTRAST_MAX := 1.5
 

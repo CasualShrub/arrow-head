@@ -4,6 +4,7 @@ class_name DashComponent
 
 @export var max_distance := 10.0
 @export var cooldown := 0.1
+@export var deadzone := 0.4
 
 @export_group("collision")
 @export var radius := 0.4:
@@ -44,6 +45,8 @@ func try_activate(origin: Vector3, target: Vector3) -> bool:
 
 func activate(origin: Vector3, wish_pos: Vector3) -> void:
 	var dest := get_dash_destination(origin, wish_pos)
+	if dest.is_equal_approx(origin):
+		return
 	var targets := get_dash_targets(origin, dest)
 	for t in targets:
 		t.mark_hit()
@@ -87,6 +90,9 @@ func get_dash_destination(origin: Vector3, target: Vector3) -> Vector3:
 	var motion = target - origin
 	motion = motion.limit_length(max_distance)
 	
+	if motion.length_squared() <= deadzone * deadzone:
+		return origin
+	
 	var query := PhysicsShapeQueryParameters3D.new()
 	query.shape = _dash_shape
 	query.transform = Transform3D(Basis.IDENTITY, origin)
@@ -110,8 +116,9 @@ func get_dash_targets(origin: Vector3, dest: Vector3) -> Array[TargetArea]:
 	
 	var full_motion := dest - origin
 	var dist := full_motion.length()
-	if dist < 0.001:
+	if full_motion.is_zero_approx():
 		dist = 0.0
+	
 	
 	var step := maxf(radius, 0.01)
 	var steps := int(ceil(dist / step)) + 1

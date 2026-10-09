@@ -8,6 +8,8 @@
 [sub_resource type="Resource" id="Resource_lu5c6"]
 script = ExtResource("3_4ap13")
 type = ExtResource("4_0jjhd")
+instance_delay = 0.5
+count = 2
 metadata/_custom_type_script = "uid://r4qbgt6it8lb"
 
 [sub_resource type="Resource" id="Resource_75j4p"]
@@ -18,3 +20,4 @@ metadata/_custom_type_script = "uid://d04k7pxjd2u24"
 
 [node name="Enemy" unique_id=71488470 instance=ExtResource("1_8r7h4")]
 patterns = Array[ExtResource("2_josdy")]([SubResource("Resource_75j4p")])
+nock_points = Array[Vector2]([Vector2(0.0245, 0.2548), Vector2(0.0245, 0.4802), Vector2(0.0245, 0.6958)])

@@ -1,0 +1,161 @@
+[gd_scene format=3 uid="uid://15i3qjkr2ll5"]
+
+[ext_resource type="Script" uid="uid://cd2wsov71of7u" path="res://systems/cutscene/cutscene.gd" id="1_cut"]
+[ext_resource type="FontFile" uid="uid://dg3navvnlkmpw" path="res://shared/fonts/Puffy-gxW55.otf" id="2_font"]
+[ext_resource type="Texture2D" uid="uid://bt84n7glx1jm8" path="res://systems/cutscene/logo/APPLESEED_LOGO.png" id="3_logo"]
+[ext_resource type="Texture2D" uid="uid://cw0cukx6p28ex" path="res://systems/cutscene/logo/STUDIO_TEXT.png" id="4_text"]
+
+[sub_resource type="Shader" id="Shader_tint"]
+code = "shader_type canvas_item;
+
+uniform vec4 tint : source_color = vec4(1.0, 0.8627, 0.6196, 1.0);
+
+void fragment() {
+	COLOR = vec4(tint.rgb, COLOR.a);
+}
+"
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_tint"]
+shader = SubResource("Shader_tint")
+shader_parameter/tint = Color(1, 0.8627, 0.6196, 1)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_text"]
+atlas = ExtResource("4_text")
+region = Rect2(37, 523, 2794, 296)
+
+[node name="Cutscene" type="Control" unique_id=641721733]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("1_cut")
+
+[node name="Background" type="ColorRect" parent="." unique_id=1744320986]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0, 0, 0, 1)
+
+[node name="Frame" type="TextureRect" parent="." unique_id=1237561179]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+expand_mode = 1
+stretch_mode = 5
+
+[node name="FrameIn" type="TextureRect" parent="." unique_id=2002534436]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Overlay" type="TextureRect" parent="." unique_id=219456093]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Logo" type="HBoxContainer" parent="." unique_id=458764716]
+visible = false
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -600.0
+offset_top = -130.0
+offset_right = 600.0
+offset_bottom = 130.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme_override_constants/separation = 60
+alignment = 1
+
+[node name="Icon" type="TextureRect" parent="Logo" unique_id=1002470631]
+custom_minimum_size = Vector2(260, 260)
+layout_mode = 2
+mouse_filter = 2
+texture = ExtResource("3_logo")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Text" type="TextureRect" parent="Logo" unique_id=1728078088]
+material = SubResource("ShaderMaterial_tint")
+custom_minimum_size = Vector2(800, 85)
+layout_mode = 2
+size_flags_vertical = 4
+mouse_filter = 2
+texture = SubResource("AtlasTexture_text")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="ImageFade" type="ColorRect" parent="." unique_id=1088463530]
+modulate = Color(1, 1, 1, 0)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -659.0
+offset_top = -540.0
+offset_right = 659.0
+offset_bottom = 540.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="Fade" type="ColorRect" parent="." unique_id=1279756008]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0, 0, 0, 1)
+
+[node name="SkipPrompt" type="Label" parent="." unique_id=1782475654]
+modulate = Color(1, 1, 1, 0)
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -420.0
+offset_top = -80.0
+offset_right = -40.0
+offset_bottom = -30.0
+grow_horizontal = 0
+grow_vertical = 0
+theme_override_fonts/font = ExtResource("2_font")
+theme_override_font_sizes/font_size = 32
+text = "Skip cutscene"
+horizontal_alignment = 2
+vertical_alignment = 2

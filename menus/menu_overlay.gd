@@ -12,6 +12,8 @@ const GROUP := &"menu_overlays"
 
 @onready var _root: Control = get_node_or_null("%Root")
 
+signal game_pause(pause:bool)
+
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
 	add_to_group(GROUP)
@@ -49,6 +51,7 @@ func _set_open(value: bool) -> void:
 func open() -> void:
 	_set_open(true)
 	get_tree().paused = true
+	SoundManager._on_paused()
 	var primary := get_node_or_null("%" + primary_button) as Control
 	if primary:
 		primary.grab_focus()
@@ -57,12 +60,14 @@ func close() -> void:
 	get_viewport().gui_release_focus()
 	_set_open(false)
 	get_tree().paused = false
+	SoundManager._on_unpaused()
 
 func _on_primary() -> void:
 	pass
 
 func restart() -> void:
 	MenuNav.restart(get_tree())
+	SoundManager._on_unpaused()
 
 func to_menu() -> void:
 	MenuNav.to_menu(get_tree())

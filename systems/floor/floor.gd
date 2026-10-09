@@ -11,6 +11,14 @@ class_name GrassFloor
 		if is_inside_tree():
 			_apply_preview()
 
+@export var floor_material: Material:
+	set(value):
+		floor_material = value
+		_preview_material = null
+		_preview_texture = null
+		if is_inside_tree():
+			_apply_preview()
+
 @export_tool_button("Reload", "Reload")
 var reload_button := func():
 	_preview_material = null
@@ -43,6 +51,10 @@ func _validate_property(property: Dictionary) -> void:
 
 func _apply_preview() -> void:
 	if not is_inside_tree():
+		return
+
+	if floor_material:
+		material_override = floor_material
 		return
 
 	# Don't rebuild the preview every time the tool script runs.

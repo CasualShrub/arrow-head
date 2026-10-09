@@ -3,6 +3,9 @@ class_name SuspicionDisplay
 
 signal state_changed(state: SuspicionComponent.SuspicionState)
 
+func _ready() -> void:
+	hide()
+
 func set_state(state: SuspicionComponent.SuspicionState) -> void:
 	match state:
 		SuspicionComponent.SuspicionState.NONE:

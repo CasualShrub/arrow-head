@@ -3,74 +3,158 @@
 [ext_resource type="PackedScene" uid="uid://b8rs35o7f45v0" path="res://entities/enemies/enemy.tscn" id="1_2bsge"]
 [ext_resource type="Script" uid="uid://d04k7pxjd2u24" path="res://systems/arrow/firing_data/arrow_pattern.gd" id="2_l1ure"]
 [ext_resource type="Script" uid="uid://r4qbgt6it8lb" path="res://systems/arrow/firing_data/firing_instance.gd" id="3_3kxgl"]
-[ext_resource type="PackedScene" path="res://scenes/arrows/arrow_weak.tscn" id="4_55ika"]
+[ext_resource type="PackedScene" uid="uid://bxgfy1nvmlb7v" path="res://entities/arrows/arrow.tscn" id="4_2bsge"]
 [ext_resource type="PackedScene" uid="uid://byh737vkctruq" path="res://entities/arrows/fire/arrow_fire.tscn" id="5_2bsge"]
 [ext_resource type="PackedScene" uid="uid://5ljerioubp6c" path="res://entities/arrows/ice/arrow_frost.tscn" id="6_7gqcw"]
 [ext_resource type="SpriteFrames" uid="uid://dm8flmwcygw4c" path="res://entities/enemies/dragonfruit/dragonfruit_frames.tres" id="7_fl2a3"]
 
 [sub_resource type="Resource" id="Resource_e5ay6"]
 script = ExtResource("3_3kxgl")
-type = ExtResource("4_55ika")
-instance_delay = 0.1
-count = 15
-spread = 3.14
-max_spread = 3.14
+type = ExtResource("4_2bsge")
+count = 10
+reload_anim = false
+spread = 35.0
+offset = 3.1399999999999864
+max_offset = 0.0
+individual_offset = true
 metadata/_custom_type_script = "uid://r4qbgt6it8lb"
 
 [sub_resource type="Resource" id="Resource_1585h"]
 script = ExtResource("2_l1ure")
-recovery = 1.0
-uses_windup = true
+recovery = 2.0
 instances = Array[ExtResource("3_3kxgl")]([SubResource("Resource_e5ay6")])
 metadata/_custom_type_script = "uid://d04k7pxjd2u24"
 
 [sub_resource type="Resource" id="Resource_q8c7o"]
 script = ExtResource("3_3kxgl")
-type = ExtResource("4_55ika")
-instance_delay = 0.2
-count = 5
-offset = -0.4995926535897901
-max_offset = 0.5004073464102099
-individual_offset = true
+type = ExtResource("4_2bsge")
+starting_delay = 1.0
+count = 3
+spread = 5.0
+metadata/_custom_type_script = "uid://r4qbgt6it8lb"
+
+[sub_resource type="Resource" id="Resource_55ika"]
+script = ExtResource("3_3kxgl")
+type = ExtResource("4_2bsge")
+starting_delay = 1.0
+count = 2
+spread = 10.0
+metadata/_custom_type_script = "uid://r4qbgt6it8lb"
+
+[sub_resource type="Resource" id="Resource_svtcy"]
+script = ExtResource("3_3kxgl")
+type = ExtResource("4_2bsge")
+starting_delay = 1.0
+count = 2
+spread = 20.0
+metadata/_custom_type_script = "uid://r4qbgt6it8lb"
+
+[sub_resource type="Resource" id="Resource_2bsge"]
+script = ExtResource("3_3kxgl")
+type = ExtResource("4_2bsge")
+starting_delay = 1.0
+count = 2
+spread = 35.0
+metadata/_custom_type_script = "uid://r4qbgt6it8lb"
+
+[sub_resource type="Resource" id="Resource_l1ure"]
+script = ExtResource("3_3kxgl")
+type = ExtResource("4_2bsge")
+starting_delay = 1.0
+count = 3
+spread = 5.0
+offset = 180.0
+metadata/_custom_type_script = "uid://r4qbgt6it8lb"
+
+[sub_resource type="Resource" id="Resource_3kxgl"]
+script = ExtResource("3_3kxgl")
+type = ExtResource("4_2bsge")
+starting_delay = 1.0
+count = 2
+spread = 10.0
+offset = 180.0
+metadata/_custom_type_script = "uid://r4qbgt6it8lb"
+
+[sub_resource type="Resource" id="Resource_7gqcw"]
+script = ExtResource("3_3kxgl")
+type = ExtResource("4_2bsge")
+starting_delay = 1.0
+count = 2
+spread = 20.0
+offset = 180.0
+metadata/_custom_type_script = "uid://r4qbgt6it8lb"
+
+[sub_resource type="Resource" id="Resource_fl2a3"]
+script = ExtResource("3_3kxgl")
+type = ExtResource("4_2bsge")
+starting_delay = 1.0
+count = 2
+spread = 35.0
+offset = 180.0
 metadata/_custom_type_script = "uid://r4qbgt6it8lb"
 
 [sub_resource type="Resource" id="Resource_o6djv"]
 script = ExtResource("2_l1ure")
-recovery = 1.0
-instances = Array[ExtResource("3_3kxgl")]([SubResource("Resource_q8c7o")])
+recovery = 3.0
+uses_windup = true
+instances = Array[ExtResource("3_3kxgl")]([SubResource("Resource_q8c7o"), SubResource("Resource_55ika"), SubResource("Resource_svtcy"), SubResource("Resource_2bsge"), SubResource("Resource_l1ure"), SubResource("Resource_3kxgl"), SubResource("Resource_7gqcw"), SubResource("Resource_fl2a3")])
 metadata/_custom_type_script = "uid://d04k7pxjd2u24"
 
 [sub_resource type="Resource" id="Resource_mjiwy"]
 script = ExtResource("3_3kxgl")
 type = ExtResource("5_2bsge")
-count = 5
-spread = 6.28318530717959
+starting_delay = 1.0
+count = 8
+spread = 315.0
+max_offset = 0.0
 metadata/_custom_type_script = "uid://r4qbgt6it8lb"
 
 [sub_resource type="Resource" id="Resource_vnqk6"]
 script = ExtResource("3_3kxgl")
 type = ExtResource("6_7gqcw")
-count = 5
-spread = 6.28318530717959
-offset = 0.62840734641021
+starting_delay = 1.0
+count = 8
+spread = 315.0
+offset = 22.5
+max_offset = 0.0
+metadata/_custom_type_script = "uid://r4qbgt6it8lb"
+
+[sub_resource type="Resource" id="Resource_lr4wb"]
+script = ExtResource("3_3kxgl")
+type = ExtResource("5_2bsge")
+starting_delay = 2.0
+count = 8
+spread = 315.0
+offset = 22.5
+metadata/_custom_type_script = "uid://r4qbgt6it8lb"
+
+[sub_resource type="Resource" id="Resource_b0eiw"]
+script = ExtResource("3_3kxgl")
+type = ExtResource("6_7gqcw")
+starting_delay = 2.0
+count = 8
+spread = 315.0
 metadata/_custom_type_script = "uid://r4qbgt6it8lb"
 
 [sub_resource type="Resource" id="Resource_54hkm"]
 script = ExtResource("2_l1ure")
-recovery = 1.5
-instances = Array[ExtResource("3_3kxgl")]([SubResource("Resource_mjiwy"), SubResource("Resource_vnqk6")])
+recovery = 3.0
+uses_windup = true
+instances = Array[ExtResource("3_3kxgl")]([SubResource("Resource_mjiwy"), SubResource("Resource_vnqk6"), SubResource("Resource_lr4wb"), SubResource("Resource_b0eiw")])
 metadata/_custom_type_script = "uid://d04k7pxjd2u24"
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_u24cr"]
 radius = 0.8
 
 [node name="Enemy" unique_id=71488470 instance=ExtResource("1_2bsge")]
+camera_focus = true
+stationary = true
 patterns = Array[ExtResource("2_l1ure")]([SubResource("Resource_1585h"), SubResource("Resource_o6djv"), SubResource("Resource_54hkm")])
+juice_color = Color(0.9, 0.1, 0.55, 1)
 
 [node name="Collider" parent="." index="0" unique_id=1742085930]
 shape = SubResource("SphereShape3D_u24cr")
 
 [node name="Sprite" parent="VisualRoot" parent_id_path=PackedInt32Array(2109639598) index="0" unique_id=1091610106]
 sprite_frames = ExtResource("7_fl2a3")
-animation = &"intro"
-frame_progress = 0.77435106
+animation = &"windup"

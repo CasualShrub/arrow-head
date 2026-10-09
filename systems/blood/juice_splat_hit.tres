@@ -1,0 +1,31 @@
+[gd_resource type="Resource" script_class="JuiceSplatStyle" format=3]
+
+[ext_resource type="Texture2D" path="res://systems/blood/baked/juice_splat_hit_0.res" id="1_3xyin"]
+[ext_resource type="Script" path="res://systems/blood/juice_splat_style.gd" id="1_style"]
+[ext_resource type="Texture2D" path="res://systems/blood/baked/juice_splat_hit_1.res" id="2_vm58c"]
+[ext_resource type="Texture2D" path="res://systems/blood/baked/juice_splat_hit_2.res" id="3_2n5n8"]
+[ext_resource type="Texture2D" path="res://systems/blood/baked/juice_splat_hit_3.res" id="4_fg4ry"]
+[ext_resource type="Texture2D" path="res://systems/blood/baked/juice_splat_hit_4.res" id="5_s803e"]
+[ext_resource type="Texture2D" path="res://systems/blood/baked/juice_splat_hit_5.res" id="6_eodop"]
+[ext_resource type="Texture2D" path="res://systems/blood/baked/juice_splat_hit_6.res" id="7_e2m85"]
+[ext_resource type="Texture2D" path="res://systems/blood/baked/juice_splat_hit_7.res" id="8_o2eem"]
+
+[resource]
+script = ExtResource("1_style")
+texture_size = Vector2i(256, 160)
+pool_blob_count = 3
+pool_radius_range = Vector2(16, 19)
+pool_offset_back = 0.15
+pool_offset_forward = 0.15
+pool_offset_side = 0.15
+streak_count_range = Vector2i(3, 4)
+streak_min_reach = 100.0
+streak_max_angle = 0.4
+streak_width_range = Vector2(15, 18)
+streak_tip_width = 12.0
+streak_wobble = 0.0
+streak_end_drop_range = Vector2(12, 13)
+droplet_count_range = Vector2i(0, 0)
+back_count_range = Vector2i(0, 0)
+shades = Array[float]([0.78, 0.86, 0.93, 1.0])
+baked_textures = Array[Texture2D]([ExtResource("1_3xyin"), ExtResource("2_vm58c"), ExtResource("3_2n5n8"), ExtResource("4_fg4ry"), ExtResource("5_s803e"), ExtResource("6_eodop"), ExtResource("7_e2m85"), ExtResource("8_o2eem")])

@@ -1,0 +1,8 @@
+[gd_scene format=3 uid="uid://bxgdwn6jomk30"]
+
+[ext_resource type="Texture2D" uid="uid://cvxcj8oqajxb8" path="res://entities/arrows/fire/arrow_fire.png" id="1_oduuf"]
+
+[node name="Node3D" type="Node3D" unique_id=175811696]
+
+[node name="Sprite3D" type="Sprite3D" parent="." unique_id=790348706]
+texture = ExtResource("1_oduuf")

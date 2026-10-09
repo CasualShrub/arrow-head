@@ -106,6 +106,57 @@ func _apply_border_size() -> void:
 	var box_shape := border_shape.shape as BoxShape3D
 	box_shape.size = Vector3(border_size.x, box_shape.size.y, border_size.y)
 
+func _grid_points(center: Vector2, half_width: float, half_depth: float, outer_width: float, outer_depth: float, rng: RandomNumberGenerator) -> Array[Vector2]:
+	var points: Array[Vector2] = []
+	var grid_x := -outer_width
+	while grid_x <= outer_width + 0.001:
+		var grid_z := -outer_depth
+		while grid_z <= outer_depth + 0.001:
+			var offset_x := grid_x + rng.randf_range(-position_jitter, position_jitter)
+			var offset_z := grid_z + rng.randf_range(-position_jitter, position_jitter)
+			if absf(offset_x) > half_width or absf(offset_z) > half_depth:
+				points.append(center + Vector2(offset_x, offset_z))
+			grid_z += spacing
+		grid_x += spacing
+	return points
+
+func _ring_points(center: Vector2, half_width: float, half_depth: float, rng: RandomNumberGenerator) -> Array[Vector2]:
+	var points: Array[Vector2] = []
+	var ring_index := 0
+	var ring_offset := spacing * 0.5
+	while ring_offset <= band_depth + 0.001:
+		var ring := _ellipse_polyline(half_width + ring_offset, half_depth + ring_offset, 256)
+		var ring_length: float = ring[ring.size() - 1].z
+		var count := maxi(3, roundi(ring_length / spacing))
+		var step := ring_length / count
+		var phase := step * (0.5 if ring_index % 2 == 1 else 0.0)
+		var segment := 1
+		for point_index in count:
+			var target := phase + step * point_index
+			while segment < ring.size() - 1 and ring[segment].z < target:
+				segment += 1
+			var from: Vector3 = ring[segment - 1]
+			var to: Vector3 = ring[segment]
+			var weight := (target - from.z) / maxf(to.z - from.z, 0.0001)
+			var point := Vector2(from.x, from.y).lerp(Vector2(to.x, to.y), weight)
+			point += Vector2(rng.randf_range(-position_jitter, position_jitter), rng.randf_range(-position_jitter, position_jitter))
+			points.append(center + point)
+		ring_offset += spacing
+		ring_index += 1
+	return points
+
+func _ellipse_polyline(radius_x: float, radius_z: float, samples: int) -> Array[Vector3]:
+	var polyline: Array[Vector3] = []
+	var travelled := 0.0
+	var previous := Vector2(radius_x, 0.0)
+	for sample_index in samples + 1:
+		var angle := TAU * sample_index / samples
+		var current := Vector2(cos(angle) * radius_x, sin(angle) * radius_z)
+		travelled += previous.distance_to(current)
+		polyline.append(Vector3(current.x, current.y, travelled))
+		previous = current
+	return polyline
+
 func _ensure_container() -> void:
 	if is_instance_valid(_container):
 		return
@@ -140,20 +191,12 @@ func _rebuild() -> void:
 	var rng := RandomNumberGenerator.new()
 	rng.seed = rng_seed
 
-	var spawn_points: Array[Vector2] = []
-	var grid_x := -outer_width
-	while grid_x <= outer_width + 0.001:
-		var grid_z := -outer_depth
-		while grid_z <= outer_depth + 0.001:
-			var point_x := center_x + grid_x + rng.randf_range(-position_jitter, position_jitter)
-			var point_z := center_z + grid_z + rng.randf_range(-position_jitter, position_jitter)
-			var inside_border := absf(point_x - center_x) <= half_width and absf(point_z - center_z) <= half_depth
-			if inside_border:
-				grid_z += spacing
-				continue
-			spawn_points.append(Vector2(point_x, point_z))
-			grid_z += spacing
-		grid_x += spacing
+	var center := Vector2(center_x, center_z)
+	var spawn_points: Array[Vector2]
+	if is_circle:
+		spawn_points = _ring_points(center, half_width, half_depth, rng)
+	else:
+		spawn_points = _grid_points(center, half_width, half_depth, outer_width, outer_depth, rng)
 
 	spawn_points.sort_custom(func(a: Vector2, b: Vector2) -> bool: return a.y < b.y)
 

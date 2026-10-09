@@ -2,8 +2,56 @@
 
 [ext_resource type="PackedScene" uid="uid://b8rs35o7f45v0" path="res://entities/enemies/enemy.tscn" id="1_e5b04"]
 [ext_resource type="SpriteFrames" uid="uid://b75cdbwepha66" path="res://entities/enemies/peacock/peacock_frames.tres" id="2_gintu"]
+[ext_resource type="Script" uid="uid://d04k7pxjd2u24" path="res://systems/arrow/firing_data/arrow_pattern.gd" id="3_pat"]
+[ext_resource type="Script" uid="uid://r4qbgt6it8lb" path="res://systems/arrow/firing_data/firing_instance.gd" id="4_ins"]
+[ext_resource type="PackedScene" uid="uid://c7svet2brpv4j" path="res://entities/arrows/pea/arrow_pea.tscn" id="5_pea"]
+[ext_resource type="PackedScene" path="res://entities/arrows/pea/arrow_pea_cannonball.tscn" id="6_ball"]
+[ext_resource type="PackedScene" uid="uid://bxgfy1nvmlb7v" path="res://entities/arrows/arrow.tscn" id="7_arrow"]
+
+[sub_resource type="Resource" id="Resource_sweep_inst"]
+script = ExtResource("4_ins")
+type = ExtResource("5_pea")
+count = 7
+instance_delay = 0.2
+spread = 70.0
+max_spread = 70.0
+metadata/_custom_type_script = "uid://r4qbgt6it8lb"
+
+[sub_resource type="Resource" id="Resource_sweep"]
+script = ExtResource("3_pat")
+recovery = 1.2
+instances = Array[ExtResource("4_ins")]([SubResource("Resource_sweep_inst")])
+metadata/_custom_type_script = "uid://d04k7pxjd2u24"
+
+[sub_resource type="Resource" id="Resource_fan_inst"]
+script = ExtResource("4_ins")
+type = ExtResource("7_arrow")
+count = 5
+spread = 50.0
+max_spread = 50.0
+metadata/_custom_type_script = "uid://r4qbgt6it8lb"
+
+[sub_resource type="Resource" id="Resource_fan"]
+script = ExtResource("3_pat")
+recovery = 1.2
+instances = Array[ExtResource("4_ins")]([SubResource("Resource_fan_inst")])
+metadata/_custom_type_script = "uid://d04k7pxjd2u24"
+
+[sub_resource type="Resource" id="Resource_ball_inst"]
+script = ExtResource("4_ins")
+type = ExtResource("6_ball")
+metadata/_custom_type_script = "uid://r4qbgt6it8lb"
+
+[sub_resource type="Resource" id="Resource_ball"]
+script = ExtResource("3_pat")
+recovery = 2.0
+instances = Array[ExtResource("4_ins")]([SubResource("Resource_ball_inst")])
+metadata/_custom_type_script = "uid://d04k7pxjd2u24"
 
 [node name="Enemy" unique_id=520769260 instance=ExtResource("1_e5b04")]
+juice_color = Color(0.4, 0.7, 0.2, 1)
+patterns = Array[ExtResource("3_pat")]([SubResource("Resource_sweep"), SubResource("Resource_fan"), SubResource("Resource_sweep"), SubResource("Resource_ball")])
+fixed_patterns = true
 
 [node name="Sprite" parent="VisualRoot" parent_id_path=PackedInt32Array(2109639598) index="0" unique_id=1091610106]
 transform = Transform3D(-3.1038542e-08, -0.710079, -4.283717e-08, -1.1027104e-22, -3.1038542e-08, 0.98, -0.710079, 3.1038542e-08, 1.8724722e-15, 0, 0, 0)

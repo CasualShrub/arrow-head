@@ -4,6 +4,9 @@
 [ext_resource type="Shader" uid="uid://4cl7l7a1abfv" path="res://shaders/outline_3d.gdshader" id="2_gq1gh"]
 [ext_resource type="Texture2D" uid="uid://c8r5phlgt4yy0" path="res://entities/arrows/pea/arrow_pea.png" id="4_gq1gh"]
 
+[ext_resource type="Script" path="res://systems/status/status_slow.gd" id="5_slow"]
+[ext_resource type="Script" path="res://entities/arrows/pea/arrow_pea.gd" id="6_pea"]
+
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_gq1gh"]
 resource_local_to_scene = true
 render_priority = 0
@@ -16,7 +19,18 @@ shader_parameter/tex_pixel_size = Vector2(0.005, 0.005)
 [sub_resource type="SphereShape3D" id="SphereShape3D_2sdfy"]
 radius = 0.2
 
+[sub_resource type="Resource" id="Resource_slow"]
+script = ExtResource("5_slow")
+lifetime = -1.0
+speed_multiplier = 0.5
+
 [node name="Arrow" unique_id=935612140 instance=ExtResource("1_2sdfy")]
+script = ExtResource("6_pea")
+speed = 15.0
+status = SubResource("Resource_slow")
+dig_depth = 0.02
+embedded_lifetime = 5.0
+embedded_blink_time = 1.5
 
 [node name="Sprite3D" parent="." index="0" unique_id=1125079801]
 transform = Transform3D(-0.385, 3.365777e-08, 1.4712277e-15, 0, -1.6828885e-08, 0.385, 3.365777e-08, 0.385, 1.6828885e-08, -0.012599438, 0, -0.013614029)

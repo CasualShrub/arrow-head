@@ -1,0 +1,45 @@
+[gd_scene format=3 uid="uid://b8uip5g4hr5g4"]
+
+[ext_resource type="Script" uid="uid://bbanbev2v05v" path="res://entities/props/tutorial/kill_him_marker.gd" id="1_script"]
+[ext_resource type="Texture2D" uid="uid://331kdxadtnju" path="res://entities/props/tutorial/circle1.PNG" id="2_c1"]
+[ext_resource type="Texture2D" uid="uid://dql8sgvi23ic2" path="res://entities/props/tutorial/circle2.PNG" id="3_c2"]
+[ext_resource type="Texture2D" uid="uid://621vam30fk3y" path="res://entities/props/tutorial/circle3.PNG" id="4_c3"]
+[ext_resource type="Texture2D" uid="uid://cn11g65ytd8dm" path="res://entities/props/tutorial/kill him.PNG" id="5_arrow"]
+
+[node name="KillHimMarker" type="Node3D" unique_id=138673835]
+script = ExtResource("1_script")
+circle_frames = Array[Texture2D]([ExtResource("2_c1"), ExtResource("3_c2"), ExtResource("4_c3")])
+
+[node name="Circle" type="Sprite3D" parent="." unique_id=411212428]
+transform = Transform3D(1, 0, 0, 0, -4.371139e-08, 1, 0, -1, -4.371139e-08, 0, 0.001, 0)
+pixel_size = 0.0018
+alpha_cut = 1
+texture = ExtResource("2_c1")
+
+[node name="Arrows" type="Node3D" parent="." unique_id=549429645]
+
+[node name="Pivot1" type="Node3D" parent="Arrows" unique_id=616021129]
+
+[node name="Arrow" type="Sprite3D" parent="Arrows/Pivot1" unique_id=836012108]
+transform = Transform3D(0.8986116, 0.4387453, 0, 0, 0, 1, 0.4387453, -0.8986116, 0, -0.874696, 0.001, 1.5853566)
+pixel_size = 0.0009
+alpha_cut = 1
+texture = ExtResource("5_arrow")
+
+[node name="Pivot2" type="Node3D" parent="Arrows" unique_id=1444544036]
+transform = Transform3D(-0.5, 0, 0.8660254, 0, 1, 0, -0.8660254, 0, -0.5, 0, 0, 0)
+
+[node name="Arrow" type="Sprite3D" parent="Arrows/Pivot2" unique_id=1656559337]
+transform = Transform3D(0.99550426, 0.094717115, 0, 0, 0, 1, 0.094717115, -0.99550426, 0, -0.18166256, 0.001, 1.8913603)
+pixel_size = 0.0009
+alpha_cut = 1
+texture = ExtResource("5_arrow")
+
+[node name="Pivot3" type="Node3D" parent="Arrows" unique_id=1805538841]
+transform = Transform3D(-0.5, 0, -0.8660254, 0, 1, 0, 0.8660254, 0, -0.5, 0, 0, 0)
+
+[node name="Arrow" type="Sprite3D" parent="Arrows/Pivot3" unique_id=1694791066]
+transform = Transform3D(1, 0, 0, 0, 0, 1, 0, -1, 0, -0.07376522, 0.001, 1.8741655)
+pixel_size = 0.0009
+alpha_cut = 1
+texture = ExtResource("5_arrow")

@@ -1,12 +1,12 @@
 [gd_scene format=3 uid="uid://coutskfill01x"]
 
-[ext_resource type="Script" path="res://scenes/outskirt_filler.gd" id="1_script"]
-[ext_resource type="PackedScene" uid="uid://4tldq5e4ke5b" path="res://entities/props/trees/tree.tscn" id="2_tree"]
-[ext_resource type="Texture2D" uid="uid://bx4ncbvdfq6ke" path="res://entities/props/trees/tree var1.png" id="3_v1"]
-[ext_resource type="Texture2D" uid="uid://dkmc4olpuraxs" path="res://entities/props/trees/tree var2.png" id="4_v2"]
-[ext_resource type="Texture2D" uid="uid://c4m8genrr4nrw" path="res://entities/props/trees/tree var3.png" id="5_v3"]
-[ext_resource type="Texture2D" uid="uid://bwelgf5ryu40g" path="res://entities/props/trees/tree var4.png" id="6_v4"]
-[ext_resource type="Texture2D" uid="uid://byb3mu5ggny31" path="res://entities/props/trees/tree.png" id="7_v0"]
+[ext_resource type="Script" uid="uid://cyb6iy0t3diem" path="res://scenes/outskirt_filler.gd" id="1_script"]
+[ext_resource type="PackedScene" uid="uid://4tldq5e4ke5b" path="res://entities/props/trees/outskirt_tree/outskirt_tree.tscn" id="2_tree"]
+[ext_resource type="Texture2D" uid="uid://bx4ncbvdfq6ke" path="res://entities/props/trees/outskirt_tree/tree var1.png" id="3_v1"]
+[ext_resource type="Texture2D" uid="uid://dkmc4olpuraxs" path="res://entities/props/trees/outskirt_tree/tree var2.png" id="4_v2"]
+[ext_resource type="Texture2D" uid="uid://c4m8genrr4nrw" path="res://entities/props/trees/outskirt_tree/tree var3.png" id="5_v3"]
+[ext_resource type="Texture2D" uid="uid://bwelgf5ryu40g" path="res://entities/props/trees/outskirt_tree/tree var4.png" id="6_v4"]
+[ext_resource type="Texture2D" uid="uid://byb3mu5ggny31" path="res://entities/props/trees/outskirt_tree/tree.png" id="7_v0"]
 
 [sub_resource type="BoxShape3D" id="OutskirtBox"]
 resource_local_to_scene = true

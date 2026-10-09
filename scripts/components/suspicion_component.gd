@@ -1,7 +1,7 @@
 extends Node
 class_name SuspicionComponent
 
-enum SuspicionState {NONE, LOW, MEDIUM, HIGH}
+enum SuspicionState { NONE, LOW, MEDIUM, HIGH }
 
 signal suspicion_changed(stage: SuspicionState)
 signal alerted()

@@ -11,14 +11,17 @@ extends Node
 const _POOL_SIZE := 12
 const _BUS := "SFX"
 const _MUSIC_BUS := "Music"
-const DEFAULT_MUSIC := "TITLE_SCREEN"
 
 const MUSIC := {
-	"TITLE_SCREEN": preload("uid://dmd00wsbb5p48"),
-	"Lvl_1": preload("uid://bhbv3bkkngiks"),
-	"Lvl_2_3": preload("uid://d0guesfdkuk1p"),
-	"Lvl_4_5": preload("uid://cix6q1uma8oa5"),
-	"Lvl_6_7": preload("uid://xn16eqr3x2e1"),
+	"TITLE_SCREEN": preload("uid://bilk8fubu6cf4"),
+	"complete_ost": preload("uid://bv51oh71drs8l"),
+	"paused": preload("uid://dqqae78uymnjn"),
+	"cutscene": preload("uid://dsniqyppxolpc"),
+	# archived music
+	#"Lvl_1": preload("uid://bhbv3bkkngiks"),
+	#"Lvl_2_3": preload("uid://d0guesfdkuk1p"),
+	#"Lvl_4_5": preload("uid://cix6q1uma8oa5"),
+	#"Lvl_6_7": preload("uid://xn16eqr3x2e1"),
 }
 
 # event key -> stream. keys are the .wav basenames.
@@ -37,6 +40,7 @@ const SOUNDS := {
 	"banana_shooting": preload("uid://clhwj7ds06on6"),
 	"big_win_kill_boss_jingle": preload("uid://ce55ed6pdob1c"),
 	"enemy_death_small_win_jingle": preload("uid://dustcpx3l8mok"),
+	"logo": preload("uid://bhm7x2koeoa21"),
 }
 
 # per-asset base level in dB — balance the individual effects against each other
@@ -55,12 +59,14 @@ const BASE_VOLUMES := {
 	"banana_shooting": 0.0,
 	"big_win_kill_boss_jingle": 0.0,
 	"enemy_death_small_win_jingle": 0.0,
+	"logo": 0.0,
 }
 
 var _pool: Array[AudioStreamPlayer] = []
 var _next := 0
 var _overrides := {}  # key -> dB, per-scenario runtime trim on top of BASE_VOLUMES
 var _music: AudioStreamPlayer
+var _pause_music: AudioStreamPlayer
 
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
@@ -72,8 +78,29 @@ func _ready() -> void:
 	_music = AudioStreamPlayer.new()
 	_music.bus = _MUSIC_BUS
 	add_child(_music)
-	_music.finished.connect(func(): _music.play())
-	play_music(DEFAULT_MUSIC)
+	
+	_pause_music = AudioStreamPlayer.new() #just for it to run in the background
+	_pause_music.bus = _MUSIC_BUS
+	add_child(_pause_music)
+	_pause_music.stream = MUSIC.get('paused')
+	GameManager.level_loaded.connect(_on_scene_changed)
+	GameManager.level_unloading.connect(_on_scene_changed)
+	if OS.has_feature("editor"):
+		_pick_editor_music.call_deferred()
+
+func _pick_editor_music() -> void:
+	var scene := get_tree().current_scene
+	if scene == null or GameManager.current_level != null:
+		return
+	var path := scene.scene_file_path
+	var menu_scenes := [
+		ProjectSettings.get_setting("application/run/main_scene"),
+		ResourceUID.uid_to_path(GameManager.MAIN_MENU),
+	]
+	if path in menu_scenes:
+		return
+	play_music("complete_ost")
+
 
 func play_music(key: String) -> void:
 	var stream: AudioStream = MUSIC.get(key)
@@ -84,10 +111,13 @@ func play_music(key: String) -> void:
 		return
 	_music.stream = stream
 	_music.play()
+	if _pause_music and key!='complete_ost':
+		_pause_music.stop()
 
 func stop_music() -> void:
 	if _music:
 		_music.stop()
+		_pause_music.stop()
 
 # fling a one-shot effect. volume_db nudges this single play; pitch_var > 0 jitters
 # pitch +/- that amount so rapidly-repeated sounds (fills, bounces) don't fatigue.
@@ -127,3 +157,20 @@ func _take_player() -> AudioStreamPlayer:
 	var stolen := _pool[_next]
 	_next = (_next + 1) % _pool.size()
 	return stolen
+	
+	
+func _on_scene_changed(level:Level) -> void:
+	stop_music()
+	play_music("complete_ost") #paused should run with it inside play_music
+	
+	
+func _on_paused() -> void: #should be only switching between ost and paused
+	var current_pos = _music.get_playback_position()
+	_pause_music.play(current_pos)
+	_music.stop()
+	
+func _on_unpaused() -> void:
+	var current_pos = _pause_music.get_playback_position()
+	_music.play(current_pos)
+	_pause_music.stop()
+	

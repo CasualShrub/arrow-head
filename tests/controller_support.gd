@@ -40,6 +40,9 @@ func _button(button: JoyButton) -> void:
 	Input.parse_input_event(event)
 	await get_tree().process_frame
 
+func _attacks(player: Player) -> int:
+	return player.arrows.get_slots_with_state(SectorArrowsComponent.SlotState.USABLE).size()
+
 func _wait(seconds := 0.05) -> void:
 	await get_tree().create_timer(seconds, true, false, true).timeout
 
@@ -79,7 +82,7 @@ func _test_player() -> void:
 		arrow.global_position = player.global_position + direction
 		_check(player.arrows.try_add_arrow(arrow), "Could not fill a test arrow sector")
 	await _wait()
-	_check(player._dash_charges == 4 and ControllerManager._attack_available, "Full sectors did not prepare four attacks")
+	_check(_attacks(player) == 4 and ControllerManager._attack_available, "Full sectors did not prepare four attacks")
 	var shots := [0]
 	player.dash.activated.connect(func(_destination, _targets): shots[0] += 1)
 	var origin := player.global_position
@@ -91,7 +94,7 @@ func _test_player() -> void:
 	_check(shots[0] == 0 and player.global_position.distance_to(origin) < 0.1, "Full R2 pull fired on its own")
 	await _button(JOY_BUTTON_RIGHT_SHOULDER)
 	await _wait()
-	_check(shots[0] == 1 and player._dash_charges == 3, "R1 did not fire and consume exactly one arrow")
+	_check(shots[0] == 1 and _attacks(player) == 3, "R1 did not fire and consume exactly one arrow")
 	_check(player.global_position.distance_to(origin + full) < 0.1, "R1 shot did not follow the stick")
 	_check(not player.dash.is_enabled() and not player.time.is_slowed(), "Dash did not end slow motion and aiming")
 	await _button(JOY_BUTTON_RIGHT_SHOULDER)
@@ -118,7 +121,7 @@ func _test_player() -> void:
 	await _wait()
 	await _button(JOY_BUTTON_RIGHT_SHOULDER)
 	await _wait()
-	_check(shots[0] == 2 and player._dash_charges == 2, "Fresh R2 aim after pause failed")
+	_check(shots[0] == 2 and _attacks(player) == 2, "Fresh R2 aim after pause failed")
 	await _axis(JOY_AXIS_TRIGGER_RIGHT, 0.0)
 	await _wait(0.15)
 	var click := InputEventMouseButton.new()
@@ -131,12 +134,12 @@ func _test_player() -> void:
 	click.pressed = false
 	Input.parse_input_event(click)
 	await _wait()
-	_check(shots[0] == 3 and player._dash_charges == 1, "Mouse release did not consume an arrow")
+	_check(shots[0] == 3 and _attacks(player) == 1, "Mouse release did not consume an arrow")
 	await _axis(JOY_AXIS_TRIGGER_RIGHT, 0.6)
 	await _wait()
 	await _button(JOY_BUTTON_RIGHT_SHOULDER)
 	await _wait()
-	_check(shots[0] == 4 and player._dash_charges == 0, "R2 aim and R1 did not consume the last arrow")
+	_check(shots[0] == 4 and _attacks(player) == 0, "R2 aim and R1 did not consume the last arrow")
 	await _axis(JOY_AXIS_TRIGGER_RIGHT, 0.0)
 	await _wait()
 	await _axis(JOY_AXIS_TRIGGER_RIGHT, 0.6)
@@ -184,7 +187,7 @@ func _test_menus() -> void:
 	await _button(JOY_BUTTON_A)
 	await _wait(0.9)
 	_check(main.get_node("LevelSelect").visible, "Controller confirm did not open Levels")
-	_check(get_viewport().gui_get_focus_owner() == main.get_node("LevelSelect/Buttons/Tutorial"), "Level select has no focus")
+	_check(get_viewport().gui_get_focus_owner() == main.get_node("LevelSelect/Center/Layout/Tutorial"), "Level select has no focus")
 	await _button(JOY_BUTTON_B)
 	_check(not main.get_node("LevelSelect").visible, "Circle/B did not close Levels")
 	await _button(JOY_BUTTON_DPAD_DOWN)

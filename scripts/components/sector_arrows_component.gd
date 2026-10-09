@@ -1,90 +1,114 @@
 extends ArrowsComponent
 class_name SectorArrowsComponent
 
-@export var slot_count := 4
+enum SlotState { EMPTY, OCCUPIED, USABLE, DISABLED }
 
-signal slot_occupied(slot: int, arrow: Arrow)
+@export var slot_count := 4
+@export var centered := true
+
+var slot_size: float:
+	get():
+		return TAU / slot_count
+
+signal arrow_embedded(slot: int, arrow: Arrow)
 signal slot_cleared(slot: int)
+
+signal slot_state_changed(slot: int, state: SlotState)
 
 signal firing_enabled(arrow: Arrow)
 signal firing_disabled(arrow: Arrow)
 
-var _embedded: Array[Arrow] = []
-var _fireable: Dictionary[Arrow, bool] = {}
+signal filled()
+signal emptied()
+
+var slots: Array[SlotState] = []
+var embedded: Array[Arrow] = []
+
+var _removal_state := SlotState.DISABLED
 
 func _ready() -> void:
-	_embedded.resize(slot_count)
+	slots.resize(slot_count)
+	embedded.resize(slot_count)
+	if not filled.is_connected(_on_filled): filled.connect(_on_filled)
+	if not emptied.is_connected(_on_emptied): emptied.connect(_on_emptied)
+
+func get_state(slot: int) -> SlotState:
+	return slots[slot]
+
+func set_state(slot: int, state: SlotState) -> void:
+	slots[slot] = state
+	slot_state_changed.emit(slot, state)
+
+func get_slots_with_state(state: SlotState) -> Array[int]:
+	var found: Array[int] = []
+	for slot in range(slot_count):
+		if get_state(slot) == state:
+			found.append(slot)
+	return found
 
 func is_full() -> bool:
 	for i in range(slot_count):
-		if !is_slot_occupied(i): return false
+		if get_state(i) == SlotState.EMPTY: return false
 	return true
 
-func get_slots_of(arrow: Arrow) -> Array[int]:
-	var slots: Array[int] = []
-	for i in range(slot_count):
-		if _embedded[i] == arrow:
-			slots.append(i)
-	return slots
+func get_embedded_arrow(slot: int) -> Arrow:
+	return embedded[slot]
 
-func get_occupied() -> Array[bool]:
-	var occupied := []
-	occupied.resize(slot_count)
-	for i in range(slot_count):
-		occupied[i] = _embedded[i] != null
-	return occupied
+func get_embedded_slots(arrow: Arrow) -> Array[int]:
+	var found: Array[int] = []
+	for slot in range(slot_count):
+		if get_embedded_arrow(slot) == arrow:
+			found.append(slot)
+	return found
 
-func is_slot_occupied(slot: int) -> bool:
-	return _embedded[slot] != null
+func is_arrow_embedded(arrow: Arrow) -> bool:
+	return embedded.has(arrow)
 
-func get_facing_slot() -> int:
-	var forward := -container.global_transform.basis.z
-	return _get_slot_from_offset(forward)
-
-func get_embedded_in(slot: int) -> Arrow:
-	return _embedded[slot]
-
-func is_fireable(arrow: Arrow) -> bool:
-	return _fireable.get(arrow, false)
-
-func has_fireable() -> bool:
-	for f in _fireable.values():
-		if f: return true
+func can_use() -> bool:
+	for slot in range(slot_count):
+		if get_state(slot) == SlotState.USABLE: return true
 	return false
 
-func get_firing_next() -> Arrow:
-	for a in _fireable.keys():
-		if is_fireable(a): return a
-	return null
+func get_using_next() -> Arrow:
+	var usable := get_slots_with_state(SlotState.USABLE)
+	if usable.is_empty(): return null
+	return get_embedded_arrow(usable.front())
 
-func is_slot_fireable(slot: int) -> bool:
-	return is_fireable(get_embedded_in(slot))
-
-func enable_firing(arrow: Arrow) -> void:
-	_fireable.set(arrow, true)
+func enable_use(arrow: Arrow) -> void:
+	for slot in get_embedded_slots(arrow):
+		set_state(slot, SlotState.USABLE)
 	firing_enabled.emit(arrow)
 
-func disable_firing(arrow: Arrow) -> void:
-	_fireable.set(arrow, false)
+func disable_use(arrow: Arrow) -> void:
+	for slot in get_embedded_slots(arrow):
+		set_state(slot, SlotState.OCCUPIED)
 	firing_disabled.emit(arrow)
 
-func fully_enable_firing() -> void:
-	for arrow in _fireable.keys():
-		enable_firing(arrow)
+func _embed_in_slot(arrow: Arrow, slot: int) -> void:
+	embedded[slot] = arrow
+	set_state(slot, SlotState.OCCUPIED)
+	arrow_embedded.emit(arrow, slot)
+	print("arrow embedded in slot ", slot)
 
-func _get_slot_size() -> float:
-	return TAU / slot_count
+func _remove_from_slots(arrow: Arrow, toState: SlotState) -> void:
+	for slot in get_embedded_slots(arrow):
+		set_state(slot, toState)
+		embedded[slot] = null
+		slot_cleared.emit(slot)
 
-var WEIRD_OFFSET = 45.0 #don't ask me why at some point during refactor somehow the quadrants got offset
 func _get_slot_from_angle(angle: float) -> int:
-	var slot_size := _get_slot_size()
-	angle = fposmod(-angle + deg_to_rad(WEIRD_OFFSET), TAU)
+	angle -= PI / 2 if not centered else 3 * PI / 4
+	angle = fposmod(-angle, TAU)
 	return int(floor(angle / slot_size))
+
+func get_angle_from_slot(slot: int) -> float:
+	var angle := -slot * slot_size
+	angle += PI / 2 if not centered else 3 * PI / 4
+	return angle + slot_size / 2
 
 func _get_slot_from_offset(dir: Vector3) -> int:
 	dir.y = 0.0
-	if dir.is_zero_approx():
-		return 0
+	if dir.is_zero_approx(): return 0
 	dir = dir.normalized()
 
 	var forward := -container.global_transform.basis.z
@@ -101,9 +125,6 @@ func _get_slot_from_offset(dir: Vector3) -> int:
 	var angle := atan2(z, x)
 	return _get_slot_from_angle(angle)
 
-func has_arrow(arrow: Arrow) -> bool:
-	return _fireable.has(arrow)
-
 func _get_slots_to_occupy(arrow: Arrow) -> Array[int]:
 	var offset := arrow.global_position - container.global_position
 	var collided_slot := _get_slot_from_offset(offset)
@@ -111,19 +132,31 @@ func _get_slots_to_occupy(arrow: Arrow) -> Array[int]:
 
 func _can_add_arrow(arrow: Arrow) -> bool:
 	for slot in _get_slots_to_occupy(arrow):
-		if is_slot_occupied(slot):
+		if get_state(slot) != SlotState.EMPTY:
 			return false
 	return true
 
 func _on_arrow_added(arrow: Arrow) -> void:
 	for slot in _get_slots_to_occupy(arrow):
-		_embedded[slot] = arrow
-		disable_firing(arrow)
-		slot_occupied.emit(slot, arrow)
+		_embed_in_slot(arrow, slot)
+	if is_full():
+		filled.emit()
+
+func expire_arrow(arrow: Arrow) -> void:
+	_removal_state = SlotState.EMPTY
+	remove_arrow(arrow)
+	_removal_state = SlotState.DISABLED
 
 func _on_arrow_removed(arrow: Arrow) -> void:
-	for i in range(slot_count):
-		if _embedded[i] == arrow:
-			_embedded[i] = null
-			slot_cleared.emit(i)
-	_fireable.erase(arrow)
+	_remove_from_slots(arrow, _removal_state)
+	if is_empty():
+		emptied.emit()
+
+func _on_filled() -> void:
+	for arrow in embedded:
+		if arrow == null: continue
+		enable_use(arrow)
+
+func _on_emptied() -> void:
+	for slot in range(slot_count):
+		set_state(slot, SlotState.EMPTY)

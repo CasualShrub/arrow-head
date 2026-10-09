@@ -3,6 +3,8 @@
 extends CharacterBody3D
 class_name Player
 
+signal death_animation_finished()
+
 @export var health: HealthComponent:
 	set(value):
 		health = value
@@ -44,7 +46,15 @@ class_name Player
 		dash = value
 		update_configuration_warnings()
 
+@export var angry_effect: ScreenEffect = preload("res://systems/screen_effect/angry_vignette.tres")
+@export var angry_flash: ScreenEffect = preload("res://systems/screen_effect/angry_flash.tres")
+@export var angry_flash_hold := 0.06
+@export var angry_shake := 0.7
 @export var speed := 6.0
+var speed_multiplier := 1.0
+var frozen := false
+var aim_spin := 0.0
+var _aim_facing := Vector3.FORWARD
 @export var dash_cost := 0.0
 ## how far arrows dig into apples skin
 @export var arrow_dig_depth := 0.15
@@ -56,6 +66,25 @@ class_name Player
 		_update_collider()
 		
 @export var hurt_reaction_duration := 0.35
+@export var juice_color := Color(0.97, 0.9, 0.68)
+@export var death_juice_style: JuiceSplatStyle = preload("res://systems/blood/juice_splat_death.tres")
+
+@export var idle_face_camera_delay := 0.5
+
+@export_group("juice leak")
+@export var leak_style: JuiceSplatStyle = preload("res://systems/blood/juice_splat_drip.tres")
+@export var leak_step_distance := 0.9
+@export var leak_interval := 0.65
+@export var leak_spurt_range := Vector2(0.15, 0.6)
+@export var leak_drops_range := Vector2i(1, 3)
+@export var leak_extra_drop_size := 0.85
+@export var leak_max_step := 0.5
+
+@export_group("juice burst")
+@export var burst_drops_range := Vector2i(6, 10)
+@export var burst_distance_range := Vector2(0.3, 1.2)
+@export var burst_spread := 1.1
+@export var burst_size_range := Vector2(1.0, 1.4)
 
 @onready var _collider: CollisionShape3D = %Collider
 @onready var _camera: PlayerCamera = %Camera
@@ -66,15 +95,36 @@ class_name Player
 @onready var _mouse_pivot: Node3D = %MousePivot
 @onready var _sectors: Sectors = %Sectors
 @onready var _chunks: CPUParticles3D = %AppleChunks
+@onready var _aura: AngryAura = %Aura
+@onready var _status: StatusComponent = $StatusComponent
 
+signal force_walk_finished()
+
+var _idle_time := 0.0
+var _last_aim_target := Vector3.ZERO
 var _dash_charges := 0
 var _dash_arrows: Array[Arrow] = []
 var _controller_aim := Vector2.UP
+var _force_walk_direction := Vector3.ZERO
+var _force_walk_target: Variant = null
+var _status_sources: Array[Arrow] = []
+var _angry_handle: ScreenEffectHandle
+var _leak_distance := 0.0
+var _leak_timer := 0.0
+var _last_leak_position := Vector3.ZERO
 
 func _ready() -> void:
-	if Engine.is_editor_hint(): update_configuration_warnings()
+	if Engine.is_editor_hint():
+		update_configuration_warnings()
+		return
+	DarkenManager.register_highlighted(self)
+	ScreenShaderManager.register_unfiltered(self)
+	_sectors.centered = arrows.centered
 	_update_collider()
+	arrows.arrow_removed.connect(_on_arrow_removed)
+	_last_leak_position = global_position
 	if not Engine.is_editor_hint():
+		_sprite.animation_finished.connect(_on_animation_finished)
 		ControllerManager.disconnected.connect(_cancel_attack)
 
 func _notification(what: int) -> void:
@@ -95,12 +145,31 @@ func _cancel_attack() -> void:
 	Engine.time_scale = time.normal_scale
 	ControllerManager.stop_feedback()
 
-func _process(_delta: float) -> void:
+func _process(delta: float) -> void:
 	if Engine.is_editor_hint(): return
-	ControllerManager.set_attack_available(not health.is_dead() and _dash_charges > 0)
-	
+	ControllerManager.set_attack_available(not health.is_dead() and not is_force_walking() and arrows.can_use())
+
+	if is_force_walking():
+		face(global_position + _force_walk_direction)
+		_camera.set_lookahead(Vector2.ZERO)
+		return
+
 	var aim_target := _get_aim_target()
-	face(aim_target)
+	var is_active := movement_input.get_vector() != Vector2.ZERO
+	if aim_target.distance_squared_to(_last_aim_target) > 0.0001:
+		is_active = true
+	_last_aim_target = aim_target
+	if _is_aim_overridden():
+		_aim_facing = _aim_facing.rotated(Vector3.UP, aim_spin * delta)
+		aim_target = _get_overridden_aim_target()
+	if is_active:
+		_idle_time = 0.0
+	else:
+		_idle_time += delta
+	if _idle_time >= idle_face_camera_delay and not health.is_dead():
+		_eyes.set_eyes_direction(PlayerEyes.EyeDirection.CENTERED)
+	else:
+		face(aim_target)
 	var lookahead_offset := Vector2.ZERO
 	if input_mode.is_keyboard_mouse():
 		lookahead_offset = _camera.get_mouse_screen_offset()
@@ -116,19 +185,17 @@ func _process(_delta: float) -> void:
 		_dash_preview.set_preview_position(dash_dest)
 		_dash_preview.set_preview_targets(dash_targets)
 
-	var target_slot := _get_target_slot()
-	if _dash_charges > 0 and target_slot >= 0:
-		_sectors.set_primed(target_slot)
-	else:
-		_sectors.clear_primed()
-
 func _physics_process(delta: float) -> void:
 	if Engine.is_editor_hint() or health.is_dead(): return
-	
+
+	if is_force_walking():
+		_force_walk_step(delta)
+		return
+
 	if slow_input.consume_pressed():
 		if not time.is_slowed():
 			time.slow()
-		if input_mode.is_controller() and _dash_charges > 0:
+		if input_mode.is_controller() and arrows.can_use():
 			dash.enable()
 	if slow_input.consume_released():
 		if time.is_slowed():
@@ -137,6 +204,7 @@ func _physics_process(delta: float) -> void:
 			dash.disable()
 	
 	_move(movement_input.get_vector(), delta)
+	_tick_leak(delta)
 	
 	# keep on same plane
 	global_position.y = 0
@@ -144,14 +212,14 @@ func _physics_process(delta: float) -> void:
 func _update_attack() -> void:
 	if input_mode.is_controller():
 		if fire_input.consume_pressed() and dash.is_enabled():
-			dash.try_activate(global_position, _get_aim_target())
+			dash.try_activate(global_position, _get_dash_aim_target())
 		fire_input.consume_released()
 		return
 	if fire_input.consume_cancelled():
 		_cancel_attack()
 		return
 	if fire_input.consume_pressed():
-		if _dash_charges <= 0:
+		if not arrows.can_use():
 			fire_input.reset()
 			return
 		if not time.is_slowed():
@@ -160,7 +228,7 @@ func _update_attack() -> void:
 	var activated := fire_input.consume_activated()
 	var released := fire_input.consume_released()
 	if activated or released:
-		if _dash_charges <= 0 or not dash.try_activate(global_position, _get_aim_target()):
+		if not arrows.can_use() or not dash.try_activate(global_position, _get_dash_aim_target()):
 			_cancel_attack()
 
 func _get_component_warning(comp: Variant, comp_name: StringName) -> Variant:
@@ -190,6 +258,71 @@ func _update_collider() -> void:
 		#s.radius = hurt_radius
 		#_collider.shape = s
 
+func _apply_arrow_effects(arrow: Arrow) -> void:
+	if arrow.embedded_lifetime >= 0.0:
+		arrow.expired.connect(arrows.expire_arrow.bind(arrow), CONNECT_ONE_SHOT)
+		arrow.blinked.connect(_on_embedded_arrow_blinked.bind(arrow))
+		arrow.begin_embedded_decay()
+	if arrow.status:
+		_status_sources.append(arrow)
+		_status.add_status(arrow.status)
+
+func _on_embedded_arrow_blinked(is_shown: bool, arrow: Arrow) -> void:
+	for slot in arrows.get_embedded_slots(arrow):
+		_sectors.set_highlight_shown(slot, is_shown)
+
+func _on_arrow_removed(arrow: Arrow) -> void:
+	if not _status_sources.has(arrow): return
+	_status_sources.erase(arrow)
+	for source in _status_sources:
+		if source.status.get_script() == arrow.status.get_script():
+			return
+	_status.remove_status(arrow.status)
+
+func _is_aim_overridden() -> bool:
+	return frozen or aim_spin != 0.0
+
+func _get_overridden_aim_target() -> Vector3:
+	return global_position + _aim_facing * 100.0
+
+func _get_dash_aim_target() -> Vector3:
+	if _is_aim_overridden():
+		return _get_overridden_aim_target()
+	return _get_aim_target()
+
+func _capture_aim_facing() -> void:
+	if _is_aim_overridden(): return
+	_aim_facing = -_mouse_pivot.global_basis.z
+	_aim_facing.y = 0.0
+	_aim_facing = _aim_facing.normalized()
+
+func freeze_aim() -> void:
+	_capture_aim_facing()
+	frozen = true
+
+func unfreeze_aim() -> void:
+	frozen = false
+
+func start_aim_spin(rate: float) -> void:
+	_capture_aim_facing()
+	aim_spin = rate
+
+func stop_aim_spin() -> void:
+	aim_spin = 0.0
+
+func show_status_sprite(anim: StringName, alpha := 1.0) -> void:
+	if health.is_dead(): return
+	_status_sprite.modulate.a = alpha
+	_status_sprite.play(anim)
+	_status_sprite.show()
+
+func set_status_sprite_visible(shown: bool) -> void:
+	if health.is_dead(): return
+	_status_sprite.visible = shown
+
+func hide_status_sprite() -> void:
+	_status_sprite.hide()
+
 func get_camera() -> PlayerCamera:
 	return _camera
 
@@ -199,10 +332,22 @@ func get_hit(arrow: Arrow) -> void:
 		return
 	_chunks.emitting = true
 	_camera.shake()
-	if arrows.try_add_arrow(arrow):
-		arrow.embed(arrow_dig_depth)
-		var slots := arrows.get_slots_of(arrow)
-		var sector := slots[0] if slots.size() > 0 else 0
+	var juice_dir := Vector3.ZERO
+	if arrow.simulation:
+		juice_dir = arrow.simulation.facing
+	JuiceSplatter.splat(global_position, juice_dir, juice_color)
+	if arrow.instakill:
+		arrow.deactivate()
+		health.die()
+	elif arrows.try_add_arrow(arrow):
+		var dig := arrow_dig_depth
+		if arrow.dig_depth >= 0.0:
+			dig = arrow.dig_depth
+		arrow.embed(dig)
+		_burst_from(arrow)
+		_apply_arrow_effects(arrow)
+		var slots := arrows.get_embedded_slots(arrow)
+		var sector := slots[0] if not slots.is_empty() else 0
 		SoundManager.play("Q%d_fill" % clampi(sector + 1, 1, 4))
 		SoundManager.play("apple_damage1") 
 		ControllerManager.pulse(0.2, 0.35, 0.1)
@@ -214,10 +359,71 @@ func get_hit(arrow: Arrow) -> void:
 	_eyes.set_eyes_state("hit")
 	get_tree().create_timer(0.25).timeout.connect(
 		func():
-			_eyes.set_eyes_state("default")
+			_eyes.set_eyes_state(&"default")
+			_refresh_eyes_state()
 			health.make_vulnerable()
 	)
 	#_eyes_hit.start()
+
+func _get_wound_arrows() -> Array[Arrow]:
+	var wounds: Array[Arrow] = []
+	for arrow in arrows.embedded:
+		if arrow and not wounds.has(arrow):
+			wounds.append(arrow)
+	return wounds
+
+func _tick_leak(delta: float) -> void:
+	var moved := global_position - _last_leak_position
+	moved.y = 0.0
+	_last_leak_position = global_position
+	var wounds := _get_wound_arrows()
+	if wounds.is_empty():
+		_leak_distance = 0.0
+		_leak_timer = 0.0
+		return
+	_leak_distance += minf(moved.length(), leak_max_step)
+	var step := leak_step_distance / wounds.size()
+	while _leak_distance >= step:
+		_leak_distance -= step
+		_leak_from(wounds.pick_random())
+	_leak_timer += delta
+	var interval := leak_interval / wounds.size()
+	while _leak_timer >= interval:
+		_leak_timer -= interval
+		_leak_from(wounds.pick_random())
+
+func _get_wound_outward(arrow: Arrow) -> Vector3:
+	var outward := arrow.global_position - global_position
+	outward.y = 0.0
+	if outward.length_squared() < 0.0001:
+		return Vector3.FORWARD.rotated(Vector3.UP, randf() * TAU)
+	return outward.normalized()
+
+func _get_wound_position(arrow: Arrow, outward: Vector3) -> Vector3:
+	var wound := global_position + outward * hurt_radius
+	wound.y = arrow.global_position.y
+	return wound
+
+func _spurt_drop(wound: Vector3, dir: Vector3, distance: float, size: float) -> void:
+	JuiceSplatter.spurt(wound, wound + dir * distance, juice_color, size, leak_style)
+
+func _leak_from(arrow: Arrow) -> void:
+	var outward := _get_wound_outward(arrow).rotated(Vector3.UP, randf_range(-0.5, 0.5))
+	var wound := _get_wound_position(arrow, outward)
+	for i in randi_range(leak_drops_range.x, leak_drops_range.y):
+		var dir := outward.rotated(Vector3.UP, randf_range(-0.3, 0.3))
+		var size := 1.0
+		if i > 0:
+			size = leak_extra_drop_size
+		_spurt_drop(wound, dir, randf_range(leak_spurt_range.x, leak_spurt_range.y), size)
+
+func _burst_from(arrow: Arrow) -> void:
+	var outward := _get_wound_outward(arrow)
+	var wound := _get_wound_position(arrow, outward)
+	for i in randi_range(burst_drops_range.x, burst_drops_range.y):
+		var dir := outward.rotated(Vector3.UP, randf_range(-burst_spread, burst_spread))
+		var distance := randf_range(burst_distance_range.x, burst_distance_range.y)
+		_spurt_drop(wound, dir, distance, randf_range(burst_size_range.x, burst_size_range.y))
 
 func _get_aim_target() -> Vector3:
 	if input_mode.is_keyboard_mouse():
@@ -237,36 +443,105 @@ func face(target: Vector3) -> void:
 	_eyes.make_eyes_look_at(target)
 
 func _move(dir: Vector2, _dt: float) -> void:
-	var v = dir * speed
+	var v = dir * speed * speed_multiplier
 	velocity.x = v.x
 	velocity.z = v.y
 	velocity.y = 0
 	move_and_slide()
 
+func is_force_walking() -> bool:
+	return _force_walk_direction != Vector3.ZERO
+
+func force_walk(direction: Vector3) -> void:
+	_begin_force_walk(direction)
+	_force_walk_target = null
+
+func force_walk_to(target: Vector3) -> void:
+	target.y = global_position.y
+	_begin_force_walk(target - global_position)
+	_force_walk_target = target
+	if not is_force_walking():
+		force_walk_finished.emit()
+
+func stop_force_walk() -> void:
+	if not is_force_walking(): return
+	_force_walk_direction = Vector3.ZERO
+	_force_walk_target = null
+	_collider.disabled = false
+	force_walk_finished.emit()
+
+func _begin_force_walk(direction: Vector3) -> void:
+	direction.y = 0
+	_force_walk_direction = direction.normalized()
+	if not is_force_walking(): return
+	if time.is_slowed():
+		time.resume()
+	dash.disable()
+	_collider.disabled = true
+	velocity = Vector3.ZERO
+
+func _force_walk_step(delta: float) -> void:
+	fire_input.consume_pressed()
+	fire_input.consume_released()
+	slow_input.consume_pressed()
+	slow_input.consume_released()
+	var step := _force_walk_direction * speed * delta
+	if _force_walk_target != null:
+		var remaining: Vector3 = _force_walk_target - global_position
+		remaining.y = 0
+		if remaining.length() <= step.length():
+			global_position = _force_walk_target
+			stop_force_walk()
+			return
+	global_position += step
+
+func _refresh_eyes_state() -> void:
+	if _eyes.get_eyes_state() == &"hit": return
+	if arrows.can_use():
+		_eyes.set_eyes_state(&"angry")
+		_aura.activate()
+		_start_angry_effect()
+	else:
+		_eyes.set_eyes_state(&"default")
+		_aura.deactivate()
+		_stop_angry_effect()
+
+func _start_angry_effect() -> void:
+	if _angry_handle or not angry_effect: return
+	_angry_handle = ScreenEffectManager.play(angry_effect, self)
+	_camera.add_shake(angry_shake)
+	_play_angry_flash()
+
+func _play_angry_flash() -> void:
+	if not angry_flash: return
+	var handle := ScreenEffectManager.play(angry_flash, self)
+	await get_tree().create_timer(angry_flash_hold, true, false, true).timeout
+	ScreenEffectManager.stop(handle)
+
+func _stop_angry_effect(instant := false) -> void:
+	ScreenEffectManager.stop(_angry_handle, instant)
+	_angry_handle = null
+
 func _on_died() -> void:
+	JuiceSplatter.splat(global_position, Vector3.ZERO, juice_color, 1.0, death_juice_style)
+	_status.clear()
 	_cancel_attack()
 	ControllerManager.pulse(0.5, 0.85, 0.3)
-	_dash_charges = 0
-	_dash_arrows.clear()
 	arrows.clear_arrows()
-	_sectors.clear()
 	time.resume()
 	
 	SoundManager.play("apple_death")
 	_sprite.play("death")
 	
 	_eyes.hide()
+	_aura.deactivate_instantly()
+	_stop_angry_effect(true)
 	_status_sprite.hide()
 	_sectors.hide()
 
-func _get_target_slot() -> int:
-	var start := arrows.get_facing_slot()
-	for i in range(arrows.slot_count):
-		var slot := (start + i) % arrows.slot_count
-		var arrow := arrows.get_embedded_in(slot)
-		if arrow and arrow in _dash_arrows:
-			return slot
-	return -1
+func _on_animation_finished() -> void:
+	if _sprite.animation == &"death":
+		death_animation_finished.emit()
 
 func _on_dash_activated(destination: Vector3, targets: Array) -> void:
 	_dash_preview.disable()
@@ -276,38 +551,28 @@ func _on_dash_activated(destination: Vector3, targets: Array) -> void:
 	for target in targets:
 		if target is Enemy:
 			target.get_hit()
-	var consumed_slot := _get_target_slot()
-	if consumed_slot >= 0:
-		var consumed_arrow := arrows.get_embedded_in(consumed_slot)
-		if consumed_arrow:
-			_dash_arrows.erase(consumed_arrow)
-			arrows.remove_arrow(consumed_arrow)
-			_dash_charges = maxi(_dash_charges - 1, 0)
+	var next_used := arrows.get_using_next()
+	if next_used:
+		arrows.remove_arrow(next_used)
 	time.bar.consume(dash_cost * time.bar.max_value)
 	if time.is_slowed():
 		time.resume()
 	ControllerManager.attack_released()
 
-func _on_slot_occupied(slot: int, _arrow: Arrow) -> void:
-	_sectors.highlight_sector(slot)
-	if _dash_charges == 0 and arrows.is_full():
-		_dash_charges = arrows.slot_count
-		_dash_arrows.clear()
-		for i in range(arrows.slot_count):
-			var a := arrows.get_embedded_in(i)
-			if a:
-				_dash_arrows.append(a)
-
-func _on_slot_cleared(slot: int) -> void:
-	_sectors.unhighlight_sector(slot)
-
-func _on_firing_enabled(_arrow: Arrow) -> void:
-	if time.is_slowed():
-		dash.enable()
-
-func _on_firing_disabled(_arrow: Arrow) -> void:
-	if not arrows.is_full():
-		dash.disable()
+func _on_slot_state_changed(
+	slot: int,
+	state: SectorArrowsComponent.SlotState
+) -> void:
+	var sector_state := (
+		_sectors.SectorState.HIGHLIGHTED if state == arrows.SlotState.OCCUPIED
+		else _sectors.SectorState.USABLE if state == arrows.SlotState.USABLE
+		else _sectors.SectorState.DISABLED if state == arrows.SlotState.DISABLED
+		else _sectors.SectorState.NONE
+	)
+	_sectors.set_state(slot, sector_state)
+	_refresh_eyes_state()
+	if not arrows.can_use():
+		if dash.is_enabled(): dash.disable()
 
 func _on_time_slowed() -> void:
 	afterimage.enable()

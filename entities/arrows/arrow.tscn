@@ -18,15 +18,17 @@ radius = 0.05
 
 [node name="Arrow" type="Node3D" unique_id=935612140 groups=["projectiles"]]
 script = ExtResource("1_l3dt7")
+speed = 10.0
 max_bounces = 3
 wall_stick_decay_time = 3.0
 metadata/_custom_type_script = "uid://b2gqyiev2ibwo"
 
 [node name="Sprite3D" type="Sprite3D" parent="." unique_id=1125079801]
 transform = Transform3D(-0.385, 3.365777e-08, 1.4712277e-15, 0, -1.6828885e-08, 0.385, 3.365777e-08, 0.385, 1.6828885e-08, 0, 0, 0)
-layers = 524289
+layers = 786433
 material_override = SubResource("ShaderMaterial_outline")
 double_sided = false
+render_priority = 11
 texture = ExtResource("2_d85th")
 
 [node name="ShapeCast3D" type="ShapeCast3D" parent="." unique_id=1469456788]

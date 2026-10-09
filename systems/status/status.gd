@@ -5,20 +5,24 @@ class_name Status
 
 var owner: Player
 
-var _applied_at: float
-var _expires_at: float
+var _elapsed := 0.0
 
 func apply(target: Player) -> void:
 	owner = target
-	
-	_applied_at = Time.get_ticks_msec()
-	_expires_at = _applied_at + lifetime
+	_elapsed = 0.0
 
 func remove() -> void:
 	pass
-	
+
+func refresh() -> void:
+	_elapsed = 0.0
+
 func wants_expire() -> bool:
-	return lifetime >= 0.0 and Time.get_ticks_msec() >= _expires_at
-	
+	return lifetime >= 0.0 and _elapsed >= lifetime
+
+func advance(delta: float) -> void:
+	_elapsed += delta
+	tick(delta)
+
 func tick(_delta: float) -> void:
 	pass
