@@ -12,4 +12,6 @@
 [resource]
 script = ExtResource("1_vakto")
 levels = Array[ExtResource("1_pakn1")]([ExtResource("2_lvl1"), ExtResource("3_lvl2"), ExtResource("4_duuve"), ExtResource("5_40qns"), ExtResource("6_wthst"), ExtResource("7_lsol4")])
+easyLevels = Array[ExtResource("1_pakn1")]([ExtResource("4_duuve"), ExtResource("5_40qns")])
+expertLevels = Array[ExtResource("1_pakn1")]([ExtResource("6_wthst"), ExtResource("7_lsol4")])
 metadata/_custom_type_script = "uid://dq3x6bxvuaeyx"
