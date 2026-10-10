@@ -496,6 +496,20 @@ texture = ExtResource("34_lcontrast")
 expand_mode = 1
 stretch_mode = 5
 
+[node name="difficulty highlight" type="ColorRect" parent="Panel" unique_id=382954124]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.564
+anchor_top = 0.48700002
+anchor_right = 0.65300006
+anchor_bottom = 0.551
+offset_left = 0.48797607
+offset_top = -0.090026855
+offset_right = -0.59906006
+offset_bottom = 0.42999268
+color = Color(0.42220175, 0.19638258, 0, 1)
+
 [node name="Difficulty" type="Control" parent="Panel" unique_id=196867330]
 layout_mode = 1
 anchor_left = 0.476

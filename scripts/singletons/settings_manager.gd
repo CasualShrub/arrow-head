@@ -2,6 +2,7 @@ extends Node
 
 signal changed
 signal mouse_sensitivity_changed(value: float)
+signal difficulty_changed(difficulty: Difficulty)
 
 const PATH := "user://settings.cfg"
 const SAVE_DELAY := 0.25
@@ -86,6 +87,7 @@ func set_contrast(v: float) -> void:
 
 func set_difficulty(d: Difficulty) -> void:
 	current_difficulty = d
+	difficulty_changed.emit()
 	_apply_difficulty()
 	_changed()
 	
@@ -179,11 +181,13 @@ func _build_filter() -> void:
 	_filter.material = mat
 	layer.add_child(_filter)
 
-func _apply_difficulty():
+func _apply_difficulty():   #the functionality is in the game_manager and campaign_data now
 	if current_difficulty == Difficulty.EASY:
 		print("EASY MODE")
 	if current_difficulty == Difficulty.HARD:
 		print("HARD MODE")
 	if current_difficulty == Difficulty.EXPERT:
 		print("EXPERT MODE")
+		
+
 		

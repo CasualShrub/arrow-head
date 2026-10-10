@@ -47,6 +47,7 @@ const NAV_ACTIONS: Array[StringName] = [&"ui_left", &"ui_right", &"ui_up", &"ui_
 @onready var _difficulty_easy: Button = %Easy
 @onready var _difficulty_hard: Button = %Hard
 @onready var _difficulty_expert: Button = %Expert
+@onready var _difficulty_highlight: ColorRect = %"difficulty highlight"
 
 var _showing_licenses := false
 var _page_opener: Control
@@ -85,7 +86,8 @@ func _ready() -> void:
 	_difficulty_easy.pressed.connect(func(): SettingsManager.set_difficulty(SettingsManager.Difficulty.EASY))
 	_difficulty_hard.pressed.connect(func(): SettingsManager.set_difficulty(SettingsManager.Difficulty.HARD))
 	_difficulty_expert.pressed.connect(func(): SettingsManager.set_difficulty(SettingsManager.Difficulty.EXPERT))
-
+	SettingsManager.difficulty_changed.connect(_move_difficulty_highlight)
+	
 	SettingsManager.changed.connect(_sync)
 	_build_controller_page()
 	_sync()
@@ -342,3 +344,14 @@ func _sync_controller_guide() -> void:
 func _sync_trigger_status() -> void:
 	_trigger_status.text = ControllerManager.adaptive.status
 	_trigger_test.disabled = not ControllerManager.adaptive.available
+
+func _move_difficulty_highlight() -> void:
+	if SettingsManager.current_difficulty == SettingsManager.Difficulty.EASY:
+		_difficulty_highlight.position = Vector2(652,521)
+		_difficulty_highlight.size = Vector2(122,69)
+	elif SettingsManager.current_difficulty == SettingsManager.Difficulty.HARD:
+		_difficulty_highlight.position = Vector2(780,521)
+		_difficulty_highlight.size = Vector2(122,69)
+	elif SettingsManager.current_difficulty == SettingsManager.Difficulty.EXPERT:
+		_difficulty_highlight.position = Vector2(908,521)
+		_difficulty_highlight.size = Vector2(163,69)
