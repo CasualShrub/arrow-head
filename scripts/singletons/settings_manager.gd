@@ -87,7 +87,6 @@ func set_contrast(v: float) -> void:
 
 func set_difficulty(d: Difficulty) -> void:
 	current_difficulty = d
-	difficulty_changed.emit()
 	_apply_difficulty()
 	_changed()
 	
@@ -182,12 +181,14 @@ func _build_filter() -> void:
 	layer.add_child(_filter)
 
 func _apply_difficulty():   #the functionality is in the game_manager and campaign_data now
-	if current_difficulty == Difficulty.EASY:
-		print("EASY MODE")
-	if current_difficulty == Difficulty.HARD:
-		print("HARD MODE")
-	if current_difficulty == Difficulty.EXPERT:
-		print("EXPERT MODE")
+	#if current_difficulty == Difficulty.EASY:
+		#print("EASY MODE")
+	#if current_difficulty == Difficulty.HARD:
+		#print("HARD MODE")
+	#if current_difficulty == Difficulty.EXPERT:
+		#print("EXPERT MODE")
+	difficulty_changed.emit()
+	_changed()
 		
 
 		

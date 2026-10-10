@@ -87,6 +87,8 @@ func _ready() -> void:
 	_difficulty_hard.pressed.connect(func(): SettingsManager.set_difficulty(SettingsManager.Difficulty.HARD))
 	_difficulty_expert.pressed.connect(func(): SettingsManager.set_difficulty(SettingsManager.Difficulty.EXPERT))
 	SettingsManager.difficulty_changed.connect(_move_difficulty_highlight)
+	#print("connectd")
+	_move_difficulty_highlight() #because settings load slower than settings_manager, highlight can't apply on start
 	
 	SettingsManager.changed.connect(_sync)
 	_build_controller_page()
@@ -346,6 +348,7 @@ func _sync_trigger_status() -> void:
 	_trigger_test.disabled = not ControllerManager.adaptive.available
 
 func _move_difficulty_highlight() -> void:
+	#print("moving highlight")
 	if SettingsManager.current_difficulty == SettingsManager.Difficulty.EASY:
 		_difficulty_highlight.position = Vector2(652,521)
 		_difficulty_highlight.size = Vector2(122,69)
